@@ -57,7 +57,7 @@ test('markup: the phone bar has four labelled destinations, and viewport-fit=cov
   assert.match(HTML, /<meta name="viewport" content="width=device-width, initial-scale=1\.0, viewport-fit=cover">/);
 });
 
-test('markup: one search box, in the header - Home points at it and never draws its own (Huatuo, change 2)', () => {
+test('markup: one search box, in the header, on every page\'s DOM - Home never draws, moves or reaches for it', () => {
   assert.equal((HTML.match(/id="q"/g) || []).length, 1, 'more than one #q');
   const header = HTML.slice(HTML.indexOf('<div class="header">'), HTML.indexOf('<div class="sidebar-overlay"'));
   assert.ok(header.includes('id="q"'), '#q is not in the header');
@@ -65,7 +65,8 @@ test('markup: one search box, in the header - Home points at it and never draws 
   const home = /function renderHome\([^)]*\) \{[\s\S]*?\n\}/.exec(src)?.[0] || '';
   assert.ok(home, 'no renderHome');
   assert.ok(!/<input|appendChild|insertBefore|\.append\(|replaceChild/.test(home), 'Home draws or moves a search input');
-  assert.match(home, /find\.onclick = \(\) => box\?\.focus\(\)/, '"Find a program" does not focus the header box');
+  // #465 (the owner, 2026-10-02): no box on Home, so nothing there points at it, fills it or focuses it
+  assert.ok(!/#q\b|setQuery|renderSuggestions/.test(home), 'Home still reaches for the search box');
 });
 
 // ---------- 2. CSS ----------
@@ -165,6 +166,7 @@ function loadPage({ hash = '#/', width = 1280, store = {} } = {}) {
   const readPublic = url => {
     let rel = String(url).replace(/^\//, '').replace(/\?.*$/, '');
     if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/camps') rel = 'data/camps/index.json';
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) && fs.statSync(p).isFile() ? fs.readFileSync(p, 'utf8') : null;
   };
@@ -223,61 +225,77 @@ test('the Shortlist count in the header and the bar follows the saved programs',
   assert.deepEqual(COUNTS.map(c => c.textContent), ['', ''], 'an empty Shortlist still shows a count');
 });
 
-test('filters belong to their destination: Home draws no filter rail; Programs keeps it (owner\'s D4)', async () => {
+test('filters belong to their destination: Home and Pipelines draw no filter rail; Programs keeps it, ID Camps for now', async () => {
   const pg = loadPage({ hash: '#/' });
   await settle();
   assert.ok(pg.body.classList.contains('no-rail'), 'Home shows the Programs filter rail');
-  for (const hash of ['#/programs', '#/c/ACC']) {
+  for (const [hash, rail] of [['#/programs', true], ['#/c/ACC', true], ['#/camps', true], ['#/trends', false], ['#/', false]]) {
     pg.sb.location.hash = hash; pg.sb.route(); await settle(60);
-    assert.ok(!pg.body.classList.contains('no-rail'), `${hash} lost its filter rail`);
+    assert.equal(!pg.body.classList.contains('no-rail'), rail, `${hash}: the rail is ${rail ? 'missing' : 'drawn'}`);
   }
-  // Pipelines (#467, PR G) and ID Camps (PR F) join NO_RAIL in the PRs that stop them reading the Programs filters; hiding
-  // the rail before that would leave those pages narrowed by filters nobody can see. Update this list with them.
-  assert.deepEqual([...pg.sb.NO_RAIL], ['home']);
+  // #465 (the owner, 2026-10-02): Pipelines has no rail and ignores the Programs filters (trends_view); ID Camps keeps
+  // the rail until PR F gives it its own. Update this list with F.
+  assert.deepEqual([...pg.sb.NO_RAIL], ['home', 'trends']);
   assert.match(HTML, /body\.no-rail \.sidebar, body\.no-rail \.sidebar-overlay, body\.no-rail \.hamburger \{ display: none; \}/);
 });
 
-test('Home: heading, "Find a program" and #447\'s own examples (desktop five, phone three), and a chip runs that search', async () => {
+// #465 (the owner, 2026-10-02): "show search box only when needed" - on Programs (#/programs, #14's aliases, #/c/) and a
+// program's page. Everywhere else body.no-search hides it (and "Find programs for me") with CSS; it stays in the DOM.
+test('the search box shows on Programs and a program\'s page only; hidden by CSS elsewhere, the phone header one row', async () => {
   const pg = loadPage({ hash: '#/' });
   await settle();
-  const html = pg.$('#app').innerHTML;
-  assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/);
-  assert.match(html, /<button type="button" class="btn primary" id="homeFind">Find a program/);
-  const chips = [...html.matchAll(/data-home-chip="([^"]*)"/g)].map(m => m[1]);
-  assert.deepEqual(chips, [...pg.sb.HELP_CHIPS], 'Home\'s examples are not #447\'s HELP_CHIPS');
-  pg.$('#homeFind').onclick(); assert.equal(FOCUS.el, '#q', '"Find a program" does not focus the header box');
-  const chip = pg.$('#app')._q['[data-home-chip]'].find(c => c.dataset.homeChip === 'Bulldogs');  // the nodes the page wired
-  chip.onclick(); await settle(150);
-  assert.equal(pg.$('#q').value, 'Bulldogs'); assert.equal(pg.sb.S.qRaw, 'Bulldogs');
-  assert.equal(pg.sb.location.hash, '#/', 'a chip left Home (it only suggests, as the box does)');
-  const phone = loadPage({ hash: '#/', width: 375 });
-  await settle();
-  assert.deepEqual([...phone.$('#app').innerHTML.matchAll(/data-home-chip="([^"]*)"/g)].map(m => m[1]), [...phone.sb.PHONE_CHIPS]);
-});
-
-test('Home: the three destinations, with the program count from the index; no camp count until PR C', async () => {
-  const pg = loadPage({ hash: '#/' });
-  await settle();
-  const html = pg.$('#app').innerHTML;
-  const hrefs = [...html.matchAll(/<a class="home-entry" href="([^"]+)">/g)].map(m => m[1]);
-  assert.deepEqual(hrefs, ['#/programs', '#/camps', '#/trends']);
-  const by = d => INDEX.programs.filter(p => p.division === d).length.toLocaleString('en-US');
-  assert.ok(html.includes(`${INDEX.programs.length.toLocaleString('en-US')} programs · D1 ${by('D1')} · D2 ${by('D2')} · D3 ${by('D3')}`), 'the program count is not live');
-  assert.ok(!/upcoming ID camps at/.test(html), 'a camp count written into the page (it comes from the camps document, PR C)');
-  assert.ok(!/Continue:|Shortlist \(/.test(html), 'Continue shows with nothing saved');
-});
-
-test('Home: Continue only from saved state - the Programs filters when they differ from the defaults, the Shortlist when not empty', async () => {
   const slug = INDEX.programs[0].slug;
+  for (const [hash, shown] of [['#/', false], ['#/programs', true], ['#/c/ACC', true], [`#/p/${slug}`, true], [`#/p/${slug}/roster`, true],
+    ['#/camps', false], ['#/trends', false], ['#/faq', false], ['#/api', false], ['#/shortlist', false], ['#/compare', false], ['#/nowhere', false]]) {
+    pg.sb.location.hash = hash; pg.sb.route(); await settle(60);
+    assert.equal(!pg.body.classList.contains('no-search'), shown, `${hash}: the search box is ${shown ? 'hidden' : 'shown'}`);
+  }
+  assert.equal(decl('', 'body.no-search .header-search', 'display'), 'none');
+  assert.equal(decl('', 'body.no-search .header-recs', 'display'), 'none');
+  assert.equal(decl('', 'body.no-search .header-right', 'margin-left'), 'auto', 'the Shortlist and theme toggle do not keep to the right edge');
+  assert.equal(decl(PHONE, 'body.no-search', '--header-height'), 'calc(60px + env(safe-area-inset-top, 0px))', 'the phone header keeps an empty search row');
+});
+
+test('where the box is hidden, "/" does not reach for it, and "Clear search" puts focus on the heading, not in the box', async () => {
+  const pg = loadPage({ hash: '#/' });
+  await settle();
+  const slash = () => { const e = { key: '/', target: { matches: () => false, closest: () => null }, prevented: false, preventDefault() { e.prevented = true; } }; FOCUS.el = null; pg.docListeners.keydown.forEach(fn => fn(e)); return e; };
+  for (const hash of ['#/', '#/camps', '#/trends']) {
+    pg.sb.location.hash = hash; pg.sb.route(); await settle(80);
+    const e = slash();
+    assert.ok(!e.prevented && FOCUS.el !== '#q', `${hash}: "/" focused the hidden box`);
+  }
+  pg.sb.location.hash = '#/programs'; pg.sb.route(); await settle(80);
+  assert.ok(slash().prevented && FOCUS.el === '#q', '"/" no longer focuses the box on Programs');
+  // a search made on Programs still narrows ID Camps (until PR F), which says so with "Clear search"
+  pg.sb.S.qRaw = 'Stanford'; pg.sb.S.q = 'stanford';
+  pg.sb.location.hash = '#/camps'; pg.sb.route(); await settle(150);
+  FOCUS.el = null;
+  pg.docListeners.click.forEach(fn => fn({ target: { closest: s => (s === '[data-clear-search]' ? {} : null) } }));
+  await settle(250);
+  assert.equal(pg.sb.S.qRaw, '');
+  assert.equal(FOCUS.el, '.content-title', `focus went to ${FOCUS.el}`);
+});
+
+test('Home: a heading, one line and three large options - Programs, ID Camps, Pipelines - with no rail and no search box', async () => {
+  const slug = INDEX.programs[0].slug;
+  // saved state that the old Home turned into Continue links: the new Home shows none of it, and writes nothing
   const pg = loadPage({ hash: '#/', store: { 'cd.filters': { division: ['D1'], region: ['West'], sort: 'rpi' }, 'cd.favorites': [slug] } });
   await settle();
   const html = pg.$('#app').innerHTML;
-  assert.match(html, /<a href="#\/programs">Continue: Programs · D1 · West · sorted by RPI[^<]*→<\/a>/);
-  assert.match(html, /<a href="#\/shortlist">☆ Shortlist \(1\) →<\/a>/);
+  assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/);
+  assert.equal((html.match(/class="content-subtitle"/g) || []).length, 1, 'not one line under the heading');
+  const opts = [...html.matchAll(/<a class="home-entry" href="([^"]+)">[\s\S]*?<span class="home-entry-title">([^<]+)<\/span><span class="home-entry-desc">([^<]+)<\/span>(?:<span class="home-entry-fact">([^<]+)<\/span>)?<\/span><\/a>/g)]
+    .map(m => [m[1], m[2], !!m[3], m[4] || '']);
+  assert.deepEqual(opts.map(o => o.slice(0, 3)), [['#/programs', 'Programs', true], ['#/camps', 'ID Camps', true], ['#/trends', 'Pipelines', true]]);
+  assert.equal(opts[0][3], `${INDEX.programs.length.toLocaleString('en-US')} programs`, 'the program count is not the live index');
+  assert.ok(!/homeFind|data-home-chip|home-continue|Continue:|Shortlist \(|<input|<button/.test(html), 'Home still draws the search button, chips, Continue or a control');
+  assert.ok(pg.body.classList.contains('no-rail') && pg.body.classList.contains('no-search'), 'Home shows the rail or the search box');
   const keys = [];
   pg.sb.localStorage.setItem = (k) => keys.push(k);
   pg.sb.location.hash = '#/'; pg.sb.route(); await settle(60);
   assert.deepEqual(keys, [], 'Home wrote saved state');
+  assert.match(HTML, /\.home-entries \{ display: grid; grid-template-columns: repeat\(3, minmax\(0, 1fr\)\);/, 'the three options are not side by side on a desktop');
 });
 
 test('the bar steps aside while a phone\'s keyboard is up, and comes back after', async () => {

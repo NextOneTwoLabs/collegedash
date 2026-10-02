@@ -665,16 +665,21 @@ test('suggestions follow the other boxes through the same AND query; 6 in an emp
   assert.deepEqual(await count(true), [6, 9]);
 });
 
-test('#310 sidebar filters never hide a picked program', async () => {
-  const other = INDEX.programs.find(p => p.division === 'D1' && p.conference && ![A, B, C].some(q => q.conference === p.conference)).conference;
+// #465 (the owner, 2026-10-02): Pipelines has no rail, so the saved Programs filters - and a search made on Programs -
+// never narrow it (it used to hide rows with "hidden by your sidebar filters", #310).
+test('#465 Pipelines ignores the Programs filters and search: nothing hidden, nothing named', async () => {
+  const other = INDEX.programs.find(p => p.division === 'D1' && p.conference && ![A, B, C].some(q => q.conference === p.conference));
   const page = loadPage({ 'data/trends/index.json': fixture() });
-  page.sandbox.S.filters.conf = [other];
+  const S = page.sandbox.S;
+  S.filters.conf = [other.conference]; S.filters.region = [other.region || 'West']; S.filters.division = ['D3'];
+  S.filters.cond = [{ field: 'admissionRate', op: '<', value: 0.01 }]; S.qRaw = 'zzzz'; S.q = 'zzzz';
   page.sandbox.location.hash = `#/trends?club=mvla&program=${A.slug}`; await page.sandbox.route(); await tick();
   assert.deepEqual(stats(page.results()), { players: '3', current: '3', past: '0', commits: '0' }, 'the card still shows');
-  assert.ok(page.results().includes('is outside your sidebar filters; it is shown because you picked it.'));
+  assert.ok(!/sidebar filters/.test(page.results()), 'a picked program is called outside the filters');
   page.sandbox.location.hash = '#/trends?club=mvla'; await page.sandbox.route(); await tick();
-  assert.deepEqual(cellsOf(page.results()), [], 'unpicked program rows are still filtered');
-  assert.ok(page.results().includes('3 programs with these players are hidden by your sidebar filters.'));
+  assert.equal(cellsOf(page.results()).length, 3, 'the Programs filters still hide program rows');
+  assert.ok(!/hidden by your|sidebar filters/.test(page.results()), 'a hidden-by-filters line is still drawn');
+  assert.ok(!page.sandbox.document.querySelector('#app').innerHTML.includes('zzzz'), 'the subtitle names the Programs search (and its filters)');
 });
 
 test('#316 Back and Forward close an open suggestion list, without adding a history entry', async () => {

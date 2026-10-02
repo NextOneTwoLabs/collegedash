@@ -458,7 +458,7 @@ test('#465: a bare #/ (and no hash at all) is Home - never rewritten, never sort
     assert.deepEqual(pg.hist.entries, [hash], `${JSON.stringify(hash)} was rewritten`);
     assert.equal(pg.writes.length, 0, `${JSON.stringify(hash)}: something was written to history`);
     assert.match(pg.$('#app').innerHTML, /<h1 class="content-title">Find your college soccer path\.<\/h1>/);
-    assert.match(pg.$('#app').innerHTML, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Browse Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*Find ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Explore Pipelines/);
+    assert.match(pg.$('#app').innerHTML, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Pipelines/);
     assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).region, ['West'], 'Home changed the saved filters');
     assert.equal(pg.sb.feedbackRoute(), '#/');
   }

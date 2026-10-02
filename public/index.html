@@ -617,25 +617,21 @@ a.pill { text-decoration: none; }
 .bottom-nav { display: none; }
 /* Filters belong to their destination (owner's D4): views listed in NO_RAIL draw no sidebar and no button to open one. */
 body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { display: none; }
-/* Home (#465): the heading and one line come from pageHeader; then the pointer to the header search, #447's examples,
-   Continue, and the three destinations. */
-.home-find { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 2px 0 10px; }
-.home-find .btn { padding: 10px 16px; font-size: 14px; }
-.home-try { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
-.home-chip { border: 1px solid var(--border); background: var(--bg-surface); border-radius: 999px; padding: 4px 12px; font-size: 13px; font-weight: 600; min-height: 32px; }
-.home-chip:hover { border-color: var(--accent); color: var(--accent-text); }
-.home-continue { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
-.home-continue a { border: 1px solid var(--border); background: var(--bg-surface); border-radius: 10px; padding: 8px 12px; font-weight: 600; color: var(--text-primary); }
-.home-continue a:hover { border-color: var(--accent); text-decoration: none; }
-.home-entries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; max-width: 1160px; }
-.home-entry { display: flex; flex-direction: column; gap: 6px; padding: 20px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); color: var(--text-primary); min-height: 44px; }
-.home-entry:hover { border-color: var(--accent); text-decoration: none; }
-.home-entry-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--accent-surface); color: var(--accent-text); display: grid; place-items: center; flex: none; }
-.home-entry-icon svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
-.home-entry-title { display: block; font-size: 18px; font-weight: 700; }
-.home-entry-desc { display: block; color: var(--text-secondary); }
-.home-entry-fact { display: block; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-light); font-size: 12px; color: var(--text-secondary); }
-
+/* Home (#465, the owner's direction of 2026-10-02): the heading and one line come from pageHeader, then three large
+   options - Programs, ID Camps, Pipelines - each with one line (Programs with a quiet count). No rail, no search box. */
+.home-entries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 1080px; margin-top: 8px; }
+.home-entry { display: flex; flex-direction: column; gap: 10px; min-height: 180px; padding: 28px 24px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+.home-entry:hover { border-color: var(--accent); box-shadow: var(--shadow-md); text-decoration: none; }
+.home-entry-icon { width: 52px; height: 52px; border-radius: 12px; background: var(--accent-surface); color: var(--accent-text); display: grid; place-items: center; flex: none; }
+.home-entry-icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.home-entry-title { display: block; font-size: 22px; font-weight: 700; }
+.home-entry-desc { display: block; margin-top: 4px; font-size: 15px; color: var(--text-secondary); }
+.home-entry-fact { display: block; margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+/* #465: the program search box shows only where it searches - Programs and a program's page (searchShownFor). It stays
+   in the DOM everywhere (#447 and #445 keep working wherever it shows); elsewhere it and "Find programs for me" are not
+   drawn, the Shortlist and theme toggle move to the right edge, and on a phone the header is one row. */
+body.no-search .header-search, body.no-search .header-recs { display: none; }
+body.no-search .header-right { margin-left: auto; }
 /* #465 B: viewport-fit=cover lets the page draw under a notch or a rounded corner, so the fixed header keeps its content
    inside the safe area: it grows by the top inset (portrait) and pads by the side insets (landscape). The 460 px rule
    below narrows the side padding the same way. */
@@ -710,12 +706,15 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
   .layout { height: calc(100vh - var(--header-height) - var(--bottom-nav-h)); height: calc(100dvh - var(--header-height) - var(--bottom-nav-h)); }
   .qpanel { max-height: calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px); max-height: calc(100dvh - var(--header-height) - var(--bottom-nav-h) - 8px); overflow-y: auto; }
   .sidebar { padding-left: env(safe-area-inset-left, 0px); }  /* #465 B: the drawer's left edge, clear of a landscape notch */
-  .home-find { display: none; }  /* the search box is right above, in the sticky second row */
-  .home-entries { grid-template-columns: 1fr; gap: 8px; }
-  .home-entry { flex-direction: row; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; }
-  .home-entry-title { font-size: 15px; }
-  .home-entry-desc { font-size: 12px; }
-  .home-entry-fact { border: 0; margin: 2px 0 0; padding: 0; }
+  .home-entries { grid-template-columns: 1fr; gap: 12px; }
+  .home-entry { flex-direction: row; align-items: center; gap: 14px; min-height: 0; padding: 18px 16px; }
+  .home-entry-icon { width: 44px; height: 44px; }
+  .home-entry-title { font-size: 18px; }
+  .home-entry-desc { font-size: 14px; }
+  .home-entry-fact { margin-top: 4px; }
+  /* no search box: the header is the brand row alone. Its grid keeps both rows (the brand row sits exactly where it does
+     on Programs; the second row is empty and draws nothing), and everything under the header moves up with the height. */
+  body.no-search { --header-height: calc(60px + env(safe-area-inset-top, 0px)); }
 }
 @media print { .header, .sidebar, .view-tabs, .bottom-nav { display: none; } body { overflow: auto; height: auto; } .layout { height: auto; margin: 0; } }
 </style>
@@ -2048,7 +2047,7 @@ document.addEventListener('keydown', e => {
   // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
-  if (e.key === '/') { e.preventDefault(); $('#q')?.focus(); }  // #434: the header box, on every page
+  if (e.key === '/') { if (searchShown()) { e.preventDefault(); $('#q')?.focus(); } }  // #434: the header box, where it shows (#465)
   else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); listCommit(); renderList(); }
 });
 
@@ -2061,9 +2060,13 @@ function setQuery(v) {
   clearTimeout(qTimer);
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching PROGRAMS, never camp
   // names. On any other page it only suggests (#434 PR 2): a header box must not throw the reader off the page.
-  qTimer = setTimeout(() => { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }, 80);
+  qTimer = setTimeout(searchApply, 80);
   listTyping();  // #14: the list's address follows the box, replacing its entry
 }
+function searchApply() { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') return renderCamps(); if (v === 'list' || v === 'c') return renderList(); }
+// #465: the box shows on Programs and a program's page only (body.no-search elsewhere, set by syncNav).
+const SEARCH_VIEWS = new Set(['list', 'c', 'p']);
+const searchShown = () => !document.body.classList.contains('no-search');
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
@@ -2258,7 +2261,14 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
   }
 }
 // "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
-document.addEventListener('click', e => { if (e.target.closest?.('[data-clear-search]')) { setQuery(''); $('#q')?.focus(); } });
+// Where the box is hidden (ID Camps, which a search made on Programs still narrows), the page is redrawn at once and
+// focus goes to its heading, as a route does (#453) - never to a box that is not drawn.
+document.addEventListener('click', e => {
+  if (!e.target.closest?.('[data-clear-search]')) return;
+  setQuery('');
+  if (searchShown()) { $('#q')?.focus(); return; }
+  clearTimeout(qTimer); Promise.resolve(searchApply()).then(() => routeFocus('h1'));
+});
 
 /* ---------- ask (issue #165, AI prototype 1) ----------
    A question becomes the page's own filter state. The Worker's /api/ask returns only pills, condition chips
@@ -3240,7 +3250,8 @@ function feedbackRoute() {
    Focus is always given with preventScroll, so it never moves the page: route() puts #main at the top on every route
    and nothing restores a scroll position on Back/Forward; if that ever changes, this does not fight it. */
 const ROUTE_FOCUS = { last: null };
-const routeFocusHeld = () => !!document.activeElement?.closest?.('.header-search, #recsPanel, #feedback');
+// #465: the search box holds focus only on a page that shows it; leaving for a page that hides it, the <h1> takes focus.
+const routeFocusHeld = () => { const a = document.activeElement; return !!(a?.closest?.('#recsPanel, #feedback') || (searchShown() && a?.closest?.('.header-search'))); };
 function routeFocusPlan(h, parts) {
   if (parts[0] === 'rpi') return null;  // an alias that rewrites itself to the list; the list's own route decides
   const prev = ROUTE_FOCUS.last; ROUTE_FOCUS.last = h;
@@ -3261,65 +3272,33 @@ function routeFocus(plan) {
   } catch { /* focus is a courtesy; a page that drew must never turn into an error card over it */ }
 }
 /* ---------- Home (#465) ----------
-   The plan approved on #465 (revision 2, owner's D1-D3):
-   - the page heading (route focus lands on it, #453) and one line;
-   - "Find a program ↑": a button that focuses the header's search box. #q never moves (Huatuo, change 2), so there is
-     one search control on every page; on a phone the box is already right above, in the sticky row, and the button
-     is not drawn;
-   - #447's examples, from the same HELP_CHIPS / PHONE_CHIPS the box's help panel shows (change 1); a chip fills the
-     box and runs that search, exactly as the panel's chip does;
-   - Continue (D3): only from state already saved - the Programs filters when they differ from the defaults, and the
-     Shortlist when it is not empty. No new key;
-   - the three destinations, as links drawn before any data: their counts come from the index already loaded and are
-     left out when it is not (the camp count arrives with PR C's preview).
-   It needs no data of its own, so it draws even when the program index failed (`failed` is that card) and waits on
-   nothing. */
+   The owner's direction of 2026-10-02 (recorded on #465): very simple, no sidebar, just the three options - Programs,
+   ID Camps, Pipelines - each a large link with one line, Programs with a quiet count from the index already loaded
+   (left out when it is not). The page heading (route focus lands on it, #453) and one line come from pageHeader. No
+   search box here: it shows on Programs and a program's page only. It needs no data of its own, so it draws even when
+   the program index failed (`failed` is that card) and waits on nothing. */
 const HOME_ICON = { list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>', camps: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>', trends: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2.5"/><path d="M7 6c5 0 6 6 9.5 6M7 18c5 0 6-6 9.5-6"/></svg>' };
-function homeContinue() {
-  const f = S.filters, st = { ...listSnapshot(), q: '' }, bits = [];
-  if (listHashOf(st) !== listHashOf({ division: [], region: [], conf: [], classYear: [], cond: [], q: '', sort: 'name', sortDir: null, view: 'cards' })) {
-    bits.push(...f.division, ...confLabels(f.conf), ...f.region);
-    if (f.classYear.length) bits.push(`class of ${f.classYear.join(', ')} highlighted`);
-    if (f.cond.length) bits.push(f.cond.map(condText).join(' and '));
-    if (f.sort !== 'name' || f.sortDir) bits.push(`sorted by ${sortLabel(f.sort) || f.sort}`);
-    if (f.view === 'table') bits.push('Stats');
-  }
-  const nFav = presentSlugs(S.favorites).length;
-  const links = [bits.length ? `<a href="#/programs">Continue: Programs · ${esc(bits.join(' · '))} →</a>` : '',
-    nFav ? `<a href="#/shortlist">☆ Shortlist (${nFav}) →</a>` : ''].filter(Boolean);
-  return links.length ? `<div class="home-continue">${links.join('')}</div>` : '';
-}
 function renderHome(failed = '') {
   const idx = S.index;
-  const chips = (isPhone() ? PHONE_CHIPS : HELP_CHIPS).map(t => `<button type="button" class="home-chip" data-home-chip="${esc(t)}">${esc(t)}</button>`).join('');
-  const divs = idx ? (idx.divisions || []).map(d => `${d} ${fmtNum(idx.byDiv?.[d] || 0)}`).join(' · ') : '';
   const entry = (k, href, title, desc, fact) => `<a class="home-entry" href="${href}"><span class="home-entry-icon" aria-hidden="true">${HOME_ICON[k]}</span>`
     + `<span><span class="home-entry-title">${title}</span><span class="home-entry-desc">${desc}</span>${fact ? `<span class="home-entry-fact">${fact}</span>` : ''}</span></a>`;
   $('#app').innerHTML = pageHeader({ title: 'Find your college soccer path.',
-    subtitle: 'Explore NCAA women’s soccer programs, upcoming ID camps, and connections from clubs and high schools to colleges.' })
+    subtitle: 'NCAA women’s soccer programs, ID camps, and where club and high school players go to college.' })
     + `<div class="content-body home">${failed}
-      <div class="home-find"><button type="button" class="btn primary" id="homeFind">Find a program <span aria-hidden="true">↑</span></button><span class="muted">Search by school, mascot, city or state in the box at the top.</span></div>
-      <div class="home-try"><span class="muted">Try:</span>${chips}</div>
-      ${homeContinue()}
-      <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Browse Programs', 'Explore and compare schools that interest you.', idx ? `${fmtNum(idx.programs.length)} programs${divs ? ` · ${divs}` : ''}` : '')}${entry('camps', '#/camps', 'Find ID Camps', 'Upcoming dates and details from camp sources.', '')}${entry('trends', '#/trends', 'Explore Pipelines', 'See where players from a club or high school have gone to college.', 'Clubs and high schools behind college rosters')}</nav>
+      <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Programs', 'Explore and compare every NCAA women’s soccer program.', idx ? `${fmtNum(idx.programs.length)} programs` : '')}${entry('camps', '#/camps', 'ID Camps', 'Find upcoming ID camps and their dates.', '')}${entry('trends', '#/trends', 'Pipelines', 'See which colleges players from a club or high school went to.', '')}</nav>
     </div>`;
-  const box = $('#q');
-  const find = $('#homeFind'); if (find) find.onclick = () => box?.focus();
-  $('#app').querySelectorAll('[data-home-chip]').forEach(b => b.onclick = () => {  // #447's chip, from Home
-    const t = b.dataset.homeChip; if (box) { box.value = t; box.focus?.(); }
-    setQuery(t); SUGG.open = true; SUGG.active = -1; renderSuggestions();
-  });
   return Promise.resolve();
 }
 // #465 B: the destinations' aria-current, the Shortlist count in the header and the bottom bar, and whether this view
 // has the Programs filter rail. Filters belong to their destination (owner's D4): a view in NO_RAIL draws no sidebar.
-// Pipelines (#467, PR G) and ID Camps (PR F) join NO_RAIL in the PRs that stop them reading the Programs filters - hiding
-// the rail before that would leave those pages narrowed by filters nobody can see.
-const NO_RAIL = new Set(['home']);
+// Pipelines has no rail (the owner, 2026-10-02) and no longer reads the Programs filters (trendsView), so nothing hidden
+// narrows it. ID Camps keeps the rail until PR F gives it its own.
+const NO_RAIL = new Set(['home', 'trends']);
 function syncNav(view) {
   const cur = view === 'c' ? 'list' : view;
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute?.('aria-current'); });
   document.body.classList.toggle('no-rail', NO_RAIL.has(view));
+  document.body.classList.toggle('no-search', !SEARCH_VIEWS.has(view));  // #465: the search box only where it searches
   syncNavCounts();
 }
 function syncNavCounts() {
@@ -4397,7 +4376,7 @@ async function trendsLoadNames({ slug, cur }) {
   b.innerHTML = `<b>Current players (${n}):</b> ${n ? esc(names.join(', ')) : 'none on the current roster.'}${differs ? `<span class="muted">${esc(differs)}</span>` : ''}`;
 }
 function trendsView(sel) {
-  const { doc, byProgram, pastLabel } = TR, f = S.filters;
+  const { doc, byProgram, pastLabel } = TR;
   const C = trendsKnownVals(sel, 'club'), H = trendsKnownVals(sel, 'school'), P = trendsKnownVals(sel, 'program');
   const q = { ...(C.length ? { club: C } : {}), ...(H.length ? { school: H } : {}), ...(P.length ? { program: P } : {}) };
   TR.selNow = q;
@@ -4423,13 +4402,6 @@ function trendsView(sel) {
   // A program alone: its own counts, as #308 wrote the program page's subtitle; otherwise the index's.
   const bits = one && boxes === 1 ? [`${one.current} current players, ${one.past} former, ${commitsText(one.commits)}`]
     : [doc.divisions.join(', '), `${fmtNum(cov.current.players)} current players`, `${fmtNum(cov.past.players)} former`, `${fmtNum(cov.commits.recruits)} ${doc.commitDivisions.join(', ')} commits`];
-  if ((C.length || H.length) && !P.length) {
-    if (f.conf.length) bits.push(esc(confLabels(f.conf).join(', ')));
-    if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
-    if (f.division.length) bits.push(esc(f.division.map(divisionName).join(', ')));
-    if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
-    if (S.q) bits.push(`programs matching “${esc(S.qRaw)}”`);
-  }
   const sub = `${named.length ? named.join(' × ') : 'Clubs and high schools behind college rosters'} · ${bits.join(' · ')}`;
 
   // Notes above the results: values the index does not carry, a box left with none, a picked program outside the filters.
@@ -4445,7 +4417,6 @@ function trendsView(sel) {
   for (const [k, n] of Object.entries(TR.dropped || {})) {
     notes.push(`This link listed ${n + TR_MAX} ${TR_PLURAL[k]}; a box takes up to ${TR_MAX}, so the first ${TR_MAX} are shown and ${n} ${n === 1 ? 'was' : 'were'} left out.`);
   }
-  for (const id of P) { const pq = byProgram.get(id); if (pq && !matchesFilters(pq, null)) notes.push(`${esc(displayName(pq))} is outside your sidebar filters; it is shown because you picked it.`); }
   const pairsNote = doc.pairsUnknown && C.length && H.length;
   if (pairsNote) notes.push('This index was built before clubs and high schools could be combined; club and high school together are answered after the next data refresh. The results below leave the high schools out.');
   const noteHtml = notes.map(n => `<p class="small muted tr-note">${n}</p>`).join('');
@@ -4461,8 +4432,8 @@ function trendsView(sel) {
   const commitCell = (r, sch) => r.commits != null ? sm(r.commits) : sch ? dash : notCollected;
   const cells = (r, sch) => `<td class="num"><span class="num-strong">${pl(r.current, r.past)}</span></td><td class="num">${fmtNum(r.current)}</td><td class="num">${sm(r.past)}</td><td class="num trend-sep">${commitCell(r, sch)}</td>`;
   const where = e => [e.city, e.state].filter(Boolean).join(', ');
-  const filtered = rows => { const shown = rows.filter(r => byProgram.has(r.slug) && (P.includes(r.slug) || matchesFilters(byProgram.get(r.slug), null))); return { shown, hidden: rows.length - shown.length }; };
-  const hiddenLine = (n, what) => n ? `${n} program${n === 1 ? '' : 's'} with ${what} ${n === 1 ? 'is' : 'are'} hidden by your sidebar filters. ` : '';
+  // #465: Pipelines has no rail, so the Programs filters (and a search made there) never narrow it.
+  const shownOf = rows => rows.filter(r => byProgram.has(r.slug));
   const sch = H.length > 0, kindCov = C.length ? 'club' : 'school';
   const totalsOf = rows => { const known = rows.filter(r => r.commits != null); return { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: known.length ? known.reduce((a, r) => a + r.commits, 0) : null }; };
   // Totals combine the chosen boxes, so with 2+ boxes they follow the same "1–2" rule as the rows.
@@ -4495,15 +4466,15 @@ function trendsView(sel) {
   // Clubs and/or schools, no program: the programs their players went to (a true AND when both are chosen).
   if (C.length || H.length) {
     const rows = programRows(trendsQuery(doc, q));
-    const t = totalsOf(rows), { shown, hidden } = filtered(rows);
+    const t = totalsOf(rows), shown = shownOf(rows);
     const trs = shown.map(r => { const p = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(p)}${link({ program: p.slug }, 'at this program →', 'tr-go')}${expander(p.slug, r.current)}</td>${cells(r, sch)}</tr>`; }).join('');
     const what = [C.length && orText('club', C), H.length && orText('school', H)].filter(Boolean).join(' and ');
     const heading = [C.length && orList('club', C), H.length && orList('school', H)].filter(Boolean).join(' <span class="muted" style="font-weight:400">and</span> ');
     const one1 = C.length + H.length === 1 ? (C.length ? TR.entById.club.get(C[0]) : TR.entById.school.get(H[0])) : null;
     const html = `${noteHtml}<div class="card"><h3>${heading}${one1 && where(one1) ? ` <span class="muted" style="font-weight:400">· ${esc(where(one1))}</span>` : ''} ${one1?.unmatched ? unmatchedBadge : ''}</h3>
       <p class="small muted">Programs with players from ${esc(what)}, most players first: ${totalsText(t)} at ${rows.length} program${rows.length === 1 ? '' : 's'}. ${commitsNote} ${smallNote}</p>
-      <div class="tscroll"><table class="trend-table">${head('Program', sch)}<tbody>${trs || `<tr><td colspan="5"><div class="empty">${rows.length ? 'Every program with these players is hidden by your filters.' : `No players in the index are from ${esc(what)}.`}</div></td></tr>`}</tbody></table></div>
-      <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:${covList(rows.length ? rows : doc.divisions.map(d => ({ division: d, current: 0, past: 0, commits: null })), kindCov)}${hiddenLine(hidden, 'these players')}${sch ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
+      <div class="tscroll"><table class="trend-table">${head('Program', sch)}<tbody>${trs || `<tr><td colspan="5"><div class="empty">No players in the index are from ${esc(what)}.</div></td></tr>`}</tbody></table></div>
+      <div class="table-footnote"><b>Coverage</b> — counts are lower bounds:${covList(rows.length ? rows : doc.divisions.map(d => ({ division: d, current: 0, past: 0, commits: null })), kindCov)}${sch ? 'Commits are not shown for high schools: no recruit carries a matched high school yet. ' : ''}Current players are listed from the public roster; commits are never listed by name.</div></div>`;
     return { html, sub, say: `${rows.length} program${rows.length === 1 ? '' : 's'}.` };
   }
   // Programs only: the clubs and the high schools feeding them, summed across the chosen programs.
