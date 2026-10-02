@@ -19,7 +19,7 @@
 //   - junk in a saved cd.filters is dropped on load and never thrown on;
 //   - every "Clear filters" control on the page clears chips (the set of controls is read from the source,
 //     so a new one added without clearing chips fails here);
-//   - the ID Camp View honours chips and counts hidden camps;
+//   - the ID Camps page is NOT narrowed by chips (#465, owner decision D4: it has its own filters);
 //   - with no chips, the Program View's rows are in byte-identical order to the predicate and list code that
 //     shipped before this change, over 270 sort x conference x region x search states on the real index,
 //     and the rendered order and subtitle are unchanged over 60 cards and table states. The expected order
@@ -71,7 +71,7 @@ function makeElement(name) {
 }
 const HANDLES = ['S', 'TITLE_TABLE_DIVISIONS', 'COND_FIELDS', 'COND_UNITS', 'condFromInput', 'condText', 'condStatus', 'condTally', 'condHiddenText',
   'addCond', 'removeCond', 'condRemove', 'condFormOpen', 'condFormClose', 'condFormSubmit', 'filteredPrograms', 'matchesFilters',
-  'matchScore', 'sortCmp', 'normText', 'tuitionOf', 'renderList', 'renderCamps', 'renderSidebar', 'loadIndex', 'corpusLabel', 'SORTS'];
+  'matchScore', 'sortCmp', 'normText', 'tuitionOf', 'renderList', 'renderCamps', 'renderSidebar', 'loadIndex', 'corpusLabel', 'SORTS', 'todayLocal'];
 // `seed` maps a localStorage key to the RAW string stored, which is how a hand-edited or corrupt save is reproduced.
 function loadPage({ index, seed = {} } = {}) {
   const els = new Map();
@@ -389,41 +389,38 @@ test('every "Clear filters" control on the page clears condition chips', async (
   const source = fs.readFileSync(HTML, 'utf8');
   // The controls are read from the source, so one added later without clearing chips is caught by this list growing.
   const ids = [...source.matchAll(/id="([A-Za-z]+)"[^>]*>\s*Clear filters\s*</g)].map(m => m[1]);
-  assert.deepEqual(ids, ['campsClear'], `the Clear filters controls on the page: ${ids}`);
+  // #465 (D4): the ID Camps page's Clear filters clears the CAMP filters (data-camps-clear), never the Programs pills or
+  // chips - which no longer narrow camps at all - so no program "Clear filters" control is left on the page to check.
+  assert.deepEqual(ids, [], `the Clear filters controls on the page: ${ids}`);
   const pg = await ready(loadPage());
   const { S, renderCamps } = pg.sb;
   reset(S); S.filters.region = ['South'];
-  S.filters.cond = [{ field: 'admissionRate', op: '<', value: 0 }]; // matches nothing, so the empty state and its button render
+  S.filters.cond = [{ field: 'admissionRate', op: '<', value: 0 }];
   pg.sb.location.hash = '#/camps';
   await renderCamps();
-  assert.ok(pg.app().includes('id="campsClear"'), 'the camps empty state has no Clear filters button');
-  const clear = pg.$('#campsClear').onclick;
-  assert.equal(typeof clear, 'function', '#campsClear has no handler');
-  clear();
-  assert.deepEqual(plain(S.filters.cond), [], 'Clear filters left the chips on');
-  assert.deepEqual(plain(S.filters.region), [], 'Clear filters left a pill on');
-  const saved = JSON.parse(pg.sb._store.get('cd.filters') || '{}');
-  assert.ok(Array.isArray(saved.cond) && saved.cond.length === 0, `the cleared chips were not saved: ${JSON.stringify(saved.cond)}`);
+  assert.ok(!pg.app().includes('No upcoming ID camp found in our sources for these filters'),
+    'a Programs chip emptied the camps page (#465 D4: it must not narrow camps)');
+  assert.deepEqual(plain(S.filters.cond), [{ field: 'admissionRate', op: '<', value: 0 }], 'opening camps changed the Programs chips');
+  assert.deepEqual(plain(S.filters.region), ['South'], 'opening camps changed the Programs pills');
   reset(S);
 });
 
-test('the ID Camp View honours chips and counts the camps hidden for missing data', async () => {
+test('#465 D4: Programs condition chips do not narrow the ID Camps page, and it counts nothing hidden for them', async () => {
   const pg = await ready(loadPage());
   const { S, renderCamps } = pg.sb;
   const byProgram = new Map(SHIPPED.programs.map(p => [p.slug, p]));
-  const idCamps = CAMPS.camps.filter(c => c.campType === 'id' && byProgram.has(c.slug));
+  const today = pg.sb.todayLocal();
+  const past = c => c.precision === 'month' ? (c.endDate || c.startDate).slice(0, 7) < today.slice(0, 7) : (c.endDate || c.startDate) < today;  // #71
+  const idCamps = CAMPS.camps.filter(c => c.campType === 'id' && (byProgram.has(c.slug) || c.program) && !past(c));
   reset(S); S.filters.cond = [{ field: 'academicRank', op: '<=', value: 100 }];
   pg.sb.location.hash = '#/camps';
   await renderCamps();
-  const want = idCamps.filter(c => byProgram.get(c.slug).academicRank != null && byProgram.get(c.slug).academicRank <= 100);
-  const missing = idCamps.filter(c => byProgram.get(c.slug).academicRank == null).length;
-  assert.ok(want.length > 0 && missing > 0, `fixture: ${want.length} shown, ${missing} missing`);
   const html = pg.app();
-  assert.deepEqual(slugsIn(html).sort(), want.map(c => c.slug).sort(), 'camp rows on screen');
+  const onScreen = [...html.matchAll(/<li class="camp-row" data-slug="([^"]+)"/g)].map(m => m[1]);
+  assert.deepEqual(onScreen.sort(), idCamps.map(c => c.slug).sort(), 'camp rows on screen');
   const sub = subtitle(html);
-  assert.ok(sub.includes(`${want.length} upcoming ID camp${want.length === 1 ? '' : 's'} of ${idCamps.length}`), sub);
-  assert.ok(sub.includes(`${missing} camp${missing === 1 ? '' : 's'} hidden: no academic rank`), sub);
-  assert.ok(sub.includes('US rank #100 or better'), sub);
+  assert.ok(sub.includes(`${idCamps.length} upcoming ID camp${idCamps.length === 1 ? '' : 's'} at`), sub);
+  assert.ok(!sub.includes('hidden: no academic rank') && !sub.includes('US rank'), sub);
   reset(S);
 });
 

@@ -369,7 +369,9 @@ test('XSS: planted markup in q, conf and region reaches no HTML sink on the list
   // Pipelines names the search only while a club or high school is picked (and no program), so one is picked
   const club = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'trends', 'index.json'), 'utf8')).clubs.id[0];
   pg.sb.location.hash = `#/trends?club=${encodeURIComponent(club)}`; await settle(300);
-  assert.ok(pg.sinks.some(s => /^#(app|trSub)$/.test(s.el) && /programs matching “&quot;&gt;&lt;img/.test(s.html)), 'Pipelines never drew its search line, so it was not checked');
+  // #465 (owner's D4): neither ID Camps nor Pipelines reads the Programs search any more, so neither names it at all -
+  // which also means the planted text cannot reach their sinks. (Before #465 B and F, a camps subtitle named it.)
+  assert.ok(!pg.sinks.some(s => /^#(app|trSub)$/.test(s.el) && /programs matching/.test(s.html)), 'ID Camps or Pipelines names the Programs search');
   const drawn = new Set(pg.sinks.map(s => s.el));
   for (const el of ['#sidebar', '#app', '#qList']) assert.ok(drawn.has(el), `${el} was never drawn, so it was not checked`);
   // The page draws no <img> or <script> through innerHTML at all, so any one is the planted markup; an unescaped quote
@@ -429,8 +431,9 @@ test('static: one writer of list addresses; pushState only from listCommit and t
   const script = HTML.slice(HTML.indexOf('<script>'), HTML.indexOf('</script>'));
   const code = script.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
   const pushSites = [...code.matchAll(/history\.pushState\(|'pushState'/g)].length;
-  assert.equal(pushSites, 2, 'a pushState outside listUrlWrite and trendsPush');
+  assert.equal(pushSites, 3, 'a pushState outside listUrlWrite, trendsPush and campsCommit (#465)');
   assert.match(code, /history\.pushState\(null, '', trendsUrl\(sel\)\)/);
+  assert.match(code, /function campsCommit\(next, focus\) \{[^]*?history\.pushState\(null, '', h\)/);
   assert.match(code, /function listUrlWrite\(mode, st = listSnapshot\(\)\) \{[^]*?history\[mode === 'push' \? 'pushState' : 'replaceState'\]\(null, '', h\)/);
   assert.ok(!/history\.replaceState\(null, '', '#\/'\); return go/.test(code), '#/c/ still rewrites to a bare #/');
   assert.equal([...code.matchAll(/listCommit\(\);/g)].length, 19, 'the commit sites changed: pills (4), sort, direction, two conditions, the c key, Cards/Stats (2), table headers (2), Ask applied and undone, Recommended\'s clear, and #465 D\'s Conference toggle, its chip removal and the phone chip row');

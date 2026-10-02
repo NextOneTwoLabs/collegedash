@@ -225,28 +225,28 @@ test('the Shortlist count in the header and the bar follows the saved programs',
   assert.deepEqual(COUNTS.map(c => c.textContent), ['', ''], 'an empty Shortlist still shows a count');
 });
 
-test('filters belong to their destination: Home and Pipelines draw no filter rail; Programs keeps it, ID Camps for now', async () => {
+test('filters belong to their destination: Home, Pipelines and ID Camps draw no Programs rail; Programs keeps it', async () => {
   const pg = loadPage({ hash: '#/' });
   await settle();
   assert.ok(pg.body.classList.contains('no-rail'), 'Home shows the Programs filter rail');
-  for (const [hash, rail] of [['#/programs', true], ['#/c/ACC', true], ['#/camps', true], ['#/trends', false], ['#/', false]]) {
+  for (const [hash, rail] of [['#/programs', true], ['#/c/ACC', true], ['#/camps', false], ['#/trends', false], ['#/', false]]) {
     pg.sb.location.hash = hash; pg.sb.route(); await settle(60);
     assert.equal(!pg.body.classList.contains('no-rail'), rail, `${hash}: the rail is ${rail ? 'missing' : 'drawn'}`);
   }
-  // #465 (the owner, 2026-10-02): Pipelines has no rail and ignores the Programs filters (trends_view); ID Camps keeps
-  // the rail until PR F gives it its own. Update this list with F.
-  assert.deepEqual([...pg.sb.NO_RAIL], ['home', 'trends']);
+  // #465 (the owner, 2026-10-02): Pipelines has no rail and ignores the Programs filters (trends_view); ID Camps has its
+  // own sidebar since PR F (#471) and ignores the Programs filters and search.
+  assert.deepEqual([...pg.sb.NO_RAIL], ['home', 'trends', 'camps']);
   assert.match(HTML, /body\.no-rail \.sidebar, body\.no-rail \.sidebar-overlay, body\.no-rail \.hamburger \{ display: none; \}/);
 });
 
 // #465 (the owner, 2026-10-02): "show search box only when needed" - on Programs (#/programs, #14's aliases, #/c/) and a
 // program's page. Everywhere else body.no-search hides it (and "Find programs for me") with CSS; it stays in the DOM.
-test('the search box shows on Programs and a program\'s page only; hidden by CSS elsewhere, the phone header one row', async () => {
+test('the search box shows on Programs, a program\'s page and ID Camps (#471); hidden by CSS elsewhere, the phone header one row', async () => {
   const pg = loadPage({ hash: '#/' });
   await settle();
   const slug = INDEX.programs[0].slug;
   for (const [hash, shown] of [['#/', false], ['#/programs', true], ['#/c/ACC', true], [`#/p/${slug}`, true], [`#/p/${slug}/roster`, true],
-    ['#/camps', false], ['#/trends', false], ['#/faq', false], ['#/api', false], ['#/shortlist', false], ['#/compare', false], ['#/nowhere', false]]) {
+    ['#/camps', true], ['#/trends', false], ['#/faq', false], ['#/api', false], ['#/shortlist', false], ['#/compare', false], ['#/nowhere', false]]) {
     pg.sb.location.hash = hash; pg.sb.route(); await settle(60);
     assert.equal(!pg.body.classList.contains('no-search'), shown, `${hash}: the search box is ${shown ? 'hidden' : 'shown'}`);
   }
@@ -260,16 +260,18 @@ test('where the box is hidden, "/" does not reach for it, and "Clear search" put
   const pg = loadPage({ hash: '#/' });
   await settle();
   const slash = () => { const e = { key: '/', target: { matches: () => false, closest: () => null }, prevented: false, preventDefault() { e.prevented = true; } }; FOCUS.el = null; pg.docListeners.keydown.forEach(fn => fn(e)); return e; };
-  for (const hash of ['#/', '#/camps', '#/trends']) {
+  for (const hash of ['#/', '#/trends']) {
     pg.sb.location.hash = hash; pg.sb.route(); await settle(80);
     const e = slash();
     assert.ok(!e.prevented && FOCUS.el !== '#q', `${hash}: "/" focused the hidden box`);
   }
-  pg.sb.location.hash = '#/programs'; pg.sb.route(); await settle(80);
-  assert.ok(slash().prevented && FOCUS.el === '#q', '"/" no longer focuses the box on Programs');
-  // a search made on Programs still narrows ID Camps (until PR F), which says so with "Clear search"
+  for (const hash of ['#/programs', '#/camps']) {  // #471: ID Camps shows the box, and "/" reaches it there too
+    pg.sb.location.hash = hash; pg.sb.route(); await settle(80);
+    assert.ok(slash().prevented && FOCUS.el === '#q', `"/" does not focus the box on ${hash}`);
+  }
+  // a "Clear search" on a page whose box is hidden (a Programs query named there) puts focus on the heading
   pg.sb.S.qRaw = 'Stanford'; pg.sb.S.q = 'stanford';
-  pg.sb.location.hash = '#/camps'; pg.sb.route(); await settle(150);
+  pg.sb.location.hash = '#/trends'; pg.sb.route(); await settle(150);
   FOCUS.el = null;
   pg.docListeners.click.forEach(fn => fn({ target: { closest: s => (s === '[data-clear-search]' ? {} : null) } }));
   await settle(250);

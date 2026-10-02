@@ -151,7 +151,7 @@ test('typing in the header search box: a route change never takes focus from it'
 });
 
 test('#465: a route to a page that hides the search box moves focus to its heading, never leaving it in a hidden box', async () => {
-  for (const to of ['#/', '#/camps', '#/trends', '#/faq']) {
+  for (const to of ['#/', '#/trends', '#/faq']) {  // ID Camps shows the box since #471
     const pg = await open('#/programs');
     pg.sb.document.activeElement = IN_SEARCH;
     const f = await nav(pg, to, 400);
@@ -197,6 +197,7 @@ test('the same page drawn again (a retry, an address rewritten in place) takes n
 
 test('no new live region: exactly the six polite regions main has (#qStatus covers search), none assertive', () => {
   const ids = [...HTML.matchAll(/<[^<>]*aria-live="(polite|assertive)"[^<>]*>/g)].map(m => (/id="([\w-]+)"/.exec(m[0]) || [])[1]).sort();
-  assert.deepEqual(ids, ['feedbackNote', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive'], 'a live region was added or removed');
+  // #465: campsStatus is the ID Camps filter bar's result count, like Pipelines' trLive; it is never used on a route change
+  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive'], 'a live region was added or removed');
   assert.ok(!/aria-live="assertive"/.test(HTML), 'an assertive live region');
 });
