@@ -59,7 +59,7 @@ function loadPage() {
     Object, RegExp, Intl, isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
     document: { documentElement: makeElement('html'), body: makeElement('body'), activeElement: null, querySelector: bySelector,
       querySelectorAll: () => [], createElement: makeElement, addEventListener() { } },
-    location: { hash: '#/', replace(h) { this.hash = h; } },
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },  // #465: the list is #/programs
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
@@ -189,7 +189,7 @@ test('a place: one option for the whole list, counted as the list draws it; choo
   assert.equal(box(pg)._attrs['aria-activedescendant'], 'qOpt-place');
   key(pg, 'Enter');
   await settle(20);
-  assert.equal(pg.sb.location.hash, '#/', 'choosing the place opened something else');
+  assert.equal(pg.sb.location.hash, '#/programs', 'choosing the place opened something else');
   assert.equal(pg.sb.S.qRaw, 'Ohio', 'choosing the place cleared the query');
   assert.equal(box(pg)._attrs['aria-expanded'], 'false');
 });
@@ -239,7 +239,7 @@ test('on a profile page typing only suggests; a program picked from search takes
 
 test('mouse: pressing an option keeps the box focused, and a click chooses it', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await type(pg, 'kenyon');
   const list = pg.$('#qList');
   let prevented = false;
@@ -254,7 +254,7 @@ test('mouse: pressing an option keeps the box focused, and a click chooses it', 
 // Huatuo's two follow-ups on #445, folded into #447.
 test('#445 follow-up: #qStatus is rewritten only when its words change (a filter tap with a query typed is not re-announced)', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await type(pg, 'Ohio');
   const st = pg.$('#qStatus'), said = st.textContent, before = st._textWrites;
   assert.ok(said, 'fixture: the status is empty');

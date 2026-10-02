@@ -1438,7 +1438,7 @@ function loadFailedHtml(err, id = 'loadRetry') {
     : s === 503 ? 'The data service is briefly unavailable. Try again in a moment.'
     : s === 0 ? 'The data did not load. Check your connection and try again.'
     : 'The data did not load. Try again.';
-  return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/">All programs</a></p></div>`;
+  return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/programs">All programs</a></p></div>`;
 }
 async function loadIndex() {
   if (S.index) return S.index;
@@ -1994,10 +1994,17 @@ function syncShowResults() { const b = $('#showResults'); if (b) b.textContent =
 function showResults() {
   const v = currentView();
   closeDrawer();
-  if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/';  // from a profile etc., to the list
+  if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/programs';  // from Home, a profile etc., to the list
   $('#sidebarToggle')?.focus();
 }
-function currentView() { return location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0] || 'list'; }
+// #465 (owner's D1): a bare #/ (or no hash) is Home. Programs is #/programs and keeps the internal view name 'list', so
+// every check of 'list' still means the program list; #14's #/?… and the old #/list are Programs too (route() rewrites
+// them to #/programs in place).
+function currentView() {
+  const v = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0];
+  if (v === 'programs' || v === 'list') return 'list';
+  return v || (location.hash.includes('?') ? 'list' : 'home');
+}
 // Views that the sidebar's pills narrow but its sort select and recruiting-class pills cannot: the camp
 // list (issue #65) and the Pipelines view (#230, #322), where a sort of programs has no row to sort.
 const filterOnlyView = v => v === 'camps' || v === 'trends';
@@ -2188,7 +2195,7 @@ function openFromSearch(slug) {
 function showPlaceList() {
   closeDrawer();
   if (isPhone()) $('#q')?.blur?.();
-  if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/';
+  if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/programs';
 }
 function chooseSuggestion(i) {
   const it = SUGG.items[i]; if (!it) return;
@@ -2285,10 +2292,10 @@ function applyAsk(a) {
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
   S.qRaw = ''; S.q = ''; S.askMsg = ''; syncSearchBox();
   S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
-  saveState(); listCommit();  // on the list a new entry; anywhere else the '#/' below is the visitor's way to it
+  saveState(); listCommit();  // on the list a new entry; anywhere else the '#/programs' below is the visitor's way to it
   S.sidebarTab = 'programs'; renderSidebar();
   const v = currentView();
-  if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/';
+  if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/programs';  // #465: Ask from Home lands on Programs
 }
 function undoAsk() {
   const r = S.askResult; if (!r) return;
@@ -2634,7 +2641,7 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
   R.catalogError = false;
   R.active = true; R.shown = RECS_PAGE; R.fitError = null; R.toast = null; renderRecsToast();
   if (fromPanel) { R.open = false; renderRecsPanel(); syncRecsEntry(); }
-  if (currentView() !== 'list') { location.hash = '#/'; }
+  if (currentView() !== 'list') { location.hash = '#/programs'; }
   syncSortControls();
   if (!R.fit) {
     R.loading = true; await renderList();
@@ -2710,7 +2717,7 @@ function recsNvHtml(res) {
 // The list in Recommended mode. Called by renderList; returns true when it drew the page.
 function renderRecsList(idx) {
   const R = S.recs, f = S.filters;
-  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Recommended for you' }];
+  const crumbs = [{ label: 'Programs', href: '#/programs' }, { label: 'Recommended for you' }];
   if (R.loading) {
     $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: 'Loading recommendations…', tabs: listTabs(f.view) })
       + `<div class="content-body"><div class="empty" role="status">Loading recommendations…</div></div>`;
@@ -3066,10 +3073,13 @@ const recsPilotReady = recsPilotStart();
 
 /* ---------- router ---------- */
 /* ---------- the list's state in the address (issue #14) ----------
-   #/?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
+   #/programs?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
+   #465 (owner's D1) moved the canonical prefix from #/? to #/programs?. The params, encoding and validation did not
+   change, and every #/?… link ever shared still opens the same list: route() rewrites it in place to #/programs?….
    This is a public contract: people share and bookmark these links, so the format may grow but never change meaning.
    - Nine params, always in that order, each list's values in a fixed (sorted) order, defaults left out. `sort` is
-     always written, so an address this page wrote is never a bare #/ - and a bare #/ keeps meaning "my saved filters".
+     always written, so an address this page wrote is never a bare #/programs - and a bare #/programs means "my saved
+     filters". (A bare #/ is Home, #465.)
    - Every value goes through encodeURIComponent, so `+ , : & # %` inside a value are always escaped, and a space is
      written `+`. Lists are joined with a literal `,`. A conference key "D2|Independent" is written D2:Independent
      (a literal `|` is not a fragment character); `|` and %7C are read too. On the way in `+` becomes a space BEFORE
@@ -3080,7 +3090,8 @@ const recsPilotReady = recsPilotStart();
      on. Only q is free text: control characters removed, trimmed, at most LIST_Q_MAX characters.
    - NEVER in it: recommendations (cd.recs), the pilot, compare, the shortlist, residency, "More statistics", an open
      condition form, Ask. listHashOf reads the nine fields of listSnapshot() and nothing else.
-   History (Bianque's review on #14): arriving, Back/Forward, a bare #/, #/c/ and #/rpi only ever replaceState (to the
+   History (Bianque's review on #14): arriving, Back/Forward, a bare #/programs, the #/?… alias, #/c/ and #/rpi only ever
+   replaceState (to the
    canonical form) or do nothing. pushState comes only from listCommit(), called by the visitor's own commits: a pill,
    the sort and its direction, Cards/Stats, a condition added or removed, Ask applied or undone, a filter cleared from
    Recommended. Typing replaces, 80 ms after the last key; a commit first writes typing still pending into the entry
@@ -3106,7 +3117,7 @@ function listHashOf(st) {
   out.push(`sort=${listEnc(st.sort || 'name')}`);
   if (st.sortDir === 'asc' || st.sortDir === 'desc') out.push(`dir=${st.sortDir}`);
   if (st.view === 'table') out.push('view=table');
-  return `#/?${out.join('&')}`;
+  return `#/programs?${out.join('&')}`;
 }
 // The ONE reader: the part after '?' to a checked state. Pure - it changes nothing. Unknown params, a repeated param
 // after its first, and every value the page does not know are dropped; a missing param is the page's default.
@@ -3163,7 +3174,7 @@ function listCommit() {
   }
   listUrlWrite('push');
 }
-// The list route: a state the address carries is applied (and saved, as #/c/ always did); a bare #/ keeps the saved
+// The list route: a state the address carries is applied (and saved, as #/c/ always did); a bare #/programs keeps the saved
 // filters. Either way the address is then made canonical IN PLACE. true when the state on screen changed.
 function listArrive() {
   clearTimeout(listTypeTimer); listTypeTimer = null;
@@ -3225,10 +3236,29 @@ function routeFocus(plan) {
     el.focus({ preventScroll: true });
   } catch { /* focus is a courtesy; a page that drew must never turn into an error card over it */ }
 }
+/* ---------- Home (#465) ----------
+   PR A's Home is deliberately small: the page heading route focus lands on (#453), one line, and the three destinations.
+   PR B draws the real page (entry cards, Continue, the camp preview). It needs no data, so it is drawn even when the
+   program index failed to load (`failed` is that card), and never waits on anything. */
+function renderHome(failed = '') {
+  $('#app').innerHTML = pageHeader({ title: 'Find your college soccer path.',
+    subtitle: 'Explore NCAA women’s soccer programs, upcoming ID camps, and connections from clubs and high schools to colleges.' })
+    + `<div class="content-body">${failed}<nav class="home-dest" aria-label="Start here"><a class="btn primary" href="#/programs">Browse Programs</a> <a class="btn" href="#/camps">Find ID Camps</a> <a class="btn" href="#/trends">Explore Pipelines</a></nav></div>`;
+  return Promise.resolve();
+}
+// #465 (owner's D1): #14's list addresses (#/?…, any query on the bare root) and the old #/list path are a PERMANENT
+// alias of Programs, rewritten IN PLACE (replaceState: never a new entry, never Home) to #/programs with the same query.
+const PROGRAMS_ALIAS = /^#\/?(?:\?|list(?:\/?$|\/?\?))/;
 function route() {
-  const h = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
+  let hash = location.hash;
+  if (PROGRAMS_ALIAS.test(hash)) {
+    const i = hash.indexOf('?');
+    hash = `#/programs${i >= 0 ? hash.slice(i) : ''}`;
+    try { history.replaceState(null, '', hash); } catch { /* refused: the address stays, the list still opens below */ }
+  }
+  const h = hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
   const parts = h.split('/').filter(Boolean);
-  const view = parts[0] || 'list';
+  const view = parts[0] === 'programs' ? 'list' : parts[0] || 'home';
   const app = $('#app');
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
@@ -3258,7 +3288,7 @@ function route() {
   }
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
-  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/'); return; }
+  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/programs'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = capCompare(parts[1].split(',').filter(Boolean)); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
@@ -3273,6 +3303,7 @@ function route() {
   if (view === 'faq') return go(renderFaq());
   if (view === 'api') return go(renderApiDocs());
   if (view === 'list') { if (listArrive()) renderSidebar(); return go(perfView('list', renderList(), perfNav)); }
+  if (view === 'home') return go(renderHome());  // not measured: #394's Worker knows list, profile, trends, camps (#465 PR B decides)
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
   routeFocus(focusPlan);
 }
@@ -3304,8 +3335,8 @@ function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', 
 /* ---------- not found (unknown program slug or route): message, up to three "did you mean" links, keeps the URL ---------- */
 function renderNotFound({ title, message, suggestions = [] }) {
   const did = suggestions.length ? `<p>Did you mean ${suggestions.map(p => `<a href="#/p/${esc(p.slug)}">${esc(p.name)}</a> <span class="team-sub">(${programLine(p)})</span>`).join(', ')}?</p>` : '';
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Not found' }], title: esc(title) })
-    + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'Not found' }], title: esc(title) })
+    + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/programs">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
 }
 // programs whose name a hash segment looks like: "stanfrod" and "program/stanford" both suggest Stanford
 function slugSuggestions(parts) {
@@ -3546,7 +3577,7 @@ async function renderList() {
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
-  const crumbs = f.conf.length ? [{ label: 'All programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'All programs' }];
+  const crumbs = f.conf.length ? [{ label: 'Home', href: '#/' }, { label: 'Programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'Home', href: '#/' }, { label: 'Programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
@@ -3629,7 +3660,7 @@ async function renderShortlist() {
   await loadIndex();
   const rows = shortlistRows();
   const right = rows.length >= 2 ? `<a class="open-external" href="#/compare/${rows.slice(0, 4).map(p => esc(p.slug)).join(',')}">⇄ Compare ${Math.min(rows.length, 4)}</a>` : '';
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
     + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card shortlist-empty" tabindex="-1"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
   $('#app').querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
 }
@@ -3841,13 +3872,13 @@ function campsResultsHtml(rows) {
   if (!rows.length && !CAMPS.all.length) {
     return `<div class="card camps-empty"><h2>No upcoming ID camp found in our sources</h2>
       <p class="muted">We list a camp here once a school has posted a dated women's soccer ID or prospect camp. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here. A program's own <b>ID Camps</b> tab shows everything we found for it.</p>
-      <p><a class="btn primary" href="#/">Browse programs</a></p>${footHtml}</div>`;
+      <p><a class="btn primary" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
   }
   if (!rows.length) {
     const what = campsChips(st).map(([, l]) => l).join(' · ');
     return `<div class="card camps-empty"><h2>No upcoming ID camp found in our sources for these filters</h2>
       <p class="muted">${esc(what)}. ${CAMPS.all.length} upcoming ID camp${CAMPS.all.length === 1 ? ' is' : 's are'} listed across all programs. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here.</p>
-      <p><button type="button" class="btn primary" data-camps-clear data-camps-focus="clear-empty">Clear filters</button> <a class="btn" href="#/">Browse programs</a></p>${footHtml}</div>`;
+      <p><button type="button" class="btn primary" data-camps-clear data-camps-focus="clear-empty">Clear filters</button> <a class="btn" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
   }
   const months = new Map();
   rows.forEach(x => { const m = (x.c.startDate || '').slice(0, 7); if (!months.has(m)) months.set(m, []); months.get(m).push(x); });
@@ -3967,7 +3998,7 @@ async function renderCamps() {
 
   const sum = campsSummary();
   $('#app').innerHTML = pageHeader({
-    crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Upcoming ID camps' }],
+    crumbs: [{ label: 'Home', href: '#/' }, { label: 'Upcoming ID camps' }],
     title: 'Upcoming ID camps', subtitle: sum.sub, tabs: listTabs('camps'),
   }) + `<div class="content-body">
       <p class="camps-lead">Upcoming women's soccer ID and prospect camps that programs list on their own camp pages.</p>
@@ -3976,7 +4007,7 @@ async function renderCamps() {
 
   const app = $('#app');
   // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
-  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { S.filters.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { S.filters.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
   const bar = $('#campsBar');
   bar.addEventListener('click', e => {
     const w = e.target.closest('[data-camps-when]');
@@ -4234,9 +4265,9 @@ function renderTrendsRoute() { return TR ? trendsApply(TR.sel) : renderTrends();
 async function renderTrends() {
   const idx = await loadIndex();
   const f = S.filters, app = $('#app');
-  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Pipelines' }];
+  const crumbs = [{ label: 'Home', href: '#/' }, { label: 'Pipelines' }];
   const tabs = listTabs('trends');
-  const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
   const title = 'From Youth Clubs/High Schools to Colleges'; // owner's wording (#329): every state of the page uses it
   const subtitle = 'Clubs and high schools behind college rosters';
   let doc;
@@ -4252,7 +4283,7 @@ async function renderTrends() {
     const missing = err?.status === 404;
     app.innerHTML = pageHeader({ crumbs, title, subtitle, tabs })
       + `<div class="content-body">${missing
-        ? '<div class="card" id="trFailed"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div>'
+        ? '<div class="card" id="trFailed"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/programs">All programs</a></p></div>'
         : loadFailedHtml(err, 'trRetry')}</div>`; // the same card as every other data load (#345)
     wireTabs(); $('#trRetry').onclick = () => renderTrends(); return;
   }
@@ -4769,7 +4800,7 @@ async function renderProfile(slug, tab) {
   const subtitle = [programLine(p, p.school?.city, p.school?.state), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference && p.division && confShared(p.conference) ? confKeyOf(p.division, p.conference) : (p.conference || ''))}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference && p.division && confShared(p.conference) ? confKeyOf(p.division, p.conference) : (p.conference || ''))}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
@@ -5133,7 +5164,7 @@ async function renderCompare() {
   const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(displayName(p))}</a><span class="team-sub">${programLine(p, p.school?.city, p.school?.state)}</span></th>`).join('')}</tr>
       ${groups.map(([g, rowsDef]) => `<tr><th class="group" colspan="${profiles.length + 1}">${g}</th></tr>` + rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')).join('')}</table></div></div>`
     : '<div class="card"><p class="muted">Add up to four programs with ⇄ Compare on any card or program page, or type a school name above.</p></div>';
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
     + `<div class="content-body">${bar}${table}</div>`;
   const add = $('#cmpAdd'), res = $('#cmpResults');
   if (add) {
@@ -5164,7 +5195,7 @@ async function renderFaq() {
     [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class (listed mostly for Division I programs)', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
   ];
   const app = $('#app');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h2>About the data</h2>
       <p class="lead">nextonetwo College Soccer gathers public information about NCAA women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
 
@@ -5228,7 +5259,7 @@ async function renderApiDocs() {
     ['429', 'Too many requests: over a per-minute limit. Retry-After says when to try again.'],
     ['503', 'API keys cannot be checked right now. Retry-After says when to try again.'],
   ];
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h3>What it is, honestly</h3>
       <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. The website stays free with no login and never needs a key. <b>Direct use needs an API key</b> the owner issues: scripts, agents and other servers send one. Without a key there is only a small allowance per internet address, for a quick look. The limits make copying the data slow and visible, not impossible: the project’s repository is public and holds the same data.</p></div>
     <div class="card"><h3>Three ways in</h3>
@@ -5310,8 +5341,9 @@ async function renderApiDocs() {
 // First load. A failure shows the try-again card (#345), whose button runs this same start again.
 function boot() {
   return loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => {
-    setDocTitle('Couldn’t load the data');
-    $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`;
+    // #465: Home needs no data, so it still draws (heading, destinations) with the try-again card inside it.
+    if (currentView() === 'home') renderHome(loadFailedHtml(e));
+    else { setDocTitle('Couldn’t load the data'); $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; }
     const b = $('#loadRetry'); if (b) b.onclick = () => boot();
   });
 }

@@ -114,7 +114,7 @@ const ON_VIEW_TAB = at('a.view-tab');
 const headingFocus = f => f.length && f.at(-1).el === '.content-title' && f.at(-1).opts?.preventScroll === true && f.at(-1).tabindex === '-1';
 
 test('the first view of a page load takes no focus', async () => {
-  for (const h of ['#/', `#/p/${SLUG}`, '#/camps', '#/rpi']) {
+  for (const h of ['#/', '#/programs', `#/p/${SLUG}`, '#/camps', '#/rpi']) {
     const pg = await open(h);
     assert.deepEqual(pg.focus, [], `${h}: the landing view took focus`);
   }
@@ -122,7 +122,7 @@ test('the first view of a page load takes no focus', async () => {
 
 test('every route change focuses the new page\'s <h1> (tabindex -1, preventScroll)', async () => {
   const pg = await open('#/');
-  for (const h of [`#/p/${SLUG}`, '#/camps', '#/trends', '#/compare', '#/shortlist', '#/faq', '#/api', '#/no-such-page', '#/']) {
+  for (const h of [`#/p/${SLUG}`, '#/camps', '#/trends', '#/compare', '#/shortlist', '#/faq', '#/api', '#/no-such-page', '#/programs', '#/']) {
     const f = await nav(pg, h, 400);
     assert.ok(headingFocus(f), `${h}: focus did not move to the page heading (${JSON.stringify(f)})`);
   }

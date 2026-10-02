@@ -102,3 +102,14 @@ test('every /api/v1 route the Worker serves is in docs/data-api.md and on the #/
   }
   assert.equal(resolveResource('/api/v1/nope').status, 404, 'and nothing else resolves');
 });
+
+test('#465: the docs name the camps `program` block\'s fields exactly as build.py and the schema define them', () => {
+  const BUILD = readFileSync('build.py', 'utf8');
+  const fields = [...(/^CAMP_PROGRAM_FIELDS = \(([^)]*)\)/m.exec(BUILD)?.[1] || '').matchAll(/"([A-Za-z]+)"/g)].map(m => m[1]);
+  assert.deepEqual(fields, ['name', 'shortName', 'division', 'city', 'state', 'region'], 'build.CAMP_PROGRAM_FIELDS');
+  const row = DOCS.split('\n').find(l => l.startsWith('| `/api/v1/camps` |')) || '';
+  const named = [...(/a `program` block of (.*?) copied/.exec(row)?.[1] || '').matchAll(/`([A-Za-z]+)`/g)].map(m => m[1]);
+  assert.deepEqual(named, fields, `docs/data-api.md's /api/v1/camps row: ${row.slice(0, 120)}`);
+  const schema = JSON.parse(readFileSync('schema/camps.schema.json', 'utf8'));
+  assert.deepEqual(schema.$defs.program.required, fields, 'schema/camps.schema.json');
+});
