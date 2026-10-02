@@ -75,10 +75,21 @@ from collect import common  # noqa: E402
 import seasons_test  # noqa: E402
 
 LIVE_INDEX = os.path.join(common.PUBLIC_DATA_DIR, "camps", "index.json")
-# #465 size pins (gzip -9 of the file as build writes it, compact), set with headroom over the values measured for
-# the PR on 2026-10-02: 7,004 B for 98 rows (71.5 B per row), of which the program blocks are 1,803 B (18.4 B per row).
-CAMPS_GZ_PER_ROW = 85
-PROGRAM_BLOCK_GZ_PER_ROW = 24
+# #465 size pins (gzip -9 of the file as build writes it, compact): a fixed allowance plus a per-row rate. The rows
+# follow the calendar, and the document has a fixed head (updated, window, counts: ~132 B gzipped with no rows) while
+# gzip has little to share across a handful of rows, so a pure per-row pin fails a correct build in an off-season with
+# ~20 or fewer camps (Bianque's review of #468). Measured for the PR on 2026-10-02: 7,004 B for 98 rows, of which the
+# program blocks are 1,803 B; and on a scratch document, 458 B for one row (71 B of it the block).
+CAMPS_GZ_BASE, CAMPS_GZ_PER_ROW = 600, 85
+PROGRAM_BLOCK_GZ_BASE, PROGRAM_BLOCK_GZ_PER_ROW = 150, 24
+
+
+def camps_size_ok(gz: int, rows: int) -> bool:
+    return gz <= CAMPS_GZ_BASE + CAMPS_GZ_PER_ROW * rows
+
+
+def block_size_ok(block_gz: int, rows: int) -> bool:
+    return block_gz <= PROGRAM_BLOCK_GZ_BASE + PROGRAM_BLOCK_GZ_PER_ROW * rows
 
 FAILS: list[str] = []
 TOTAL = 0
@@ -400,10 +411,10 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     stripped = json.dumps({**doc, "camps": [{k: v for k, v in r.items() if k != "program"} for r in rows]},
                           ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
     gz, gz0 = len(gzip.compress(raw, 9)), len(gzip.compress(stripped, 9))
-    ok(f"#465 size: the gzipped camps document is at most {CAMPS_GZ_PER_ROW} B per row",
-       gz <= CAMPS_GZ_PER_ROW * len(rows), f"{gz} B for {len(rows)} rows ({gz / len(rows):.1f} B per row)")
-    ok(f"#465 size: the program block adds at most {PROGRAM_BLOCK_GZ_PER_ROW} B per row, gzipped",
-       gz - gz0 <= PROGRAM_BLOCK_GZ_PER_ROW * len(rows), f"+{gz - gz0} B for {len(rows)} rows")
+    ok(f"#465 size: the gzipped camps document is at most {CAMPS_GZ_BASE} + {CAMPS_GZ_PER_ROW} B per row",
+       camps_size_ok(gz, len(rows)), f"{gz} B for {len(rows)} rows")
+    ok(f"#465 size: the program blocks add at most {PROGRAM_BLOCK_GZ_BASE} + {PROGRAM_BLOCK_GZ_PER_ROW} B per row, gzipped",
+       block_size_ok(gz - gz0, len(rows)), f"+{gz - gz0} B for {len(rows)} rows")
     if VERBOSE:
         print(f"       camps index: {len(raw)} B raw, {gz} B gzipped ({gz0} B without the program blocks), {len(rows)} rows")
 
@@ -462,6 +473,45 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
               f"{len(rows)} published, {len(dropped)} dropped; counts {doc['counts']}; "
               f"{len(youth_items)} youth items kept on profiles; "
               f"{os.path.getsize(path) / 1024:.1f} KB raw")
+
+
+# ---------- the size pin at small row counts (#465, Bianque's review of #468) ----------
+
+def synthetic_rows(n: int) -> list[dict]:
+    """n synthetic published rows of realistic length, each different, as build writes them. Made-up names only."""
+    states = ["TX", "OH", "CA", "NC", "PA", "IL", "GA", "NY"]
+    out = []
+    for i in range(n):
+        slug = f"example-college-{i}"
+        it = {"name": f"Winter Elite ID Clinic {i} | January {i % 28 + 1}th", "startDate": f"2027-01-{i % 28 + 1:02d}",
+              "endDate": f"2027-01-{i % 28 + 1:02d}", "dateText": f"01/{i % 28 + 1:02d}/2027", "precision": "day",
+              "yearInferred": i % 17 == 0, "location": None, "ages": "9th - 12th Grade as of Fall 2026" if i % 2 else None,
+              "price": f"${150 + i}.00" if i % 3 == 0 else None,
+              "registerUrl": f"https://register.example.org/camp.cfm?sport=7&id={340000 + i * 37}",
+              "sourceUrl": f"https://www.examplecollege{i}soccercamps.example/", "kind": "camp", "campType": "id",
+              "confidence": "heuristic"}
+        out.append(build.camp_row(slug, it, {"slug": slug, "name": f"Example College {i}", "shortName": f"Example {i}",
+                                             "division": ("D1", "D2", "D3")[i % 3], "city": f"Example City {i}",
+                                             "state": states[i % len(states)], "region": "South"}))
+    return out
+
+
+def test_size_small() -> None:
+    print("size: the pin holds when camps thin out")
+    head = {"updated": "2026-10-02T15:00:00Z", "window": {"from": "2026-10-02", "to": None}}
+    for n in (0, 1, 5, 20):
+        rows = synthetic_rows(n)
+        with_blocks = json.dumps({**head, "counts": build.camp_counts(rows), "camps": rows}, ensure_ascii=False, separators=(",", ":"))
+        without = json.dumps({**head, "counts": build.camp_counts(rows), "camps": [{k: v for k, v in r.items() if k != "program"} for r in rows]},
+                             ensure_ascii=False, separators=(",", ":"))
+        gz, gz0 = len(gzip.compress((with_blocks + "\n").encode(), 9)), len(gzip.compress((without + "\n").encode(), 9))
+        # FIX where the pure per-row pins this replaces (85 and 24 B per row) would have failed this correct document
+        fix_doc, fix_block = gz > CAMPS_GZ_PER_ROW * n, gz - gz0 > PROGRAM_BLOCK_GZ_PER_ROW * n
+        ok(f"{'FIX ' if fix_doc else ''}{n} row(s): the document ({gz} B gzipped) is within the pin", camps_size_ok(gz, n), f"{gz} B")
+        ok(f"{'FIX ' if fix_block else ''}{n} row(s): the blocks (+{gz - gz0} B) are within the pin", block_size_ok(gz - gz0, n), f"+{gz - gz0} B")
+        if n <= 1:  # the pure per-row pin this replaces would have failed a correct build here
+            ok(f"{n} row(s): a pure {CAMPS_GZ_PER_ROW} B-per-row pin would have failed this correct document",
+               gz > CAMPS_GZ_PER_ROW * n, f"{gz} B against {CAMPS_GZ_PER_ROW * n}")
 
 
 # ---------- the invariant ----------
@@ -686,6 +736,7 @@ def main(argv=None) -> int:
 
     test_window()
     test_classify()
+    test_size_small()
     before = public_state()
     tmp = tempfile.mkdtemp(prefix="camps-build-")
     try:
