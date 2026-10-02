@@ -558,6 +558,36 @@ test('#471 the camps q in the address: a malformed escape does not throw and is 
   assert.doesNotMatch(html, /<img/i, 'planted markup in q reached the page unescaped');
   assert.match(html, /matching “&lt;img src=x onerror=alert\(1\)&gt;”/);
   assert.match(html, /<h2>No upcoming ID camp found in our sources matching “&lt;img src=x onerror=alert\(1\)&gt;”<\/h2>/);
+  // Huatuo's non-blocking note: #14's listQ rule - control characters stripped, the cap counted in code points, so a
+  // cap never splits an emoji
+  const emoji = '⚽'.repeat(96) + '😀😀';  // after "ab ": the 100th code point is the first 😀 (2 UTF-16 units)
+  await openSearch(`#/camps?q=${encodeURIComponent('a\u0007b ' + emoji)}`);
+  const q = sb.campsNow().st.q;
+  assert.ok(q.startsWith('ab ⚽'), `a control character was kept: ${JSON.stringify(q.slice(0, 4))}`);
+  assert.equal(Array.from(q).length, 100, 'the cap is not 100 code points');
+  assert.ok(!/[\uD800-\uDBFF]$/.test(q), 'the cap split an emoji');
+});
+
+test('Huatuo on #471: arriving at ID Camps never announces the last visit\'s search - texas, Programs, then #/camps?q=june', async () => {
+  S.camps = JSON.parse(JSON.stringify(SEARCH_FIXTURE));
+  const status = el('#qStatus');
+  sb.location.hash = '#/camps'; sb.route(); await settle(80);
+  type('texas'); await settle(120);
+  assert.match(status.textContent, /matching “texas”/, 'fixture: typing did not write the count');
+  for (const [from, to] of [['texas', 'june'], ['june', 'saint']]) {
+    sb.location.hash = '#/programs'; sb.route(); await settle(80);
+    const seen = [];
+    let text = status.textContent;
+    Object.defineProperty(status, 'textContent', { configurable: true, get: () => text, set: v => { seen.push(v); text = v; } });
+    sb.location.hash = `#/camps?q=${to}`; sb.route(); await settle(120);
+    delete status.textContent; status.textContent = text;
+    assert.equal(el('#q').value, to, 'fixture: the box does not show the new query');
+    assert.ok(!seen.some(v => v.includes(`“${from}”`)), `arriving at q=${to} announced "${seen.find(v => v.includes(from))}"`);
+    assert.ok(seen.every(v => v === '' || v.includes(`“${to}”`)), `arriving wrote ${JSON.stringify(seen)}`);
+    type(`${to}`); await settle(120);  // the next round starts from a count for this query, as in Huatuo's repro
+    type(`${to} `); await settle(120);
+  }
+  sb.location.hash = '#/programs'; sb.route(); await settle(80);
 });
 
 test('Bianque on #476, checked on camps: widening past the phone breakpoint with the sheet open closes it - nothing stays inert', async () => {

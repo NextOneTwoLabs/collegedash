@@ -2404,8 +2404,11 @@ function updateSearchStatus() {
   let text = '';
   // #471 (Huatuo): on ID Camps the line carries only the camps count while a search is typed - never #447's help
   // sentence, never a Programs count - and, as below, is written only when it changes.
+  // Huatuo on #471: only for the camps state the address names. Arriving, the rail is redrawn (and this called) before
+  // renderCamps reads the new address, so the last visit's CAMPS.st must not be counted - arrival writes nothing.
   if (campsBox()) {
-    text = CAMPS?.st?.q ? `${campsSummary().count}.` : '';
+    const current = CAMPS?.st && location.hash === campsHashOf(CAMPS.st);
+    text = current && CAMPS.st.q ? `${campsSummary().count}.` : '';
     if (el.textContent !== text) el.textContent = text;
     return;
   }
@@ -4200,10 +4203,10 @@ function campProgram(c, byProgram) {
    from/to real dates (a range wins over a preset; a `to` before `from` is dropped), region one of REGIONS, state a US
    state code, div D1-D3, program a known slug. The Shortlist toggle is NEVER in it (it reads the visitor's own list). */
 const CAMPS_PARAMS = ['when', 'from', 'to', 'region', 'state', 'div', 'program', 'q'];
-// The camps search (#471, owner 2026-10-02): free text, so it is not checked against a list - it is trimmed, capped and
-// only ever drawn through esc(). A malformed escape (listDec's try) drops it.
-const CAMPS_Q_MAX = 100;
-const campsQ = s => String(s ?? '').trim().slice(0, CAMPS_Q_MAX).trim();
+// The camps search (#471, owner 2026-10-02): free text, so it is not checked against a list. #14's own rule for the
+// Programs q (listQ): control characters stripped, trimmed, capped at 100 code points (never half an emoji); only ever
+// drawn through esc(). A malformed escape (listDec's try) drops it.
+const campsQ = s => listQ(s);
 const CAMPS_WHEN = { '30d': ['Next 30 days', 30], '90d': ['Next 3 months', 91] };
 const CAMPS_DIVS = ['D1', 'D2', 'D3'];
 const campsDateOk = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
