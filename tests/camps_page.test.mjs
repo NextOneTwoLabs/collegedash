@@ -17,19 +17,25 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { parseCss, decls } from './lib/css_cascade.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const HTML = process.env.CAMPS_PAGE_TEST_HTML || path.join(PUBLIC, 'index.html');
 const SOURCE = fs.readFileSync(HTML, 'utf8');
 
+const FOCUSED = { el: null };
 function makeElement(name) {
+  const classes = new Set(), attrs = new Map(), listeners = {};
   return {
-    _name: name, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0, checked: false, disabled: false,
-    dataset: {}, style: {}, classList: { add() { }, remove() { }, toggle: () => false, contains: () => false },
-    setAttribute() { }, getAttribute: () => null, addEventListener() { }, removeEventListener() { },
+    _name: name, _listeners: listeners, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0, checked: false, disabled: false,
+    dataset: {}, style: {},
+    classList: { add: (...c) => c.forEach(x => classes.add(x)), remove: (...c) => c.forEach(x => classes.delete(x)),
+      toggle(c, on) { const v = on === undefined ? !classes.has(c) : !!on; if (v) classes.add(c); else classes.delete(c); return v; }, contains: c => classes.has(c) },
+    setAttribute: (k, v) => attrs.set(k, String(v)), getAttribute: k => (attrs.has(k) ? attrs.get(k) : null), removeAttribute: k => attrs.delete(k),
+    addEventListener(t, fn) { (listeners[t] ||= []).push(fn); }, removeEventListener() { },
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null,
-    matches: () => false, focus() { }, contains: () => false,
+    matches: () => false, focus() { FOCUSED.el = this; }, contains: () => false,
   };
 }
 const history = [];
@@ -57,7 +63,7 @@ function loadPage() {
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = SOURCE.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast'];
+  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast', 'campsSheet'];
   const src = lines.slice(a + 1, b).join('\n')
     + `\n;for (const k of ${JSON.stringify(handles)}) { try { globalThis[k] = eval(k); } catch { } }`
     + `\n;globalThis.campsNow = () => { try { return eval('CAMPS'); } catch { return undefined; } };\n`;
@@ -218,4 +224,58 @@ test('#465 the Programs sidebar is not drawn on the camps page (D4), and the pag
   assert.match(SOURCE, /document\.body\.classList\.toggle\('view-camps', view === 'camps'\)/);
   const body = SOURCE.slice(SOURCE.indexOf('function campsMatch('), SOURCE.indexOf('/* ---------- trends'));
   assert.ok(!/matchesFilters|S\.filters\.(conf|region|division|cond)|S\.q\b/.test(body.replace(/S\.filters\.view/g, '')), 'the camps page reads a Programs filter');
+});
+
+/* ---------- the camps page's own sidebar (owner, 2026-10-02): a left column on a wide screen, a sheet on a phone ---------- */
+const CSS = parseCss([...SOURCE.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n'));
+const css = (at, sel, prop) => CSS.filter(r => r.at.join(' ') === at && r.selectors.includes(sel)).flatMap(r => decls(r.body)).filter(d => d.prop === prop).map(d => d.value).pop();
+const PHONE = '@media (max-width: 768px)';
+
+test('#465 the filters are a sidebar beside the list, in the decided order, with the chips and count beside it', async () => {
+  const html = await open('#/camps');
+  const side = (/<aside class="camps-side" id="campsBar" aria-labelledby="campsSideTitle">([\s\S]*?)<\/aside>/.exec(html) || [])[1] || '';
+  assert.ok(side, 'no camps sidebar');
+  assert.match(side, /<h2 class="camps-side-title" id="campsSideTitle" tabindex="-1">Filter camps<\/h2>/);
+  const order = ['campsWhenLabel', 'campsLoc', 'campsDivLabel', 'campsProgram', 'campsSaved'].map(id => side.indexOf(`id="${id}"`));
+  assert.ok(order.every(i => i >= 0) && order.every((v, i) => !i || v > order[i - 1]), `When, Program location, Division, Program, Shortlisted: ${order}`);
+  assert.ok(!/class="camps-bar"/.test(html), 'the old top filter bar is still drawn');
+  const main = html.slice(html.indexOf('<div class="camps-main" id="campsMain">'));
+  assert.match(main, /<button type="button" class="btn camps-more-btn" id="campsMoreBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="campsBar"/);
+  assert.ok(main.indexOf('id="campsActive"') >= 0 && main.indexOf('id="campsStatus"') >= 0 && main.indexOf('id="campsResults"') >= 0);
+  assert.match(html, /<div class="camps-backdrop" id="campsBackdrop" hidden><\/div>/);
+});
+
+test('#465 CSS: a left column on desktop, sticky; on a phone a bottom sheet over the page and the bottom bar', () => {
+  assert.equal(css('', '.camps-layout', 'grid-template-columns'), '260px minmax(0, 1fr)');
+  assert.equal(css('', '.camps-side', 'position'), 'sticky');
+  assert.equal(css(PHONE, '.camps-layout', 'grid-template-columns'), 'minmax(0, 1fr)');
+  assert.equal(css(PHONE, '.camps-side', 'display'), 'none', 'the sheet shows before it is opened');
+  assert.equal(css(PHONE, '.camps-side', 'position'), 'fixed');
+  assert.equal(css(PHONE, '.camps-side.open', 'display'), 'flex');
+  assert.ok(Number(css(PHONE, '.camps-side', 'z-index')) > Number(css('', '.camps-backdrop', 'z-index')), 'the sheet is under its own backdrop');
+  assert.ok(Number(css('', '.camps-backdrop', 'z-index')) >= 60, 'the backdrop must cover the bottom bar (#470 keeps the bar under 60)');
+  assert.equal(css(PHONE, '.camps-more-btn', 'display'), 'inline-flex', 'no Filters button on a phone');
+  for (const sel of ['.camps-more-btn', '.camps-sheet-close', '.camps-sheet-foot']) assert.equal(css('', sel, 'display'), 'none', `${sel} shows on desktop`);
+  assert.equal(css(PHONE, '.camps-sheet-close', 'min-height'), '44px');
+});
+
+test('#465 the phone sheet: a modal dialog that takes focus, and gives it back to Filters (or the list) when it closes', async () => {
+  await open('#/camps');
+  const side = el('#campsBar'), back = el('#campsBackdrop'), btn = el('#campsMoreBtn');
+  sb.campsSheet(true);
+  assert.ok(side.classList.contains('open') && side.getAttribute('role') === 'dialog' && side.getAttribute('aria-modal') === 'true');
+  assert.equal(back.hidden, false, 'no backdrop');
+  assert.equal(btn.getAttribute('aria-expanded'), 'true');
+  assert.equal(FOCUSED.el, el('#campsSideTitle'), 'focus did not move into the sheet');
+  sb.campsSheet(false);
+  assert.ok(!side.classList.contains('open') && side.getAttribute('role') === null && side.getAttribute('aria-modal') === null);
+  assert.equal(back.hidden, true);
+  assert.equal(FOCUSED.el, btn, 'focus did not go back to Filters');
+  sb.campsSheet(true); sb.campsSheet(false, { focus: 'list' });
+  assert.equal(FOCUSED.el, el('#campsResults h2'), '"Show N camps" did not take the reader to the list');
+  // Escape closes it, through the page's own keydown listener on the sheet
+  sb.campsSheet(true);
+  const ev = { key: 'Escape', shiftKey: false, prevented: false, preventDefault() { this.prevented = true; } };
+  for (const fn of side._listeners.keydown || []) fn(ev);
+  assert.ok(!side.classList.contains('open') && ev.prevented, 'Escape did not close the sheet');
 });

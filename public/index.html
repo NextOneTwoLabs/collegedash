@@ -603,22 +603,31 @@ a.pill { text-decoration: none; }
 /* ===== ID CAMPS PAGE (#465 PR F) =====
    One list markup at every width: rows on a wide screen, stacked cards on a phone, so a phone never scrolls sideways
    and a camp's date and its actions are always on the same card. The Programs sidebar is not drawn on this page (D4:
-   its filters do not narrow camps); the page's own filter bar is. */
+   its filters do not narrow camps); the page's OWN filters are (owner, 2026-10-02): a left sidebar on a wide screen,
+   a sheet on a phone. */
 body.view-camps .sidebar, body.view-camps .sidebar-overlay, body.view-camps #sidebarToggle { display: none !important; }
 .camps-lead { margin: 0 0 12px; color: var(--text-secondary); }
-.camps-bar { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: 8px; display: flex; flex-wrap: wrap; gap: 10px 20px; align-items: flex-start; }
-.camps-more { display: contents; }
+.camps-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items: start; }
+.camps-side { position: sticky; top: 0; max-height: calc(100vh - var(--header-height) - 24px); overflow-y: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+.camps-side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.camps-side-title { font-size: 14px; margin: 0; }
+.camps-side-title:focus { outline: none; }
+.camps-side-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.camps-main { min-width: 0; }
 .camps-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
 .camps-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-.camps-note { font-size: 12px; color: var(--text-secondary); max-width: 320px; }
-.camps-bar .pill { min-height: 36px; white-space: nowrap; flex: 0 0 auto; }
-.camps-bar .pill.active, .camps-bar .pill[aria-pressed="true"] { background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); }
+.camps-note { font-size: 12px; color: var(--text-secondary); }
+.camps-side .pill-row { flex-wrap: wrap; }
+.camps-side .pill { min-height: 36px; white-space: nowrap; flex: 0 0 auto; }
+.camps-side .pill.active, .camps-side .pill[aria-pressed="true"] { background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); }
 .camps-range { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
 .camps-range label { display: flex; flex-direction: column; font-size: 12px; color: var(--text-secondary); gap: 2px; }
-.camps-range input, .camps-bar select { min-height: 36px; font: inherit; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; }
+.camps-range input, .camps-side select { min-height: 36px; width: 100%; font: inherit; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; }
 .camps-saved label { display: flex; align-items: center; gap: 6px; min-height: 36px; }
-.camps-more-btn, .camps-show { display: none; }
-.camps-active { flex-basis: 100%; display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.camps-more-btn, .camps-sheet-close, .camps-sheet-foot { display: none; }
+.camps-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 60; }
+.camps-backdrop[hidden] { display: none; }
+.camps-active { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
 .camps-active:empty { display: none; }
 .camps-fresh { color: var(--text-primary); }
 .camps-month-title { font-size: 15px; margin: 18px 0 8px; }
@@ -641,16 +650,20 @@ body.view-camps .sidebar, body.view-camps .sidebar-overlay, body.view-camps #sid
 .camps-foot { border-top: none; padding: 12px 0 0; }
 .camps-empty h2 { font-size: 16px; margin: 0 0 6px; }
 @media (max-width: 1100px) { .camp-row { grid-template-columns: 150px minmax(0, 1fr) auto; } .camp-facts { grid-column: 2 / -1; } }
+@media (max-width: 1024px) { .camps-layout { grid-template-columns: 220px minmax(0, 1fr); } }
+/* A phone: the sidebar becomes a bottom sheet (a modal dialog, opened by "Filters (n)"), over the page and the bottom bar. */
 @media (max-width: 768px) {
-  .camps-bar { flex-wrap: nowrap; flex-direction: column; align-items: stretch; gap: 10px; }
-  .camps-field { max-width: 100%; }
-  .camps-bar .pill-row { flex-wrap: nowrap; overflow-x: auto; max-width: 100%; }
-  .camps-more-btn { display: inline-flex; min-height: 44px; align-self: flex-start; }
-  .camps-more { display: none; flex-direction: column; gap: 12px; width: 100%; }
-  .camps-bar.open .camps-more { display: flex; }
-  .camps-show { display: inline-flex; min-height: 44px; justify-content: center; width: 100%; }
-  .camps-bar select { width: 100%; min-height: 44px; }
-  .camps-bar .pill { min-height: 44px; }
+  .camps-layout { grid-template-columns: minmax(0, 1fr); }
+  .camps-side { display: none; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 61; max-height: 85vh; max-height: 85dvh;
+    border-radius: 16px 16px 0 0; border-bottom: none; padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); box-shadow: var(--shadow-lg); }
+  .camps-side.open { display: flex; }
+  .camps-side-title { font-size: 16px; }
+  .camps-sheet-close { display: inline-flex; min-width: 44px; min-height: 44px; justify-content: center; }
+  .camps-sheet-foot { display: flex; gap: 8px; position: sticky; bottom: calc(-16px - env(safe-area-inset-bottom, 0px)); background: var(--bg-surface); padding: 8px 0; }
+  .camps-sheet-foot .btn { flex: 1; justify-content: center; min-height: 44px; }
+  .camps-more-btn { display: inline-flex; min-height: 44px; margin-bottom: 8px; }
+  .camps-side select { min-height: 44px; }
+  .camps-side .pill { min-height: 44px; }
   .camp-row { grid-template-columns: 1fr; gap: 8px; padding: 14px; }
   .camp-facts { grid-template-columns: 1fr 1fr; grid-column: auto; }
   .camp-facts div:first-child { grid-column: 1 / -1; }
@@ -3897,7 +3910,7 @@ function campsSummary() {
     st, rows, count, range,
     sub: `${esc(count)} · soonest first${CAMPS.doc.updated ? ` · <span class="camps-fresh">List refreshed ${esc(fmtDate(CAMPS.doc.updated))}</span>` : ''}`,
     whenOn: k => k === 'range' ? range : k === '' ? !st.when && !range : st.when === k && !range,
-    more: chips.filter(([k]) => k !== 'when' && k !== 'range').length,
+    more: chips.length,  // the Filters button's count: every active filter, When included (it is in the sheet too)
     show: `Show ${rows.length} camp${rows.length === 1 ? '' : 's'}`,
     chipsHtml: chips.length ? `<span class="camps-label">Showing</span> ${chips.map(([k, l]) => `<span class="pill cond-chip">${esc(l)}<button type="button" class="cond-x" data-camps-rm="${esc(k)}" data-camps-focus="rm-${esc(k)}" aria-label="Remove filter: ${esc(l)}" title="Remove">✕</button></span>`).join('')} <button type="button" class="btn" data-camps-clear data-camps-focus="clear">Clear all</button>` : '',
     savedNote: S.favorites.size ? '' : '(none saved yet)',
@@ -3915,12 +3928,14 @@ function campsBarHtml(sum) {
   const progCount = slug => all.filter(x => x.c.slug === slug).length;
   // A program a link names that has no upcoming camp keeps its option, so the select can show what is selected.
   if (st.program && !progs.some(([s]) => s === st.program)) progs.unshift([st.program, CAMPS.byProgram.get(st.program)?.shortName || CAMPS.byProgram.get(st.program)?.name || st.program]);
-  return `<div class="camps-bar" id="campsBar" role="group" aria-label="Camp filters">
+  // The camps page's OWN sidebar (owner, 2026-10-02): a left column on a wide screen, a sheet on a phone. It is not the
+  // Programs filters (D4) and never reads them.
+  return `<aside class="camps-side" id="campsBar" aria-labelledby="campsSideTitle">
+    <div class="camps-side-head"><h2 class="camps-side-title" id="campsSideTitle" tabindex="-1">Filter camps</h2>
+      <button type="button" class="btn camps-sheet-close" id="campsSheetClose" aria-label="Close filters">✕</button></div>
     <div class="camps-field"><span class="camps-label" id="campsWhenLabel">When</span>
       <div class="pill-row" role="group" aria-labelledby="campsWhenLabel">${whenBtn('', 'All upcoming')}${whenBtn('30d', 'Next 30 days')}${whenBtn('90d', 'Next 3 months')}${whenBtn('range', 'Pick dates')}</div>
       <div class="camps-range" id="campsRange"${sum.range ? '' : ' hidden'}><label>From <input type="date" id="campsFrom" data-camps-focus="from" min="${esc(CAMPS.today)}" value="${esc(st.from || '')}"></label><label>To <input type="date" id="campsTo" data-camps-focus="to" min="${esc(st.from || CAMPS.today)}" value="${esc(st.to || '')}"></label></div></div>
-    <button type="button" class="btn camps-more-btn" id="campsMoreBtn" aria-expanded="false" aria-controls="campsMore" data-camps-focus="more">Filters <span id="campsMoreCount">(${sum.more})</span></button>
-    <div class="camps-more" id="campsMore">
       <div class="camps-field"><label class="camps-label" for="campsLoc">Program location</label>
         <select id="campsLoc" class="season-select" aria-describedby="campsLocNote" data-camps-focus="loc"><option value="">Add a state or region…</option>${locOpts}</select>
         <span class="camps-note" id="campsLocNote">Where the school is, not where the camp is held: only ${all.filter(x => x.c.location).length} of ${all.length} camps state a location.</span></div>
@@ -3929,12 +3944,35 @@ function campsBarHtml(sum) {
       <div class="camps-field"><label class="camps-label" for="campsProgram">Program</label>
         <select id="campsProgram" class="season-select" data-camps-focus="program"><option value="">Any of ${progs.length} program${progs.length === 1 ? '' : 's'}</option>${progs.map(([s, n]) => `<option value="${esc(s)}"${st.program === s ? ' selected' : ''}>${esc(n)} (${progCount(s)})</option>`).join('')}</select></div>
       <div class="camps-field camps-saved"><label><input type="checkbox" id="campsSaved" data-camps-focus="saved"${S.campsSaved ? ' checked' : ''}${!S.favorites.size && !S.campsSaved ? ' disabled' : ''}> Shortlisted programs only</label> <span class="camps-note" id="campsSavedNote">${sum.savedNote}</span></div>
-      <button type="button" class="btn primary camps-show" id="campsShow" data-camps-focus="show">${sum.show}</button>
-    </div>
-    <div class="camps-active" id="campsActive">${sum.chipsHtml}</div>
-    <p class="sr-only" id="campsStatus" role="status" aria-live="polite"></p>
-  </div>`;
+    <div class="camps-sheet-foot"><button type="button" class="btn" data-camps-clear data-camps-focus="clear-sheet">Clear all</button>
+      <button type="button" class="btn primary camps-show" id="campsShow" data-camps-focus="show">${sum.show}</button></div>
+  </aside>`;
 }
+// The column beside the sidebar: on a phone the button that opens it as a sheet, then the active filters as removable
+// chips, the bar's status line (read out on a change), and the list.
+function campsMainHeadHtml(sum) {
+  return `<button type="button" class="btn camps-more-btn" id="campsMoreBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="campsBar" data-camps-focus="more">Filters <span id="campsMoreCount">(${sum.more})</span></button>
+    <div class="camps-active" id="campsActive">${sum.chipsHtml}</div>
+    <p class="sr-only" id="campsStatus" role="status" aria-live="polite"></p>`;
+}
+const campsSheetOpen = () => !!$('#campsBar')?.classList.contains('open');
+// Open or close the phone sheet. Open: a modal dialog over the page and the bottom bar, focus on its heading; Escape,
+// the ✕, the backdrop or "Show N camps" close it, and focus goes back to the Filters button (or, from Show, the list).
+function campsSheet(open, { focus } = {}) {
+  const side = $('#campsBar'), btn = $('#campsMoreBtn'), back = $('#campsBackdrop');
+  if (!side) return;
+  side.classList.toggle('open', open);
+  if (back) back.hidden = !open;
+  if (open) { side.setAttribute('role', 'dialog'); side.setAttribute('aria-modal', 'true'); }
+  else { side.removeAttribute('role'); side.removeAttribute('aria-modal'); }
+  btn?.setAttribute('aria-expanded', String(open));
+  if (open) $('#campsSideTitle')?.focus();
+  else if (focus === 'list') { const t = $('#campsResults h2'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else btn?.focus(); }
+  else btn?.focus();
+}
+// Where focus goes when the control it was on is gone (a removed chip): the sidebar's first When pill, or on a phone
+// with the sheet closed, the Filters button - never <body>.
+const campsFallbackFocus = () => (isPhone() && !campsSheetOpen() ? $('#campsMoreBtn') : $('#campsBar [data-camps-when]'))?.focus();
 // Brings everything that depends on the state up to date without rebuilding the bar.
 function campsUpdate({ announce = false } = {}) {
   const sum = campsSummary(), st = sum.st, rows = sum.rows, count = sum.count;
@@ -3983,7 +4021,7 @@ function campsCommit(next, focus) {
   campsUpdate({ announce: true });
   const el = focus && $(`#app [data-camps-focus="${focus}"]`);
   if (el && document.activeElement !== el) el.focus();
-  else if (focus && !el) $('#campsBar [data-camps-when]')?.focus();  // the control is gone (a removed chip): never <body>
+  else if (focus && !el) campsFallbackFocus();  // the control is gone (a removed chip): never <body>
 }
 async function renderCamps() {
   const idx = await loadIndex();
@@ -4002,23 +4040,19 @@ async function renderCamps() {
     title: 'Upcoming ID camps', subtitle: sum.sub, tabs: listTabs('camps'),
   }) + `<div class="content-body">
       <p class="camps-lead">Upcoming women's soccer ID and prospect camps that programs list on their own camp pages.</p>
-      ${campsBarHtml(sum)}
-      <div id="campsResults" class="camps-results">${campsResultsHtml(sum.rows)}</div></div>`;
+      <div class="camps-layout">${campsBarHtml(sum)}
+        <div class="camps-main" id="campsMain">${campsMainHeadHtml(sum)}
+          <div id="campsResults" class="camps-results">${campsResultsHtml(sum.rows)}</div></div></div>
+      <div class="camps-backdrop" id="campsBackdrop" hidden></div></div>`;
 
   const app = $('#app');
   // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { S.filters.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
   const bar = $('#campsBar');
-  bar.addEventListener('click', e => {
-    const w = e.target.closest('[data-camps-when]');
-    if (w) {
-      const k = w.dataset.campsWhen;
-      if (k === 'range') { S.campsRange = true; campsUpdate(); $('#campsFrom')?.focus(); return; }
-      S.campsRange = false;
-      return campsCommit({ ...CAMPS.st, when: k || null, from: null, to: null }, `when-${k || 'all'}`);
-    }
-    const d = e.target.closest('[data-camps-div]');
-    if (d) { const v = d.dataset.campsDiv, div = CAMPS.st.div.includes(v) ? CAMPS.st.div.filter(x => x !== v) : [...CAMPS.st.div, v]; return campsCommit({ ...CAMPS.st, div }, `div-${v}`); }
+  const clearAll = focus => { S.campsSaved = false; S.campsRange = false; campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null }, focus); };
+  // The chips and the Filters button live in the main column, beside the sidebar.
+  $('#campsMain').addEventListener('click', e => {
+    if (e.target.closest('#campsMoreBtn')) return campsSheet(true);
     const rm = e.target.closest('[data-camps-rm]');
     if (rm) {
       const k = rm.dataset.campsRm, st = { ...CAMPS.st }, [kind, val] = k.split(':');
@@ -4028,16 +4062,36 @@ async function renderCamps() {
       else if (kind === 'program') st.program = null;
       else if (kind === 'saved') S.campsSaved = false;
       else st[kind] = st[kind].filter(x => x !== val);
-      // focus moves to the chip that takes the removed one's place, else the one before, else Clear all goes too: When
+      // focus moves to the chip that takes the removed one's place, else the one before, else (none left) the fallback
       const left = chipsBefore.filter(b => b !== rm), heir = left[Math.min(at, left.length - 1)];
-      return campsCommit(st, heir ? heir.dataset.campsFocus : 'when-all');
+      return campsCommit(st, heir ? heir.dataset.campsFocus : 'gone');
     }
-    if (e.target.closest('[data-camps-clear]')) { S.campsSaved = false; S.campsRange = false; return campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null }, 'when-all'); }
-    if (e.target.closest('#campsMoreBtn')) { const open = !bar.classList.contains('open'); bar.classList.toggle('open', open); $('#campsMoreBtn').setAttribute('aria-expanded', String(open)); return; }
-    if (e.target.closest('#campsShow')) { bar.classList.remove('open'); $('#campsMoreBtn').setAttribute('aria-expanded', 'false'); const t = $('#campsResults h2'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } }
+    if (e.target.closest('[data-camps-clear]')) return clearAll('gone');
   });
-  const res = $('#campsResults');
-  res.addEventListener('click', e => { if (e.target.closest('[data-camps-clear]')) { S.campsSaved = false; S.campsRange = false; campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null }, 'when-all'); } });
+  $('#campsBackdrop').onclick = () => campsSheet(false);
+  bar.addEventListener('keydown', e => {
+    if (!campsSheetOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); return campsSheet(false); }
+    if (e.key !== 'Tab') return;  // a modal sheet keeps Tab inside it
+    const f = [...bar.querySelectorAll('button:not([disabled]), select, input:not([disabled]), [tabindex="-1"]')].filter(x => !x.closest('[hidden]'));
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  bar.addEventListener('click', e => {
+    if (e.target.closest('#campsSheetClose')) return campsSheet(false);
+    const w = e.target.closest('[data-camps-when]');
+    if (w) {
+      const k = w.dataset.campsWhen;
+      if (k === 'range') { S.campsRange = true; campsUpdate(); $('#campsFrom')?.focus(); return; }
+      S.campsRange = false;
+      return campsCommit({ ...CAMPS.st, when: k || null, from: null, to: null }, `when-${k || 'all'}`);
+    }
+    const d = e.target.closest('[data-camps-div]');
+    if (d) { const v = d.dataset.campsDiv, div = CAMPS.st.div.includes(v) ? CAMPS.st.div.filter(x => x !== v) : [...CAMPS.st.div, v]; return campsCommit({ ...CAMPS.st, div }, `div-${v}`); }
+    if (e.target.closest('[data-camps-clear]')) return clearAll('when-all');
+    if (e.target.closest('#campsShow')) return campsSheet(false, { focus: 'list' });
+  });
   $('#campsLoc').onchange = e => {
     const [kind, val] = e.target.value.split(':'); e.target.value = '';
     if (!val) return;
