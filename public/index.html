@@ -1416,18 +1416,54 @@ function toggleTheme() {
 /* sidebar: collapses on desktop (remembered), slides in as a drawer on phones */
 const isPhone = () => window.innerWidth <= 768;
 function isProgramsView() { const v = currentView(); return v === 'list' || v === 'c'; }  // #465: Programs (#/programs, #/c/…)
+/* #465: the one helper behind both phone filter sheets - Programs' rail (#sidebar, below) and ID Camps' (#campsBar) - for
+   what they share (the plan on #465, Bianque's approval and its five conditions):
+   - modal(on): the dialog role (and the name, where the sheet has one), the body class its z-order hangs on, and the
+     page behind made inert or released;
+   - inert, book-kept: only elements this sheet made inert are released, so one inert for another reason (the #400
+     sheet's, say) stays inert; opening twice and closing once leaves nothing inert;
+   - widening past the phone breakpoint ends an open sheet: one resize and one (max-width: 768px) change listener for
+     both, each sheet with its own close (its own focus rule).
+   Each sheet keeps the rest itself: which elements go inert, its opener's aria-expanded, focus, Escape and Tab, and
+   when it is modal at all. */
+const PHONE_SHEETS = [];
+function phoneSheet({ sheet, labelledBy = null, bodyClass = null, regions, isOpen, onWide }) {
+  let mine = [];
+  const inert = on => {
+    mine.forEach(e => { e.inert = false; });
+    mine = [];
+    if (on) for (const e of regions()) if (e && !e.inert) { e.inert = true; mine.push(e); }
+  };
+  const modal = on => {
+    const el = $(sheet);
+    if (el && on) { el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); if (labelledBy) el.setAttribute('aria-labelledby', labelledBy); }
+    else if (el) { el.removeAttribute?.('role'); el.removeAttribute?.('aria-modal'); if (labelledBy) el.removeAttribute?.('aria-labelledby'); }
+    if (bodyClass) document.body.classList.toggle(bodyClass, on);
+    inert(on);
+  };
+  PHONE_SHEETS.push({ isOpen, onWide });
+  return { modal, inert };
+}
+{
+  // a phone turned to landscape (844-932 px): the breakpoint's own media query, which a viewport change always
+  // re-evaluates, and resize
+  const wide = () => { if (!isPhone()) for (const sh of PHONE_SHEETS) if (sh.isOpen()) sh.onWide(); };
+  window.addEventListener('resize', wide);
+  matchMedia('(max-width: 768px)').addEventListener?.('change', wide);
+}
 /* #465 D (the plan on #472, Huatuo's condition 4 and his addition 1): on Programs, on a phone, the drawer is a modal
    sheet - role="dialog", aria-modal, named by its heading, which takes focus on open - and #main, the header and the
    bottom bar are inert behind it. Its opener is #sidebarToggle ("Filters", aria-expanded, aria-controls). Every close
    - Show N, its ✕, Escape, the overlay - clears inert and returns focus to the opener. A pick inside it (a pill, a
    condition, a conference) keeps it open. Elsewhere the drawer behaves as before. */
+// body.sheet-open draws it above the header while open (CSS). Widening ends it with focus on the opener, which the
+// desktop layout shows (the sheet's heading and close button it does not) - Bianque on #476.
+const PROGRAMS_SHEET = phoneSheet({ sheet: '#sidebar', labelledBy: 'sheetHeading', bodyClass: 'sheet-open',
+  regions: () => ['#main', '.header', '.bottom-nav'].map(sel => document.querySelector(sel)),
+  isOpen: () => !!$('#sidebar')?.classList.contains('open'), onWide: () => closeDrawer({ focus: true }) });
 function drawerSheetState(open) {
-  const sb = $('#sidebar'); if (!sb) return;
-  const modal = !!(open && isPhone() && isProgramsView());
-  if (modal) { sb.setAttribute('role', 'dialog'); sb.setAttribute('aria-modal', 'true'); sb.setAttribute('aria-labelledby', 'sheetHeading'); }
-  else { sb.removeAttribute?.('role'); sb.removeAttribute?.('aria-modal'); sb.removeAttribute?.('aria-labelledby'); }
-  for (const sel of ['#main', '.header', '.bottom-nav']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
-  document.body.classList.toggle('sheet-open', modal);  // drawn above the header while open (CSS)
+  if (!$('#sidebar')) return;
+  PROGRAMS_SHEET.modal(!!(open && isPhone() && isProgramsView()));  // modal on Programs, on a phone, only
 }
 function openDrawer() {
   $('#sidebar').classList.add('open'); $('#sidebarOverlay').classList.add('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'true');
@@ -1451,10 +1487,6 @@ function closeDrawer({ focus = false } = {}) {
   drawerSheetState(false);
   if (focus && was) $('#sidebarToggle')?.focus();
 }
-// #465 D (Bianque on #476): widening past 768 px with the sheet open (a phone turned to landscape, 844-932 px) ends it,
-// as the #400 sheet re-checks on resize - otherwise the page stays inert under an overlay that no tap or key can close
-// there. Focus goes to the opener, which the desktop layout shows (the sheet's heading and close button it does not).
-window.addEventListener('resize', () => { if (!isPhone() && $('#sidebar').classList.contains('open')) closeDrawer({ focus: true }); });
 // A pick inside the drawer closes it, except on Programs, where the sheet stays open until Show N, ✕, Escape or the overlay.
 function closeDrawerOnPick() { if (!isProgramsView()) closeDrawer(); }
 $('#sidebarToggle').onclick = toggleSidebar;
@@ -4438,9 +4470,7 @@ function campsSheet(open, { focus } = {}) {
   if (!side) return;
   side.classList.toggle('open', open);
   if (back) back.hidden = !open;
-  if (open) { side.setAttribute('role', 'dialog'); side.setAttribute('aria-modal', 'true'); }
-  else { side.removeAttribute('role'); side.removeAttribute('aria-modal'); }
-  campsInert(open);  // Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader
+  CAMPS_SHEET.modal(open);  // the dialog role, and the page inert - Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader
   btn?.setAttribute('aria-expanded', String(open));
   if (open) $('#campsSideTitle')?.focus();
   else if (focus === 'keep') return;
@@ -4457,20 +4487,17 @@ function campsSheet(open, { focus } = {}) {
    with it. Focus stays where it is: inside the sheet it is now inside the visible sidebar, and the Filters button it
    would go back to is hidden on a wide screen. Both signals: the breakpoint's own media query (which a viewport change
    always re-evaluates) and resize. */
-{
-  const wide = () => { if (!isPhone() && campsSheetOpen()) campsSheet(false, { focus: 'keep' }); };
-  window.addEventListener('resize', wide);
-  matchMedia('(max-width: 768px)').addEventListener?.('change', wide);
-}
-let CAMPS_INERT = [];
-function campsInert(on) {
-  CAMPS_INERT.forEach(e => { e.inert = false; });
-  CAMPS_INERT = [];
-  const side = $('#campsBar'), back = $('#campsBackdrop');
-  if (!on || !side) return;
-  for (let el = side; el?.parentElement && el !== document.body; el = el.parentElement)
-    for (const sib of el.parentElement.children) if (sib !== el && sib !== back && !sib.inert) { sib.inert = true; CAMPS_INERT.push(sib); }
-}
+// The shared helper (phoneSheet) keeps the inert book and the widening listeners; what goes inert, and focus kept where
+// it is on widening, are this sheet's own.
+const CAMPS_SHEET = phoneSheet({ sheet: '#campsBar', isOpen: () => campsSheetOpen(), onWide: () => campsSheet(false, { focus: 'keep' }),
+  regions: () => {
+    const side = $('#campsBar'), back = $('#campsBackdrop'), out = [];
+    if (side) for (let el = side; el?.parentElement && el !== document.body; el = el.parentElement)
+      for (const sib of el.parentElement.children) if (sib !== el && sib !== back) out.push(sib);
+    return out;
+  } });
+// route() releases the page without closing the sheet or moving focus (leaving #/camps with it open).
+function campsInert(on) { CAMPS_SHEET.inert(on); }
 // Where focus goes when the control it was on is gone (a removed chip): the sidebar's first When pill, or on a phone
 // with the sheet closed, the Filters button - never <body>.
 const campsFallbackFocus = () => (isPhone() && !campsSheetOpen() ? $('#campsMoreBtn') : $('#campsBar [data-camps-when]'))?.focus();
