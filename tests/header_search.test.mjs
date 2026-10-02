@@ -96,7 +96,9 @@ const watched = sel => {
 // the header and the two-row phone grid; the rest is what main already had.
 const EXPECTED = {
   '|input': { font: 'inherit' },
-  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100' },
+  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100',
+    // #465 B: viewport-fit=cover - the header keeps its content inside the safe area (top inset, side insets in landscape)
+    'padding-top': 'var(--safe-top)', 'padding-left': 'max(20px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(20px, env(safe-area-inset-right, 0px))' },
   '|.search-input': { width: '100%', height: '40px', padding: '8px 32px 8px 34px', 'font-size': '13px' },
   '|.header-search': { position: 'relative', flex: '1 1 auto', 'min-width': '0', 'max-width': '520px', margin: '0 16px' },
   '|.header-search .search-input': { height: '38px' },
@@ -104,7 +106,7 @@ const EXPECTED = {
   '@media (max-width: 768px)|.header-search': { 'grid-row': '2', 'grid-column': '1 / -1', 'max-width': 'none', margin: '0' },
   '@media (max-width: 768px)|.header.has-recs .header-search': { 'grid-column': '1' },
   '@media (max-width: 768px)|.header-search .search-input': { 'font-size': '16px' },
-  '@media (max-width: 460px)|.header': { padding: '0 12px' },
+  '@media (max-width: 460px)|.header': { 'padding-left': 'max(12px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(12px, env(safe-area-inset-right, 0px))' },  // #465 B: was padding: 0 12px; now side padding only, so the top safe-area inset stays
   '@media print|.header': { display: 'none' },
 };
 function check(css) {
@@ -160,8 +162,8 @@ test('#404 phase 1: the box is drawn at 375 px without opening the menu, and at 
 test('#434: at <=768 px the header is two rows and --header-height follows them', () => {
   const root = parseCss(CSS).filter(r => r.selectors.includes(':root'));
   const v = at => root.filter(r => r.at.join(' ') === at).flatMap(r => decls(r.body)).filter(d => d.prop === '--header-height').map(d => d.value).pop();
-  assert.equal(v(''), '60px', 'the desktop header height changed');
-  assert.equal(v('@media (max-width: 768px)'), '112px', 'the phone header height does not cover both rows');
+  assert.equal(v(''), 'calc(60px + env(safe-area-inset-top, 0px))', 'the desktop header height changed');  // #465 B: + the top safe-area inset
+  assert.equal(v('@media (max-width: 768px)'), 'calc(112px + env(safe-area-inset-top, 0px))', 'the phone header height does not cover both rows');
   assert.equal(EXPECTED['@media (max-width: 768px)|.header']['grid-template-rows'], '52px 52px');
   assert.ok(52 + 52 <= 112);
 });
@@ -201,7 +203,7 @@ function loadPage({ width = 375, ask = false } = {}) {
       querySelector: bySelector, querySelectorAll: () => [], createElement: makeElement,
       addEventListener(type, fn) { (docListeners[type] ||= []).push(fn); },
     },
-    location: { hash: '#/', replace(h) { this.hash = h; } },
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
@@ -251,7 +253,7 @@ const cardSlugs = html => [...html.matchAll(/class="card pcard[^"]*" data-slug="
 
 test('typing in the header box filters the list through the shared search; the sidebar has no search box', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   const box = pg.$('#q');
   assert.equal((box._listeners.input || []).length, 1, 'the header box has no single input handler');
   assert.equal((box._listeners.keydown || []).length, 1, 'the header box has no single keydown handler');
@@ -266,7 +268,7 @@ test('typing in the header box filters the list through the shared search; the s
 
 test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, no search, no repeated heading', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   pg.sb.S.sidebarTab = 'programs';
   pg.sb.renderSidebar();
   const side = pg.$('#sidebar').innerHTML;
@@ -280,22 +282,22 @@ test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, 
 
 test('Enter keeps #409/#23\'s rules: a name opens it, a place keeps the list, a filtered-out program never opens', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'kenyon'); key(pg, 'Enter'); await settle(20);
   assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'Ohio'); key(pg, 'Enter'); await settle(20);
-  assert.equal(pg.sb.location.hash, '#/', 'Enter on a place opened a program');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Enter on a place opened a program');
   pg.sb.S.filters.region = ['West'];
   await typeIn(pg, 'kenyon'); key(pg, 'Enter'); await settle(20);
-  assert.equal(pg.sb.location.hash, '#/', 'Enter opened Kenyon under a West filter');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Enter opened Kenyon under a West filter');
   assert.match(pg.$('#qStatus').textContent, /^No match within your filters \(\d+ without them\)$/);
   pg.sb.S.filters.region = [];
 });
 
 test('Huatuo on #441: on a phone, Enter on a school name opens it and blurs the box, so the keyboard drops', async () => {
   const pg = await ready({ width: 375 });
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'kenyon');
   BLURRED.clear();
   key(pg, 'Enter'); await settle(20);
@@ -316,7 +318,7 @@ test('"/" focuses the header box on any page, without opening the drawer', async
 
 test('the list subtitle carries "Clear search", which clears the query and returns focus to the box', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'Ohio');
   await pg.sb.renderList();
   assert.match(pg.$('#app').innerHTML, /matching “Ohio” <button type="button" class="clear-search" data-clear-search>Clear search<\/button>/);
@@ -342,7 +344,7 @@ test('Ask (owner only): the header box\'s placeholder follows it and Shift+Enter
 
 test('no request while typing, choosing or clearing: the box searches the index already loaded', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   const before = pg.requests.length;
   await typeIn(pg, 'Ohio'); key(pg, 'Enter'); await settle(20);
   await typeIn(pg, 'duke'); await typeIn(pg, '');

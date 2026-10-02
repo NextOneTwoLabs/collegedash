@@ -60,7 +60,7 @@ function loadPage({ html = HTML, status = { local: false }, probe = 'redirect', 
     isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
     document: { documentElement: makeElement('html'), body: makeElement('body'), querySelector: bySelector, querySelectorAll: () => [],
       addEventListener() { }, createElement: makeElement },
-    location: { hash: '', replace(h) { this.hash = h; } },
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },  // #465: the list is #/programs; '' is Home
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) },
@@ -143,7 +143,7 @@ for (const [name, status, probe] of OFF_CASES) {
     assert.equal(pg.$('#qStatus').textContent, 'No match - try the short name (UCLA, Ole Miss), the mascot, or a state or city');  // #404 adds places
     assert.equal(key(pg, 'Enter'), false);
     await settle();
-    assert.equal(pg.sb.location.hash, '', 'Enter with no match did something');
+    assert.equal(pg.sb.location.hash, '#/programs', 'Enter with no match did something');
     await type(pg, 'stanford');
     assert.equal(pg.$('#qStatus').textContent, '1 match · Enter opens the first');
     key(pg, 'Enter', true);
@@ -178,7 +178,7 @@ test('off: sidebar, cards, table and camp view are byte-identical to the page be
     const snaps = [];
     for (const pg of [now, before]) {
       Object.assign(pg.sb.S.filters, { conf: [], region: [], division: [], classYear: [], sort: 'name', view: 'cards', cond: [] }, JSON.parse(JSON.stringify(st)));
-      pg.sb.location.hash = '';
+      pg.sb.location.hash = '#/programs';
       pg.sb.renderSidebar();
       await pg.sb.renderList();
       const list = pg.app(), side = pg.sidebar();
@@ -230,13 +230,13 @@ test('on: with a name match, Enter still opens the profile and Shift+Enter asks 
   key(pg, 'Enter', true);
   await settle();
   assert.equal(pg.askRequests().length, 1, 'Shift+Enter did not ask');
-  assert.equal(pg.sb.location.hash, '', 'Shift+Enter opened the profile');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Shift+Enter opened the profile');
   // The answer just applied ACC + South + admission under 30%. Since #23, Enter opens only a match those filters
   // show, so the name here is one they keep (Duke); Stanford, in the West, is hidden and Enter leaves it closed.
   await type(pg, 'stanford');
   key(pg, 'Enter');
   await settle();
-  assert.equal(pg.sb.location.hash, '', 'Enter opened Stanford, which the applied filters hide');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Enter opened Stanford, which the applied filters hide');
   await type(pg, 'duke');
   key(pg, 'Enter');
   await settle();
@@ -278,4 +278,17 @@ test('on: the "From your question" line disappears once the filters are changed 
   assert.equal(S.askResult, null);
   await pg.sb.renderList();
   assert.ok(!pg.app().includes('ask-banner'));
+});
+
+// #465 (Huatuo, change 5): an applied answer sets the list's filters and its banner shows on the list, so asking from
+// Home (a bare #/) lands on Programs, never on Home with filters nobody can see.
+test('#465: asking from Home lands on Programs (#/programs), where the answer and its banner show', async () => {
+  const pg = await ready(loadPage({ probe: { ask: true, spend: { month: '2026-09', usd: 0, capUsd: 10 } }, answer: { body: ANSWER } }));
+  pg.sb.location.hash = '#/';
+  await type(pg, 'stanford');
+  key(pg, 'Enter', true);
+  await settle();
+  assert.equal(pg.askRequests().length, 1, 'Shift+Enter did not ask');
+  assert.equal(pg.sb.location.hash, '#/programs', 'asking from Home did not go to Programs');
+  assert.deepEqual(plain(pg.sb.S.filters.conf), ['ACC'], 'the answer was not applied');
 });

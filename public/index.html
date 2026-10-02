@@ -2,7 +2,7 @@
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>College Soccer · nextonetwo</title>
 <meta name="description" content="A research dashboard for NCAA women's soccer: program profiles built from public sources — school, roster, schedule, RPI and commitments.">
 <link rel="icon" href="/assets/favicon.svg?v=2" type="image/svg+xml">
@@ -22,7 +22,7 @@
 /* ===== THEME TOKENS (shared with ecnl.nextonetwo.com) ===== */
 :root {
   --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --header-height: 60px;
+  --header-height: calc(60px + env(safe-area-inset-top, 0px));  /* #465 B: grows by the top safe-area inset */
   --sidebar-width: 280px;
   --radius-sm: 6px; --radius-md: 10px; --radius-lg: 14px;
   --transition-fast: 0.18s ease; --transition-med: 0.3s ease;
@@ -107,7 +107,8 @@ tr:hover td { background: var(--row-hover); }
 .theme-toggle:hover { background: var(--bg-surface-alt); }
 
 /* ===== LAYOUT ===== */
-.layout { display: flex; height: calc(100vh - var(--header-height)); margin-top: var(--header-height); }
+.layout { display: flex; height: calc(100vh - var(--header-height)); height: calc(100dvh - var(--header-height)); margin-top: var(--header-height);
+  padding-left: env(safe-area-inset-left, 0px); padding-right: env(safe-area-inset-right, 0px); }  /* #465 B: dvh (100vh before it is supported); the side insets under viewport-fit=cover */
 .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 49; opacity: 0; transition: opacity var(--transition-med); }
 .sidebar-overlay.visible { display: block; opacity: 1; }
 .sidebar { width: var(--sidebar-width); min-width: var(--sidebar-width); background: var(--bg-surface); border-right: 1px solid var(--border); overflow-y: auto; display: flex; flex-direction: column; padding: 12px 0 0; transition: transform var(--transition-med), background var(--transition-med); z-index: 50; }
@@ -181,7 +182,8 @@ tr:hover td { background: var(--row-hover); }
 .recs-ask { color: var(--text-secondary); }
 .recs-note { font-size: 12px; color: var(--text-secondary); margin: 4px 0 0; }
 .recs-error { color: var(--danger-text); font-size: 13px; min-height: 18px; margin-top: 10px; }
-.recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px; }
+.recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }  /* #465 B: Show matches and Clear stay off the home indicator, in the phone sheet and the side panel alike */
 .recs-actions .btn { min-height: 44px; }
 .recs-status { font-size: 13px; color: var(--text-secondary); min-height: 18px; padding-bottom: 16px; }
 /* Results mode (issue #400, PR 4). Each chip pairs its icon with words, so nothing is said by colour alone. */
@@ -218,10 +220,11 @@ tr:hover td { background: var(--row-hover); }
 .recs-toast .btn { min-height: 44px; }
 @media (max-width: 768px) { .recs-toast { margin: 0 16px 12px; } }
 @media (min-width: 769px) and (max-width: 1180px) {
-  .recs-panel { position: fixed; top: var(--header-height); right: 0; bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }
+  .recs-panel { position: fixed; top: var(--header-height); right: env(safe-area-inset-right, 0px); bottom: 0; z-index: 60; box-shadow: var(--shadow-lg); }  /* #465 B: clear of a landscape notch */
 }
 @media (max-width: 768px) {
-  .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0; }
+  .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0;
+    padding-top: calc(12px + env(safe-area-inset-top, 0px)); padding-left: calc(16px + env(safe-area-inset-left, 0px)); padding-right: calc(16px + env(safe-area-inset-right, 0px)); }  /* #465 B: the sheet covers the header, so it keeps out of the notch itself */
 }
 .browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
 .browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
@@ -634,6 +637,41 @@ a.pill { text-decoration: none; }
 .feedback-note.ok { color: var(--good-text); }
 .feedback-note.error { color: var(--danger-text); }  /* #47: the site's error colour, as .cond-error and .recs-error */
 
+/* ===== GLOBAL SHELL (#465 B) ===== */
+/* Desktop: Programs · ID Camps · Pipelines in the header, the Shortlist beside About the data. The current destination
+   carries aria-current="page" (syncNav), and that is what is styled. */
+.gnav { display: flex; align-items: center; gap: 2px; margin: 0 6px 0 4px; flex: none; }
+.gnav a { font-size: 14px; font-weight: 600; color: var(--text-secondary); padding: 7px 10px; border-radius: 8px; white-space: nowrap; text-decoration: none; }
+.gnav a:hover { color: var(--text-primary); background: var(--bg-surface-alt); text-decoration: none; }
+.gnav a[aria-current="page"] { color: var(--accent-text); background: var(--accent-surface); }
+.nav-shortlist { display: inline-flex; align-items: center; gap: 5px; }
+.nav-shortlist svg, .bottom-nav svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.nav-shortlist[aria-current="page"] { text-decoration: underline; }
+.nav-count:not(:empty) { margin-left: 4px; font-size: 11px; font-weight: 700; line-height: 18px; min-width: 18px; padding: 0 5px; border-radius: 999px; background: var(--accent); color: var(--accent-contrast); text-align: center; }
+.bottom-nav { display: none; }
+/* Filters belong to their destination (owner's D4): views listed in NO_RAIL draw no sidebar and no button to open one. */
+body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { display: none; }
+/* Home (#465, the owner's direction of 2026-10-02): the heading and one line come from pageHeader, then three large
+   options - Programs, ID Camps, Pipelines - each with one line (Programs with a quiet count). No rail, no search box. */
+.home-entries { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; max-width: 1080px; margin-top: 8px; }
+.home-entry { display: flex; flex-direction: column; gap: 10px; min-height: 180px; padding: 28px 24px; border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-surface); color: var(--text-primary); box-shadow: var(--shadow-sm); }
+.home-entry:hover { border-color: var(--accent); box-shadow: var(--shadow-md); text-decoration: none; }
+.home-entry-icon { width: 52px; height: 52px; border-radius: 12px; background: var(--accent-surface); color: var(--accent-text); display: grid; place-items: center; flex: none; }
+.home-entry-icon svg { width: 28px; height: 28px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.home-entry-title { display: block; font-size: 22px; font-weight: 700; }
+.home-entry-desc { display: block; margin-top: 4px; font-size: 15px; color: var(--text-secondary); }
+.home-entry-fact { display: block; margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+/* #465: the program search box shows only where it searches - Programs and a program's page (searchShownFor). It stays
+   in the DOM everywhere (#447 and #445 keep working wherever it shows); elsewhere it and "Find programs for me" are not
+   drawn, the Shortlist and theme toggle move to the right edge, and on a phone the header is one row. */
+body.no-search .header-search, body.no-search .header-recs { display: none; }
+body.no-search .header-right { margin-left: auto; }
+/* #465 B: viewport-fit=cover lets the page draw under a notch or a rounded corner, so the fixed header keeps its content
+   inside the safe area: it grows by the top inset (portrait) and pads by the side insets (landscape). The 460 px rule
+   below narrows the side padding the same way. */
+:root { --safe-top: env(safe-area-inset-top, 0px); }
+.header { padding-top: var(--safe-top); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
 @media (max-width: 1024px) { .conf-layout { grid-template-columns: 1fr; } .glance-panel { order: -1; position: static; } }
@@ -641,7 +679,7 @@ a.pill { text-decoration: none; }
   .observed-top, .header-link { display: none; }
   .sidebar { position: fixed; top: var(--header-height); left: 0; bottom: 0; width: 280px; min-width: 280px; transform: translateX(-100%); box-shadow: none; }
   .sidebar.open { transform: translateX(0); box-shadow: var(--shadow-lg); }
-  .drawer-show { display: block; position: sticky; bottom: 0; z-index: 1; padding: 10px 16px; background: var(--bg-surface); border-top: 1px solid var(--border); }
+  .drawer-show { display: block; position: sticky; bottom: 0; z-index: 1; padding: 10px 16px; padding-bottom: calc(10px + env(safe-area-inset-bottom, 0px)); background: var(--bg-surface); border-top: 1px solid var(--border); }  /* #465 B: off the home indicator */
   .drawer-show .btn { width: 100%; justify-content: center; padding: 10px 12px; font-size: 14px; }
   .content-header { padding: 14px 16px 0; }
   .content-header-row { flex-direction: column; align-items: flex-start; }
@@ -657,7 +695,7 @@ a.pill { text-decoration: none; }
    box with "Find programs for me" beside it while recs is on - and --header-height is both rows, so .layout, the drawer
    and the #400 sheet all move down with it. The sheet itself stays position: fixed; inset: 0 over the whole header. */
 @media (max-width: 768px) {
-  :root { --header-height: 112px; }
+  :root { --header-height: calc(112px + env(safe-area-inset-top, 0px)); }
   .header { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-rows: 52px 52px; column-gap: 8px; align-items: center; }
   .header-search { grid-row: 2; grid-column: 1 / -1; max-width: none; margin: 0; }
   .header.has-recs .header-search { grid-column: 1; }
@@ -667,13 +705,52 @@ a.pill { text-decoration: none; }
 }
 /* Below 480 px the button's visible words shorten; its accessible name stays "Find programs for me" (aria-label). */
 @media (max-width: 479px) { .recs-entry-full { display: none; } .recs-entry-short { display: inline; } }
-@media (max-width: 460px) { .header { padding: 0 12px; } .header-left { gap: 8px; } .wordmark img { width: 26px; height: 26px; margin-right: 8px; } }
+@media (max-width: 460px) { .header { padding-left: max(12px, env(safe-area-inset-left, 0px)); padding-right: max(12px, env(safe-area-inset-right, 0px)); } .header-left { gap: 8px; } .wordmark img { width: 26px; height: 26px; margin-right: 8px; } }
 /* Issue #51: at 320-375 px the header row is wider than the screen and "College Soccer" ran under the theme toggle
    (44 px of overlap at 320, measured). Below 400 px the wordmark and label shrink and the left gaps tighten, which
    clears the toggle from 360 px (15 px to spare); below that the divider and label go, as .header-link already does below 768. */
 @media (max-width: 400px) { .cards { grid-template-columns: 1fr; } .header-left { gap: 6px; } .wordmark { font-size: 18px; } .section-label { font-size: 13px; } }
 @media (max-width: 359px) { .header-divider, .section-label { display: none; } }
-@media print { .header, .sidebar, .view-tabs { display: none; } body { overflow: auto; height: auto; } .layout { height: auto; margin: 0; } }
+/* #465 B: the header carries the three destinations from 769 px up. To leave the search box room, About the data
+   leaves the header at <=1180 px (it is in every page's footer and breadcrumbs), and the wordmark's text and the
+   Shortlist's word go at <=1024 px (both keep their accessible names). */
+@media (max-width: 1180px) { .header-about { display: none; } }
+@media (max-width: 1024px) { .wm-text, .nav-shortlist .nav-label { display: none; } }
+/* From 769 px up the brand group keeps its width (the search box is what gives way, down to ~180 px at 769), and at
+   <=900 px the three destinations tighten - measured on local serve.py at 800 px, where "College Soccer" ran under the
+   nav before. */
+@media (min-width: 769px) { .header-left { flex-shrink: 0; } }
+@media (max-width: 900px) { .gnav a { padding: 7px 6px; font-size: 13px; } }
+/* #465 B, phones: the bar of four destinations, inside the safe area. --bottom-nav-h is its height; .layout ends above it,
+   so the last row, the feedback form and the drawer's "Show N programs" are never under it; it is 0 while the
+   keyboard is up. Stacking: page < bar (45) < drawer overlay (49) < drawer (50) < #400 side panel (60) < header (100) <
+   #447's panel (120), which is capped to end above the bar; the #400 phone sheet (200) is modal and covers all of them.
+   Heights use 100dvh (the visible viewport while the browser's toolbars show) after a 100vh fallback. */
+@media (max-width: 768px) {
+  :root { --bottom-nav-h: calc(56px + env(safe-area-inset-bottom, 0px)); }
+  body.kbd-open { --bottom-nav-h: 0px; }
+  .gnav { display: none; }
+  .bottom-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    height: var(--bottom-nav-h); padding: 0 env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px);
+    background: var(--bg-surface); border-top: 1px solid var(--border); }
+  body.kbd-open .bottom-nav { display: none; }
+  .bottom-nav a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; min-height: 44px; font-size: 11px; font-weight: 600; color: var(--text-secondary); text-decoration: none; }
+  .bottom-nav a[aria-current="page"] { color: var(--accent-text); }
+  .bottom-nav svg { width: 22px; height: 22px; }
+  .layout { height: calc(100vh - var(--header-height) - var(--bottom-nav-h)); height: calc(100dvh - var(--header-height) - var(--bottom-nav-h)); }
+  .qpanel { max-height: calc(100vh - var(--header-height) - var(--bottom-nav-h) - 8px); max-height: calc(100dvh - var(--header-height) - var(--bottom-nav-h) - 8px); overflow-y: auto; }
+  .sidebar { padding-left: env(safe-area-inset-left, 0px); }  /* #465 B: the drawer's left edge, clear of a landscape notch */
+  .home-entries { grid-template-columns: 1fr; gap: 12px; }
+  .home-entry { flex-direction: row; align-items: center; gap: 14px; min-height: 0; padding: 18px 16px; }
+  .home-entry-icon { width: 44px; height: 44px; }
+  .home-entry-title { font-size: 18px; }
+  .home-entry-desc { font-size: 14px; }
+  .home-entry-fact { margin-top: 4px; }
+  /* no search box: the header is the brand row alone. Its grid keeps both rows (the brand row sits exactly where it does
+     on Programs; the second row is empty and draws nothing), and everything under the header moves up with the height. */
+  body.no-search { --header-height: calc(60px + env(safe-area-inset-top, 0px)); }
+}
+@media print { .header, .sidebar, .view-tabs, .bottom-nav { display: none; } body { overflow: auto; height: auto; } .layout { height: auto; margin: 0; } }
 </style>
 </head>
 <body>
@@ -682,10 +759,13 @@ a.pill { text-decoration: none; }
     <button class="hamburger" id="sidebarToggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/></svg>
     </button>
-    <a class="wordmark" href="https://www.nextonetwo.com"><img src="/assets/favicon.svg?v=2" alt="" width="32" height="32">next<span class="accent">one</span>two</a>
+    <a class="wordmark" href="https://www.nextonetwo.com" aria-label="nextonetwo"><img src="/assets/favicon.svg?v=2" alt="" width="32" height="32"><span class="wm-text">next<span class="accent">one</span>two</span></a>
     <div class="header-divider"></div>
-    <a class="section-label" href="https://college.nextonetwo.com/">College Soccer</a>
+    <a class="section-label" href="#/" aria-label="College Soccer home">College Soccer</a>
   </div>
+  <!-- #465 B: the three destinations, one click from every page (desktop; phones use the bottom bar below). aria-current
+       follows the route (syncNav). -->
+  <nav class="gnav" aria-label="Main"><a href="#/programs" data-nav="list">Programs</a><a href="#/camps" data-nav="camps">ID Camps</a><a href="#/trends" data-nav="trends">Pipelines</a></nav>
   <!-- #434: the one search box (static, on every page). setQuery / searchKeydown; the status is screen-reader only. -->
   <div class="header-search" role="search">
     <label class="sr-only" for="q">Search programs</label>
@@ -702,12 +782,15 @@ a.pill { text-decoration: none; }
   <!-- #434 decision 4: "Find programs for me", drawn by renderHeaderRecs while recs is on (one button, #recsOpen). -->
   <div class="header-recs" id="headerRecs"></div>
   <div class="header-right">
-    <span class="observed-top" id="observedTop" title="When the data was last collected"></span>
-    <a class="header-link" href="#/faq">About the data</a>
+    <a class="header-link nav-shortlist" href="#/shortlist" data-nav="shortlist" aria-label="Shortlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.5 4.1 1.2 5.9L12 16.8 6.7 19.7l1.2-5.9-4.5-4.1 6-.7z"/></svg><span class="nav-label">Shortlist</span><span class="nav-count" data-short-count></span></a>
+    <a class="header-link header-about" href="#/faq">About the data</a>
     <button class="theme-toggle" id="themeToggle" title="Toggle dark mode" aria-label="Switch to dark mode">🌙</button>
   </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
+<!-- #465 B: on phones the destinations are a labelled bar at the foot of the screen, inside the safe area; hidden while
+     the on-screen keyboard is up (body.kbd-open) so it never covers a focused field. -->
+<nav class="bottom-nav" aria-label="Main"><a href="#/programs" data-nav="list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>Programs</span></a><a href="#/camps" data-nav="camps"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg><span>ID Camps</span></a><a href="#/trends" data-nav="trends"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2.5"/><path d="M7 6c5 0 6 6 9.5 6M7 18c5 0 6-6 9.5-6"/></svg><span>Pipelines</span></a><a href="#/shortlist" data-nav="shortlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.5 6 .7-4.5 4.1 1.2 5.9L12 16.8 6.7 19.7l1.2-5.9-4.5-4.1 6-.7z"/></svg><span>Shortlist<span class="nav-count" data-short-count></span></span></a></nav>
 <div class="layout" id="layout">
   <aside class="sidebar" id="sidebar" aria-label="Navigation"></aside>
   <div class="main" id="main">
@@ -1412,7 +1495,7 @@ function loadFailedHtml(err, id = 'loadRetry') {
     : s === 503 ? 'The data service is briefly unavailable. Try again in a moment.'
     : s === 0 ? 'The data did not load. Check your connection and try again.'
     : 'The data did not load. Try again.';
-  return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/">All programs</a></p></div>`;
+  return `<div class="card load-failed" role="alert"><h3>Couldn’t load the data</h3><p class="muted">${esc(why)}</p><p><button type="button" class="btn primary" id="${esc(id)}">Try again</button> <a class="btn" href="#/programs">All programs</a></p></div>`;
 }
 async function loadIndex() {
   if (S.index) return S.index;
@@ -1514,8 +1597,9 @@ function trendsNormalize(doc) {
 const observedIso = () => S.refresh?.updated || S.index?.updated;
 const observedText = () => observedIso() ? `Data checked ${fmtDate(observedIso())}` : '';
 function renderObserved() {
+  // #465 B: the header no longer carries the date (freshness is said once, in the page it applies to)
   const el = $('#observedTop'); const iso = observedIso();
-  el.textContent = observedText(); el.title = iso ? new Date(iso).toLocaleString() : '';
+  if (el) { el.textContent = observedText(); el.title = iso ? new Date(iso).toLocaleString() : ''; }
   document.querySelectorAll('.observed').forEach(o => { o.textContent = observedText(); });
 }
 const programBySlug = slug => S.index?.programs.find(p => p.slug === slug);
@@ -1668,7 +1752,7 @@ function refocusFav(from, heir) {
 }
 function toggleFav(slug, from) {
   const heir = favHeir(from);
-  S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar();
+  S.favorites.has(slug) ? S.favorites.delete(slug) : S.favorites.add(slug); lsSet('cd.favorites', [...S.favorites]); renderSidebar(); syncNavCounts();
   if (currentView() === 'shortlist') renderShortlist().then(() => refocusFav(from, heir)).catch(e => console.error(e));
   else refocusFav(from, heir);
 }
@@ -1967,10 +2051,17 @@ function syncShowResults() { const b = $('#showResults'); if (b) b.textContent =
 function showResults() {
   const v = currentView();
   closeDrawer();
-  if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/';  // from a profile etc., to the list
+  if (!(v === 'list' || v === 'c' || filterOnlyView(v))) location.hash = '#/programs';  // from Home, a profile etc., to the list
   $('#sidebarToggle')?.focus();
 }
-function currentView() { return location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0] || 'list'; }
+// #465 (owner's D1): a bare #/ (or no hash) is Home. Programs is #/programs and keeps the internal view name 'list', so
+// every check of 'list' still means the program list; #14's #/?… and the old #/list are Programs too (route() rewrites
+// them to #/programs in place).
+function currentView() {
+  const v = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, '').split('/')[0];
+  if (v === 'programs' || v === 'list') return 'list';
+  return v || (location.hash.includes('?') ? 'list' : 'home');
+}
 // Views that the sidebar's pills narrow but its sort select and recruiting-class pills cannot: the camp
 // list (issue #65) and the Pipelines view (#230, #322), where a sort of programs has no row to sort.
 const filterOnlyView = v => v === 'camps' || v === 'trends';
@@ -1990,7 +2081,7 @@ document.addEventListener('keydown', e => {
   // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
-  if (e.key === '/') { e.preventDefault(); $('#q')?.focus(); }  // #434: the header box, on every page
+  if (e.key === '/') { if (searchShown()) { e.preventDefault(); $('#q')?.focus(); } }  // #434: the header box, where it shows (#465)
   else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); listCommit(); renderList(); }
 });
 
@@ -2003,9 +2094,13 @@ function setQuery(v) {
   clearTimeout(qTimer);
   // Typing filters the view you are in - #/camps included, where it narrows camps to matching PROGRAMS, never camp
   // names. On any other page it only suggests (#434 PR 2): a header box must not throw the reader off the page.
-  qTimer = setTimeout(() => { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'list' || v === 'c') renderList(); }, 80);
+  qTimer = setTimeout(searchApply, 80);
   listTyping();  // #14: the list's address follows the box, replacing its entry
 }
+function searchApply() { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') return renderCamps(); if (v === 'list' || v === 'c') return renderList(); }
+// #465: the box shows on Programs and a program's page only (body.no-search elsewhere, set by syncNav).
+const SEARCH_VIEWS = new Set(['list', 'c', 'p']);
+const searchShown = () => !document.body.classList.contains('no-search');
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
@@ -2161,7 +2256,7 @@ function openFromSearch(slug) {
 function showPlaceList() {
   closeDrawer();
   if (isPhone()) $('#q')?.blur?.();
-  if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/';
+  if (!['list', 'c', 'camps'].includes(currentView())) location.hash = '#/programs';
 }
 function chooseSuggestion(i) {
   const it = SUGG.items[i]; if (!it) return;
@@ -2200,7 +2295,14 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
   }
 }
 // "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
-document.addEventListener('click', e => { if (e.target.closest?.('[data-clear-search]')) { setQuery(''); $('#q')?.focus(); } });
+// Where the box is hidden (ID Camps, which a search made on Programs still narrows), the page is redrawn at once and
+// focus goes to its heading, as a route does (#453) - never to a box that is not drawn.
+document.addEventListener('click', e => {
+  if (!e.target.closest?.('[data-clear-search]')) return;
+  setQuery('');
+  if (searchShown()) { $('#q')?.focus(); return; }
+  clearTimeout(qTimer); Promise.resolve(searchApply()).then(() => routeFocus('h1'));
+});
 
 /* ---------- ask (issue #165, AI prototype 1) ----------
    A question becomes the page's own filter state. The Worker's /api/ask returns only pills, condition chips
@@ -2258,10 +2360,10 @@ function applyAsk(a) {
     ...f.classYear.map(y => `class of ${y}`), ...f.cond.map(condText)].concat(sort ? [`sorted by ${sort[1]}`] : []);
   S.qRaw = ''; S.q = ''; S.askMsg = ''; syncSearchBox();
   S.askResult = { prev, parts, reading: typeof a.reading === 'string' ? a.reading : '', key: askKey() };
-  saveState(); listCommit();  // on the list a new entry; anywhere else the '#/' below is the visitor's way to it
+  saveState(); listCommit();  // on the list a new entry; anywhere else the '#/programs' below is the visitor's way to it
   S.sidebarTab = 'programs'; renderSidebar();
   const v = currentView();
-  if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/';
+  if (v === 'list' || v === 'camps') rerenderForFilters(); else location.hash = '#/programs';  // #465: Ask from Home lands on Programs
 }
 function undoAsk() {
   const r = S.askResult; if (!r) return;
@@ -2607,7 +2709,7 @@ async function recsShowRecommended({ fromPanel = false } = {}) {
   R.catalogError = false;
   R.active = true; R.shown = RECS_PAGE; R.fitError = null; R.toast = null; renderRecsToast();
   if (fromPanel) { R.open = false; renderRecsPanel(); syncRecsEntry(); }
-  if (currentView() !== 'list') { location.hash = '#/'; }
+  if (currentView() !== 'list') { location.hash = '#/programs'; }
   syncSortControls();
   if (!R.fit) {
     R.loading = true; await renderList();
@@ -2683,7 +2785,7 @@ function recsNvHtml(res) {
 // The list in Recommended mode. Called by renderList; returns true when it drew the page.
 function renderRecsList(idx) {
   const R = S.recs, f = S.filters;
-  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Recommended for you' }];
+  const crumbs = [{ label: 'Programs', href: '#/programs' }, { label: 'Recommended for you' }];
   if (R.loading) {
     $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: 'Loading recommendations…', tabs: listTabs(f.view) })
       + `<div class="content-body"><div class="empty" role="status">Loading recommendations…</div></div>`;
@@ -3039,10 +3141,13 @@ const recsPilotReady = recsPilotStart();
 
 /* ---------- router ---------- */
 /* ---------- the list's state in the address (issue #14) ----------
-   #/?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
+   #/programs?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
+   #465 (owner's D1) moved the canonical prefix from #/? to #/programs?. The params, encoding and validation did not
+   change, and every #/?… link ever shared still opens the same list: route() rewrites it in place to #/programs?….
    This is a public contract: people share and bookmark these links, so the format may grow but never change meaning.
    - Nine params, always in that order, each list's values in a fixed (sorted) order, defaults left out. `sort` is
-     always written, so an address this page wrote is never a bare #/ - and a bare #/ keeps meaning "my saved filters".
+     always written, so an address this page wrote is never a bare #/programs - and a bare #/programs means "my saved
+     filters". (A bare #/ is Home, #465.)
    - Every value goes through encodeURIComponent, so `+ , : & # %` inside a value are always escaped, and a space is
      written `+`. Lists are joined with a literal `,`. A conference key "D2|Independent" is written D2:Independent
      (a literal `|` is not a fragment character); `|` and %7C are read too. On the way in `+` becomes a space BEFORE
@@ -3053,7 +3158,8 @@ const recsPilotReady = recsPilotStart();
      on. Only q is free text: control characters removed, trimmed, at most LIST_Q_MAX characters.
    - NEVER in it: recommendations (cd.recs), the pilot, compare, the shortlist, residency, "More statistics", an open
      condition form, Ask. listHashOf reads the nine fields of listSnapshot() and nothing else.
-   History (Bianque's review on #14): arriving, Back/Forward, a bare #/, #/c/ and #/rpi only ever replaceState (to the
+   History (Bianque's review on #14): arriving, Back/Forward, a bare #/programs, the #/?… alias, #/c/ and #/rpi only ever
+   replaceState (to the
    canonical form) or do nothing. pushState comes only from listCommit(), called by the visitor's own commits: a pill,
    the sort and its direction, Cards/Stats, a condition added or removed, Ask applied or undone, a filter cleared from
    Recommended. Typing replaces, 80 ms after the last key; a commit first writes typing still pending into the entry
@@ -3079,7 +3185,7 @@ function listHashOf(st) {
   out.push(`sort=${listEnc(st.sort || 'name')}`);
   if (st.sortDir === 'asc' || st.sortDir === 'desc') out.push(`dir=${st.sortDir}`);
   if (st.view === 'table') out.push('view=table');
-  return `#/?${out.join('&')}`;
+  return `#/programs?${out.join('&')}`;
 }
 // The ONE reader: the part after '?' to a checked state. Pure - it changes nothing. Unknown params, a repeated param
 // after its first, and every value the page does not know are dropped; a missing param is the page's default.
@@ -3136,7 +3242,7 @@ function listCommit() {
   }
   listUrlWrite('push');
 }
-// The list route: a state the address carries is applied (and saved, as #/c/ always did); a bare #/ keeps the saved
+// The list route: a state the address carries is applied (and saved, as #/c/ always did); a bare #/programs keeps the saved
 // filters. Either way the address is then made canonical IN PLACE. true when the state on screen changed.
 function listArrive() {
   clearTimeout(listTypeTimer); listTypeTimer = null;
@@ -3178,7 +3284,8 @@ function feedbackRoute() {
    Focus is always given with preventScroll, so it never moves the page: route() puts #main at the top on every route
    and nothing restores a scroll position on Back/Forward; if that ever changes, this does not fight it. */
 const ROUTE_FOCUS = { last: null };
-const routeFocusHeld = () => !!document.activeElement?.closest?.('.header-search, #recsPanel, #feedback');
+// #465: the search box holds focus only on a page that shows it; leaving for a page that hides it, the <h1> takes focus.
+const routeFocusHeld = () => { const a = document.activeElement; return !!(a?.closest?.('#recsPanel, #feedback') || (searchShown() && a?.closest?.('.header-search'))); };
 function routeFocusPlan(h, parts) {
   if (parts[0] === 'rpi') return null;  // an alias that rewrites itself to the list; the list's own route decides
   const prev = ROUTE_FOCUS.last; ROUTE_FOCUS.last = h;
@@ -3198,10 +3305,60 @@ function routeFocus(plan) {
     el.focus({ preventScroll: true });
   } catch { /* focus is a courtesy; a page that drew must never turn into an error card over it */ }
 }
+/* ---------- Home (#465) ----------
+   The owner's direction of 2026-10-02 (recorded on #465): very simple, no sidebar, just the three options - Programs,
+   ID Camps, Pipelines - each a large link with one line, Programs with a quiet count from the index already loaded
+   (left out when it is not). The page heading (route focus lands on it, #453) and one line come from pageHeader. No
+   search box here: it shows on Programs and a program's page only. It needs no data of its own, so it draws even when
+   the program index failed (`failed` is that card) and waits on nothing. */
+const HOME_ICON = { list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>', camps: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>', trends: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2.5"/><path d="M7 6c5 0 6 6 9.5 6M7 18c5 0 6-6 9.5-6"/></svg>' };
+function renderHome(failed = '') {
+  const idx = S.index;
+  const entry = (k, href, title, desc, fact) => `<a class="home-entry" href="${href}"><span class="home-entry-icon" aria-hidden="true">${HOME_ICON[k]}</span>`
+    + `<span><span class="home-entry-title">${title}</span><span class="home-entry-desc">${desc}</span>${fact ? `<span class="home-entry-fact">${fact}</span>` : ''}</span></a>`;
+  $('#app').innerHTML = pageHeader({ title: 'Find your college soccer path.',
+    subtitle: 'NCAA women’s soccer programs, ID camps, and where club and high school players go to college.' })
+    + `<div class="content-body home">${failed}
+      <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Programs', 'Explore and compare every NCAA women’s soccer program.', idx ? `${fmtNum(idx.programs.length)} programs` : '')}${entry('camps', '#/camps', 'ID Camps', 'Find upcoming ID camps and their dates.', '')}${entry('trends', '#/trends', 'Pipelines', 'See which colleges players from a club or high school went to.', '')}</nav>
+    </div>`;
+  return Promise.resolve();
+}
+// #465 B: the destinations' aria-current, the Shortlist count in the header and the bottom bar, and whether this view
+// has the Programs filter rail. Filters belong to their destination (owner's D4): a view in NO_RAIL draws no sidebar.
+// Pipelines has no rail (the owner, 2026-10-02) and no longer reads the Programs filters (trendsView), so nothing hidden
+// narrows it. ID Camps keeps the rail until PR F gives it its own.
+const NO_RAIL = new Set(['home', 'trends']);
+function syncNav(view) {
+  const cur = view === 'c' ? 'list' : view;
+  document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute?.('aria-current'); });
+  document.body.classList.toggle('no-rail', NO_RAIL.has(view));
+  document.body.classList.toggle('no-search', !SEARCH_VIEWS.has(view));  // #465: the search box only where it searches
+  syncNavCounts();
+}
+function syncNavCounts() {
+  const n = presentSlugs(S.favorites).length;
+  document.querySelectorAll('[data-short-count]').forEach(el => { el.textContent = n ? String(n) : ''; });
+}
+// The bottom bar steps aside while a phone's keyboard is up, so it never covers the field being typed in.
+{
+  const typing = t => !!t?.matches?.('textarea, select, input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"])');
+  document.addEventListener('focusin', e => { if (isPhone() && typing(e.target)) document.body.classList.add('kbd-open'); });
+  document.addEventListener('focusout', () => setTimeout(() => { if (!typing(document.activeElement)) document.body.classList.remove('kbd-open'); }, 0));
+}
+// #465 (owner's D1): #14's list addresses (#/?…, any query on the bare root) and the old #/list path are a PERMANENT
+// alias of Programs, rewritten IN PLACE (replaceState: never a new entry, never Home) to #/programs with the same query.
+const PROGRAMS_ALIAS = /^#\/?(?:\?|list(?:\/?$|\/?\?))/;
 function route() {
-  const h = location.hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
+  let hash = location.hash;
+  if (PROGRAMS_ALIAS.test(hash)) {
+    const i = hash.indexOf('?');
+    hash = `#/programs${i >= 0 ? hash.slice(i) : ''}`;
+    try { history.replaceState(null, '', hash); } catch { /* refused: the address stays, the list still opens below */ }
+  }
+  const h = hash.replace(/^#\/?/, '').replace(/\?.*$/, ''); // #/trends?club=… carries its state after '?' (#310)
   const parts = h.split('/').filter(Boolean);
-  const view = parts[0] || 'list';
+  const view = parts[0] === 'programs' ? 'list' : parts[0] || 'home';
+  syncNav(view);  // #465 B: aria-current on the destinations, and the filter rail only where it applies
   const app = $('#app');
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
@@ -3229,7 +3386,7 @@ function route() {
   }
   // conf is [] and not '': every other reader treats it as an array, and toggleIn would throw on the
   // string until the next reload normalised it back (issue #21).
-  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/'); return; }
+  if (view === 'rpi') { S.filters.view = 'table'; S.filters.sort = 'rpi'; S.filters.sortDir = null; S.filters.conf = []; saveState(); location.replace('#/programs'); return; }
   if (view === 'compare') { if (parts[1]) { S.compare = capCompare(parts[1].split(',').filter(Boolean)); saveState(); } S.sidebarTab = 'compare'; renderSidebar(); return go(renderCompare()); }
   if (view === 'shortlist') { S.sidebarTab = 'shortlist'; renderSidebar(); return go(renderShortlist()); }
   // #/camps is a route, not an f.view: f.view persists in cd.filters, and a visitor who glanced at
@@ -3244,6 +3401,7 @@ function route() {
   if (view === 'faq') return go(renderFaq());
   if (view === 'api') return go(renderApiDocs());
   if (view === 'list') { if (listArrive()) renderSidebar(); return go(perfView('list', renderList(), perfNav)); }
+  if (view === 'home') return go(renderHome());  // not measured: #394's Worker knows list, profile, trends, camps (#465 PR B decides)
   renderNotFound({ title: 'Page not found', message: `There is no page at <code>#/${esc(h)}</code>.`, suggestions: slugSuggestions(parts) });
   routeFocus(focusPlan);
 }
@@ -3275,8 +3433,8 @@ function pageHeader({ crumbs = [], title, nick = '', subtitle = '', right = '', 
 /* ---------- not found (unknown program slug or route): message, up to three "did you mean" links, keeps the URL ---------- */
 function renderNotFound({ title, message, suggestions = [] }) {
   const did = suggestions.length ? `<p>Did you mean ${suggestions.map(p => `<a href="#/p/${esc(p.slug)}">${esc(p.name)}</a> <span class="team-sub">(${programLine(p)})</span>`).join(', ')}?</p>` : '';
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Not found' }], title: esc(title) })
-    + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'Not found' }], title: esc(title) })
+    + `<div class="content-body"><div class="card"><p class="muted">${message}</p>${did}<p><a class="btn primary" href="#/programs">All programs</a> <span class="muted small">or press / to search</span></p></div></div>`;
 }
 // programs whose name a hash segment looks like: "stanfrod" and "program/stanford" both suggest Stanford
 function slugSuggestions(parts) {
@@ -3517,7 +3675,7 @@ async function renderList() {
   // Cards / Table switch f.view in place; ID Camps is a route of its own (#/camps), because f.view is
   // persisted in cd.filters and a visitor who glanced at camps once would land back in it next visit.
   const tabs = listTabs(f.view);
-  const crumbs = f.conf.length ? [{ label: 'All programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'All programs' }];
+  const crumbs = f.conf.length ? [{ label: 'Home', href: '#/' }, { label: 'Programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'Home', href: '#/' }, { label: 'Programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
   $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
@@ -3600,7 +3758,7 @@ async function renderShortlist() {
   await loadIndex();
   const rows = shortlistRows();
   const right = rows.length >= 2 ? `<a class="open-external" href="#/compare/${rows.slice(0, 4).map(p => esc(p.slug)).join(',')}">⇄ Compare ${Math.min(rows.length, 4)}</a>` : '';
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, { label: 'My shortlist' }], title: 'My shortlist', subtitle: rows.length ? `${rows.length} saved program${rows.length === 1 ? '' : 's'} · kept in this browser only` : 'Nothing saved yet', right })
     + `<div class="content-body">${rows.length ? `<div class="grid cards">${rows.map(cardHtml).join('')}</div>` : '<div class="card shortlist-empty" tabindex="-1"><p class="muted">Save a program with the ☆ on any card or program page and it will appear here. Your shortlist stays in this browser and is not sent anywhere.</p></div>'}</div>`;
   $('#app').querySelectorAll('.pcard').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
 }
@@ -3662,10 +3820,11 @@ function campTally(doc) {
 }
 // The list header strip. Cards and Table are f.view and switch in place; ID Camps and Pipelines (#322) are
 // routes of their own.
+// #465 B: Cards / Stats is Programs' own view switch and the only thing in this strip. ID Camps and Pipelines are global
+// destinations now (the header's nav, the phone's bottom bar), not tabs beside a display mode.
 function listTabs(active) {
   const btn = (k, l) => `<button class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}" data-view="${k}">${l}</button>`;
-  const link = (k, href, l) => `<a href="${href}" class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}">${l}</a>`;
-  return btn('cards', 'Cards') + btn('table', 'Stats') + link('camps', '#/camps', 'ID Camps') + link('trends', '#/trends', 'Pipelines');
+  return btn('cards', 'Cards') + btn('table', 'Stats');
 }
 function campRowHtml(c, p) {
   const details = [c.location, c.ages, c.price].filter(Boolean).join(' · ');
@@ -3728,24 +3887,24 @@ async function renderCamps() {
     body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
       <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), confLabels(f.conf).join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', f.cond.map(condText).join(' and '), S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
       ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
-      <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/">All programs</a></p>
+      <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/programs">All programs</a></p>
       <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
   } else {
     body = `<div class="card"><h3>No upcoming ID camps are published right now</h3>
       <p class="muted">We publish a camp here once a school has posted a dated women's soccer ID or prospect camp. Camps are usually announced in the spring. A program's own <b>ID Camps</b> tab shows everything we found for it, including camps we could not date.</p>
-      <p><a class="btn primary" href="#/">All programs</a></p>
+      <p><a class="btn primary" href="#/programs">All programs</a></p>
       <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
   }
 
   $('#app').innerHTML = pageHeader({
-    crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Upcoming ID camps' }],
-    title: 'Upcoming ID camps', subtitle: bits.join(' · '), tabs: listTabs('camps'),
+    crumbs: [{ label: 'Home', href: '#/' }, { label: 'Upcoming ID camps' }],
+    title: 'Upcoming ID camps', subtitle: bits.join(' · '), tabs: '',  // #465 B: no Cards/Stats here; the nav reaches every destination
   }) + `<div class="content-body">${askBanner()}${body}</div>`;
 
   const app = $('#app');
   wireAskBanner();
   // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
-  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
   app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
   const clr = $('#campsClear');
   // Clears everything that narrowed the list, search and condition chips included - otherwise "clear filters" leaves one on.
@@ -3962,9 +4121,9 @@ function renderTrendsRoute() { return TR ? trendsApply(TR.sel) : renderTrends();
 async function renderTrends() {
   const idx = await loadIndex();
   const f = S.filters, app = $('#app');
-  const crumbs = [{ label: 'All programs', href: '#/' }, { label: 'Pipelines' }];
-  const tabs = listTabs('trends');
-  const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/'; });
+  const crumbs = [{ label: 'Home', href: '#/' }, { label: 'Pipelines' }];
+  const tabs = '';  // #465 B: no Cards/Stats here; the nav reaches every destination
+  const wireTabs = () => app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
   const title = 'From Youth Clubs/High Schools to Colleges'; // owner's wording (#329): every state of the page uses it
   const subtitle = 'Clubs and high schools behind college rosters';
   let doc;
@@ -3980,7 +4139,7 @@ async function renderTrends() {
     const missing = err?.status === 404;
     app.innerHTML = pageHeader({ crumbs, title, subtitle, tabs })
       + `<div class="content-body">${missing
-        ? '<div class="card" id="trFailed"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/">All programs</a></p></div>'
+        ? '<div class="card" id="trFailed"><h3>Not built yet</h3><p class="muted">The clubs and high-schools index is produced by the daily data refresh and has not been published yet. Check back after the next refresh.</p><p><button type="button" class="btn primary" id="trRetry">Try again</button> <a class="btn" href="#/programs">All programs</a></p></div>'
         : loadFailedHtml(err, 'trRetry')}</div>`; // the same card as every other data load (#345)
     wireTabs(); $('#trRetry').onclick = () => renderTrends(); return;
   }
@@ -4415,8 +4574,8 @@ function trendsView(sel) {
   const commitCell = (r, sch) => r.commits != null ? sm(r.commits) : sch ? dash : notCollected;
   const cells = (r, sch) => `<td class="num"><span class="num-strong">${pl(r.current, r.past)}</span></td><td class="num">${fmtNum(r.current)}</td><td class="num">${sm(r.past)}</td><td class="num trend-sep">${commitCell(r, sch)}</td>`;
   const where = e => [e.city, e.state].filter(Boolean).join(', ');
-  // D4 (#465): the Programs filters and search never narrow Pipelines, so a shared link reads the same for everyone.
-  const known = rows => rows.filter(r => byProgram.has(r.slug));
+  // #465: Pipelines has no rail, so the Programs filters (and a search made there) never narrow it.
+  const shownOf = rows => rows.filter(r => byProgram.has(r.slug));
   const sch = H.length > 0, kindCov = C.length ? 'club' : 'school';
   const totalsOf = rows => { const known = rows.filter(r => r.commits != null); return { current: rows.reduce((a, r) => a + r.current, 0), past: rows.reduce((a, r) => a + r.past, 0), commits: known.length ? known.reduce((a, r) => a + r.commits, 0) : null }; };
   // Totals combine the chosen boxes, so with 2+ boxes they follow the same "1–2" rule as the rows.
@@ -4448,7 +4607,7 @@ function trendsView(sel) {
   // Clubs and/or schools, no program: the programs their players went to (a true AND when both are chosen).
   if (C.length || H.length) {
     const rows = programRows(trendsQuery(doc, q));
-    const t = totalsOf(rows), shown = known(rows);
+    const t = totalsOf(rows), shown = shownOf(rows);
     const trs = shown.map(r => { const p = byProgram.get(r.slug); return `<tr class="team-row"><td>${progCell(p)}${link({ program: p.slug }, 'at this program →', 'tr-go')}${expander(p.slug, r.current)}</td>${cells(r, sch)}</tr>`; }).join('');
     const what = [C.length && orText('club', C), H.length && orText('school', H)].filter(Boolean).join(' and ');
     const heading = [C.length && orList('club', C), H.length && orList('school', H)].filter(Boolean).join(' <span class="muted" style="font-weight:400">and</span> ');
@@ -4598,7 +4757,7 @@ async function renderProfile(slug, tab) {
   const subtitle = [programLine(p, p.school?.city, p.school?.state), rpiRow?.rpiRank && appliesTo('rpi', p) ? `RPI ${rpiSeason()} <b>#${rpiRow.rpiRank}</b>${rpiInProgress() ? ` (${IN_PROGRESS})` : ''}` : '', titles ? titlesPhrase(titles, p.division) : ''].filter(Boolean).join(' · ');
   const right = Object.entries(p.links).filter(([k, v]) => v && linkHasSection(k, p)).map(([k, v]) => extLink(v, LINK_LABELS[k] || k)).join('');
   const tabs = shownTabs.map(([k, l]) => `<a href="#/p/${esc(slug)}/${k}" class="view-tab${k === tab ? ' active' : ''}" role="tab" aria-selected="${k === tab}">${tabLabel(k, l, p)}</a>`).join('');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference && p.division && confShared(p.conference) ? confKeyOf(p.division, p.conference) : (p.conference || ''))}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, ...(p.division ? [{ label: p.division, title: divisionName(p.division) }] : []), { label: p.conference || 'Programs', href: `#/c/${encodeURIComponent(p.conference && p.division && confShared(p.conference) ? confKeyOf(p.division, p.conference) : (p.conference || ''))}` }, { label: displayName(p) }], title: esc(p.name), nick: p.nickname || '', subtitle, right, tabs })
     + `<div class="content-body">${notice}<div class="conf-layout"><div class="conf-main" id="tab"></div><aside class="glance-panel" aria-label="Program at a glance">${glanceHtml(p, row)}</aside></div></div>`;
   const fn = { overview: tabOverview, school: tabSchool, climate: tabClimate, history: tabHistory, staff: tabStaff, roster: tabRoster, commitments: tabCommitments, schedule: tabSchedule, news: tabNews, camps: tabCamps }[tab] || tabOverview;
   const el = $('#tab');
@@ -4961,7 +5120,7 @@ async function renderCompare() {
   const table = profiles.length ? `<div class="flight-panel"><div class="tscroll"><table class="cmp-table"><tr><th></th>${profiles.map(p => `<th><a href="#/p/${esc(p.slug)}">${esc(displayName(p))}</a><span class="team-sub">${programLine(p, p.school?.city, p.school?.state)}</span></th>`).join('')}</tr>
       ${groups.map(([g, rowsDef]) => `<tr><th class="group" colspan="${profiles.length + 1}">${g}</th></tr>` + rowsDef.map(([label, fn]) => `<tr><th>${label}</th>${profiles.map(p => `<td>${fn(p)}</td>`).join('')}</tr>`).join('')).join('')}</table></div></div>`
     : '<div class="card"><p class="muted">Add up to four programs with ⇄ Compare on any card or program page, or type a school name above.</p></div>';
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Programs', href: '#/programs' }, { label: 'Compare' }], title: 'Compare programs', subtitle: profiles.length ? `${profiles.length} side by side · Academics, soccer, cost and campus life` : 'Side-by-side comparison of up to four programs' })
     + `<div class="content-body">${bar}${table}</div>`;
   const add = $('#cmpAdd'), res = $('#cmpResults');
   if (add) {
@@ -4992,7 +5151,7 @@ async function renderFaq() {
     [ext('https://www.topdrawersoccer.com/', 'TopDrawerSoccer') + ' and ' + ext('https://www.soccerwire.com/', 'SoccerWire'), 'Commitments by graduating class (listed mostly for Division I programs)', 'Recruiting news sites; listings are submitted by clubs, families and the sites’ own reporters'],
   ];
   const app = $('#app');
-  app.innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
+  app.innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'About the data' }], title: 'About the data', subtitle: 'Where the numbers come from, what they are not, and how to send feedback' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h2>About the data</h2>
       <p class="lead">nextonetwo College Soccer gathers public information about NCAA women’s soccer programs into one place so families can research schools. Please read this page once so you know what the numbers are, and are not.</p></div>
 
@@ -5056,7 +5215,7 @@ async function renderApiDocs() {
     ['429', 'Too many requests: over a per-minute limit. Retry-After says when to try again.'],
     ['503', 'API keys cannot be checked right now. Retry-After says when to try again.'],
   ];
-  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'All programs', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
+  $('#app').innerHTML = pageHeader({ crumbs: [{ label: 'Home', href: '#/' }, { label: 'Data API' }], title: 'Data API', subtitle: 'The JSON behind this site' }) + `<div class="content-body"><div class="faq">
     <div class="card"><h3>What it is, honestly</h3>
       <p>A read-only HTTP API at <code>${esc(base)}</code> that serves the same JSON this website reads. The website stays free with no login and never needs a key. <b>Direct use needs an API key</b> the owner issues: scripts, agents and other servers send one. Without a key there is only a small allowance per internet address, for a quick look. The limits make copying the data slow and visible, not impossible: the project’s repository is public and holds the same data.</p></div>
     <div class="card"><h3>Three ways in</h3>
@@ -5138,8 +5297,9 @@ async function renderApiDocs() {
 // First load. A failure shows the try-again card (#345), whose button runs this same start again.
 function boot() {
   return loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => {
-    setDocTitle('Couldn’t load the data');
-    $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`;
+    // #465: Home needs no data, so it still draws (heading, destinations) with the try-again card inside it.
+    if (currentView() === 'home') renderHome(loadFailedHtml(e));
+    else { setDocTitle('Couldn’t load the data'); $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; }
     const b = $('#loadRetry'); if (b) b.onclick = () => boot();
   });
 }

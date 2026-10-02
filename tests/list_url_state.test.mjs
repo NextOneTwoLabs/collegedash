@@ -38,7 +38,7 @@ const LIST_PARAMS = ['div', 'region', 'conf', 'class', 'cond', 'q', 'sort', 'dir
 const unesc = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const camel = s => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
 
-function loadPage({ hash = '#/', store = {}, session = {}, ask = false } = {}) {
+function loadPage({ hash = '#/programs', store = {}, session = {}, ask = false } = {}) {
   const els = new Map(), docListeners = {}, winListeners = {}, requests = [], sinks = [], writes = [];
   const ls = new Map(Object.entries(store).map(([k, v]) => [k, JSON.stringify(v)]));
   const ss = new Map(Object.entries(session));
@@ -158,20 +158,20 @@ const plain = v => JSON.parse(JSON.stringify(v));
 // ---------- 1. the format (snapshot) and its round trip ----------
 
 const SNAPSHOT = [
-  [{}, '#/?sort=name'],
-  [{ division: ['D2'], region: ['West'], conf: ['D2|Independent'], q: 'Ohio' }, '#/?div=D2&region=West&conf=D2:Independent&q=Ohio&sort=name'],
-  [{ division: ['D3', 'D1'], region: ['West', 'Midwest'] }, '#/?div=D1,D3&region=Midwest,West&sort=name'],
-  [{ conf: ['D3|College Conference of Illinois & Wisconsin'] }, '#/?conf=D3:College+Conference+of+Illinois+%26+Wisconsin&sort=name'],
-  [{ conf: ['D1|Big Ten', 'ACC'] }, '#/?conf=ACC,D1:Big+Ten&sort=name'],
-  [{ cond: [{ field: 'admissionRate', op: '<', value: 0.3 }, { field: 'academicRank', op: '<=', value: 50 }] }, '#/?cond=academicRank:le:50,admissionRate:lt:0.3&sort=name'],
-  [{ classYear: ['2027', '2026'] }, '#/?class=2026,2027&sort=name'],
-  [{ q: 'a+b & c%d #e, f:g Montréal' }, '#/?q=a%2Bb+%26+c%25d+%23e%2C+f%3Ag+Montr%C3%A9al&sort=name'],
-  [{ sort: 'admit', sortDir: 'asc', view: 'table' }, '#/?sort=admit&dir=asc&view=table'],
+  [{}, '#/programs?sort=name'],
+  [{ division: ['D2'], region: ['West'], conf: ['D2|Independent'], q: 'Ohio' }, '#/programs?div=D2&region=West&conf=D2:Independent&q=Ohio&sort=name'],
+  [{ division: ['D3', 'D1'], region: ['West', 'Midwest'] }, '#/programs?div=D1,D3&region=Midwest,West&sort=name'],
+  [{ conf: ['D3|College Conference of Illinois & Wisconsin'] }, '#/programs?conf=D3:College+Conference+of+Illinois+%26+Wisconsin&sort=name'],
+  [{ conf: ['D1|Big Ten', 'ACC'] }, '#/programs?conf=ACC,D1:Big+Ten&sort=name'],
+  [{ cond: [{ field: 'admissionRate', op: '<', value: 0.3 }, { field: 'academicRank', op: '<=', value: 50 }] }, '#/programs?cond=academicRank:le:50,admissionRate:lt:0.3&sort=name'],
+  [{ classYear: ['2027', '2026'] }, '#/programs?class=2026,2027&sort=name'],
+  [{ q: 'a+b & c%d #e, f:g Montréal' }, '#/programs?q=a%2Bb+%26+c%25d+%23e%2C+f%3Ag+Montr%C3%A9al&sort=name'],
+  [{ sort: 'admit', sortDir: 'asc', view: 'table' }, '#/programs?sort=admit&dir=asc&view=table'],
   [{ division: ['D2'], region: ['West', 'Midwest'], conf: ['D2|Independent'], classYear: ['2027'], cond: [{ field: 'admissionRate', op: '<', value: 0.3 }], q: 'Ohio State', sort: 'admit', sortDir: 'asc', view: 'table' },
-    '#/?div=D2&region=Midwest,West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table'],
+    '#/programs?div=D2&region=Midwest,West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table'],
 ];
 let BASE = null;
-const base = async () => (BASE ||= await open({ hash: '#/' }));
+const base = async () => (BASE ||= await open({ hash: '#/programs' }));
 
 test('format snapshot: ten states give exactly these addresses (the public contract)', async () => {
   const pg = await base();
@@ -189,7 +189,7 @@ test('round trip: reading each snapshot address gives back the state, sorted', a
     for (const k of ['division', 'region', 'conf', 'classYear']) want[k] = [...want[k]].sort();
     want.conf = want.conf.slice().sort((x, y) => (x.replace('|', ':') < y.replace('|', ':') ? -1 : 1));
     want.cond = want.cond.slice().sort((x, y) => (x.field < y.field ? -1 : 1));
-    const got = plain(pg.sb.listStateOf(h.slice(3)));
+    const got = plain(pg.sb.listStateOf(h.slice(h.indexOf('?') + 1)));
     assert.deepEqual(got, plain(want), h);
     assert.equal(pg.sb.listHashOf(got), h, `${h} is not canonical after a round trip`);
   }
@@ -204,7 +204,7 @@ test('encoding (amendment 4): + is a space, %2B a plus; + & % # , : and non-ASCI
   for (const s of ['1+1', 'A&M', '100%', '#1', 'a,b', 'a:b', 'Montréal', 'São Paulo, SP', 'x %2B y']) {
     const h = pg.sb.listHashOf({ ...DEFAULT, q: s });
     assert.ok(!/[,:]/.test(h.slice(h.indexOf('q='), h.indexOf('&sort'))), `${s}: a , or : inside q is not escaped (${h})`);
-    assert.equal(q(h.slice(3)), s, `${s} does not survive the round trip (${h})`);
+    assert.equal(q(h.slice(h.indexOf('?') + 1)), s, `${s} does not survive the round trip (${h})`);
   }
   assert.equal(q('q=%E0'), '', 'a malformed escape is carried');
   assert.equal(q('q=%E0&sort=admit').length, 0);
@@ -234,7 +234,7 @@ test('every arriving value is checked against what the page knows; only q is fre
 // ---------- 3. arriving (replace only) ----------
 
 test('arriving on a link applies it over the saved filters, saves it, and rewrites the address in place', async () => {
-  const pg = await open({ hash: '#/?div=D2&conf=D2:Independent&q=Ohio', store: { 'cd.filters': { region: ['South'], sort: 'rpi', view: 'table' } } });
+  const pg = await open({ hash: '#/programs?div=D2&conf=D2:Independent&q=Ohio', store: { 'cd.filters': { region: ['South'], sort: 'rpi', view: 'table' } } });
   const f = pg.sb.S.filters;
   assert.deepEqual(plain(f.division), ['D2']);
   assert.deepEqual(plain(f.conf), ['D2|Independent']);
@@ -244,20 +244,20 @@ test('arriving on a link applies it over the saved filters, saves it, and rewrit
   assert.match(pg.$('#app').innerHTML, /matching “Ohio”/);
   assert.equal(pill(pg, 'conf', 'Independent', 'D2')._attrs['aria-pressed'], 'true', 'the D2 Independent pill is not lit');
   assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).division, ['D2'], 'the link\'s state is not saved');
-  assert.deepEqual(pg.hist.entries, ['#/?div=D2&conf=D2:Independent&q=Ohio&sort=name'], 'arriving added an entry or did not canonicalise');
+  assert.deepEqual(pg.hist.entries, ['#/programs?div=D2&conf=D2:Independent&q=Ohio&sort=name'], 'arriving added an entry or did not canonicalise');
   assert.equal(pushes(pg), 0, 'arriving pushed');
 });
 
-test('a bare #/ keeps the saved filters and becomes canonical in place', async () => {
-  const pg = await open({ hash: '#/', store: { 'cd.filters': { region: ['West'], sort: 'admit' } } });
+test('a bare #/programs keeps the saved filters and becomes canonical in place', async () => {
+  const pg = await open({ hash: '#/programs', store: { 'cd.filters': { region: ['West'], sort: 'admit' } } });
   assert.deepEqual(plain(pg.sb.S.filters.region), ['West']);
-  assert.deepEqual(pg.hist.entries, ['#/?region=West&sort=admit']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?region=West&sort=admit']);
   assert.equal(pushes(pg), 0);
 });
 
-test('a link whose every value is dropped is replaced, never pushed (#/?region=Nowhere)', async () => {
+test('a link whose every value is dropped is replaced, never pushed (the old-form #/?region=Nowhere, through the #465 alias)', async () => {
   const pg = await open({ hash: '#/?region=Nowhere&sort=__proto__', store: { 'cd.filters': { region: ['West'] } } });
-  assert.deepEqual(pg.hist.entries, ['#/?sort=name']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?sort=name']);
   assert.deepEqual(plain(pg.sb.S.filters.region), []);
   assert.equal(pushes(pg), 0);
 });
@@ -265,15 +265,15 @@ test('a link whose every value is dropped is replaced, never pushed (#/?region=N
 // ---------- 4. history (amendment 2) ----------
 
 test('history: a commit adds one entry, typing adds none, and Back/Forward restore the state without adding any', async () => {
-  const pg = await open({ hash: '#/' });
-  assert.deepEqual(pg.hist.entries, ['#/?sort=name']);
+  const pg = await open({ hash: '#/programs' });
+  assert.deepEqual(pg.hist.entries, ['#/programs?sort=name']);
   await click(pg, 'region', 'West');
-  assert.deepEqual(pg.hist.entries, ['#/?sort=name', '#/?region=West&sort=name'], 'a pill did not add exactly one entry');
+  assert.deepEqual(pg.hist.entries, ['#/programs?sort=name', '#/programs?region=West&sort=name'], 'a pill did not add exactly one entry');
   await type(pg, 'Ohio'); await settle(150);
   assert.equal(pg.hist.entries.length, 2, 'typing added history entries');
-  assert.equal(pg.sb.location.hash, '#/?region=West&q=Ohio&sort=name', 'typing did not replace the entry with the search');
+  assert.equal(pg.sb.location.hash, '#/programs?region=West&q=Ohio&sort=name', 'typing did not replace the entry with the search');
   pg.$('#sortSelect').onchange({ target: { value: 'admit' } }); await settle();
-  assert.deepEqual(pg.hist.entries.slice(2), ['#/?region=West&q=Ohio&sort=admit'], 'the sort did not add one entry');
+  assert.deepEqual(pg.hist.entries.slice(2), ['#/programs?region=West&q=Ohio&sort=admit'], 'the sort did not add one entry');
   const n = pg.hist.entries.length, p = pushes(pg);
   await back(pg);
   assert.equal(pg.sb.S.filters.sort, 'name'); assert.deepEqual(plain(pg.sb.S.filters.region), ['West']); assert.equal(pg.$('#q').value, 'Ohio');
@@ -285,32 +285,32 @@ test('history: a commit adds one entry, typing adds none, and Back/Forward resto
   await back(pg);
   assert.equal(pg.hist.entries.length, n, 'Back, Forward, Back added entries');
   assert.equal(pushes(pg), p, 'Back or Forward pushed');
-  assert.equal(pg.sb.location.hash, '#/?sort=name');
+  assert.equal(pg.sb.location.hash, '#/programs?sort=name');
 });
 
 test('history: a commit within 80 ms of typing writes the typing into the entry it was typed on first', async () => {
-  const pg = await open({ hash: '#/' });
+  const pg = await open({ hash: '#/programs' });
   await type(pg, 'Te');
   pill(pg, 'region', 'West').onclick();  // no wait: the typing replace is still pending
   await settle(150);
-  assert.deepEqual(pg.hist.entries, ['#/?q=Te&sort=name', '#/?region=West&q=Te&sort=name']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?q=Te&sort=name', '#/programs?region=West&q=Te&sort=name']);
 });
 
 test('history: the other commits (direction, Cards/Stats key, conditions) push once each; Back from a program lands on the filtered list', async () => {
-  const pg = await open({ hash: '#/' });
+  const pg = await open({ hash: '#/programs' });
   await click(pg, 'division', 'D1');
   pg.$('#sortDir').onclick(); await settle();
-  assert.equal(pg.sb.location.hash, '#/?div=D1&sort=name&dir=desc');
+  assert.equal(pg.sb.location.hash, '#/programs?div=D1&sort=name&dir=desc');
   pg.docListeners.keydown.forEach(fn => fn({ key: 'c', target: { matches: () => false, closest: () => null }, preventDefault() { } })); await settle();
-  assert.equal(pg.sb.location.hash, '#/?div=D1&sort=name&dir=desc&view=table');
+  assert.equal(pg.sb.location.hash, '#/programs?div=D1&sort=name&dir=desc&view=table');
   pg.sb.condFormOpen(); pg.$('#condValue').value = '30'; pg.sb.condFormSubmit(); await settle();
-  assert.match(pg.sb.location.hash, /^#\/\?div=D1&cond=admissionRate:(lt|le|gt|ge):0\.3&sort=name&dir=desc&view=table$/);
+  assert.match(pg.sb.location.hash, /^#\/programs\?div=D1&cond=admissionRate:(lt|le|gt|ge):0\.3&sort=name&dir=desc&view=table$/);
   pg.sb.condRemove(0); await settle();
   assert.equal(pg.hist.entries.length, 6, 'each commit did not add exactly one entry');
   const n = pg.hist.entries.length;
   pg.sb.location.hash = `#/p/${INDEX.programs[0].slug}`; await settle(150);
   await back(pg);
-  assert.equal(pg.sb.location.hash, '#/?div=D1&sort=name&dir=desc&view=table');
+  assert.equal(pg.sb.location.hash, '#/programs?div=D1&sort=name&dir=desc&view=table');
   assert.deepEqual(plain(pg.sb.S.filters.division), ['D1']); assert.equal(pg.sb.S.filters.view, 'table');
   assert.equal(pg.hist.entries.length, n + 1, 'coming back from a program added an entry');
 });
@@ -320,21 +320,21 @@ test('history: the other commits (direction, Cards/Stats key, conditions) push o
 test('old links: #/c/<name>, a keyed #/c/, #/rpi, #pilot=, #/p/ and #/trends keep working, and only ever replace', async () => {
   let pg = await open({ hash: '#/c/ACC', store: { 'cd.filters': { division: ['D2'] } } });
   assert.deepEqual(plain(pg.sb.S.filters.conf), ['ACC']); assert.deepEqual(plain(pg.sb.S.filters.division), []);
-  assert.deepEqual(pg.hist.entries, ['#/?conf=ACC&sort=name']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?conf=ACC&sort=name']);
   assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).conf, ['ACC'], '#/c/ no longer saves the conference');
   assert.equal(pill(pg, 'conf', 'ACC')._attrs['aria-pressed'], 'true', 'the sidebar was not redrawn for #/c/');
   pg = await open({ hash: '#/c/D2%7CIndependent' });
-  assert.deepEqual(pg.hist.entries, ['#/?conf=D2:Independent&sort=name']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?conf=D2:Independent&sort=name']);
   for (const h of ['#/c/%E0', '#/c/Nowhere', '#/c/%3Cscript%3E']) {
     pg = await open({ hash: h });
     assert.deepEqual(plain(pg.sb.S.filters.conf), [], `${h} carried a value the data does not have`);
-    assert.deepEqual(pg.hist.entries, ['#/?sort=name'], h);
+    assert.deepEqual(pg.hist.entries, ['#/programs?sort=name'], h);
   }
   pg = await open({ hash: '#/rpi' });
-  assert.deepEqual(pg.hist.entries, ['#/?sort=rpi&view=table']);
+  assert.deepEqual(pg.hist.entries, ['#/programs?sort=rpi&view=table']);
   pg = await open({ hash: '#pilot=abc123secret' });
   assert.ok(pg.writes.every(w => !w.url.includes('abc123secret')) && pg.hist.entries.every(h => !h.includes('abc123secret')), 'the pilot token was written back');
-  assert.deepEqual(pg.hist.entries, ['#/?sort=name']);
+  assert.deepEqual(pg.hist.entries, ['#/'], 'the pilot strip lands on Home (#465), which is never rewritten');
   const slug = INDEX.programs[0].slug;
   pg = await open({ hash: `#/p/${slug}` });
   assert.deepEqual(pg.hist.entries, [`#/p/${slug}`]);
@@ -347,7 +347,7 @@ test('old links: #/c/<name>, a keyed #/c/, #/rpi, #pilot=, #/p/ and #/trends kee
 
 test('XSS: planted markup in q, conf and region reaches no HTML sink on the list, Camps or Pipelines, and arriving never asks', async () => {
   const planted = '"><img src=x onerror=alert(1)>';
-  const pg = await open({ hash: '#/?q=%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E&conf=%3Cscript%3E&region=%3Cb%3E', ask: true });
+  const pg = await open({ hash: '#/programs?q=%22%3E%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E&conf=%3Cscript%3E&region=%3Cb%3E', ask: true });
   assert.equal(pg.sb.S.ask, true, 'fixture: Ask is not on, so "never asks" would prove nothing');
   assert.equal(pg.sb.S.qRaw, planted, 'the planted search did not arrive, so the sinks were never exercised');
   assert.deepEqual(plain(pg.sb.S.filters.conf), []); assert.deepEqual(plain(pg.sb.S.filters.region), []);
@@ -374,7 +374,7 @@ test('XSS: planted markup in q, conf and region reaches no HTML sink on the list
 
 test('privacy: no address ever carries recommendations, the pilot, compare, shortlist, residency or More statistics; the title never carries q', async () => {
   const pg = await open({
-    hash: '#/',
+    hash: '#/programs',
     store: { 'cd.recs': { v: 1, prefs: { SENTINEL_RECS: 1 } }, 'cd.compare': ['SENTINEL_CMP'], 'cd.favorites': ['SENTINEL_FAV'], 'cd.residency': 'SENTINEL_RES', 'cd.filters': { moreStats: true } },
     session: { 'cd.recs.pilot': 'SENTINEL_PILOT' },
   });
@@ -386,8 +386,8 @@ test('privacy: no address ever carries recommendations, the pilot, compare, shor
   const written = [...pg.writes.map(w => w.url), ...pg.hist.entries];
   assert.ok(written.length >= 8);
   for (const h of written) {
-    assert.match(h, /^#\/\?/, `not a list address: ${h}`);
-    const keys = h.slice(3).split('&').map(p => p.split('=')[0]);
+    assert.match(h, /^#\/programs\?/, `not a list address: ${h}`);
+    const keys = h.slice(h.indexOf('?') + 1).split('&').map(p => p.split('=')[0]);
     assert.ok(keys.every(k => LIST_PARAMS.includes(k)), `a param outside the nine: ${h}`);
     assert.ok(!/SENTINEL|moreStats|recs|pilot|residency|compare|fav/i.test(h), `private state in the address: ${h}`);
   }
@@ -396,11 +396,11 @@ test('privacy: no address ever carries recommendations, the pilot, compare, shor
 });
 
 test('feedback sends a rebuilt route: the canonical list address without q on the list, the bare path elsewhere', async () => {
-  const pg = await open({ hash: '#/?q=Secret+Name&foo=bar&region=West&zz=%3Cb%3E' });
+  const pg = await open({ hash: '#/programs?q=Secret+Name&foo=bar&region=West&zz=%3Cb%3E' });
   const form = pg.$('#feedbackForm');
   form.elements = { message: { value: 'hello' }, email: { value: '' }, website: { value: '' } };
   const send = async () => { await form._listeners.submit[0]({ preventDefault() { } }); await settle(); return JSON.parse(pg.requests.filter(r => r.url.endsWith('api/feedback')).at(-1).body); };
-  assert.equal((await send()).route, '#/?region=West&sort=name');
+  assert.equal((await send()).route, '#/programs?region=West&sort=name');
   pg.sb.location.hash = '#/trends?club=SENTINEL_CLUB'; await settle(250);
   assert.equal((await send()).route, '#/trends');
   const slug = INDEX.programs[0].slug;
@@ -429,4 +429,74 @@ test('static: one writer of list addresses; pushState only from listCommit and t
   // Bianque on #456: a Compare link names the programs compared, so the card must not say comparison never travels
   assert.match(HTML, /A link to the Compare page lists the programs you're comparing\./);
   assert.ok(!/shortlist, comparison, residency/.test(HTML), 'the About card still says comparison is never in a link');
+});
+
+// ---------- 9. #465 (owner's D1): Home at #/, Programs at #/programs?…, #14's #/?… a permanent alias ----------
+
+test('#465: every old #14 address (#/?…, #/?, #/list) opens the same list at #/programs?…, in place, never Home', async () => {
+  const cases = [
+    ['#/?div=D2&conf=D2:Independent&q=Ohio', '#/programs?div=D2&conf=D2:Independent&q=Ohio&sort=name'],
+    ['#/?div=D2&conf=D2|Independent&q=Ohio&sort=name', '#/programs?div=D2&conf=D2:Independent&q=Ohio&sort=name'],
+    ['#?region=West&sort=admit&dir=asc&view=table', '#/programs?region=West&sort=admit&dir=asc&view=table'],
+    ['#/?', '#/programs?sort=name'],
+    ['#/list?class=2027', '#/programs?class=2027&sort=name'],
+  ];
+  for (const [from, to] of cases) {
+    const pg = await open({ hash: from, store: { 'cd.filters': { region: ['South'] } } });
+    assert.deepEqual(pg.hist.entries, [to], `${from} did not become ${to} in place`);
+    assert.equal(pushes(pg), 0, `${from}: the alias pushed`);
+    assert.ok(!/Find your college soccer path/.test(pg.$('#app').innerHTML), `${from} opened Home`);
+  }
+  // a bare #/list keeps the saved filters, as a bare #/programs does
+  const pg = await open({ hash: '#/list', store: { 'cd.filters': { region: ['South'] } } });
+  assert.deepEqual(pg.hist.entries, ['#/programs?region=South&sort=name']);
+});
+
+test('#465: a bare #/ (and no hash at all) is Home - never rewritten, never sort=name, saved filters untouched', async () => {
+  for (const hash of ['#/', '', '#']) {
+    const pg = await open({ hash, store: { 'cd.filters': { region: ['West'], sort: 'admit' } } });
+    assert.deepEqual(pg.hist.entries, [hash], `${JSON.stringify(hash)} was rewritten`);
+    assert.equal(pg.writes.length, 0, `${JSON.stringify(hash)}: something was written to history`);
+    assert.match(pg.$('#app').innerHTML, /<h1 class="content-title">Find your college soccer path\.<\/h1>/);
+    assert.match(pg.$('#app').innerHTML, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Pipelines/);
+    assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).region, ['West'], 'Home changed the saved filters');
+    assert.equal(pg.sb.feedbackRoute(), '#/');
+  }
+});
+
+test('#465: Home -> Programs uses the saved filters; Back returns to Home without rewriting it', async () => {
+  const pg = await open({ hash: '#/', store: { 'cd.filters': { division: ['D1'] } } });
+  pg.sb.location.hash = '#/programs'; await settle(300);
+  assert.deepEqual(pg.hist.entries, ['#/', '#/programs?div=D1&sort=name']);
+  await back(pg);
+  assert.equal(pg.sb.location.hash, '#/');
+  assert.match(pg.$('#app').innerHTML, /Find your college soccer path/);
+  assert.equal(pg.hist.entries.length, 2);
+});
+
+test('#465: Ask from Home lands on Programs; old #/c/ and #/rpi land on #/programs', async () => {
+  const src = HTML.slice(HTML.indexOf('<script>'), HTML.indexOf('</script>'));
+  assert.match(src, /if \(v === 'list' \|\| v === 'camps'\) rerenderForFilters\(\); else location\.hash = '#\/programs';/, 'applyAsk off the list does not go to #/programs');
+  let pg = await open({ hash: '#/c/ACC' });
+  assert.deepEqual(pg.hist.entries, ['#/programs?conf=ACC&sort=name']);
+  pg = await open({ hash: '#/rpi' });
+  assert.deepEqual(pg.hist.entries, ['#/programs?sort=rpi&view=table']);
+});
+
+// The inventory (Huatuo, change 5): every bare-root address string left in the page is one of these, each meaning Home.
+// A new '#/' meaning "the list" fails here; the list is '#/programs'.
+test('#465 inventory: the only bare-root ("#/") addresses left are Home links and the pilot strip', () => {
+  const src = HTML.replace(/\r\n/g, '\n');
+  const found = [...src.matchAll(/[^\n]{0,60}['"`]#\/['"`][^\n]{0,30}/g)].map(m => m[0].trim());
+  const allowed = [
+    /history\.replaceState\(null, '', '#\/'\); \} catch/,           // the #400 pilot strip (Home)
+    /if \(location\.hash !== '#\/'\) location\.replace\('#\/'\)/,   // its fallback (Home)
+    /\{ label: 'Home', href: '#\/' \}/,                              // breadcrumbs that start at Home
+    /<a class="section-label" href="#\/" aria-label="College Soccer/,  // the header's product name (#465 B)
+  ];
+  const stray = found.filter(l => !allowed.some(re => re.test(l)));
+  assert.deepEqual(stray, [], 'a bare "#/" that is not Home');
+  assert.equal(found.length, 10, `the inventory changed: ${found.length} bare-root strings (2 pilot, 7 Home crumbs: not found, the list twice, camps, Pipelines, About, Data API; the header's College Soccer link)`);
+  assert.ok(!/location\.hash = '#\/'/.test(src) && !/location\.replace\('#\/'\)\s*;?\s*return/.test(src), 'a navigation to "#/" meant as the list');
+  assert.ok((src.match(/'#\/programs'/g) || []).length >= 10, 'the list-intent navigations do not say #/programs');
 });

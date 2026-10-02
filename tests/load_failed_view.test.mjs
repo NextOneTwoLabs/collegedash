@@ -113,6 +113,22 @@ test('first load: 503, a dropped connection and anything else each get the card,
   }
 });
 
+// #465 (Huatuo, change 6): Home needs no data. When the program index fails on a visit that lands on Home (a bare #/
+// or no hash), Home still draws its heading and the three destinations, with the try-again card inside it.
+test('#465: Home still draws its heading and destinations when the program index fails; the card is inside it', async () => {
+  let fail = true;
+  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 503, body: {} } : null));
+  await settle();
+  const html = page.app();
+  assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/, 'Home did not draw');
+  assert.match(html, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Pipelines/, 'a destination is missing');
+  assert.ok(html.includes(CARD) && html.includes('id="loadRetry"'), 'the try-again card is missing from Home');
+  fail = false;
+  page.el('#loadRetry').onclick();
+  await settle();
+  assert.ok(!page.app().includes(CARD) && page.app().includes('Find your college soccer path'), 'Try again did not load Home');
+});
+
 test('a profile: 429 is a load failure with Try again, and only a 404 says "not built yet"', async () => {
   let status = 429;
   const page = loadPage(u => (u === `/api/v1/programs/${SLUG}` ? (status === 200 ? null : { status, body: {} }) : null));
@@ -177,7 +193,7 @@ test('phase 3: under a simulated 429 run, a visitor who keeps clicking sends no 
   const page = loadPage(u => (u.startsWith('/api/v1/programs/') ? { status: 429, body: {}, headers: { 'retry-after': '60', 'x-collegedash-session': 'none' } } : null));
   await settle();
   const actions = [];
-  for (let i = 0; i < 6; i++) actions.push(`#/p/${SLUGS[i % SLUGS.length]}`, '#/');
+  for (let i = 0; i < 6; i++) actions.push(`#/p/${SLUGS[i % SLUGS.length]}`, '#/programs');
   actions.push(`#/compare/${SLUGS.slice(0, 4).join(',')}`, `#/p/${SLUGS[0]}/roster`, `#/compare/${SLUGS.slice(1, 3).join(',')}`);
   for (const h of actions) { await go(page, h); page.advance(1_000); }
   for (let i = 0; i < 10; i++) { page.el('#loadRetry').onclick?.(); await settle(); page.advance(1_000); }
@@ -199,7 +215,7 @@ test('phase 3: Compare asks for one refused profile, not all of them, and shows 
 });
 
 test('phase 3: no silent empty state - every view a visitor waits on shows the card on 429, 401 or 503', async () => {
-  const views = [['#/', '/api/v1/programs'], ['#/', '/api/v1/programs', 'table'], ['#/camps', '/api/v1/camps'], ['#/trends', '/api/v1/trends'],
+  const views = [['#/programs', '/api/v1/programs'], ['#/programs', '/api/v1/programs', 'table'], ['#/camps', '/api/v1/camps'], ['#/trends', '/api/v1/trends'],
     [`#/p/${SLUGS[0]}`, profileUrl(SLUGS[0])], [`#/compare/${SLUGS[0]},${SLUGS[1]}`, profileUrl(SLUGS[0])]];
   for (const status of [429, 401, 503]) {
     for (const [hash, url, listView] of views) {

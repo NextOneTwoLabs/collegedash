@@ -107,7 +107,7 @@ test('setup: the index loads and the page thinks it is on a phone', async () => 
 
 test('the programs tab of the drawer ends with "Show N programs", N being every program with no filter', () => {
   reset({});
-  sb.location.hash = '#/';
+  sb.location.hash = '#/programs';
   S.sidebarTab = 'programs';
   sb.renderSidebar();
   assert.equal(bar(), `Show ${INDEX.programs.length} programs`);
@@ -126,7 +126,7 @@ test('N follows the pills: one region selected counts that region\'s programs', 
 
 test('N follows a typed search, without rebuilding the drawer, and equals the cards the list draws', async () => {
   reset({});
-  sb.location.hash = '#/';
+  sb.location.hash = '#/programs';
   sb.renderSidebar();
   const html = $('#sidebar').innerHTML;
   // #434: typed into the header box, through its own input listener (the drawer has no search box any more)
@@ -147,7 +147,7 @@ test('N follows a typed search, without rebuilding the drawer, and equals the ca
 
 test('tapping it closes the drawer, tells the toggle, and hands focus back to the toggle', () => {
   reset({});
-  sb.location.hash = '#/';
+  sb.location.hash = '#/programs';
   sb.renderSidebar();
   openDrawer();
   assert.equal($('#sidebarToggle').getAttribute('aria-expanded'), 'true');
@@ -159,7 +159,7 @@ test('tapping it closes the drawer, tells the toggle, and hands focus back to th
   assert.ok(!$('#sidebarOverlay').classList.contains('visible'), 'the overlay is still showing');
   assert.equal($('#sidebarToggle').getAttribute('aria-expanded'), 'false', 'the toggle still says expanded');
   assert.equal(focused, '#sidebarToggle', 'focus did not go back to the toggle');
-  assert.equal(sb.location.hash, '#/', 'the list view navigated away');
+  assert.equal(sb.location.hash, '#/programs', 'the list view navigated away');
 });
 
 test('from a program page it goes to the list; on the camp view it names the view', () => {
@@ -168,11 +168,11 @@ test('from a program page it goes to the list; on the camp view it names the vie
   sb.renderSidebar();
   openDrawer();
   $('#showResults').onclick();
-  assert.equal(sb.location.hash, '#/', 'from a profile, Show N programs should open the list');
+  assert.equal(sb.location.hash, '#/programs', 'from a profile, Show N programs should open the list');
   sb.location.hash = '#/camps';
   sb.renderSidebar();
   assert.equal(bar(), 'Show camps');
-  sb.location.hash = '#/';
+  sb.location.hash = '#/programs';
 });
 
 test('only the programs tab carries it, and only phones draw it', () => {

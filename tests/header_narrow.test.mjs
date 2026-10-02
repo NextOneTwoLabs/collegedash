@@ -51,15 +51,19 @@ const parseCss = text => parseRules(text).map((r, order) => ({ media: r.at, sele
 // a layout property it does not read (position, order, transform, margin, ...) added to one of these selectors, or a
 // changed value, fails here instead of passing silently.
 const EXACT = {
-  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100' },
+  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100',
+    // #465 B: viewport-fit=cover - the header keeps its content inside the safe area (top inset, side insets in landscape)
+    'padding-top': 'var(--safe-top)', 'padding-left': 'max(20px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(20px, env(safe-area-inset-right, 0px))' },
   '|.header-left': { display: 'flex', 'align-items': 'center', gap: '14px', 'min-width': '0' },
   '|.wordmark': { 'font-size': '21px', 'letter-spacing': '-0.6px', 'line-height': '1', 'white-space': 'nowrap' },
   '|.header-divider': { width: '1px', height: '24px' },
   '|.section-label': { 'font-size': '14px', 'white-space': 'nowrap' },
   // #434: at <=768 px the header is two rows - this brand row (left cell, the toggle beside it), then the search box
   '@media (max-width: 768px)|.header': { display: 'grid', 'grid-template-columns': 'minmax(0, 1fr) auto', 'grid-template-rows': '52px 52px', 'column-gap': '8px', 'align-items': 'center' },
-  '@media (max-width: 460px)|.header': { padding: '0 12px' },
+  '@media (max-width: 460px)|.header': { 'padding-left': 'max(12px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(12px, env(safe-area-inset-right, 0px))' },  // #465 B: was padding: 0 12px; now side padding only, so the top safe-area inset stays
   '@media (max-width: 460px)|.header-left': { gap: '8px' },
+  // #465 B: from 769 px the brand group keeps its width beside the nav; the search box gives way instead
+  '@media (min-width: 769px)|.header-left': { 'flex-shrink': '0' },
   '@media (max-width: 400px)|.header-left': { gap: '6px' },
   '@media (max-width: 400px)|.wordmark': { 'font-size': '18px' },
   '@media (max-width: 400px)|.section-label': { 'font-size': '13px' },
@@ -186,7 +190,7 @@ test('#434: at <=768 px the header is two rows, and the brand row keeps its own 
 });
 
 test('the header markup still carries the section label and divider (only CSS hides them)', () => {
-  assert.match(page, /<div class="header">\s*<div class="header-left">[\s\S]*?<a class="wordmark" [^>]*>[\s\S]*?<\/a>\s*<div class="header-divider"><\/div>\s*<a class="section-label" href="https:\/\/college\.nextonetwo\.com\/">College Soccer<\/a>\s*<\/div>/);
+  assert.match(page, /<div class="header">\s*<div class="header-left">[\s\S]*?<a class="wordmark" [^>]*>[\s\S]*?<\/a>\s*<div class="header-divider"><\/div>\s*<a class="section-label" href="#\/" aria-label="College Soccer home">College Soccer<\/a>\s*<\/div>/);
 });
 
 test('below 360 px the divider and the "College Soccer" label are not drawn', () => {

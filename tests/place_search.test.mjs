@@ -57,7 +57,7 @@ function loadPage() {
       documentElement: makeElement('html'), body: makeElement('body'),
       querySelector: bySelector, querySelectorAll: () => [], createElement: makeElement, addEventListener() { },
     },
-    location: { hash: '#/', replace(h) { this.hash = h; } },
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },  // #465: the list is #/programs
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
@@ -89,7 +89,7 @@ const settle = () => new Promise(r => setTimeout(r, 120));  // setQuery re-rende
 
 // Type a query the way the header box does, and return the cards the list shows, in order, with their division tags.
 async function search(raw) {
-  sb.location.hash = '#/';
+  sb.location.hash = '#/programs';
   sb.setQuery(raw);
   await settle();
   await sb.renderList();
@@ -187,7 +187,7 @@ test('the three programs with no state are still found by name', async () => {
 });
 
 // Enter through the header box's own keydown listener (#434: the box is static and wired once, at load).
-async function enter(raw, hash = '#/') {
+async function enter(raw, hash = '#/programs') {
   sb.location.hash = hash;
   const box = sb.document.querySelector('#q');  // #434: the header box, wired once at load
   assert.equal((box._listeners.keydown || []).length, 1, 'the header box should have exactly one keydown handler');
@@ -201,8 +201,8 @@ async function enter(raw, hash = '#/') {
 }
 
 test('Enter on a place query keeps the list (no single program opens); Enter on a name query still opens the top hit', async () => {
-  assert.equal(await enter('Ohio'), '#/', 'Enter on "Ohio" left the list');
-  assert.equal(await enter('OH'), '#/', 'Enter on "OH" left the list');
+  assert.equal(await enter('Ohio'), '#/programs', 'Enter on "Ohio" left the list');
+  assert.equal(await enter('OH'), '#/programs', 'Enter on "OH" left the list');
   assert.equal(await enter('Kenyon'), '#/p/kenyon-college', 'Enter on a school name no longer opens it');
   // Stanford is also its city's name, but the only program in Stanford, CA is Stanford: nothing is listed for the place alone.
   assert.equal(INDEX.programs.find(p => p.slug === 'stanford')?.city, 'Stanford', 'fixture: Stanford is in Stanford, CA');
@@ -244,7 +244,7 @@ test('#23: with a region or division filter, the status count equals the cards t
 test('#23: Enter never opens a program the filters hide', async () => {
   assert.equal(INDEX.programs.find(p => p.slug === 'kenyon-college')?.region, 'Midwest', 'fixture: Kenyon is in the Midwest');
   await withFilters({ region: ['West'] }, async () => {
-    assert.equal(await enter('Kenyon'), '#/', 'Enter opened Kenyon although the West filter hides it');
+    assert.equal(await enter('Kenyon'), '#/programs', 'Enter opened Kenyon although the West filter hides it');
   });
   await withFilters({ region: ['Midwest'] }, async () => {
     assert.equal(await enter('Kenyon'), '#/p/kenyon-college', 'Enter no longer opens a program the filters show');

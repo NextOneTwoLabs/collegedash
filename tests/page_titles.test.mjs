@@ -99,13 +99,16 @@ test('the other routes each have their own title', async () => {
   assert.equal(seen.size, 7, 'two routes share a title');
 });
 
-test('the program list: the site\'s own title unfiltered, the conference when one is chosen', async () => {
-  sb.S.filters.conf = [];
+// #465 (owner's D1): Home (a bare #/) keeps the site's own title; the program list, now #/programs, is "Programs".
+test('Home has the site\'s own title; the program list is "Programs" unfiltered, the conference when one is chosen', async () => {
   assert.equal(await visit('#/'), SITE);
+  sb.S.filters.conf = [];
+  assert.equal(await visit('#/programs'), 'Programs · College Soccer');
   assert.equal(await visit('#/c/ACC'), 'ACC · College Soccer');
   assert.equal(await visit('#/c/D2%7CIndependent'), 'Independent (D2) · College Soccer');  // #425's label
   sb.S.filters.conf = [];
-  assert.equal(await visit('#/'), SITE, 'back on the unfiltered list, the title did not come back');
+  assert.equal(await visit('#/programs'), 'Programs · College Soccer', 'back on the unfiltered list, the title did not come back');
+  assert.equal(await visit('#/'), SITE, 'Home did not get the site title back');
 });
 
 test('leaving a page sets the next page\'s title (never the previous one\'s)', async () => {
@@ -113,5 +116,6 @@ test('leaving a page sets the next page\'s title (never the previous one\'s)', a
   assert.equal(await visit('#/faq'), 'About the data · College Soccer');
   await visit('#/camps');
   sb.S.filters.conf = [];
+  assert.equal(await visit('#/programs'), 'Programs · College Soccer');
   assert.equal(await visit('#/'), SITE);
 });
