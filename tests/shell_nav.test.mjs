@@ -120,7 +120,10 @@ test('CSS: every surface on a screen edge keeps clear of the safe areas (the #40
   assert.equal(decl(at768, '.recs-panel', 'padding-top'), 'calc(12px + env(safe-area-inset-top, 0px))', 'the #400 sheet\'s heading and Close sit under the notch');
   assert.equal(decl(at768, '.recs-panel', 'padding-left'), 'calc(16px + env(safe-area-inset-left, 0px))');
   assert.equal(decl(at768, '.recs-panel', 'padding-right'), 'calc(16px + env(safe-area-inset-right, 0px))');
-  assert.equal(decl(at768, '.recs-actions', 'padding-bottom'), 'calc(14px + env(safe-area-inset-bottom, 0px))', 'Show matches and Clear sit on the home indicator');
+  // unconditional (Bianque's nit on #470): the 769-1180 px side panel on a landscape iPhone reaches the bottom edge too
+  assert.equal(decl('', '.recs-actions', 'padding-bottom'), 'calc(14px + env(safe-area-inset-bottom, 0px))', 'Show matches and Clear sit on the home indicator');
+  for (const at of [at768, '@media (min-width: 769px) and (max-width: 1180px)'])
+    assert.equal(decl(at, '.recs-actions', 'padding-bottom'), undefined, `${at} overrides the actions' inset`);
   assert.equal(decl(PHONE, '.drawer-show', 'padding-bottom'), 'calc(10px + env(safe-area-inset-bottom, 0px))', 'the drawer\'s Show N programs sits on the home indicator');
   assert.equal(decl(PHONE, '.sidebar', 'padding-left'), 'env(safe-area-inset-left, 0px)', 'the drawer\'s left edge runs under a landscape notch');
   assert.equal(decl('', '.layout', 'padding-left'), 'env(safe-area-inset-left, 0px)', 'a landscape phone over 768 px: the sidebar runs under the notch');

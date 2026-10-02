@@ -182,7 +182,8 @@ tr:hover td { background: var(--row-hover); }
 .recs-ask { color: var(--text-secondary); }
 .recs-note { font-size: 12px; color: var(--text-secondary); margin: 4px 0 0; }
 .recs-error { color: var(--danger-text); font-size: 13px; min-height: 18px; margin-top: 10px; }
-.recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px; }
+.recs-actions { display: flex; gap: 10px; justify-content: flex-end; position: sticky; bottom: 0; background: var(--bg-surface); padding: 10px 0 14px;
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }  /* #465 B: Show matches and Clear stay off the home indicator, in the phone sheet and the side panel alike */
 .recs-actions .btn { min-height: 44px; }
 .recs-status { font-size: 13px; color: var(--text-secondary); min-height: 18px; padding-bottom: 16px; }
 /* Results mode (issue #400, PR 4). Each chip pairs its icon with words, so nothing is said by colour alone. */
@@ -224,7 +225,6 @@ tr:hover td { background: var(--row-hover); }
 @media (max-width: 768px) {
   .recs-panel { position: fixed; inset: 0; width: auto; min-width: 0; z-index: 200; border-left: none; padding: 12px 16px 0;
     padding-top: calc(12px + env(safe-area-inset-top, 0px)); padding-left: calc(16px + env(safe-area-inset-left, 0px)); padding-right: calc(16px + env(safe-area-inset-right, 0px)); }  /* #465 B: the sheet covers the header, so it keeps out of the notch itself */
-  .recs-actions { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }  /* #465 B: Show matches and Clear stay off the home indicator */
 }
 .browse-row { display: flex; align-items: center; gap: 10px; padding: 2px 16px 8px; }
 .browse-label { font-size: 11px; font-weight: 600; color: var(--text-secondary); padding: 6px 16px 4px; }
