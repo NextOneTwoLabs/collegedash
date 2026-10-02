@@ -201,7 +201,7 @@ function loadPage({ width = 375, ask = false } = {}) {
       querySelector: bySelector, querySelectorAll: () => [], createElement: makeElement,
       addEventListener(type, fn) { (docListeners[type] ||= []).push(fn); },
     },
-    location: { hash: '#/', replace(h) { this.hash = h; } },
+    location: { hash: '#/programs', replace(h) { this.hash = h; } },
     history: { replaceState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
@@ -251,7 +251,7 @@ const cardSlugs = html => [...html.matchAll(/class="card pcard[^"]*" data-slug="
 
 test('typing in the header box filters the list through the shared search; the sidebar has no search box', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   const box = pg.$('#q');
   assert.equal((box._listeners.input || []).length, 1, 'the header box has no single input handler');
   assert.equal((box._listeners.keydown || []).length, 1, 'the header box has no single keydown handler');
@@ -266,7 +266,7 @@ test('typing in the header box filters the list through the shared search; the s
 
 test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, no search, no repeated heading', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   pg.sb.S.sidebarTab = 'programs';
   pg.sb.renderSidebar();
   const side = pg.$('#sidebar').innerHTML;
@@ -280,22 +280,22 @@ test('#434 decision 3: the sidebar\'s first tab is "Browse" - sort and filters, 
 
 test('Enter keeps #409/#23\'s rules: a name opens it, a place keeps the list, a filtered-out program never opens', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'kenyon'); key(pg, 'Enter'); await settle(20);
   assert.equal(pg.sb.location.hash, '#/p/kenyon-college');
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'Ohio'); key(pg, 'Enter'); await settle(20);
-  assert.equal(pg.sb.location.hash, '#/', 'Enter on a place opened a program');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Enter on a place opened a program');
   pg.sb.S.filters.region = ['West'];
   await typeIn(pg, 'kenyon'); key(pg, 'Enter'); await settle(20);
-  assert.equal(pg.sb.location.hash, '#/', 'Enter opened Kenyon under a West filter');
+  assert.equal(pg.sb.location.hash, '#/programs', 'Enter opened Kenyon under a West filter');
   assert.match(pg.$('#qStatus').textContent, /^No match within your filters \(\d+ without them\)$/);
   pg.sb.S.filters.region = [];
 });
 
 test('Huatuo on #441: on a phone, Enter on a school name opens it and blurs the box, so the keyboard drops', async () => {
   const pg = await ready({ width: 375 });
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'kenyon');
   BLURRED.clear();
   key(pg, 'Enter'); await settle(20);
@@ -316,7 +316,7 @@ test('"/" focuses the header box on any page, without opening the drawer', async
 
 test('the list subtitle carries "Clear search", which clears the query and returns focus to the box', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   await typeIn(pg, 'Ohio');
   await pg.sb.renderList();
   assert.match(pg.$('#app').innerHTML, /matching “Ohio” <button type="button" class="clear-search" data-clear-search>Clear search<\/button>/);
@@ -342,7 +342,7 @@ test('Ask (owner only): the header box\'s placeholder follows it and Shift+Enter
 
 test('no request while typing, choosing or clearing: the box searches the index already loaded', async () => {
   const pg = await ready();
-  pg.sb.location.hash = '#/';
+  pg.sb.location.hash = '#/programs';
   const before = pg.requests.length;
   await typeIn(pg, 'Ohio'); key(pg, 'Enter'); await settle(20);
   await typeIn(pg, 'duke'); await typeIn(pg, '');
