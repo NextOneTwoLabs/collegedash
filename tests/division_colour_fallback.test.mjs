@@ -7,8 +7,9 @@
 // are read from the real theme blocks in the same file.
 //
 // What this proves:
-//   - a program WITH colours renders exactly the markup it did before (pinned literal strings);
-//   - a program with no colours renders its own division's tint in the band, stripe and swatches;
+//   - a program WITH colours renders exactly the pinned markup (since #465 E: a small crest, its colours as CSS
+//     variables on the card's band, and the swatches);
+//   - a program with no colours renders its own division's tint in the crest and swatches;
 //   - a program with no colours and an unknown or missing division keeps the old grey placeholder;
 //   - each tint is defined in both themes and body text on it clears WCAG AA (4.5:1) in both.
 import { test } from 'node:test';
@@ -22,20 +23,19 @@ const start = html.indexOf('/* ---------- team colours ---------- */');
 const end = html.indexOf('\n', html.indexOf('const swatchesHtml'));
 assert.ok(start > 0 && end > start, 'team-colour block found in index.html');
 const ctx = vm.createContext({});
-vm.runInContext(`${escLine}\n${html.slice(start, end)}\nthis.api = { teamColors, bandAttrs, stripeHtml, swatchesHtml };`, ctx);
-const { teamColors, bandAttrs, stripeHtml, swatchesHtml } = ctx.api;
-const render = p => { const tc = teamColors(p); return [bandAttrs(tc), stripeHtml(tc), swatchesHtml(p)]; };
+vm.runInContext(`${escLine}\n${html.slice(start, end)}\nthis.api = { teamColors, crestVars, swatchesHtml };`, ctx);
+const { teamColors, crestVars, swatchesHtml } = ctx.api;
+// #465 E: the card shows the colours as a small crest (CSS variables on the band) rather than a coloured band and stripe.
+const render = p => { const tc = teamColors(p); return [crestVars(tc), swatchesHtml(p)]; };
 
-test('a program with team colours renders exactly as before', () => {
+test('a program with team colours renders its crest from them, and the swatches as before', () => {
   assert.deepEqual(render({ division: 'D2', colors: ['#8C1D40', 'FFC627'] }), [
-    'class="band" style="background:#8C1D40;color:#ffffff"',
-    '<div class="stripe" style="background:#FFC627"></div>',
+    ' style="--crest:#8C1D40;--crest2:#FFC627;--crest-ink:#ffffff"',
     '<span class="swatches" aria-hidden="true"><i style="background:#8C1D40"></i><i style="background:#FFC627"></i></span>',
   ]);
-  // one colour only: the second slot is still the old grey, not a division tint
+  // one colour only: the crest's edge repeats it; the swatches' second slot is still the old grey, not a division tint
   assert.deepEqual(render({ division: 'D3', colors: ['#ffcc00'] }), [
-    'class="band" style="background:#ffcc00;color:#111111"',
-    '<div class="stripe" style="background:var(--border-light)"></div>',
+    ' style="--crest:#ffcc00;--crest2:#ffcc00;--crest-ink:#111111"',
     '<span class="swatches" aria-hidden="true"><i style="background:#ffcc00"></i><i style="background:var(--border-light)"></i></span>',
   ]);
 });
@@ -45,8 +45,7 @@ test('a program with no colours renders its division tint', () => {
     const v = `var(--div-${d.toLowerCase()})`;
     for (const colors of [undefined, [], ['not-a-colour']]) {
       assert.deepEqual(render({ division: d, colors }), [
-        `class="band" style="background:${v};color:var(--text-primary)"`,
-        `<div class="stripe" style="background:${v}"></div>`,
+        ` style="--crest:${v};--crest2:${v};--crest-ink:var(--text-primary)"`,
         `<span class="swatches" aria-hidden="true"><i style="background:${v}"></i><i style="background:${v}"></i></span>`,
       ], `${d} ${JSON.stringify(colors)}`);
     }
@@ -56,8 +55,7 @@ test('a program with no colours renders its division tint', () => {
 test('no colours and an unknown division falls back to the old grey', () => {
   for (const division of ['NAIA', undefined, null, 'd1']) {
     assert.deepEqual(render({ division }), [
-      'class="band neutral"',
-      '<div class="stripe" style="background:var(--border-light)"></div>',
+      '',  // no style on the band: the crest's own CSS fallback, the old grey (var(--bg-surface-alt))
       '<span class="swatches" aria-hidden="true"><i style="background:var(--border)"></i><i style="background:var(--border-light)"></i></span>',
     ], String(division));
   }

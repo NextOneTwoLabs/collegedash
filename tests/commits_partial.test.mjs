@@ -82,19 +82,22 @@ test('setup: fifteen programs outside D1 carry a count, carson-newman among them
   assert.ok(D1_WITH.length > 100);
 });
 
-test('cards: every one of the fifteen says "partial", and no D1 card with commits does', () => {
+// #465 E: commits left the default card; they are its fact row when the list is sorted by Commits (or a class is
+// highlighted), so the cards are checked in that state.
+const sortedByCommits = fn => { const was = sb.S.filters.sort; sb.S.filters.sort = 'commits'; try { return fn(); } finally { sb.S.filters.sort = was; } };
+test('cards: every one of the fifteen says "partial", and no D1 card with commits does', () => sortedByCommits(() => {
   for (const p of PARTIAL) {
     const html = sb.cardHtml(row(p.slug));
     assert.ok(partialIn(html), `${p.slug}: the card shows its count without the note`);
     assert.match(html, /\(partial<span class="sr-only">: not systematically collected<\/span>\)/, `${p.slug}: the card's note text`);
   }
   for (const p of D1_WITH) assert.ok(!partialIn(sb.cardHtml(row(p.slug))), `${p.slug} (D1): the note is on a collected program`);
-});
+}));
 
 test('the card and the Commits column now agree, by the same rule', () => {
   const cn = row('carson-newman');
   assert.match(sb.tableHtml([cn]), /<span class="sr-only">Not collected<\/span>/, 'the column says Not collected');
-  assert.ok(partialIn(sb.cardHtml(cn)), 'the card shows the count without saying it is partial');
+  assert.ok(sortedByCommits(() => partialIn(sb.cardHtml(cn))), 'the card shows the count without saying it is partial');
   const fn = /const commitsPartial = \(p, short = false\) => ([^\n]*)/.exec(PAGE)?.[1] || '';
   assert.match(fn, /^commitsCollected\(p\)/, 'the note does not use the column\'s commitsCollected');
 });

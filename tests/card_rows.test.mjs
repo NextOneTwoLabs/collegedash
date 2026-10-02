@@ -1,8 +1,8 @@
 // Issue #426: program cards in one row of the grid had bands, meta lines and stats at different heights (a long name,
-// a title badge beside the name, a long conference). (a) Each card is a subgrid of five row tracks - band, stripe,
-// meta, detail (facts + Recommended reasons in ONE wrapper), foot - each part placed on its own track, inside
-// @supports (grid-template-rows: subgrid) so older browsers keep the flex card. (c) The title badge sits on its own
-// line under the name, not beside it.
+// a title badge beside the name, a long conference). (a) Each card is a subgrid of five row tracks - since #465 E:
+// band (crest, name, badge), meta, summary, detail (the ONE fact row, or Recommended's reasons, in one wrapper), foot -
+// each part placed on its own track, inside @supports (grid-template-rows: subgrid) so older browsers keep the flex
+// card. (c) The title badge sits on its own line under the name, not beside it.
 //
 //     node --test tests/card_rows.test.mjs
 //
@@ -33,7 +33,7 @@ const CANNOT = 'the card-rows test cannot read';
 // A selector "targets a card part" when its LAST compound carries one of the card's own classes, or a generic part
 // class (.body .meta .foot) under .pcard, or no class at all (a tag, `*`, a pseudo-class) under .pcard - so
 // `.band .nick` (inside the band) is not a part, but `.pcard > *:last-child` and `.pcard .band h3` are.
-const OWN = /\.(pcard|band|stripe|card-detail|titles|facts)(?![\w-])/, GENERIC = /\.(body|meta|foot)(?![\w-])/;
+const OWN = /\.(pcard|band|stripe|card-detail|card-sum|card-fact|titles|facts)(?![\w-])/, GENERIC = /\.(body|meta|foot)(?![\w-])/;
 const isPart = sel => {
   const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop(), under = /\.pcard(?![\w-])/.test(parts.join(' '));
   return OWN.test(last) || (under && GENERIC.test(last)) || (under && !/\./.test(last.replace(/:[\w-]+(\([^)]*\))?/g, '')) && !/\./.test(last));
@@ -43,20 +43,20 @@ const SUBGRID_AT = '@supports (grid-template-rows: subgrid)';
 // properties it sets (#430: a property added to a known selector - `.pcard .foot { order: -1 }` - must fail too).
 const EXPECTED = {
   [`|.pcard`]: { display: 'flex', 'flex-direction': 'column', padding: '0', overflow: 'hidden' },  // the fallback card
-  [`|.band`]: { display: 'flex', 'flex-direction': 'column', 'align-items': 'flex-start', 'justify-content': 'flex-start', gap: '6px', padding: '14px 16px 12px' },
-  [`|.band .titles`]: { 'font-size': '11px', padding: '2px 8px', 'white-space': 'nowrap' },
-  [`|.stripe`]: { height: '5px' },
+  [`|.band`]: { display: 'grid', 'grid-template-columns': '36px minmax(0, 1fr)', 'align-items': 'start', gap: '4px 12px', padding: '14px 16px 6px' },
+  [`|.band .titles`]: { 'grid-column': '2', 'justify-self': 'start', 'font-size': '11px', padding: '2px 8px', 'white-space': 'nowrap' },
   [`|.pcard .band h3`]: { 'font-size': '17px', 'line-height': '1.2' },
-  [`|.pcard .body`]: { flex: '1', padding: '14px 16px 12px' },
-  [`|.pcard .meta`]: { 'font-size': '12px', 'margin-bottom': '12px' },
-  [`|.facts`]: { display: 'grid', 'grid-template-columns': '1fr 1fr', gap: '12px 16px' },
+  [`|.pcard .body`]: { flex: '1', padding: '0 16px 12px' },
+  [`|.pcard .meta`]: { 'font-size': '12px', 'margin-bottom': '6px' },
+  [`|.pcard .card-sum`]: { 'font-size': '13px', 'margin-bottom': '4px' },
+  [`|.pcard .card-fact`]: { 'font-size': '13px' },
   [`|.pcard .foot`]: { display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', gap: '8px', padding: '6px 8px 6px 16px', 'font-size': '12px' },
   [`${SUBGRID_AT}|.grid.cards > .pcard`]: { display: 'grid', 'grid-row': 'span 5', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .band`]: { 'grid-row': '1' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .stripe`]: { 'grid-row': '2' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .body`]: { 'grid-row': '3 / span 2', display: 'grid', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body`]: { 'grid-row': '2 / span 3', display: 'grid', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .meta`]: { 'grid-row': '1' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-detail`]: { 'grid-row': '2' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-sum`]: { 'grid-row': '2' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-detail`]: { 'grid-row': '3' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .foot`]: { 'grid-row': '5' },
 };
 // The card parts' layout, exactly as EXPECTED; fails loudly on anything else, and on a subgrid outside @supports.
@@ -80,13 +80,14 @@ test('the cascade check fails loudly on every form it cannot read', () => {
     ['a universal child', `${SUBGRID_AT} { .pcard > *:last-child { grid-row: 2; } }`],
     ['the badge taken out of flow', '.band .titles { position: absolute; }'],
     ['subgrid outside @supports', '.grid.cards > .pcard { grid-template-rows: subgrid; }'],
-    ['the band back to a row', '.pcard .band { flex-direction: row; }'],
+    ['the band back to a column', '.pcard .band { grid-template-columns: 1fr; }'],
     // #430: a layout property added to, or changed on, a selector the check already knows (Bianque's three first)
     ['order on the foot (Bianque)', '.pcard .foot { order: -1; }'],
     ['order on the band (Bianque)', '.band { order: 1; }'],
     ['position on the card (Bianque)', '.pcard { position: absolute; }'],
     ['a changed value on a known selector', '.pcard .meta { margin-bottom: 40px; }'],
-    ['a transform on a subgrid part', `${SUBGRID_AT} { .grid.cards > .pcard > .stripe { transform: translateY(-20px); } }`],
+    ['a transform on a subgrid part', `${SUBGRID_AT} { .grid.cards > .pcard > .body > .card-sum { transform: translateY(-20px); } }`],
+    ['the fact row moved', `${SUBGRID_AT} { .grid.cards > .pcard > .body > .card-detail { grid-row: 2; } }`],
   ]) assert.throws(run(extra), new RegExp(CANNOT), `${name}: the check did not fail`);
 });
 
@@ -96,10 +97,11 @@ test('inside @supports subgrid: the card spans five tracks and every part names 
   for (const [key, want] of Object.entries(EXPECTED)) assert.deepEqual({ ...got[key] }, want, key);
 });
 
-test('(c) the band is a column with the badge pill at its own width (align-items: flex-start)', () => {
+test('(c) the badge sits under the name, in the name\'s column, at its own width (#465 E: the crest takes column 1)', () => {
   const got = cardLayout(parseCss(CSS));
-  assert.equal(got['|.band']?.['flex-direction'], 'column', 'the band still lays the badge beside the name');
-  assert.equal(got['|.band']?.['align-items'], 'flex-start', 'the badge pill would stretch to the band width');
+  assert.equal(got['|.band']?.['grid-template-columns'], '36px minmax(0, 1fr)', 'the band is no longer crest | name');
+  assert.equal(got['|.band .titles']?.['grid-column'], '2', 'the badge left the name\'s column');
+  assert.equal(got['|.band .titles']?.['justify-self'], 'start', 'the badge pill would stretch to the column width');
 });
 
 // ---------- (1) the card, rendered by the page ----------
@@ -157,17 +159,17 @@ test('setup: the index loads', async () => {
   assert.ok(sb.S.index.programs.length > 900);
 });
 
-test('every card: band, stripe, body, foot; the body: meta, then ONE detail wrapper holding facts and reasons', () => {
+test('every card: band, body, foot; the body: meta, summary, then ONE detail wrapper holding the fact row or the reasons', () => {
   const ps = sb.S.index.programs;
-  const withFacts = ps.find(p => p.undergradEnrollment != null && p.nationalTitles > 0 && p.division !== 'D1');
-  const noFacts = ps.find(p => p.undergradEnrollment == null && p.tuitionInState == null && p.tuitionOutOfState == null && p.academicRank == null);
-  assert.ok(withFacts && noFacts, 'fixture: need a card with facts and a badge, and one without facts');
-  for (const [p, why, label] of [[withFacts, undefined, 'facts + badge'], [withFacts, WHY, 'facts + reasons'], [noFacts, undefined, 'no facts'], [noFacts, WHY, 'reasons only']]) {
+  const withFact = ps.find(p => p.undergradEnrollment != null && p.nationalTitles > 0 && p.division !== 'D1');
+  const noFact = ps.find(p => p.undergradEnrollment == null);
+  assert.ok(withFact && noFact, 'fixture: need a card with a fact and a badge, and one without');
+  for (const [p, why, label] of [[withFact, undefined, 'fact + badge'], [withFact, WHY, 'reasons'], [noFact, undefined, 'empty fact row'], [noFact, WHY, 'reasons only']]) {
     const html = sb.cardHtml(p, why);
-    assert.deepEqual(childrenOf(html, 'card pcard').map(c => c.split('.')[1].split(' ')[0]), ['band', 'stripe', 'body', 'foot'], `${label}: card parts`);
-    assert.deepEqual(childrenOf(html, 'body').map(c => c.split('.')[1]), ['meta', 'card-detail'], `${label}: the body has meta and one detail wrapper`);
+    assert.deepEqual(childrenOf(html, 'card pcard').map(c => c.split('.')[1].split(' ')[0]), ['band', 'body', 'foot'], `${label}: card parts`);
+    assert.deepEqual(childrenOf(html, 'body').map(c => c.split('.')[1]), ['meta', 'card-sum', 'card-detail'], `${label}: the body has meta, summary and one detail wrapper`);
     const detail = childrenOf(html, 'card-detail').map(c => c.split('.')[1]);
-    assert.deepEqual(detail, [...(p === withFacts ? ['facts'] : []), ...(why ? ['recs-why'] : [])], `${label}: what the detail wrapper holds`);
+    assert.deepEqual(detail, why ? ['recs-why'] : ['card-fact'], `${label}: the detail wrapper holds the fact row, or the reasons in its place`);
   }
 });
 
@@ -175,7 +177,7 @@ test('(c) the badge is the band\'s own child after the name, never inside the na
   const p = sb.S.index.programs.find(x => x.nationalTitles > 0 && x.division === 'D3');
   const html = sb.cardHtml(p);
   const band = childrenOf(html, 'band');
-  assert.deepEqual(band.map(c => c.split('.')[0] + (c.split('.')[1] ? '.' + c.split('.')[1] : '')), ['h3', 'span.titles'], 'band children');
+  assert.deepEqual(band.map(c => c.split('.')[0] + (c.split('.')[1] ? '.' + c.split('.')[1] : '')), ['span.crest', 'h3', 'span.titles'], 'band children: the crest, the name, the badge');
   assert.match(html, /<span class="titles">\d+ NCAA D3 titles?<\/span>/, 'the badge text (its accessible name) is unchanged');
 });
 

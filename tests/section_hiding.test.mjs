@@ -112,13 +112,12 @@ function loadPage(overrides = {}) {
 /* ---------- what each section needs, written from the data and not from the page ---------- */
 const nonEmpty = v => Array.isArray(v) ? v.length > 0 : v != null && typeof v === 'object' ? Object.keys(v).length > 0 : v != null;
 const HONORS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaAppearances', 'confRegularSeasonTitles', 'confTournamentTitles'];
+// #465 E (D6 b): the card keeps the RPI on its summary line and ONE fact row - Undergrads in the default list, shown
+// exactly when the school reports it; US rank, tuition, commits and the roster moved to Stats and the profile.
 const expectRow = r => ({
-  'RPI fact': (r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank != null) || (r.rpiHistory || []).some(h => h.year === RPI_SEASON),
-  'US rank fact': r.academicRank != null,
+  'RPI on the card': (r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank != null) || (r.rpiHistory || []).some(h => h.year === RPI_SEASON),
   'Undergrads fact': r.undergradEnrollment != null,
-  'Tuition fact': r.tuitionInState != null || r.tuitionOutOfState != null,
-  'Commits foot': nonEmpty(r.commitmentsByYear),
-  'roster foot': r.rosterSize != null,
+  'US rank on the card': false, 'Tuition on the card': false, 'Commits on the card': false, 'roster on the card': false,
 });
 const expectProfile = p => {
   const pr = p.program || {}, sch = p.school || {};
@@ -179,10 +178,12 @@ const expectProfile = p => {
 /* ---------- how each section shows itself in the rendered markup ---------- */
 const factShown = (html, label) => html.includes(`<div class="label">${label}</div>`);
 const foot = html => (html.match(/<div class="foot"><span>([\s\S]*?)<span class="foot-actions">/) || [])[1] || '';
+const cardSum = html => (html.match(/<div class="card-sum">([\s\S]*?)<\/div>/) || [])[1] || '';
+const cardFact = html => (html.match(/<div class="card-fact">([\s\S]*?)<\/div>/) || [])[1] || '';
 const seeRow = html => ({
-  'RPI fact': factShown(html, RPI.label), 'US rank fact': factShown(html, 'US rank (THE)'),
-  'Undergrads fact': factShown(html, 'Undergrads'), 'Tuition fact': factShown(html, 'Tuition / yr'),
-  'Commits foot': /Commits/.test(foot(html)), 'roster foot': /on roster/.test(foot(html)),
+  'RPI on the card': /RPI [^<]*#\d+/.test(cardSum(html)), 'Undergrads fact': cardFact(html).includes('<span class="fl">Undergrads</span>'),
+  'US rank on the card': /US rank/.test(html), 'Tuition on the card': /Tuition/.test(html),
+  'Commits on the card': /Commits|commits/.test(cardFact(html) + foot(html)), 'roster on the card': /on roster/.test(html),
 });
 const tile = (html, re) => [...html.matchAll(/<div class="tile"><div class="label">([^<]*)<\/div>/g)].some(m => re.test(m[1]));
 const glance = html => (html.match(/<aside class="glance-panel"[^>]*>([\s\S]*)<\/aside>/) || [])[1] || '';
