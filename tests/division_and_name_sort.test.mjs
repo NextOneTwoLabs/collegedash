@@ -405,26 +405,26 @@ test('division is multi-select, and it filters both views through matchesFilters
   assert.ok(rows.every(p => p.division === 'D3' && p.region === 'West'), 'division and region stopped ANDing');
   M.filters.region = [];
 
-  // the camp view gets it from the same predicate, joined by slug
+  // #465 (D4): the ID Camps page has its own Division filter, in its address; the Programs pill does not narrow it
   const idx = M.index;
   const d1 = idx.programs.find(p => p.division === 'D1'), d3 = idx.programs.find(p => p.division === 'D3');
   M.camps = {
     updated: '2026-09-14T20:56:27Z', window: { from: '2026-09-14', to: null },
     counts: { total: 2, id: 2, youth: 0, unknown: 0 },
     camps: [
-      { slug: d1.slug, name: 'A D1 ID Camp', startDate: '2026-10-01', campType: 'id', kind: 'camp' },
-      { slug: d3.slug, name: 'A D3 ID Camp', startDate: '2026-10-02', campType: 'id', kind: 'camp' },
+      { slug: d1.slug, name: 'A D1 ID Camp', startDate: '2030-10-01', campType: 'id', kind: 'camp' },
+      { slug: d3.slug, name: 'A D3 ID Camp', startDate: '2030-10-02', campType: 'id', kind: 'camp' },
     ],
   };
-  multi.sandbox.location.hash = '#/camps';
-  M.filters.division = ['D3'];
+  multi.sandbox.location.hash = '#/camps?div=D3';
+  M.filters.division = ['D1'];  // the Programs pill, which must not matter here
   await multi.sandbox.renderCamps();
   assert.ok(mApp().includes('A D3 ID Camp'), 'the D3 camp was filtered out of its own division');
-  assert.ok(!mApp().includes('A D1 ID Camp'), 'a D1 camp survived a D3-only filter - the camp view is not using matchesFilters');
-  assert.ok(mApp().includes('1 upcoming ID camp of 2'), 'the camp view does not count the division filter as a filter');
-  assert.ok(mApp().includes("NCAA Division III women's soccer"), 'the camp view still claims the wrong division');
+  assert.ok(!mApp().includes('A D1 ID Camp'), 'a D1 camp survived the page\'s D3-only filter');
+  assert.ok(mApp().includes('1 upcoming ID camp of 2'), 'the camp page does not count its division filter as a filter');
 
   M.filters.division = [];
+  multi.sandbox.location.hash = '#/camps';
   await multi.sandbox.renderCamps();
   assert.ok(mApp().includes('A D1 ID Camp') && mApp().includes('A D3 ID Camp'), 'clearing the division did not restore both');
   multi.sandbox.location.hash = '#/';

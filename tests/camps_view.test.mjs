@@ -71,7 +71,7 @@ function makeEnv(fetchLog) {
       _handlers: {}, addEventListener(type, fn) { (this._handlers[type] ||= []).push(fn); },
     },
     location: { hash: '', replace(h) { this.hash = h; } },
-    history: { replaceState() { } },
+    history: { replaceState() { }, pushState() { } },
     matchMedia: () => ({ matches: false }),
     localStorage: {
       getItem: k => (store.has(k) ? store.get(k) : null),
@@ -102,7 +102,7 @@ function loadPage() {
   const source = lines.slice(a + 1, b).join('\n');
   const src = source
     + '\n;Object.assign(globalThis, { S, filteredPrograms, matchesFilters, matchScore, sortCmp, normText,'
-    + ' renderCamps, renderList, renderShortlist, renderSidebar, loadIndex, loadCamps, campTally, campCmp });\n';
+    + ' renderCamps, renderList, renderShortlist, renderSidebar, loadIndex, loadCamps, campTally, campCmp, campIsPast, todayLocal });\n';
   const fetchLog = [];
   const sandbox = makeEnv(fetchLog);
   vm.createContext(sandbox);
@@ -174,7 +174,9 @@ test('the published camps index renders as it actually is today', async () => {
   const bySlug = new Map(S.index.programs.map(p => [p.slug, p]));
   const idRows = (published.camps || []).filter(c => c.campType === 'id');
   const resolvable = idRows.filter(c => bySlug.has(c.slug));
-  assert.equal((app().match(/<tr class="team-row"/g) || []).length, resolvable.length);
+  // #465: the page applies #71's past rule against the visitor's own today, so a row that ended since the build is gone
+  const today = sandbox.todayLocal(), upcoming = resolvable.filter(c => !sandbox.campIsPast(c, today));
+  assert.equal((app().match(/<li class="camp-row"/g) || []).length, upcoming.length);
   assert.deepEqual(idRows.filter(c => !bySlug.has(c.slug)).map(c => c.slug), [],
     'a published id row names a program the index does not carry');
   assert.deepEqual(idRows.filter(c => !c.startDate).map(c => c.name), [],
@@ -203,15 +205,16 @@ test('the camp view shows only id camps, in date order, joined to the right prog
   fixture = {
     updated: '2026-09-14T20:56:27Z', window: { from: '2026-09-14', to: null },
     counts: { total: 7, id: 4, youth: 1, unknown: 2 },
+    // dated years ahead, so the page's own past rule (#465) never drops them as the calendar moves
     camps: [
-      { slug: pc.slug, name: 'Late ID Camp', startDate: '2027-01-30', endDate: '2027-01-30', precision: 'day', campType: 'id', kind: 'camp', confidence: 'heuristic', location: 'Home field', ages: '9th - 12th', price: '$200', registerUrl: 'https://example.org/register', sourceUrl: 'https://example.org/camps' },
-      { slug: pa.slug, name: 'First ID Camp', startDate: '2026-10-01', endDate: '2026-10-02', precision: 'day', campType: 'id', kind: 'camp', confidence: 'verified', location: null, ages: null, price: null, registerUrl: null, sourceUrl: 'https://example.org/a' },
-      { slug: pb.slug, name: 'Middle Prospect Camp', startDate: '2026-11-15', endDate: null, precision: 'day', campType: 'id', kind: 'news', confidence: 'heuristic', yearInferred: true, location: 'Stadium', ages: null, price: '$150', registerUrl: 'javascript:alert(1)', sourceUrl: 'https://example.org/b' },
-      { slug: pd.slug, name: 'Little Kickers Day Camp', startDate: '2026-12-01', campType: 'youth', kind: 'camp' },
-      { slug: pa.slug, name: '2026 Soccer Camps', startDate: '2026-10-20', campType: 'unknown', kind: 'camp' },
-      { slug: pb.slug, name: 'Winter Soccer Camps', startDate: '2026-12-20', campType: 'unknown', kind: 'camp' },
-      // an id row whose slug the program index does not carry: rendered nowhere, admitted in the footnote
-      { slug: 'no-such-program', name: 'Orphan ID Camp', startDate: '2026-10-05', campType: 'id', kind: 'camp' },
+      { slug: pc.slug, name: 'Late ID Camp', startDate: '2031-01-30', endDate: '2031-01-30', precision: 'day', campType: 'id', kind: 'camp', confidence: 'heuristic', location: 'Home field', ages: '9th - 12th', price: '$200', registerUrl: 'https://example.org/register', sourceUrl: 'https://example.org/camps' },
+      { slug: pa.slug, name: 'First ID Camp', startDate: '2030-10-01', endDate: '2030-10-02', precision: 'day', campType: 'id', kind: 'camp', confidence: 'verified', location: null, ages: null, price: null, registerUrl: null, sourceUrl: 'https://example.org/a' },
+      { slug: pb.slug, name: 'Middle Prospect Camp', startDate: '2030-11-15', endDate: null, precision: 'day', campType: 'id', kind: 'news', confidence: 'heuristic', yearInferred: true, location: 'Stadium', ages: null, price: '$150', registerUrl: 'javascript:alert(1)', sourceUrl: 'https://example.org/b' },
+      { slug: pd.slug, name: 'Little Kickers Day Camp', startDate: '2030-12-01', campType: 'youth', kind: 'camp' },
+      { slug: pa.slug, name: '2026 Soccer Camps', startDate: '2030-10-20', campType: 'unknown', kind: 'camp' },
+      { slug: pb.slug, name: 'Winter Soccer Camps', startDate: '2030-12-20', campType: 'unknown', kind: 'camp' },
+      // an id row whose slug the program index does not carry, and with no program block: rendered nowhere, admitted
+      { slug: 'no-such-program', name: 'Orphan ID Camp', startDate: '2030-10-05', campType: 'id', kind: 'camp' },
     ],
   };
   S.camps = fixture;
@@ -219,26 +222,26 @@ test('the camp view shows only id camps, in date order, joined to the right prog
   await sandbox.renderCamps();
   const html = app();
 
-  assert.equal((html.match(/<tr class="team-row"/g) || []).length, 3, 'expected exactly the three joinable id rows');
+  assert.equal((html.match(/<li class="camp-row"/g) || []).length, 3, 'expected exactly the three joinable id rows');
   assert.ok(!html.includes('Little Kickers'), 'a youth camp reached the view');
   assert.ok(!html.includes('2026 Soccer Camps'), 'an unclassified camp reached the view');
   assert.ok(!html.includes('Orphan ID Camp'), 'a row with an unjoinable slug reached the view');
-  assert.ok(html.includes('<th>When</th><th>Camp</th><th>Program</th><th>Details</th><th>Links</th>'));
   assert.ok(html.includes('Upcoming ID camps'));
   assert.ok(html.includes('soonest first'), 'the subtitle does not state the fixed order');
   assert.ok(!/sorted by /.test(html), 'the subtitle claims a sort the visitor cannot change');
   assert.ok(html.includes('3 upcoming ID camps at 3 programs'), 'the subtitle miscounts rows or programs');
 
-  const order = [...html.matchAll(/<tr class="team-row" data-slug="([^"]+)"/g)].map(m => m[1]);
+  const order = [...html.matchAll(/<li class="camp-row" data-slug="([^"]+)"/g)].map(m => m[1]);
   assert.deepEqual(order, [pa.slug, pb.slug, pc.slug], 'rows are not in soonest-first order');
   const starts = fixture.camps.filter(c => c.campType === 'id').slice().sort(sandbox.campCmp).map(c => c.startDate);
   assert.deepEqual(starts, [...starts].sort(), 'campCmp is not start-date ascending');
   assert.ok(html.includes(`href="#/p/${pa.slug}/camps"`), 'the program cell does not link to its ID Camps tab');
   assert.ok(html.includes(pa.shortName || pa.name), 'the program cell does not name the program');
-  assert.ok(html.includes('>register</a>') && html.includes('>source</a>'));
+  assert.ok(html.includes('>Camp details<') && html.includes('>Register<') && html.includes('>News release<'), 'the #465 link labels');
   assert.ok(!html.includes('javascript:alert(1)'), 'a non-http(s) registerUrl became a link');
-  assert.ok(html.includes('year inferred') && html.includes('auto-detected') && html.includes('from news release'),
-    'the shared badges did not render');
+  assert.ok(html.includes('Year not stated · confirm date with organizer') && html.includes('From a news release'),
+    'the #465 confidence wording did not render');
+  assert.ok(!html.includes('auto-detected'), 'the all-rows "auto-detected" badge is said once in the footnote instead (#465)');
   assert.ok(!html.includes('>past<'), 'an upcoming-only view badged something past');
 });
 
@@ -252,7 +255,8 @@ test('the hidden count is on the page, names every class, and adds up', () => {
   assert.ok(html.includes('2 we could not classify'), 'the unclassified rows are not named');
   assert.ok(html.includes('could not be matched to a program'), 'an unjoinable row was dropped in silence');
   assert.ok(html.includes('Programs whose camp page we could not read do not appear here'), 'issue #79 is not admitted');
-  assert.ok(html.includes('Camp list checked'), 'the footnote does not date the camp list');
+  assert.ok(html.includes('List refreshed'), 'the page does not date the camp list (#465: "List refreshed", not "checked")');
+  assert.ok(!html.includes('Camp list checked'), '"checked" claims more than the index knows (#465)');
 });
 
 // #465 B: Cards / Stats is Programs' own switch; ID Camps and Pipelines are global destinations (the header's nav and
@@ -298,18 +302,18 @@ test('the sidebar drops sort and recruiting class in the camp view and hands the
 });
 
 test('a filter that yields nothing says so, counts the unfiltered set and offers a way out', async () => {
-  // On a 37-row view this is the common case, not the exception: regional coverage is thin and most
-  // conferences have no upcoming camp at all.
-  sandbox.location.hash = '#/camps';
+  // On a small list this is the common case, not the exception: regional coverage is thin. #465: the page's own
+  // filters, from its address; pd has only a youth camp, so filtering to it empties the list.
   S.camps = fixture;
-  S.filters.conf = ['Not A Conference'];
+  sandbox.location.hash = `#/camps?program=${pd.slug}`;
   await sandbox.renderCamps();
   const html = app();
-  S.filters.conf = [];
-  assert.ok(html.includes('No upcoming ID camps match these filters'));
-  assert.ok(html.includes('Clear filters'), 'no control to clear the filter');
-  assert.ok(html.includes('Not A Conference'), 'the empty state does not name the filter that emptied it');
-  assert.ok(html.includes('3 upcoming ID camps are published across all programs'), 'no unfiltered count');
+  sandbox.location.hash = '#/camps';
+  assert.ok(html.includes('No upcoming ID camp found in our sources for these filters'));
+  assert.ok(html.includes('Clear filters') && html.includes('data-camps-clear'), 'no control to clear the filter');
+  assert.ok(html.includes(pd.shortName || pd.name), 'the empty state does not name the filter that emptied it');
+  assert.ok(html.includes('3 upcoming ID camps are listed across all programs'), 'no unfiltered count');
+  assert.ok(html.includes('a camp may exist that is not listed here'), 'an empty list read as proof that no camp exists');
   assert.ok(html.includes('3 of 7 upcoming camps are not shown here'),
     'the hidden count collapsed under a filter instead of staying site-wide');
 });
@@ -317,7 +321,7 @@ test('a filter that yields nothing says so, counts the unfiltered set and offers
 test('an index with nothing to show reads as empty, not as broken', async () => {
   S.camps = { updated: published.updated, window: published.window, counts: { total: 0, id: 0, youth: 0, unknown: 0 }, camps: [] };
   await sandbox.renderCamps();
-  assert.ok(app().includes('No upcoming ID camps are published right now'));
+  assert.ok(app().includes('No upcoming ID camp found in our sources'));
   assert.ok(app().includes('All 0 upcoming camps we publish are shown here.'), 'the footnote is not honest at zero');
 });
 

@@ -49,7 +49,11 @@ function loadPage(answer) {
   const sandbox = {
     console, setTimeout, clearTimeout, Promise, Map, Set, Date: FakeDate, JSON, Math, Number, String, Array, Object, RegExp, Intl,
     isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
-    document: { documentElement: makeElement('html'), body: makeElement('body'), querySelector: bySelector, querySelectorAll: () => [], addEventListener() { }, createElement: makeElement },
+    // the body keeps real classes: syncNav's no-rail / no-search are what #465 asserts on a failed first load
+    document: { documentElement: makeElement('html'), body: (() => { const b = makeElement('body'), c = new Set();
+      b.classList = { add: (...x) => x.forEach(v => c.add(v)), remove: (...x) => x.forEach(v => c.delete(v)),
+        toggle(v, on) { const s = on === undefined ? !c.has(v) : !!on; if (s) c.add(v); else c.delete(v); return s; }, contains: v => c.has(v) };
+      return b; })(), querySelector: bySelector, querySelectorAll: () => [], addEventListener() { }, createElement: makeElement },
     location: { hash: '', replace(h) { this.hash = h; } }, history: { replaceState() { } }, matchMedia: () => ({ matches: false }),
     localStorage: { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) },
     innerWidth: 1400, addEventListener() { }, alert() { },
@@ -64,7 +68,7 @@ function loadPage(answer) {
   };
   const page = { answer, requests, sb: sandbox, app: () => bySelector('#app').innerHTML, el: bySelector, advance: ms => { offset += ms; } };
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
-  const lines = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8').split(/\r?\n/);
+  const lines = fs.readFileSync(process.env.LOAD_FAILED_TEST_HTML || path.join(PUBLIC, 'index.html'), 'utf8').split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   const src = lines.slice(a + 1, b).join('\n') + '\n;for (const k of ["S","route","boot"]) { try { globalThis[k] = eval(k); } catch { } }\n';
   vm.createContext(sandbox);
@@ -123,6 +127,10 @@ test('#465: Home still draws its heading and destinations when the program index
   assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/, 'Home did not draw');
   assert.match(html, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Pipelines/, 'a destination is missing');
   assert.ok(html.includes(CARD) && html.includes('id="loadRetry"'), 'the try-again card is missing from Home');
+  // Bianque on #470: route() never ran, so boot's catch sets the shell itself - Home shows no search box and no rail
+  const body = page.sb.document.body.classList;
+  assert.ok(body.contains('no-search'), 'a failed first load on Home shows the program search box');
+  assert.ok(body.contains('no-rail'), 'a failed first load on Home shows the Programs filter rail');
   fail = false;
   page.el('#loadRetry').onclick();
   await settle();

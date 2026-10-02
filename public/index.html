@@ -705,6 +705,76 @@ body.no-search .header-right { margin-left: auto; }
 :root { --safe-top: env(safe-area-inset-top, 0px); }
 .header { padding-top: var(--safe-top); padding-left: max(20px, env(safe-area-inset-left, 0px)); padding-right: max(20px, env(safe-area-inset-right, 0px)); }
 
+/* ===== ID CAMPS PAGE (#465 PR F) =====
+   One list markup at every width: rows on a wide screen, stacked cards on a phone, so a phone never scrolls sideways
+   and a camp's date and its actions are always on the same card. The Programs sidebar is not drawn on this page (D4:
+   its filters do not narrow camps; 'camps' is in NO_RAIL); the page's OWN filters are (owner, 2026-10-02): a left sidebar on a wide screen,
+   a sheet on a phone. */
+.camps-lead { margin: 0 0 12px; color: var(--text-secondary); }
+.camps-layout { display: grid; grid-template-columns: 260px minmax(0, 1fr); gap: 20px; align-items: start; }
+.camps-side { position: sticky; top: 0; max-height: calc(100vh - var(--header-height) - 24px); overflow-y: auto; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px; display: flex; flex-direction: column; gap: 14px; }
+.camps-side-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.camps-side-title { font-size: 14px; margin: 0; }
+.camps-side-title:focus { outline: none; }
+.camps-side-title:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.camps-main { min-width: 0; }
+.camps-field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.camps-label { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+.camps-note { font-size: 12px; color: var(--text-secondary); }
+.camps-side .pill-row { flex-wrap: wrap; }
+.camps-side .pill { min-height: 36px; white-space: nowrap; flex: 0 0 auto; }
+.camps-side .pill.active, .camps-side .pill[aria-pressed="true"] { background: var(--accent-surface); border-color: var(--accent); color: var(--accent-text); }
+.camps-range { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.camps-range label { display: flex; flex-direction: column; font-size: 12px; color: var(--text-secondary); gap: 2px; }
+.camps-range input, .camps-side select { min-height: 36px; width: 100%; font: inherit; color: var(--text-primary); background: var(--bg-surface); border: 1px solid var(--border); border-radius: 8px; padding: 4px 8px; }
+.camps-saved label { display: flex; align-items: center; gap: 6px; min-height: 36px; }
+.camps-more-btn, .camps-sheet-close, .camps-sheet-foot { display: none; }
+.camps-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.4); z-index: 110; }  /* above the header (100), as the sheet is */
+.camps-backdrop[hidden] { display: none; }
+.camps-active { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 4px; }
+.camps-active:empty { display: none; }
+.camps-fresh { color: var(--text-primary); }
+.camps-month-title { font-size: 15px; margin: 18px 0 8px; }
+.camps-month-title .muted { font-weight: 400; font-size: 13px; margin-left: 6px; }
+.camp-list { list-style: none; margin: 0; padding: 0; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.camp-row { display: grid; grid-template-columns: 170px minmax(0, 1.4fr) minmax(0, 1.5fr) auto; gap: 6px 18px; padding: 12px 16px; border-top: 1px solid var(--border-light); align-items: start; }
+.camp-row:first-child { border-top: none; }
+.camp-when { font-weight: 700; }
+.camp-title { font-size: 14px; margin: 0 0 4px; overflow-wrap: anywhere; }
+.camp-badges { margin-bottom: 4px; }
+.badge-warn { background: var(--warn-bg); color: var(--warn-text); border-color: rgba(217, 119, 6, 0.35); white-space: normal; }
+.camp-prog { display: flex; align-items: center; flex-wrap: wrap; gap: 4px 8px; font-size: 13px; }
+.camp-prog .team-name { max-width: none; }
+.camp-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px 12px; margin: 0; font-size: 13px; }
+.camp-facts div { min-width: 0; overflow-wrap: anywhere; }
+.camp-facts dt { font-size: 11px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.03em; }
+.camp-facts dd { margin: 0; }
+.camp-acts { display: flex; gap: 8px; justify-content: flex-end; flex-wrap: wrap; }
+.camp-acts .btn { min-height: 40px; white-space: nowrap; }
+.camps-foot { border-top: none; padding: 12px 0 0; }
+.camps-empty h2 { font-size: 16px; margin: 0 0 6px; }
+@media (max-width: 1100px) { .camp-row { grid-template-columns: 150px minmax(0, 1fr) auto; } .camp-facts { grid-column: 2 / -1; } }
+@media (max-width: 1024px) { .camps-layout { grid-template-columns: 220px minmax(0, 1fr); } }
+/* A phone: the sidebar becomes a bottom sheet (a modal dialog, opened by "Filters (n)"), over the page, the header and the bottom bar. */
+@media (max-width: 768px) {
+  .camps-layout { grid-template-columns: minmax(0, 1fr); }
+  .camps-side { display: none; position: fixed; left: 0; right: 0; bottom: 0; top: auto; z-index: 111; max-height: 85vh; max-height: 85dvh;
+    border-radius: 16px 16px 0 0; border-bottom: none; padding: 16px 16px calc(16px + env(safe-area-inset-bottom, 0px)); box-shadow: var(--shadow-lg); }
+  .camps-side.open { display: flex; }
+  .camps-side-title { font-size: 16px; }
+  .camps-sheet-close { display: inline-flex; min-width: 44px; min-height: 44px; justify-content: center; }
+  .camps-sheet-foot { display: flex; gap: 8px; position: sticky; bottom: calc(-16px - env(safe-area-inset-bottom, 0px)); background: var(--bg-surface); padding: 8px 0; }
+  .camps-sheet-foot .btn { flex: 1; justify-content: center; min-height: 44px; }
+  .camps-more-btn { display: inline-flex; min-height: 44px; margin-bottom: 8px; }
+  .camps-side select { min-height: 44px; }
+  .camps-side .pill { min-height: 44px; }
+  .camp-row { grid-template-columns: 1fr; gap: 8px; padding: 14px; }
+  .camp-facts { grid-template-columns: 1fr 1fr; grid-column: auto; }
+  .camp-facts div:first-child { grid-column: 1 / -1; }
+  .camp-acts { justify-content: stretch; }
+  .camp-acts .btn { flex: 1; justify-content: center; min-height: 44px; }
+}
+
 /* ===== RESPONSIVE ===== */
 @media (min-width: 769px) { .layout.sidebar-collapsed .sidebar { display: none; } }
 @media (max-width: 1024px) { .conf-layout { grid-template-columns: 1fr; } .glance-panel { order: -1; position: static; } }
@@ -801,7 +871,7 @@ body.no-search .header-right { margin-left: auto; }
   <nav class="gnav" aria-label="Main"><a href="#/programs" data-nav="list">Programs</a><a href="#/camps" data-nav="camps">ID Camps</a><a href="#/trends" data-nav="trends">Pipelines</a></nav>
   <!-- #434: the one search box (static, on every page). setQuery / searchKeydown; the status is screen-reader only. -->
   <div class="header-search" role="search">
-    <label class="sr-only" for="q">Search programs</label>
+    <label class="sr-only" for="q" id="qLabel">Search programs</label>
     <input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="qList" aria-describedby="qHint">
     <button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕</button>
     <div class="qpanel" id="qPanel" hidden>
@@ -883,6 +953,7 @@ const RECS_PILOT_RAW = (() => {
 const S = {
   index: null, profiles: {}, camps: null, trends: null, refresh: null, local: false,
   favorites: new Set(), compare: [], q: '', qRaw: '',
+  campsSaved: false, campsRange: false,  // #465: the ID Camps page's Shortlist toggle (never in its address) and its open date range
   /* sort: 'name' is THE default - this line is what a visitor with no saved cd.filters gets, and
      SORTS[0] only decides which option the select lists first. RPI exists for Division I and for
      nothing else, so an RPI default would drop every D3 and D2 program to the bottom of the first
@@ -898,6 +969,7 @@ const NCAA_RPI_URL = 'https://www.ncaa.com/rankings/soccer-women/d1/ncaa-womens-
 // The 2007–2024 end-of-season archive: Chris Thomas, "RPI for Division I Women's Soccer" (issue #102).
 const RPI_ARCHIVE_URL = 'https://sites.google.com/site/rpifordivisioniwomenssoccer/Home';
 const $ = (sel, el = document) => el.querySelector(sel);
+const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmtPct = v => v == null ? '—' : (v * 100).toFixed(v < 0.1 ? 1 : 0) + '%';
 const fmtNum = v => v == null ? '—' : Number(v).toLocaleString();
@@ -1849,6 +1921,7 @@ function syncToggles() {
   document.querySelectorAll('[data-fav]' + NOT_RM).forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
   document.querySelectorAll('[data-cmp]' + NOT_RM).forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
   document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('in-compare', S.compare.includes(c.dataset.slug)));
+  if (currentView() === 'camps' && CAMPS) campsShortlistChanged();  // #465: the "Shortlisted programs only" toggle reads it
 }
 
 /* ---------- sidebar ---------- */
@@ -2248,7 +2321,8 @@ function wireAppliedChips(app) {
   app.querySelectorAll('[data-chip-class]').forEach(b => b.onclick = () => { const y = b.dataset.chipClass, hit = after('data-chip-class', y); toggleIn(f.classYear, y); commit(sel(hit, '', -1)); });
   const clr = app.querySelector('#chipsClear'); if (clr) clr.onclick = () => { f.conf = []; f.cond = []; f.classYear = []; S.condForm = null; commit(null); };
 }
-function rerenderForFilters() { const v = currentView(); if (v === 'camps') renderCamps(); else if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
+// ID Camps is not here: the Programs filters do not narrow it (#465, owner's D4); it has its own.
+function rerenderForFilters() { const v = currentView(); if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
 /* #18: the phone drawer covers the page, so its foot carries a button that closes it on what the filters and the
    search select. Pills and conditions already close it (not Programs' sheet, #465 D); this is for a reader who typed a search or wants to look
    before choosing. It counts what the Program View would list (filteredPrograms: search, pills and conditions);
@@ -2312,19 +2386,32 @@ function setQuery(v) {
   syncSearchBox();
   SUGG.active = -1; SUGG.open = !!S.q;
   clearTimeout(qTimer);
-  // Typing filters the view you are in - #/camps included, where it narrows camps to matching PROGRAMS, never camp
-  // names. On any other page it only suggests (#434 PR 2): a header box must not throw the reader off the page.
+  // Typing filters the Programs list when it is on screen. On any other page it only suggests (#434 PR 2): a header box
+  // must not throw the reader off the page. ID Camps never reads it: there the box types the camps' own search
+  // (campsTyped, #471), and this Programs query is left as it was.
   qTimer = setTimeout(searchApply, 80);
   listTyping();  // #14: the list's address follows the box, replacing its entry
 }
-function searchApply() { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'camps') return renderCamps(); if (v === 'list' || v === 'c') return renderList(); }
-// #465: the box shows on Programs and a program's page only (body.no-search elsewhere, set by syncNav).
-const SEARCH_VIEWS = new Set(['list', 'c', 'p']);
+function searchApply() { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'list' || v === 'c') return renderList(); }
+// #465: the box shows on Programs, a program's page and ID Camps (body.no-search elsewhere, set by syncNav). On ID Camps
+// it searches camps (owner, 2026-10-02, #471), with its own query, wording and keys.
+const SEARCH_VIEWS = new Set(['list', 'c', 'p', 'camps']);
+const campsBox = () => currentView() === 'camps';
 const searchShown = () => !document.body.classList.contains('no-search');
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
   let text = '';
+  // #471 (Huatuo): on ID Camps the line carries only the camps count while a search is typed - never #447's help
+  // sentence, never a Programs count - and, as below, is written only when it changes.
+  // Huatuo on #471: only for the camps state the address names. Arriving, the rail is redrawn (and this called) before
+  // renderCamps reads the new address, so the last visit's CAMPS.st must not be counted - arrival writes nothing.
+  if (campsBox()) {
+    const current = CAMPS?.st && location.hash === campsHashOf(CAMPS.st);
+    text = current && CAMPS.st.q ? `${campsSummary().count}.` : '';
+    if (el.textContent !== text) el.textContent = text;
+    return;
+  }
   if (!S.q && SUGG.open && S.index) text = `${helpScope(false)} ${SEARCH_HINT} Down arrow for examples.`;  // #447: the full sentence on every screen ("Try:" is a visual cue)
   if (S.q) {
     // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
@@ -2349,6 +2436,13 @@ function updateSearchStatus() {
    is a list too: it is already narrowed to those programs, so Enter stays there.
    #23: both read the hits the active filters let through, so Enter never opens a program the list hides. */
 function searchKeydown(e, box) {
+  // #471 (Huatuo): on ID Camps none of the Programs keys run - no suggestions to move through, no #409 Enter that opens a
+  // program or goes to #/programs, no Ask. Enter writes the query now (a phone's keyboard drops); Escape clears it.
+  if (campsBox()) {
+    if (e.key === 'Enter') { e.preventDefault(); campsTypingFlush(); if (isPhone()) box.blur?.(); }
+    else if (e.key === 'Escape' && box.value) { e.preventDefault(); campsClearSearch('box'); }
+    return;
+  }
   const open = SUGG.open && SUGG.items.length > 0;
   if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
     if (!S.index) return;
@@ -2409,7 +2503,7 @@ function helpMode(results) { return !S.q ? 'help' : results.length ? 'list' : 'n
 const SUGGEST_MAX = 6, OUTSIDE_MAX = 3;
 const SUGG = { items: [], active: -1, open: false };
 function suggestionItems() {
-  if (!S.index) return [];
+  if (!S.index || campsBox()) return [];  // #471: no Program options, chips or help panel on ID Camps
   if (!S.q) return (isPhone() ? PHONE_CHIPS : HELP_CHIPS).map(text => ({ kind: 'chip', text }));  // #447
   const visible = visibleMatches(), all = searchMatches(), shown = new Set(visible.map(h => h.p.slug));
   const items = visible.filter(h => !h.m.place).slice(0, SUGGEST_MAX).map(h => ({ kind: 'program', p: h.p }));
@@ -2490,22 +2584,47 @@ function chooseSuggestion(i) {
 }
 // The box shows S.qRaw. Written only when it differs, so typing never writes back into the box (on a phone that moves
 // the caret); Ask's apply and undo and the camps "clear" change the query in code and land here.
+// #471: on ID Camps it shows the camps query instead (compared trimmed, so a space being typed is never taken back).
 function syncSearchBox() {
-  const box = $('#q'); if (box && box.value !== S.qRaw) box.value = S.qRaw;
+  const box = $('#q');
+  if (campsBox()) {
+    const q = CAMPS?.st?.q || '';
+    if (box && box.value.trim() !== q) box.value = q;
+    const clr = $('#qClear'); if (clr) clr.hidden = !box?.value;
+    return;
+  }
+  if (box && box.value !== S.qRaw) box.value = S.qRaw;
   const clr = $('#qClear'); if (clr) clr.hidden = !S.qRaw;
 }
-// The placeholder follows Ask.
-const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'School, mascot, state or city…';
+// The placeholder follows Ask, and the page (#471).
+const searchPlaceholder = () => campsBox() ? 'Camp, school, place or month…' : S.ask ? 'School, mascot, or a question…' : 'School, mascot, state or city…';
+// The box's wording follows the page it searches; called on every route (syncNav). A status line left by the other
+// page is cleared silently, so arriving never reads out a stale count or help sentence.
+// The markup's Programs wording stands untouched until ID Camps is first shown (and while Ask is off, #179).
+let searchModeCamps = false;
+function syncSearchMode() {
+  const box = $('#q'), camps = campsBox();
+  if (camps || searchModeCamps) {
+    searchModeCamps = true;
+    if (box && box.placeholder !== searchPlaceholder()) box.placeholder = searchPlaceholder();
+    const lab = $('#qLabel'); if (lab) lab.textContent = camps ? 'Search camps' : 'Search programs';
+    const hint = $('#qHint');
+    if (hint) hint.textContent = camps ? 'Type a school, city, state, region, division, camp name or month.' : 'Type a school, mascot, state or city. Down arrow for suggestions.';
+  }
+  const st = $('#qStatus'); if (st && st.textContent) st.textContent = '';
+  if (SUGG.open) closeSuggestions();
+  syncSearchBox();
+}
 // The header box is static markup, so it is wired once, here.
 {
   const box = $('#q');
   if (box) {
-    box.addEventListener('input', e => setQuery(e.target.value));
+    box.addEventListener('input', e => (campsBox() ? campsTyped : setQuery)(e.target.value));  // #471: two searches, one box
     box.addEventListener('keydown', e => searchKeydown(e, box));
     box.addEventListener('blur', () => { if (SUGG.open) closeSuggestions(); });
     // #447: focusing the box opens the panel - the help on an empty box, the suggestions otherwise
     box.addEventListener('focus', () => { SUGG.open = true; SUGG.active = -1; renderSuggestions(); updateSearchStatus(); });
-    const clr = $('#qClear'); if (clr) clr.onclick = () => { setQuery(''); box.focus(); };
+    const clr = $('#qClear'); if (clr) clr.onclick = () => { if (campsBox()) return campsClearSearch('box'); setQuery(''); box.focus(); };
     const list = $('#qList');
     if (list) {
       list.addEventListener('mousedown', e => e.preventDefault());  // the box keeps focus while an option is pressed
@@ -2515,8 +2634,8 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
   }
 }
 // "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
-// Where the box is hidden (ID Camps, which a search made on Programs still narrows), the page is redrawn at once and
-// focus goes to its heading, as a route does (#453) - never to a box that is not drawn.
+// Where the box is hidden, the page is redrawn at once and focus goes to its heading, as a route does (#453) - never to
+// a box that is not drawn. ID Camps has its own Clear search (data-camps-clear-q, #471).
 document.addEventListener('click', e => {
   if (!e.target.closest?.('[data-clear-search]')) return;
   setQuery('');
@@ -3547,13 +3666,14 @@ function renderHome(failed = '') {
 // #465 B: the destinations' aria-current, the Shortlist count in the header and the bottom bar, and whether this view
 // has the Programs filter rail. Filters belong to their destination (owner's D4): a view in NO_RAIL draws no sidebar.
 // Pipelines has no rail (the owner, 2026-10-02) and no longer reads the Programs filters (trendsView), so nothing hidden
-// narrows it. ID Camps keeps the rail until PR F gives it its own.
-const NO_RAIL = new Set(['home', 'trends']);
+// narrows it. ID Camps has its own sidebar since PR F (#471) and no longer reads the Programs filters or search.
+const NO_RAIL = new Set(['home', 'trends', 'camps']);
 function syncNav(view) {
   const cur = view === 'c' ? 'list' : view;
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute?.('aria-current'); });
   document.body.classList.toggle('no-rail', NO_RAIL.has(view));
   document.body.classList.toggle('no-search', !SEARCH_VIEWS.has(view));  // #465: the search box only where it searches
+  syncSearchMode();  // #471: its wording and query follow the page (ID Camps searches camps)
   syncNavCounts();
 }
 function syncNavCounts() {
@@ -3580,6 +3700,8 @@ function route() {
   const parts = h.split('/').filter(Boolean);
   const view = parts[0] === 'programs' ? 'list' : parts[0] || 'home';
   syncNav(view);  // #465 B: aria-current on the destinations, and the filter rail only where it applies
+  campsInert(false);  // #465: leaving the page with the camps sheet open (Back, a link) must not leave the page inert
+  clearTimeout(campsTypeTimer); campsTypeTimer = null;  // #471: camps typing not yet written never lands on the next entry
   const app = $('#app');
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
@@ -4015,9 +4137,13 @@ const campBadges = (it, old) => [
    3. It says how many rows it hid. A classifier nobody checks is how we would never learn it had
       drifted, so the count is on the page even when it is zero.
 
-   Region and conference filter it, with the Program View's exact semantics (matchesFilters). Sort
-   and recruiting class do not apply and are hidden from the sidebar rather than left inert. Order
-   is by date, soonest first, fixed. Search keeps its program meaning. */
+   #465 (PR F) gives the page its own filters, in the order a family decides: When, Program location (where the
+   SCHOOL is - only 7 of 86 camps state where the camp is held, so there is no venue filter), Division, Program, and
+   a local "Shortlisted programs only". The Programs filters (sidebar pills, conditions, the header search) no longer
+   narrow camps at all (owner decision D4): a camps link means the same thing for everyone. The camp filters live in
+   the address, #/camps?when=30d&region=South&state=TX,OK&div=D2&program=tcu, with #14's encoding and checks; the
+   Shortlist toggle stays out of it, because it reads the visitor's own Shortlist. Order is by date, soonest first,
+   fixed, grouped under month headings. */
 const CAMP_CLASSES = ['id', 'youth', 'unknown'];
 // soonest first; ties broken by end date then name so the order is total and stable across rebuilds
 const campCmp = (a, b) => (a.startDate || '').localeCompare(b.startDate || '')
@@ -4048,89 +4174,475 @@ function listTabs(active) {
   const btn = (k, l) => `<button class="view-tab${active === k ? ' active' : ''}" role="tab" aria-selected="${active === k}" data-view="${k}">${l}</button>`;
   return btn('cards', 'Cards') + btn('table', 'Stats');
 }
-function campRowHtml(c, p) {
-  const details = [c.location, c.ages, c.price].filter(Boolean).join(' · ');
-  const links = [c.registerUrl ? campLink(c.registerUrl, 'register') : '', c.sourceUrl ? campLink(c.sourceUrl, 'source') : ''].filter(Boolean).join(' · ');
-  return `<tr class="team-row" data-slug="${esc(c.slug)}">
-    <td>${campWhen(c)}</td>
-    <td><b>${esc(c.name)}</b> ${campBadges(c, false)}</td>
-    <td><div class="team-cell">${swatchesHtml(p)}<span><a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(displayName(p))}</a><br><span class="team-sub">${programLine(p)}</span></span>${starBtn(c.slug)}</div></td>
-    <td class="small">${esc(details) || '<span class="muted">—</span>'}</td>
-    <td class="small">${links || '<span class="muted">—</span>'}</td></tr>`;
+/* #71, shared (#465): a camp is past once it has ENDED - `endDate || startDate` - and a month-precision camp once the
+   month it ends in is over. build.py's camp_in_window and the program page's ID Camps tab use the same rule; the
+   index is built once a day, so the page applies it again against the visitor's own today. */
+const campIsPast = (it, today = todayLocal()) => {
+  const last = it?.endDate || it?.startDate || '';
+  return it?.precision === 'month' ? last.slice(0, 7) < today.slice(0, 7) : last < today;
+};
+const campAddDays = (iso, n) => { const d = new Date(iso + 'T12:00:00'); d.setDate(d.getDate() + n); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`; };
+const campDayText = iso => { const d = new Date(iso + 'T12:00:00'); return isNaN(d) ? iso : d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' }); };
+const campMonthText = ym => { const d = new Date(ym + '-01T12:00:00'); return isNaN(d) ? ym : d.toLocaleDateString(undefined, { month: 'long', year: 'numeric' }); };
+// A camp's date as the list reads it: "Sat, Oct 3", "Sat, Jan 30 – Sun, Jan 31", or "October 2026 (day not stated)".
+const campDate = c => c.precision === 'month' ? `${campMonthText((c.startDate || '').slice(0, 7))} (day not stated)`
+  : c.endDate && c.endDate !== c.startDate ? `${campDayText(c.startDate)} – ${campDayText(c.endDate)}` : campDayText(c.startDate);
+/* The program a camp row belongs to: the row's own `program` block (#465, PR C), else - until the first refresh after
+   #468 publishes the blocks - the program index row it joins by slug. null when neither exists (an orphan row). */
+function campProgram(c, byProgram) {
+  const p = byProgram.get(c.slug) || null;
+  const b = c.program && typeof c.program === 'object' && typeof c.program.name === 'string' && c.program.name ? c.program : null;
+  const src = b || p;
+  if (!src) return null;
+  return { name: src.shortName || src.name, division: src.division || null, city: src.city || null, state: src.state || null,
+           region: src.region || null, row: p };
 }
-async function renderCamps() {
-  const idx = await loadIndex();
-  const doc = await loadCamps();
-  const f = S.filters;
-  // Join to the program index by slug, then apply the Program View's own filter predicate.
-  const byProgram = new Map(idx.programs.map(p => [p.slug, p]));
-  const shown = doc.camps.filter(c => c.campType === 'id');
-  const resolved = shown.filter(c => byProgram.has(c.slug));
-  const orphans = shown.length - resolved.length; // a published slug the program index does not carry
-  const rows = resolved.filter(c => matchesFilters(byProgram.get(c.slug), null)).sort(campCmp);
-  const tally = campTally(doc);
-  const nProg = new Set(rows.map(c => c.slug)).size;
-  const filtered = !!(f.conf.length || f.region.length || f.division.length || S.q || f.cond.length);
 
-  const bits = [corpusLabel(),
-    `${rows.length} upcoming ID camp${rows.length === 1 ? '' : 's'}${filtered ? ` of ${resolved.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`];
-  // Conditions (#166), counted in camps: the camps whose program passed everything else but lacks the data.
-  if (f.cond.length) { const hidden = condHiddenText(condTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (hidden) bits.push(esc(hidden)); }
-  if (f.cond.length) { const na = condNaText(condNaTally(resolved.filter(c => matchesFilters(byProgram.get(c.slug), null, [])), f.cond, c => byProgram.get(c.slug)), f.cond, 'camp'); if (na) bits.push(esc(na)); }
-  if (f.conf.length) bits.push(esc(confLabels(f.conf).join(', ')));
-  if (f.region.length) bits.push(`${esc(f.region.join(', '))} region${f.region.length > 1 ? 's' : ''}`);
-  if (f.cond.length) bits.push(esc(f.cond.map(condText).join(' and ')));
-  if (S.q) bits.push(`programs matching “${esc(S.qRaw)}” — search matches program names, not camp names <button type="button" class="clear-search" data-clear-search>Clear search</button>`);
-  bits.push('soonest first');
-
-  // The hidden count, site-wide and not narrowed by the filters. A number that collapsed to "0 of 0"
-  // whenever a region was picked would hide exactly the classifier drift it exists to expose.
-  const hidden = tally.total - tally.id;  // counted from the rows: never negative, never clamped (#93)
-  const why = [`${tally.youth} youth or kids' camp${tally.youth === 1 ? '' : 's'}`,
-    `${tally.unknown} we could not classify`]
+/* #465: the camp page's state in the address. A public contract like #14's list address: values encoded with listEnc,
+   lists sorted, defaults left out, and everything that arrives checked against what the page knows - when a preset,
+   from/to real dates (a range wins over a preset; a `to` before `from` is dropped), region one of REGIONS, state a US
+   state code, div D1-D3, program a known slug. The Shortlist toggle is NEVER in it (it reads the visitor's own list). */
+const CAMPS_PARAMS = ['when', 'from', 'to', 'region', 'state', 'div', 'program', 'q'];
+// The camps search (#471, owner 2026-10-02): free text, so it is not checked against a list. #14's own rule for the
+// Programs q (listQ): control characters stripped, trimmed, capped at 100 code points (never half an emoji); only ever
+// drawn through esc(). A malformed escape (listDec's try) drops it.
+const campsQ = s => listQ(s);
+const CAMPS_WHEN = { '30d': ['Next 30 days', 30], '90d': ['Next 3 months', 91] };
+const CAMPS_DIVS = ['D1', 'D2', 'D3'];
+const campsDateOk = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
+function campsStateOf(query, known) {
+  const raw = new Map();
+  for (const part of String(query || '').split('&')) {
+    const i = part.indexOf('='), k = i < 0 ? part : part.slice(0, i);
+    if (CAMPS_PARAMS.includes(k) && !raw.has(k)) raw.set(k, i < 0 ? '' : part.slice(i + 1));
+  }
+  const vals = k => (raw.get(k) || '').split(',').filter(Boolean).map(listDec).filter(Boolean);
+  const one = k => { const v = vals(k); return v.length === 1 ? v[0] : null; };
+  const uniq = a => [...new Set(a)];
+  const from = campsDateOk(one('from')) ? one('from') : null;
+  let to = campsDateOk(one('to')) ? one('to') : null;
+  if (from && to && to < from) to = null;
+  const when = !from && !to && Object.prototype.hasOwnProperty.call(CAMPS_WHEN, one('when')) ? one('when') : null;
+  const program = one('program');
+  return { when, from, to, region: uniq(vals('region').filter(r => REGIONS.includes(r))),
+    state: uniq(vals('state').map(s => s.toUpperCase()).filter(s => US_STATES.includes(s))),
+    div: uniq(vals('div').filter(d => CAMPS_DIVS.includes(d))), program: program && known.has(program) ? program : null,
+    q: campsQ(listDec(raw.get('q') || '')) };  // the whole value: a comma is part of the text, not a list
+}
+function campsHashOf(st) {
+  const out = [], put = (k, vals) => { const v = [...new Set(vals)].map(listEnc).sort(); if (v.length) out.push(`${k}=${v.join(',')}`); };
+  if (st.when) out.push(`when=${st.when}`);
+  if (st.from) out.push(`from=${st.from}`);
+  if (st.to) out.push(`to=${st.to}`);
+  put('region', st.region || []); put('state', st.state || []); put('div', st.div || []);
+  if (st.program) out.push(`program=${listEnc(st.program)}`);
+  if (campsQ(st.q)) out.push(`q=${listEnc(campsQ(st.q))}`);
+  return out.length ? `#/camps?${out.join('&')}` : '#/camps';
+}
+// The sidebar's filters (the chips, Clear all) - the search is not one of them; it has its own Clear search.
+const campsFilterOn = st => !!(st.when || st.from || st.to || st.region.length || st.state.length || st.div.length || st.program || S.campsSaved);
+const campsFiltered = st => campsFilterOn(st) || !!st.q;  // narrowed at all: the count says "of M"
+/* The camps search (#471). Each word of the query must start a word of the camp's text, in any order (AND): "texas june"
+   is Texas camps in June. The text: the program's short and full name, its city, its state's full name, its region,
+   the camp's title, and every month the camp's dates touch (a month-only date, that month) - "jun" starts "june".
+   A state code (TX) and a division (D1) match only as WHOLE words, so "in" is not Indiana's code and "d" is not a
+   division. The event venue is not searched: the sidebar says Program location is where the school is.
+   Both sides go through campsNorm - normText (case, accents, punctuation) after dropping apostrophes and the ʻokina, so
+   "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys" - and "st" and "saint" stand for each other. */
+const campsNorm = s => normText(String(s ?? '').replace(/[ʻʼ'’`]/g, ''));
+const CAMPS_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+const CAMPS_SEARCH = new WeakMap();
+function campsSearchOf(c, info) {
+  let s = CAMPS_SEARCH.get(c);
+  if (s) return s;
+  const names = [info.name, c.program?.name, c.program?.shortName, info.row?.name, info.row?.shortName];
+  const words = new Set(wordsOf(campsNorm([...names, info.city, STATE_NAMES[info.state], info.region, c.name].filter(Boolean).join(' '))));
+  for (const w of [...words]) { if (w === 'st') words.add('saint'); if (w === 'saint') words.add('st'); }
+  const first = (c.startDate || '').slice(0, 7), last = c.precision === 'month' ? first : (c.endDate || c.startDate || '').slice(0, 7);
+  for (let ym = first, n = 0; /^\d{4}-\d{2}$/.test(ym) && ym <= last && n < 12; n++) {
+    const [y, m] = ym.split('-').map(Number);
+    words.add(CAMPS_MONTHS[m - 1]);
+    ym = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`;
+  }
+  const codes = new Set([info.state, info.division].filter(Boolean).map(x => campsNorm(x)));
+  s = { words: [...words], codes };
+  CAMPS_SEARCH.set(c, s);
+  return s;
+}
+function campsQueryMatch(c, info, q) {
+  const toks = wordsOf(campsNorm(q));
+  if (!toks.length) return true;
+  const s = campsSearchOf(c, info);
+  return toks.every(t => s.codes.has(t) || s.words.some(w => w.startsWith(t)));
+}
+// Does camp `c` (program `info`) pass the page's filters? The date filter keeps a camp that overlaps the window.
+function campsMatch(c, info, st, today) {
+  if (st.div.length && !st.div.includes(info.division)) return false;
+  if ((st.region.length || st.state.length) && !st.region.includes(info.region) && !st.state.includes(info.state)) return false;
+  if (st.program && c.slug !== st.program) return false;
+  if (S.campsSaved && !S.favorites.has(c.slug)) return false;
+  const start = c.startDate || '', end = c.endDate || c.startDate || '';
+  const hi = st.to || (st.when ? campAddDays(today, CAMPS_WHEN[st.when][1]) : null);
+  if (st.from && end < (c.precision === 'month' ? st.from.slice(0, 7) : st.from)) return false;
+  if (hi && start > hi) return false;
+  if (st.q && !campsQueryMatch(c, info, st.q)) return false;  // the search ANDs with every filter
+  return true;
+}
+function campRowHtml(c, info) {
+  const title = c.name || 'Camp';
+  const fact = (label, v) => `<div><dt>${label}</dt><dd>${v ? esc(v) : '<span class="muted not-listed">Not listed</span>'}</dd></div>`;
+  const ctx = `<span class="sr-only"> for ${esc(title)}, ${esc(info.name)}</span>`;
+  const src = campHttpUrl(c.sourceUrl), reg = campHttpUrl(c.registerUrl);
+  const badges = [
+    c.yearInferred ? '<span class="badge badge-warn" title="The source gave no year; it was inferred from when the camp was announced">Year not stated · confirm date with organizer</span>' : '',
+    c.kind === 'news' ? '<span class="badge">From a news release</span>' : '',
+  ].filter(Boolean).join(' ');
+  return `<li class="camp-row" data-slug="${esc(c.slug)}">
+    <div class="camp-when">${esc(campDate(c))}</div>
+    <div class="camp-main"><h3 class="camp-title">${esc(title)}</h3>${badges ? `<div class="camp-badges">${badges}</div>` : ''}
+      <div class="camp-prog">${info.row ? swatchesHtml(info.row) : ''}<a href="#/p/${esc(c.slug)}/camps" class="team-name">${esc(info.name)}</a>
+        <span class="team-sub">${programLine(info.row || { division: info.division, city: info.city, state: info.state })}</span>${starBtn(c.slug)}</div></div>
+    <dl class="camp-facts">${fact('Event location', c.location)}${fact('Ages / grades', c.ages)}${fact('Price', c.price)}</dl>
+    <div class="camp-acts">${src ? `<a class="btn" href="${esc(src)}" target="_blank" rel="noopener">${c.kind === 'news' ? 'News release' : 'Camp details'}${ctx} <span aria-hidden="true">↗</span></a>` : ''}${reg ? `<a class="btn primary" href="${esc(reg)}" target="_blank" rel="noopener">Register${ctx} <span aria-hidden="true">↗</span></a>` : ''}</div>
+  </li>`;
+}
+/* The page is drawn once per route (arrival, Back/Forward); a filter the visitor changes updates it IN PLACE
+   (campsUpdate): the controls stay where they are, so focus stays on the one just used, and the count is read out by
+   the bar's own status line. A commit pushes one history entry with the new address. */
+let CAMPS = null;  // { doc, byProgram, all: [{ c, info }], known, tally, orphans, st }
+function campsData(idx, doc) {
+  const byProgram = new Map((idx?.programs || []).map(p => [p.slug, p]));
+  const today = todayLocal();
+  const all = [];
+  let orphans = 0;
+  for (const c of doc.camps) {
+    if (c.campType !== 'id' || !c.startDate || campIsPast(c, today)) continue;
+    const info = campProgram(c, byProgram);
+    if (info) all.push({ c, info }); else orphans++;  // a published slug no program index row or block names
+  }
+  all.sort((a, b) => campCmp(a.c, b.c));
+  return { doc, byProgram, all, orphans, tally: campTally(doc), today,
+           known: new Set([...byProgram.keys(), ...doc.camps.map(c => c.slug)]) };
+}
+const campsShown = () => CAMPS.all.filter(x => campsMatch(x.c, x.info, CAMPS.st, CAMPS.today));
+const campsCountText = (n, nProg, filtered) => `${n} upcoming ID camp${n === 1 ? '' : 's'}${filtered ? ` of ${CAMPS.all.length}` : ''} at ${nProg} program${nProg === 1 ? '' : 's'}`;
+function campsChips(st) {
+  const name = slug => CAMPS.all.find(x => x.c.slug === slug)?.info.name || CAMPS.byProgram.get(slug)?.name || slug;
+  const out = [];
+  if (st.when) out.push(['when', CAMPS_WHEN[st.when][0]]);
+  if (st.from || st.to) out.push(['range', st.from && st.to ? `${fmtDate(st.from)} – ${fmtDate(st.to)}` : st.from ? `From ${fmtDate(st.from)}` : `Until ${fmtDate(st.to)}`]);
+  st.region.forEach(r => out.push([`region:${r}`, `${r} region`]));
+  st.state.forEach(s => out.push([`state:${s}`, s]));
+  st.div.forEach(d => out.push([`div:${d}`, d]));
+  if (st.program) out.push(['program', name(st.program)]);
+  if (S.campsSaved) out.push(['saved', 'Shortlisted programs']);
+  return out;
+}
+function campsResultsHtml(rows) {
+  const st = CAMPS.st, tally = CAMPS.tally;
+  // The hidden count, site-wide and not narrowed by the filters (#78, #93): never negative, never clamped.
+  const hidden = tally.total - tally.id;
+  const why = [`${tally.youth} youth or kids' camp${tally.youth === 1 ? '' : 's'}`, `${tally.unknown} we could not classify`]
     .concat(tally.unlabelled ? [`${tally.unlabelled} published without a classification`] : []).join(', ');
   const foot = [
     `Women's soccer ID and prospect camps only.`,
     hidden ? `${hidden} of ${tally.total} upcoming camps are not shown here — ${why}.` : `All ${tally.total} upcoming camps we publish are shown here.`,
     tally.disagree ? `The camp list's own tally (${tally.disagree.total ?? '?'} camps, ${tally.disagree.id} ID) does not match the rows it carries (${tally.total} camps, ${tally.id} ID), so these numbers are counted from the rows.` : '',
-    orphans ? `${orphans} row${orphans === 1 ? '' : 's'} could not be matched to a program.` : '',
-    `Every camp a school lists, youth camps included, is on that program's ID Camps tab. Programs whose camp page we could not read do not appear here.`,
-    doc.updated ? `Camp list checked ${fmtDate(doc.updated)}.` : '',
+    CAMPS.orphans ? `${CAMPS.orphans} row${CAMPS.orphans === 1 ? '' : 's'} could not be matched to a program.` : '',
+    `Every camp a school lists, youth camps included, is on that program's ID Camps tab.`,
+    `Dates and details are read automatically from each program's camp page and are not verified: confirm with the organizer. A Register link does not mean registration is still open.`,
+    `Programs whose camp page we could not read do not appear here, so a program missing from this list may still hold a camp.`,
   ].filter(Boolean).join(' ');
-
-  let body;
-  if (rows.length) {
-    body = `<div class="card"><div class="tscroll"><table>
-        <tr><th>When</th><th>Camp</th><th>Program</th><th>Details</th><th>Links</th></tr>
-        ${rows.map(c => campRowHtml(c, byProgram.get(c.slug))).join('')}</table></div>
-      <div class="table-footnote">${foot}</div></div>`;
-  } else if (filtered && resolved.length) {
-    // The common empty case, not an exceptional one: the list is small and regional coverage is thin.
-    body = `<div class="card"><h3>No upcoming ID camps match these filters</h3>
-      <p class="muted">Nothing is scheduled yet for ${esc([f.division.map(divisionName).join(', '), confLabels(f.conf).join(', '), f.region.length ? `${f.region.join(', ')} region${f.region.length > 1 ? 's' : ''}` : '', f.cond.map(condText).join(' and '), S.q ? `programs matching “${S.qRaw}”` : ''].filter(Boolean).join(' · '))}.
-      ${resolved.length} upcoming ID camp${resolved.length === 1 ? '' : 's'} ${resolved.length === 1 ? 'is' : 'are'} published across all programs. Camps are usually announced in the spring, so a selection with none today may have some later.</p>
-      <p><button class="btn primary" id="campsClear">Clear filters</button> <a class="btn" href="#/programs">All programs</a></p>
-      <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
-  } else {
-    body = `<div class="card"><h3>No upcoming ID camps are published right now</h3>
-      <p class="muted">We publish a camp here once a school has posted a dated women's soccer ID or prospect camp. Camps are usually announced in the spring. A program's own <b>ID Camps</b> tab shows everything we found for it, including camps we could not date.</p>
-      <p><a class="btn primary" href="#/programs">All programs</a></p>
-      <div class="table-footnote" style="border-top:none;padding-left:0">${foot}</div></div>`;
+  const footHtml = `<p class="table-footnote camps-foot">${foot}</p>`;  // fixed words and counts only: nothing from a page
+  if (!rows.length && !CAMPS.all.length) {
+    return `<div class="card camps-empty"><h2>No upcoming ID camp found in our sources</h2>
+      <p class="muted">We list a camp here once a school has posted a dated women's soccer ID or prospect camp. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here. A program's own <b>ID Camps</b> tab shows everything we found for it.</p>
+      <p><a class="btn primary" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
   }
+  if (!rows.length) {
+    const what = campsChips(st).map(([, l]) => l).join(' · '), on = campsFilterOn(st);
+    // #471: a search that finds nothing says what was searched, and offers Clear search (and Clear filters when any is on)
+    const head = st.q ? `No upcoming ID camp found in our sources matching “${esc(st.q)}”${on ? ' with these filters' : ''}` : 'No upcoming ID camp found in our sources for these filters';
+    return `<div class="card camps-empty"><h2>${head}</h2>
+      <p class="muted">${what ? `${esc(what)}. ` : ''}${CAMPS.all.length} upcoming ID camp${CAMPS.all.length === 1 ? ' is' : 's are'} listed across all programs. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here.${st.q ? ' Search covers the school, its city, state and region, the division, the camp\'s title and its month.' : ''}</p>
+      <p>${st.q ? '<button type="button" class="btn primary" data-camps-clear-q data-camps-focus="clear-q-empty">Clear search</button> ' : ''}${on ? `<button type="button" class="btn${st.q ? '' : ' primary'}" data-camps-clear data-camps-focus="clear-empty">Clear filters</button> ` : ''}<a class="btn" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
+  }
+  const months = new Map();
+  rows.forEach(x => { const m = (x.c.startDate || '').slice(0, 7); if (!months.has(m)) months.set(m, []); months.get(m).push(x); });
+  return [...months].map(([m, xs]) => `<section class="camps-month" aria-labelledby="campsM${esc(m)}">
+      <h2 class="camps-month-title" id="campsM${esc(m)}">${esc(campMonthText(m))} <span class="muted">${xs.length} camp${xs.length === 1 ? '' : 's'}</span></h2>
+      <ul class="camp-list">${xs.map(x => campRowHtml(x.c, x.info)).join('')}</ul></section>`).join('') + footHtml;
+}
+// Everything on the page that follows the state, computed once: the first draw and every in-place update read it.
+function campsSummary() {
+  const st = CAMPS.st, rows = campsShown(), filtered = campsFiltered(st);
+  const nProg = new Set(rows.map(x => x.c.slug)).size;
+  const range = !!(st.from || st.to || S.campsRange);
+  // the count, and with a search what it matched (#471): the subtitle, the bar's status line and the header's #qStatus
+  const count = campsCountText(rows.length, nProg, filtered) + (st.q ? ` matching “${st.q}”` : '');
+  const chips = campsChips(st);
+  return {
+    st, rows, count, range,
+    sub: `${esc(count)}${st.q ? ' <button type="button" class="clear-search" data-camps-clear-q>Clear search</button>' : ''} · soonest first${CAMPS.doc.updated ? ` · <span class="camps-fresh">List refreshed ${esc(fmtDate(CAMPS.doc.updated))}</span>` : ''}`,
+    whenOn: k => k === 'range' ? range : k === '' ? !st.when && !range : st.when === k && !range,
+    more: chips.length,  // the Filters button's count: every active filter, When included (it is in the sheet too)
+    show: `Show ${rows.length} camp${rows.length === 1 ? '' : 's'}`,
+    chipsHtml: chips.length ? `<span class="camps-label">Showing</span> ${chips.map(([k, l]) => `<span class="pill cond-chip">${esc(l)}<button type="button" class="cond-x" data-camps-rm="${esc(k)}" data-camps-focus="rm-${esc(k)}" aria-label="Remove filter: ${esc(l)}" title="Remove">✕</button></span>`).join('')} <button type="button" class="btn" data-camps-clear data-camps-focus="clear">Clear all</button>` : '',
+    savedNote: S.favorites.size ? '' : '(none saved yet)',
+  };
+}
+function campsBarHtml(sum) {
+  const st = CAMPS.st, all = CAMPS.all;
+  const whenBtn = (k, label) => `<button type="button" class="pill${sum.whenOn(k) ? ' active' : ''}" data-camps-when="${k}" data-camps-focus="when-${k || 'all'}" aria-pressed="${sum.whenOn(k)}">${label}</button>`;
+  const byRegion = new Map(REGIONS.map(r => [r, new Map()]));
+  all.forEach(({ info }) => { if (byRegion.has(info.region) && info.state) { const m = byRegion.get(info.region); m.set(info.state, (m.get(info.state) || 0) + 1); } });
+  const regionCount = r => [...byRegion.get(r).values()].reduce((a, b) => a + b, 0);
+  const locOpts = REGIONS.filter(r => regionCount(r)).map(r => `<optgroup label="${esc(r)}"><option value="region:${esc(r)}">All of the ${esc(r)} (${regionCount(r)})</option>${[...byRegion.get(r)].sort((a, b) => a[0].localeCompare(b[0])).map(([s, n]) => `<option value="state:${esc(s)}">${esc(s)} (${n})</option>`).join('')}</optgroup>`).join('');
+  const divCount = d => all.filter(x => x.info.division === d).length;
+  const progs = [...new Map(all.map(x => [x.c.slug, x.info.name])).entries()].sort((a, b) => a[1].localeCompare(b[1]));
+  const progCount = slug => all.filter(x => x.c.slug === slug).length;
+  // A program a link names that has no upcoming camp keeps its option, so the select can show what is selected.
+  if (st.program && !progs.some(([s]) => s === st.program)) progs.unshift([st.program, CAMPS.byProgram.get(st.program)?.shortName || CAMPS.byProgram.get(st.program)?.name || st.program]);
+  // The camps page's OWN sidebar (owner, 2026-10-02): a left column on a wide screen, a sheet on a phone. It is not the
+  // Programs filters (D4) and never reads them.
+  return `<aside class="camps-side" id="campsBar" aria-labelledby="campsSideTitle">
+    <div class="camps-side-head"><h2 class="camps-side-title" id="campsSideTitle" tabindex="-1">Filter camps</h2>
+      <button type="button" class="btn camps-sheet-close" id="campsSheetClose" aria-label="Close filters">✕</button></div>
+    <div class="camps-field"><span class="camps-label" id="campsWhenLabel">When</span>
+      <div class="pill-row" role="group" aria-labelledby="campsWhenLabel">${whenBtn('', 'All upcoming')}${whenBtn('30d', 'Next 30 days')}${whenBtn('90d', 'Next 3 months')}${whenBtn('range', 'Pick dates')}</div>
+      <div class="camps-range" id="campsRange"${sum.range ? '' : ' hidden'}><label>From <input type="date" id="campsFrom" data-camps-focus="from" min="${esc(CAMPS.today)}" value="${esc(st.from || '')}"></label><label>To <input type="date" id="campsTo" data-camps-focus="to" min="${esc(st.from || CAMPS.today)}" value="${esc(st.to || '')}"></label></div></div>
+      <div class="camps-field"><label class="camps-label" for="campsLoc">Program location</label>
+        <select id="campsLoc" class="season-select" aria-describedby="campsLocNote" data-camps-focus="loc"><option value="">Add a state or region…</option>${locOpts}</select>
+        <span class="camps-note" id="campsLocNote">Where the school is, not where the camp is held: only ${all.filter(x => x.c.location).length} of ${all.length} camps state a location.</span></div>
+      <div class="camps-field"><span class="camps-label" id="campsDivLabel">Division</span>
+        <div class="pill-row" role="group" aria-labelledby="campsDivLabel">${CAMPS_DIVS.map(d => `<button type="button" class="pill${st.div.includes(d) ? ' active' : ''}" data-camps-div="${d}" data-camps-focus="div-${d}" aria-pressed="${st.div.includes(d)}" aria-label="${d}, ${divCount(d)} camp${divCount(d) === 1 ? '' : 's'}">${d}<span class="pill-sub">${divCount(d)}</span></button>`).join('')}</div></div>
+      <div class="camps-field"><label class="camps-label" for="campsProgram">Program</label>
+        <select id="campsProgram" class="season-select" data-camps-focus="program"><option value="">Any of ${progs.length} program${progs.length === 1 ? '' : 's'}</option>${progs.map(([s, n]) => `<option value="${esc(s)}"${st.program === s ? ' selected' : ''}>${esc(n)} (${progCount(s)})</option>`).join('')}</select></div>
+      <div class="camps-field camps-saved"><label><input type="checkbox" id="campsSaved" data-camps-focus="saved"${S.campsSaved ? ' checked' : ''}${!S.favorites.size && !S.campsSaved ? ' disabled' : ''}> Shortlisted programs only</label> <span class="camps-note" id="campsSavedNote">${sum.savedNote}</span></div>
+    <div class="camps-sheet-foot"><button type="button" class="btn" data-camps-clear data-camps-focus="clear-sheet">Clear all</button>
+      <button type="button" class="btn primary camps-show" id="campsShow" data-camps-focus="show">${sum.show}</button></div>
+  </aside>`;
+}
+// The column beside the sidebar: on a phone the button that opens it as a sheet, then the active filters as removable
+// chips, the bar's status line (read out on a change), and the list.
+function campsMainHeadHtml(sum) {
+  return `<button type="button" class="btn camps-more-btn" id="campsMoreBtn" aria-haspopup="dialog" aria-expanded="false" aria-controls="campsBar" data-camps-focus="more">Filters <span id="campsMoreCount">(${sum.more})</span></button>
+    <div class="camps-active" id="campsActive">${sum.chipsHtml}</div>
+    <p class="sr-only" id="campsStatus" role="status" aria-live="polite"></p>`;
+}
+const campsSheetOpen = () => !!$('#campsBar')?.classList.contains('open');
+// Open or close the phone sheet. Open: a modal dialog over the page and the bottom bar, focus on its heading; Escape,
+// the ✕, the backdrop or "Show N camps" close it, and focus goes back to the Filters button (or, from Show, the list).
+function campsSheet(open, { focus } = {}) {
+  const side = $('#campsBar'), btn = $('#campsMoreBtn'), back = $('#campsBackdrop');
+  if (!side) return;
+  side.classList.toggle('open', open);
+  if (back) back.hidden = !open;
+  if (open) { side.setAttribute('role', 'dialog'); side.setAttribute('aria-modal', 'true'); }
+  else { side.removeAttribute('role'); side.removeAttribute('aria-modal'); }
+  campsInert(open);  // Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader
+  btn?.setAttribute('aria-expanded', String(open));
+  if (open) $('#campsSideTitle')?.focus();
+  else if (focus === 'keep') return;
+  else if (focus === 'list') { const t = $('#campsResults h2'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else btn?.focus(); }
+  else btn?.focus();
+}
+/* While the phone sheet is open, everything else on the page is inert: the header (z-index 100, which the sheet now
+   draws above), the bottom bar, the Programs rail, and every other part of the page - the list, the page heading,
+   the footer. The sheet sits inside #main, so #main itself cannot be inerted: from the sheet up to <body>, every
+   sibling of each ancestor is, except the sheet's own backdrop (the tap that closes it). Only elements this set
+   inert are cleared, so an element already inert for another reason stays that way. */
+/* Bianque on #476 (Programs' sheet), checked here too: a window widened past the phone breakpoint with the sheet open (a
+   phone turned to landscape) shows the sidebar again, so the sheet closes - its dialog role, backdrop and the inert page
+   with it. Focus stays where it is: inside the sheet it is now inside the visible sidebar, and the Filters button it
+   would go back to is hidden on a wide screen. Both signals: the breakpoint's own media query (which a viewport change
+   always re-evaluates) and resize. */
+{
+  const wide = () => { if (!isPhone() && campsSheetOpen()) campsSheet(false, { focus: 'keep' }); };
+  window.addEventListener('resize', wide);
+  matchMedia('(max-width: 768px)').addEventListener?.('change', wide);
+}
+let CAMPS_INERT = [];
+function campsInert(on) {
+  CAMPS_INERT.forEach(e => { e.inert = false; });
+  CAMPS_INERT = [];
+  const side = $('#campsBar'), back = $('#campsBackdrop');
+  if (!on || !side) return;
+  for (let el = side; el?.parentElement && el !== document.body; el = el.parentElement)
+    for (const sib of el.parentElement.children) if (sib !== el && sib !== back && !sib.inert) { sib.inert = true; CAMPS_INERT.push(sib); }
+}
+// Where focus goes when the control it was on is gone (a removed chip): the sidebar's first When pill, or on a phone
+// with the sheet closed, the Filters button - never <body>.
+const campsFallbackFocus = () => (isPhone() && !campsSheetOpen() ? $('#campsMoreBtn') : $('#campsBar [data-camps-when]'))?.focus();
+// Brings everything that depends on the state up to date without rebuilding the bar.
+function campsUpdate({ announce = false } = {}) {
+  const sum = campsSummary(), st = sum.st, rows = sum.rows, count = sum.count;
+  const sub = $('#app .content-subtitle');
+  if (sub) sub.innerHTML = sum.sub;
+  $$('#campsBar [data-camps-when]').forEach(b => {
+    const on = sum.whenOn(b.dataset.campsWhen);
+    b.setAttribute('aria-pressed', String(on)); b.classList.toggle('active', on);
+  });
+  const rg = $('#campsRange'); if (rg) rg.hidden = !sum.range;
+  const fr = $('#campsFrom'), to = $('#campsTo');
+  if (fr && document.activeElement !== fr) fr.value = st.from || '';
+  if (to && document.activeElement !== to) to.value = st.to || '';
+  if (fr) fr.min = CAMPS.today; if (to) to.min = st.from || CAMPS.today;
+  $$('#campsBar [data-camps-div]').forEach(b => { const on = st.div.includes(b.dataset.campsDiv); b.setAttribute('aria-pressed', String(on)); b.classList.toggle('active', on); });
+  const ps = $('#campsProgram'); if (ps) ps.value = st.program || '';
+  const sv = $('#campsSaved'), note = $('#campsSavedNote');
+  if (sv) { sv.checked = !!S.campsSaved; sv.disabled = !S.favorites.size && !S.campsSaved; }
+  if (note) note.textContent = sum.savedNote;
+  const mc = $('#campsMoreCount'); if (mc) mc.textContent = `(${sum.more})`;
+  const show = $('#campsShow'); if (show) show.textContent = sum.show;
+  const act = $('#campsActive'); if (act) act.innerHTML = sum.chipsHtml;
+  const res = $('#campsResults'); if (res) res.innerHTML = campsResultsHtml(rows);
+  const live = $('#campsStatus'); if (live && announce) live.textContent = `${count}.`;
+}
+// The Shortlist changed while the page is open: the toggle's state, and - only while it narrows the list - the list.
+// Unsaving a program while "Shortlisted only" is on removes its camps, so focus moves to the toggle, never to <body>.
+function campsShortlistChanged() {
+  if (!$('#campsBar')) return;
+  if (!S.campsSaved) {  // the list is unchanged; only the toggle's enabled state and note follow the Shortlist
+    const sv = $('#campsSaved'), note = $('#campsSavedNote');
+    if (sv) sv.disabled = !S.favorites.size;
+    if (note) note.textContent = S.favorites.size ? '' : '(none saved yet)';
+    return;
+  }
+  const had = $('#campsResults')?.contains(document.activeElement);
+  campsUpdate({ announce: true });
+  if (had && !$('#campsResults').contains(document.activeElement)) $('#campsSaved')?.focus();
+}
+// A visitor's change: the new state, one history entry for its address (never for the Shortlist toggle), then an
+// in-place update. `focus` names the control that should hold focus afterwards (its data-camps-focus).
+function campsCommit(next, focus) {
+  campsTypingFlush();  // typing not yet written belongs to the entry it was typed on, not the one about to be pushed
+  const qs = $('#qStatus'); if (qs && qs.textContent) qs.textContent = '';  // the bar's own status line says this one
+  CAMPS.st = next;
+  const h = campsHashOf(next);
+  if (location.hash !== h) { try { history.pushState(null, '', h); } catch { /* refused: the address stays as it was */ } }
+  campsUpdate({ announce: true });
+  const el = focus && $(`#app [data-camps-focus="${focus}"]`);
+  if (el && document.activeElement !== el) el.focus();
+  else if (focus && !el) campsFallbackFocus();  // the control is gone (a removed chip): never <body>
+}
+/* The camps search, typed in the header box (#471). The query is the page's own (CAMPS.st.q), never the Programs
+   query (S.qRaw): the owner's direction keeps one box and two searches. Typing narrows the list in place and REPLACES
+   the current history entry (#14's pattern), so a word typed letter by letter is one entry; a filter change or a clear
+   pushes one. The count goes to #qStatus, the header box's one live region, only when it changes (#445's rule). */
+let campsTypeTimer = null;
+function campsTyped(v) {
+  if (!CAMPS?.st || currentView() !== 'camps') return;
+  CAMPS.st = { ...CAMPS.st, q: campsQ(v) };
+  const clr = $('#qClear'); if (clr) clr.hidden = !v;
+  clearTimeout(campsTypeTimer);
+  campsTypeTimer = setTimeout(campsTypingFlush, 80);
+}
+function campsTypingFlush() {
+  if (campsTypeTimer === null) return;
+  clearTimeout(campsTypeTimer); campsTypeTimer = null;
+  if (!CAMPS?.st || currentView() !== 'camps') return;
+  const h = campsHashOf(CAMPS.st);
+  if (location.hash !== h) { try { history.replaceState(null, '', h); } catch { /* refused: the address stays as it was */ } }
+  campsUpdate();
+  updateSearchStatus();
+}
+// Clear search (the subtitle's and the empty state's buttons, the box's ✕, Escape in the box): one new entry. Focus goes
+// to the list's first heading from a button (#453's rule: never <body>), and stays in the box from the box.
+function campsClearSearch(to) {
+  const box = $('#q'); if (box) box.value = '';
+  campsCommit({ ...CAMPS.st, q: '' });
+  syncSearchBox();
+  if (to === 'box') { box?.focus(); return; }
+  const t = $('#campsResults h2');
+  if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else campsFallbackFocus();
+}
+document.addEventListener('click', e => {
+  if (e.target.closest?.('[data-camps-clear-q]') && CAMPS?.st && currentView() === 'camps') campsClearSearch('heading');
+});
+async function renderCamps() {
+  const idx = await loadIndex();
+  const doc = await loadCamps();
+  CAMPS = campsData(idx, doc);
+  const h = location.hash, i = h.indexOf('?');
+  CAMPS.st = campsStateOf(i >= 0 ? h.slice(i + 1) : '', CAMPS.known);
+  S.campsRange = !!(CAMPS.st.from || CAMPS.st.to);
+  // The address is made canonical in place (#14's rule): a link's unknown or unchecked values are dropped, no new entry.
+  const canon = campsHashOf(CAMPS.st);
+  if (h !== canon && currentView() === 'camps') { try { history.replaceState(null, '', canon); } catch { /* keep the address */ } }
+  if (currentView() === 'camps') syncSearchBox();  // #471: the box shows this address's search (Back restores both)
 
+  const sum = campsSummary();
   $('#app').innerHTML = pageHeader({
     crumbs: [{ label: 'Home', href: '#/' }, { label: 'Upcoming ID camps' }],
-    title: 'Upcoming ID camps', subtitle: bits.join(' · '), tabs: '',  // #465 B: no Cards/Stats here; the nav reaches every destination
-  }) + `<div class="content-body">${askBanner()}${body}</div>`;
+    title: 'Upcoming ID camps', subtitle: sum.sub, tabs: '',  // #465 B: no Cards/Stats here; the nav reaches every destination
+  }) + `<div class="content-body">
+      <p class="camps-lead">Upcoming women's soccer ID and prospect camps that programs list on their own camp pages.</p>
+      <div class="camps-layout">${campsBarHtml(sum)}
+        <div class="camps-main" id="campsMain">${campsMainHeadHtml(sum)}
+          <div id="campsResults" class="camps-results">${campsResultsHtml(sum.rows)}</div></div></div>
+      <div class="camps-backdrop" id="campsBackdrop" hidden></div></div>`;
 
-  const app = $('#app');
-  wireAskBanner();
-  // Cards / Table are the Program View's own control: set it, then hand the visitor back to the list.
-  app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); location.hash = '#/programs'; });
-  app.querySelectorAll('tr.team-row').forEach(tr => tr.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${tr.dataset.slug}/camps`; }));
-  const clr = $('#campsClear');
-  // Clears everything that narrowed the list, search and condition chips included - otherwise "clear filters" leaves one on.
-  if (clr) clr.onclick = () => { f.conf = []; f.region = []; f.division = []; f.cond = []; S.condForm = null; S.q = ''; S.qRaw = ''; syncSearchBox(); saveState(); renderSidebar(); renderCamps(); };
+  const bar = $('#campsBar');
+  // Clear all clears the sidebar's filters; the search stays (it has its own Clear search, #471)
+  const clearAll = focus => { S.campsSaved = false; S.campsRange = false; campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null, q: CAMPS.st.q }, focus); };
+  // The chips and the Filters button live in the main column, beside the sidebar.
+  $('#campsMain').addEventListener('click', e => {
+    if (e.target.closest('#campsMoreBtn')) return campsSheet(true);
+    const rm = e.target.closest('[data-camps-rm]');
+    if (rm) {
+      const k = rm.dataset.campsRm, st = { ...CAMPS.st }, [kind, val] = k.split(':');
+      const chipsBefore = [...$$('#campsActive [data-camps-rm]')], at = chipsBefore.indexOf(rm);
+      if (kind === 'when') st.when = null;
+      else if (kind === 'range') { st.from = null; st.to = null; S.campsRange = false; }
+      else if (kind === 'program') st.program = null;
+      else if (kind === 'saved') S.campsSaved = false;
+      else st[kind] = st[kind].filter(x => x !== val);
+      // focus moves to the chip that takes the removed one's place, else the one before, else (none left) the fallback
+      const left = chipsBefore.filter(b => b !== rm), heir = left[Math.min(at, left.length - 1)];
+      return campsCommit(st, heir ? heir.dataset.campsFocus : 'gone');
+    }
+    if (e.target.closest('[data-camps-clear]')) return clearAll('gone');
+  });
+  $('#campsBackdrop').onclick = () => campsSheet(false);
+  bar.addEventListener('keydown', e => {
+    if (!campsSheetOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); return campsSheet(false); }
+    if (e.key !== 'Tab') return;  // a modal sheet keeps Tab inside it
+    const f = [...bar.querySelectorAll('button:not([disabled]), select, input:not([disabled]), [tabindex="-1"]')].filter(x => !x.closest('[hidden]'));
+    const first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+  bar.addEventListener('click', e => {
+    if (e.target.closest('#campsSheetClose')) return campsSheet(false);
+    const w = e.target.closest('[data-camps-when]');
+    if (w) {
+      const k = w.dataset.campsWhen;
+      if (k === 'range') { S.campsRange = true; campsUpdate(); $('#campsFrom')?.focus(); return; }
+      S.campsRange = false;
+      return campsCommit({ ...CAMPS.st, when: k || null, from: null, to: null }, `when-${k || 'all'}`);
+    }
+    const d = e.target.closest('[data-camps-div]');
+    if (d) { const v = d.dataset.campsDiv, div = CAMPS.st.div.includes(v) ? CAMPS.st.div.filter(x => x !== v) : [...CAMPS.st.div, v]; return campsCommit({ ...CAMPS.st, div }, `div-${v}`); }
+    if (e.target.closest('[data-camps-clear]')) return clearAll('when-all');
+    if (e.target.closest('#campsShow')) return campsSheet(false, { focus: 'list' });
+  });
+  $('#campsLoc').onchange = e => {
+    const [kind, val] = e.target.value.split(':'); e.target.value = '';
+    if (!val) return;
+    const st = { ...CAMPS.st, [kind]: CAMPS.st[kind].includes(val) ? CAMPS.st[kind] : [...CAMPS.st[kind], val] };
+    campsCommit(st, 'loc');
+  };
+  $('#campsProgram').onchange = e => campsCommit({ ...CAMPS.st, program: e.target.value || null }, 'program');
+  $('#campsSaved').onchange = e => { S.campsSaved = e.target.checked; campsCommit({ ...CAMPS.st }, 'saved'); };
+  const dateChange = () => {
+    const f = $('#campsFrom').value, t = $('#campsTo').value;
+    const from = campsDateOk(f) ? f : null, to = campsDateOk(t) && (!from || t >= from) ? t : null;
+    S.campsRange = true;
+    campsCommit({ ...CAMPS.st, when: null, from, to }, document.activeElement?.dataset?.campsFocus || 'from');
+  };
+  $('#campsFrom').onchange = dateChange; $('#campsTo').onchange = dateChange;
 }
 
 /* ---------- trends: where players come from (#/trends, issues #230, #327) ----------
@@ -5237,8 +5749,9 @@ async function tabCamps(p) {
   const asOf = c._meta?.[0]?.asOf;
   const checked = asOf ? ` (checked ${fmtDate(asOf)})` : '';
   // #71: a month-precision camp is past once the month it ends in is over, (endDate || startDate) - build.py's
-  // camp_in_window rule - so a camp running into next month reads the same here as in the ID Camps view.
-  const isPast = it => it.precision === 'month' ? (it.endDate || it.startDate).slice(0, 7) < month : (it.endDate || it.startDate) < today;
+  // camp_in_window rule - so a camp running into next month reads the same here as in the ID Camps view. #465: the
+  // one shared helper, campIsPast, so the tab and the ID Camps page cannot drift.
+  const isPast = it => campIsPast(it, today);
   const dated = c.items.filter(it => it.startDate), undated = c.items.filter(it => !it.startDate);
   const upcoming = dated.filter(it => !isPast(it)), past = dated.filter(isPast).slice().reverse();
   const row = (it, old) => `<tr><td>${it.startDate ? when(it) : `<span class="muted">${esc(it.dateText || 'date not given')}</span>`}</td>
@@ -5408,7 +5921,7 @@ async function renderFaq() {
       <p>To find out how fast the site loads, every page load sends a short timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps data. Our server also records how long it took to answer most data requests. We don't record your IP address, a session or visitor id, your browser's user agent, the page address, the program you opened, or anything you searched for. Reports are kept as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.</p></div>
 
     <div class="card"><h3>What does a shared link include?</h3>
-      <p>The address of the program list carries its filters, sort and search, so a link you copy opens the same list for whoever you send it to. That includes anything typed in the search box and a recruiting class year you highlighted. Your shortlist, residency and recommendation preferences stay in this browser and are never part of a link. A link to the Compare page lists the programs you're comparing. The feedback form says which page you were on, without the search text.</p></div>
+      <p>The address of the program list carries its filters, sort and search, so a link you copy opens the same list for whoever you send it to. That includes anything typed in the search box and a recruiting class year you highlighted. Your shortlist, residency and recommendation preferences stay in this browser and are never part of a link. A link to the Compare page lists the programs you're comparing. A link to ID Camps carries its date, location, division and program filters, but not "Shortlisted programs only", which reads your own shortlist. The feedback form says which page you were on, without the search text.</p></div>
 
     <div class="card"><h3>Found a mistake or have a suggestion?</h3>
       <p>Feedback is welcome and helps everyone who uses this. Email ${feedbackLink()} with the program name and the page you were looking at, and what you expected to see. Every profile also links straight to its sources, so you can check the original data yourself.</p></div>
@@ -5522,6 +6035,9 @@ async function renderApiDocs() {
 // First load. A failure shows the try-again card (#345), whose button runs this same start again.
 function boot() {
   return loadIndex().then(() => { renderObserved(); renderSidebar(); route(); }).catch(e => {
+    // route() never ran, so the shell is set for this view here: the rail and the search box only where they apply
+    // (Bianque on #470: without it a failed first load on Home showed the search box and the Programs rail).
+    syncNav(currentView());
     // #465: Home needs no data, so it still draws (heading, destinations) with the try-again card inside it.
     if (currentView() === 'home') renderHome(loadFailedHtml(e));
     else { setDocTitle('Couldn’t load the data'); $('#app').innerHTML = `<div class="content-body">${loadFailedHtml(e)}</div>`; }
