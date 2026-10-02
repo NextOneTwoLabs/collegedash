@@ -273,6 +273,39 @@ tr:hover td { background: var(--row-hover); }
 .side-empty { padding: 8px 20px 12px; font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
 /* #18: the drawer's "Show N programs" bar - phones only (see the 768px block), sticky at the foot of the drawer. */
 .drawer-show { display: none; }
+/* #465 D: the rail's Conference control on Programs - a multi-select combobox (the ARIA note Huatuo approved on #465). */
+.mf-conf { padding: 0 16px 8px; }
+.mf-conf > .browse-label { padding: 6px 0 4px; }  /* the block carries the rail's 16 px inset itself */
+.conf-chips { list-style: none; margin: 0 0 8px; padding: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.conf-chip { border: 1px solid var(--accent); background: var(--accent-surface); color: var(--accent-text); border-radius: 999px; padding: 3px 10px; font-size: 12px; font-weight: 700; min-height: 28px; }
+.mf-conf-label { display: block; font-size: 12px; color: var(--text-secondary); margin-bottom: 4px; }
+.mf-conf .cond-input { width: 100%; }
+.mf-conf-list { margin-top: 6px; border: 1px solid var(--border); border-radius: 8px; max-height: 280px; overflow-y: auto; background: var(--bg-surface); }
+.mf-group-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--text-secondary); padding: 8px 10px 4px; }
+.mf-opt { display: flex; align-items: center; gap: 8px; padding: 7px 10px; min-height: 36px; cursor: pointer; }
+.mf-opt::before { content: ''; width: 14px; height: 14px; border: 1.5px solid var(--text-secondary); border-radius: 4px; flex: none; }
+.mf-opt[aria-selected="true"]::before { content: '✓'; background: var(--accent); border-color: var(--accent); color: var(--accent-contrast); font-size: 10px; line-height: 12px; text-align: center; }
+.mf-opt.active { background: var(--accent-surface); outline: 2px solid var(--accent-text); outline-offset: -2px; }
+.mf-opt .n { margin-left: auto; font-size: 12px; color: var(--text-secondary); }
+.mf-opt.pill-zero { color: var(--text-secondary); }
+.mf-nomatch { margin: 6px 0 0; font-size: 13px; color: var(--text-secondary); }
+/* #465 D, phones on Programs: the drawer is a modal sheet with its own heading and close button, and a chip row above
+   the results shows what the closed sheet holds. Neither is drawn on a desktop, where the rail is always in view. */
+.sheet-head { display: none; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 16px 10px; }
+.sheet-head h2 { font-size: 16px; }
+.sheet-close { border: 1px solid transparent; background: none; border-radius: 8px; min-width: 44px; min-height: 44px; color: var(--text-secondary); }
+.pchips { display: none; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+.pchip { display: inline-flex; align-items: center; gap: 4px; padding: 3px 4px 3px 10px; border-radius: 999px; background: var(--accent-surface); color: var(--accent-text); font-size: 12px; font-weight: 700; }
+.pchip button { border: 0; background: none; color: inherit; font-weight: 800; min-width: 32px; min-height: 32px; border-radius: 50%; }
+.pchips-clear { border: 0; background: none; color: var(--text-secondary); font-size: 12px; text-decoration: underline; min-height: 32px; }
+@media (max-width: 768px) { .mf-opt { min-height: 44px; } .sheet-head { display: flex; } .pchips { display: flex; } }
+/* The sheet is #sidebar, a sibling of #main (never inside what goes inert). While it is open it runs the full height,
+   above the header (100) and #447's panel (120), which are inert behind it, with its backdrop between; the #400 phone
+   sheet (200) stays above everything. */
+@media (max-width: 768px) {
+  body.sheet-open .sidebar { top: 0; z-index: 130; padding-top: calc(12px + env(safe-area-inset-top, 0px)); }
+  body.sheet-open .sidebar-overlay { z-index: 125; }
+}
 .shortcut-hint { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11px; color: var(--text-secondary); padding: 10px 16px; border-top: 1px solid var(--border); margin-top: auto; background: var(--bg-surface-alt); }
 .shortcut-hint span { white-space: nowrap; }
 .shortcut-hint kbd { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 4px; padding: 2px 6px; font-size: 10px; font-family: var(--font); }
@@ -826,7 +859,7 @@ body.no-search .header-right { margin-left: auto; }
 <body>
 <div class="header">
   <div class="header-left">
-    <button class="hamburger" id="sidebarToggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="true">
+    <button class="hamburger" id="sidebarToggle" aria-label="Filters" aria-controls="sidebar" aria-expanded="true">
       <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2.5" y="4" width="15" height="12" rx="2"/><path d="M7.5 4v12"/></svg>
     </button>
     <a class="wordmark" href="https://www.nextonetwo.com" aria-label="nextonetwo"><img src="/assets/favicon.svg?v=2" alt="" width="32" height="32"><span class="wm-text">next<span class="accent">one</span>two</span></a>
@@ -1382,16 +1415,55 @@ function toggleTheme() {
 
 /* sidebar: collapses on desktop (remembered), slides in as a drawer on phones */
 const isPhone = () => window.innerWidth <= 768;
+function isProgramsView() { const v = currentView(); return v === 'list' || v === 'c'; }  // #465: Programs (#/programs, #/c/…)
+/* #465 D (the plan on #472, Huatuo's condition 4 and his addition 1): on Programs, on a phone, the drawer is a modal
+   sheet - role="dialog", aria-modal, named by its heading, which takes focus on open - and #main, the header and the
+   bottom bar are inert behind it. Its opener is #sidebarToggle ("Filters", aria-expanded, aria-controls). Every close
+   - Show N, its ✕, Escape, the overlay - clears inert and returns focus to the opener. A pick inside it (a pill, a
+   condition, a conference) keeps it open. Elsewhere the drawer behaves as before. */
+function drawerSheetState(open) {
+  const sb = $('#sidebar'); if (!sb) return;
+  const modal = !!(open && isPhone() && isProgramsView());
+  if (modal) { sb.setAttribute('role', 'dialog'); sb.setAttribute('aria-modal', 'true'); sb.setAttribute('aria-labelledby', 'sheetHeading'); }
+  else { sb.removeAttribute?.('role'); sb.removeAttribute?.('aria-modal'); sb.removeAttribute?.('aria-labelledby'); }
+  for (const sel of ['#main', '.header', '.bottom-nav']) { const e = document.querySelector(sel); if (e) e.inert = modal; }
+  document.body.classList.toggle('sheet-open', modal);  // drawn above the header while open (CSS)
+}
+function openDrawer() {
+  $('#sidebar').classList.add('open'); $('#sidebarOverlay').classList.add('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'true');
+  drawerSheetState(true);
+  if (isProgramsView()) $('#sheetHeading')?.focus();
+}
 function toggleSidebar() {
-  const sb = $('#sidebar'), ov = $('#sidebarOverlay'), btn = $('#sidebarToggle');
-  if (isPhone()) { const open = sb.classList.toggle('open'); ov.classList.toggle('visible', open); btn.setAttribute('aria-expanded', String(open)); return; }
+  const sb = $('#sidebar'), btn = $('#sidebarToggle');
+  if (isPhone()) return sb.classList.contains('open') ? closeDrawer({ focus: true }) : openDrawer();
   const collapsed = $('#layout').classList.toggle('sidebar-collapsed');
   btn.setAttribute('aria-expanded', String(!collapsed));
   lsSet('cd.sidebar', collapsed ? 'collapsed' : 'open');
 }
-function closeDrawer() { if (isPhone()) { $('#sidebar').classList.remove('open'); $('#sidebarOverlay').classList.remove('visible'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); } }
+// It clears the sheet at any width (Bianque on #476): a sheet left open when the window widened must still end.
+function closeDrawer({ focus = false } = {}) {
+  const sb = $('#sidebar'), was = sb.classList.contains('open');
+  if (!was && !isPhone()) return;  // a desktop rail with no drawer open: nothing to close, and its toggle's state is its own
+  sb.classList.remove('open'); $('#sidebarOverlay').classList.remove('visible');
+  // on a phone the drawer is now shut; past 768 px the toggle speaks for the desktop rail again (shown unless collapsed)
+  $('#sidebarToggle').setAttribute('aria-expanded', isPhone() ? 'false' : String(!$('#layout').classList.contains('sidebar-collapsed')));
+  drawerSheetState(false);
+  if (focus && was) $('#sidebarToggle')?.focus();
+}
+// #465 D (Bianque on #476): widening past 768 px with the sheet open (a phone turned to landscape, 844-932 px) ends it,
+// as the #400 sheet re-checks on resize - otherwise the page stays inert under an overlay that no tap or key can close
+// there. Focus goes to the opener, which the desktop layout shows (the sheet's heading and close button it does not).
+window.addEventListener('resize', () => { if (!isPhone() && $('#sidebar').classList.contains('open')) closeDrawer({ focus: true }); });
+// A pick inside the drawer closes it, except on Programs, where the sheet stays open until Show N, ✕, Escape or the overlay.
+function closeDrawerOnPick() { if (!isProgramsView()) closeDrawer(); }
 $('#sidebarToggle').onclick = toggleSidebar;
-$('#sidebarOverlay').onclick = toggleSidebar;
+$('#sidebarOverlay').onclick = () => closeDrawer({ focus: true });
+// Escape closes the sheet; the Conference box and the condition form use it first (closing their list or form) and
+// stop it there, so it reaches the sheet only when they have nothing left to undo.
+$('#sidebar').addEventListener('keydown', e => {
+  if (e.key === 'Escape' && !e.defaultPrevented && isPhone() && isProgramsView() && $('#sidebar').classList.contains('open')) { e.preventDefault(); closeDrawer({ focus: true }); }
+});
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
 
 /* ---------- data ---------- */
@@ -1911,6 +1983,7 @@ const confPillName = (d, c, n) => `${confShared(c) ? `${c} (${d})` : c}, ${progr
 // Typing a search changes the counts without rebuilding the drawer (focus stays in the search box, as for #18).
 function syncConfCounts() {
   const sb = $('#sidebar'); if (!sb || !S.index) return;
+  if (isProgramsView()) renderConfCombo();  // #465 D: the Conference control's counts (it does nothing when not drawn)
   const counts = confCounts();
   sb.querySelectorAll('[data-conf-div]').forEach(b => {
     const n = counts.get(confKey(b.dataset.confDiv, b.dataset.conf)) || 0;
@@ -1992,7 +2065,8 @@ function renderSidebar() {
       return `<button ${pillAttrs('conf', c, confPicked(f.conf, d, c)).replace('class="pill', `class="pill${n ? '' : ' pill-zero'}`)} data-conf-div="${esc(d)}" title="${confTitle(n)}" aria-label="${esc(confPillName(d, c, n))}">${esc(c)}<span class="pill-sub">${n}</span></button>`;
     };
     const confAll = `<button ${pillAttrs('conf', '', !f.conf.length)}>All</button>`;
-    const confBlock = groups.length <= 1
+    // #465 D: on Programs the conferences are one searchable control (wireConfCombo); elsewhere the pills, as before.
+    const confBlock = isProgramsView() ? confComboHtml() : groups.length <= 1
       ? `<div class="pill-row" role="group" aria-label="Conference">${confAll}${(groups[0]?.[1] || []).map(confPill(groups[0]?.[0])).join('')}</div>`
       : `<div class="pill-row pill-row-all" role="group" aria-label="Conference">${confAll}</div>`
         + groups.map(([d, list]) => `<div class="pill-group-label">${esc(divisionName(d))}</div>
@@ -2026,7 +2100,7 @@ function renderSidebar() {
       <div class="pill-row" role="group" aria-label="Region"><button ${pillAttrs('region', '', !f.region.length)}>All</button>${REGIONS.map(r => `<button ${pillAttrs('region', r, f.region.includes(r))}>${esc(r)}</button>`).join('')}</div>
       ${onCamps ? '' : `<div class="browse-label">Highlight class</div>
       <div class="pill-row" role="group" aria-label="Highlight class"><button ${pillAttrs('class', '', !f.classYear.length)}>All</button>${years.map(y => `<button ${pillAttrs('class', String(y), f.classYear.includes(String(y)))} aria-label="'${String(y).slice(2)}, class of ${esc(String(y))}">'${String(y).slice(2)}</button>`).join('')}</div>`}
-      <div class="browse-label">Conference</div>
+      ${isProgramsView() ? '' : '<div class="browse-label">Conference</div>'}
       ${confBlock}
       <div class="drawer-show"><button type="button" class="btn primary" id="showResults">${esc(showResultsLabel())}</button></div>`;
   } else if (tab === 'shortlist') {
@@ -2042,26 +2116,32 @@ function renderSidebar() {
          <div class="side-actions"><a class="btn primary" href="${compareUrl(S.compare)}">Open comparison</a><button class="btn" id="cmpClear">Clear</button></div>`
       : `<div class="side-empty">Add up to four programs with ⇄ Compare on a card or program page, then open the side-by-side table.</div>`);
   }
-  sb.innerHTML = `<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
+  // #465 D: the phone sheet's heading (it names the dialog and takes focus on open) and its close button; CSS draws them
+  // on phones only.
+  const sheetHead = isProgramsView() ? '<div class="sheet-head"><h2 id="sheetHeading" tabindex="-1">Filters</h2><button type="button" class="sheet-close" id="sheetClose" aria-label="Close filters">✕</button></div>' : '';
+  sb.innerHTML = `${sheetHead}<div class="sidebar-tabs" role="tablist">${tabs.map(([k, l]) => `<button class="sidebar-tab${tab === k ? ' active' : ''}" role="tab" aria-selected="${tab === k}" data-tab="${k}">${l}</button>`).join('')}</div>
     ${body}
     <div class="shortcut-hint"><span><kbd>/</kbd> search</span><span><kbd>Esc</kbd> clear</span>${filterOnlyView(currentView()) ? '' : '<span><kbd>c</kbd> cards / stats</span>'}</div>`;
   sb.querySelectorAll('.sidebar-tab').forEach(b => b.onclick = () => { S.sidebarTab = b.dataset.tab; renderSidebar(); });
   // conference and region are plain filters; the class buttons only highlight (#15). All update, re-render the sidebar, re-render the list in place
   // #5: a pill press rebuilds the sidebar (renderSidebar replaces its markup), which used to drop keyboard focus onto
   // <body>. pillPressed puts it back on the same pill - found again by its data-* key, a conference pill by its division
-  // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does).
+  // too (#425) - or, on a phone, where the press closes the drawer, on the drawer's toggle (as #18's Show bar does). On
+  // Programs the phone sheet stays open (#465 D), so focus stays on the pill there too.
   const pillPressed = (attr, value, div) => {
-    if (isPhone()) { $('#sidebarToggle')?.focus(); return; }
+    if (isPhone() && !isProgramsView()) { $('#sidebarToggle')?.focus(); return; }
     const q = v => String(v).replace(/["\\]/g, '\\$&');
     $('#sidebar')?.querySelector(`[data-${attr}="${q(value)}"]${div ? `[data-conf-div="${q(div)}"]` : ''}`)?.focus();
   };
-  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('conf', c, d); });
-  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('region', v); });
+  sb.querySelectorAll('[data-conf]').forEach(b => b.onclick = () => { const c = b.dataset.conf, d = b.dataset.confDiv; if (c) toggleConf(d, c); else f.conf.length = 0; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('conf', c, d); });
+  sb.querySelectorAll('[data-region]').forEach(b => b.onclick = () => { const v = b.dataset.region; toggleIn(f.region, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('region', v); });
   // Division is the one pill group that changes which OTHER pills exist, so it prunes the conference
   // selection to what is still on screen before the sidebar is rebuilt.
-  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('division', v); });
-  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawer(); pillPressed('class', v); });
+  sb.querySelectorAll('[data-division]').forEach(b => b.onclick = () => { const v = b.dataset.division; toggleIn(f.division, v); pruneConfToDivisions(); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('division', v); });
+  sb.querySelectorAll('[data-class]').forEach(b => b.onclick = () => { const v = b.dataset.class; toggleIn(f.classYear, v); saveState(); listCommit(); renderSidebar(); rerenderForFilters(); closeDrawerOnPick(); pillPressed('class', v); });
   wireConditions(sb);
+  if (isProgramsView()) wireConfCombo();
+  const sc = $('#sheetClose'); if (sc) sc.onclick = () => closeDrawer({ focus: true });
   const sr = $('#showResults'); if (sr) sr.onclick = showResults;
   sb.querySelectorAll('[data-open]').forEach(li => li.onclick = e => { if (e.target.closest('button')) return; closeDrawer(); location.hash = `#/p/${li.dataset.open}`; });
   // #400 PR 4: Recommended is not a stored sort. Choosing it shows the saved preferences; choosing any other sort pauses
@@ -2075,6 +2155,113 @@ function renderSidebar() {
   const cc = $('#cmpClear'); if (cc) cc.onclick = () => { S.compare = []; saveState(); renderSidebar(); syncToggles(); if (currentView() === 'compare') location.hash = '#/compare'; };
   updateSearchStatus();  // the header box's count follows the filters just changed (#23)
 }
+/* ---------- the rail's Conference control on Programs (#465 D) ----------
+   A multi-select combobox, per the ARIA note Huatuo approved on #465 (with his four conditions):
+   - the text box is the combobox (aria-autocomplete="list", aria-controls the listbox, aria-activedescendant the active
+     option); the listbox is aria-multiselectable with one labelled group per division on screen; each option's name is
+     #444's confPillName - what it shows, the division where the name is shared, the count with the other filters (#16:
+     a 0 stays, drawn quieter);
+   - values go through #425's toggleConf (a bare saved name lights every option it covers and expands only on a toggle)
+     and are pruned by division exactly as the pills were; #14's conf= is unchanged;
+   - keys as #q's: Down/Up open, then move (wrapping); Enter toggles and keeps the list open; Space types; Escape closes
+     the list, then clears the text, then (on a phone) reaches the sheet and closes it; Tab leaves; Backspace in an empty
+     box moves to the last chip without removing it;
+   - option ids are stable and unique across redraws: a reversible encoding of the keyed value (condition 3), so the
+     active option survives a toggle; after a toggle the active descendant is cleared and set again on the next frame,
+     so a reader that does not announce the aria-selected flip re-reads the option with its new state (condition 1);
+   - "No conference matches" is a plain line OUTSIDE the listbox, which then holds nothing and is collapsed (condition 2);
+   - no live region: the selection is read from the option, the results from Show N programs and the list's subtitle. */
+const CONFQ = { text: '', open: false, active: -1, items: [] };
+// [A-Za-z0-9_] only, '_' only ever as an escape: encodeURIComponent, then its few unescaped punctuation marks escaped
+// too, then '%' -> '_'. confOptKey() reverses it.
+const confOptId = key => 'mfConf-' + encodeURIComponent(key).replace(/[!'()*._~-]/g, c => '%' + c.charCodeAt(0).toString(16).toUpperCase()).replace(/%/g, '_');
+const confOptKey = id => decodeURIComponent(id.replace(/^mfConf-/, '').replace(/_/g, '%'));
+function confComboHtml() {
+  return `<div class="mf-conf" role="group" aria-labelledby="mfConfLabel"><div class="browse-label" id="mfConfLabel">Conference</div>
+    <ul class="conf-chips" id="mfConfChips" aria-label="Selected conferences" hidden></ul>
+    <label class="mf-conf-label" for="mfConfInput">Find a conference</label>
+    <input class="cond-input" id="mfConfInput" type="text" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="mfConfList" aria-describedby="mfConfHint" autocomplete="off" value="${esc(CONFQ.text)}">
+    <span class="sr-only" id="mfConfHint">Type to narrow. Down arrow for the list, Enter to add or remove.</span>
+    <div class="mf-conf-list" id="mfConfList" role="listbox" aria-multiselectable="true" aria-label="Conferences" hidden></div>
+    <p class="mf-nomatch" id="mfConfNone" hidden></p></div>`;
+}
+function confComboItems() {
+  const t = normText(CONFQ.text), counts = confCounts(), f = S.filters;
+  return conferenceGroups().map(([d, list]) => [d, list.map(([c]) => c).filter(c => !t || normText(c).includes(t))
+    .map(c => ({ d, c, key: confKeyOf(d, c), n: counts.get(confKey(d, c)) || 0, on: confPicked(f.conf, d, c) }))]).filter(([, l]) => l.length);
+}
+function renderConfCombo() {
+  const input = $('#mfConfInput'), list = $('#mfConfList'), none = $('#mfConfNone'), chips = $('#mfConfChips');
+  if (!input || !list || !S.index) return;
+  const f = S.filters;
+  if (chips) {
+    chips.innerHTML = f.conf.map((k, i) => `<li><button type="button" class="conf-chip" data-conf-chip="${i}" aria-label="Remove ${esc(confLabel(k))}">${esc(confLabel(k))} <span aria-hidden="true">✕</span></button></li>`).join('');
+    chips.hidden = !f.conf.length;
+    chips.querySelectorAll('[data-conf-chip]').forEach(b => b.onclick = () => confChipRemove(Number(b.dataset.confChip)));
+  }
+  const groups = confComboItems();
+  CONFQ.items = groups.flatMap(([, l]) => l);
+  if (CONFQ.active >= CONFQ.items.length) CONFQ.active = CONFQ.items.length - 1;
+  let i = 0;
+  list.innerHTML = groups.map(([d, l]) => `<div role="group" aria-label="${esc(divisionName(d))}"><div class="mf-group-label" aria-hidden="true">${esc(divisionName(d))}</div>`
+    + l.map(it => { const k = i++; return `<div role="option" id="${confOptId(it.key)}" class="mf-opt${it.n ? '' : ' pill-zero'}${k === CONFQ.active ? ' active' : ''}" aria-selected="${it.on}" data-i="${k}" aria-label="${esc(confPillName(it.d, it.c, it.n))}">${esc(it.c)} ${divisionTag(it.d)}<span class="n">${it.n}</span></div>`; }).join('') + '</div>').join('');
+  const open = CONFQ.open && CONFQ.items.length > 0;
+  list.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
+  const noMatch = CONFQ.open && !CONFQ.items.length && !!CONFQ.text.trim();
+  if (none) { none.hidden = !noMatch; none.textContent = noMatch ? `No conference matches “${CONFQ.text.trim()}”` : ''; }
+  if (open && CONFQ.active >= 0) input.setAttribute('aria-activedescendant', confOptId(CONFQ.items[CONFQ.active].key));
+  else input.removeAttribute?.('aria-activedescendant');
+}
+function confComboToggle(i) {
+  const it = CONFQ.items[i]; if (!it) return;
+  const input = $('#mfConfInput');
+  toggleConf(it.d, it.c);
+  saveState(); listCommit();
+  CONFQ.active = i; CONFQ.open = true;
+  renderConfCombo();
+  // Huatuo's condition 1: re-point the active descendant so the option is re-read with its new state
+  const id = confOptId(it.key);
+  if (input) { input.removeAttribute?.('aria-activedescendant'); setTimeout(() => { if (CONFQ.open && $('#mfConfInput') === input) input.setAttribute('aria-activedescendant', id); }, 0); }
+  syncShowResults(); rerenderForFilters();
+}
+function confChipRemove(i) {
+  const f = S.filters; if (f.conf[i] == null) return;
+  f.conf.splice(i, 1); saveState(); listCommit();
+  renderConfCombo(); syncShowResults(); rerenderForFilters();
+  // #455: focus to the chip that took its place, else the one before, else the text box
+  const chips = $('#mfConfChips')?.querySelectorAll?.('[data-conf-chip]') || [];
+  const next = f.conf.length ? (i < f.conf.length ? i : f.conf.length - 1) : -1;
+  if (next >= 0) ($('#mfConfChips').querySelector(`[data-conf-chip="${next}"]`) || chips[next])?.focus();
+  else $('#mfConfInput')?.focus();
+}
+function wireConfCombo() {
+  const input = $('#mfConfInput'), list = $('#mfConfList'); if (!input || !list) return;
+  renderConfCombo();
+  input.addEventListener('input', e => { CONFQ.text = e.target.value; CONFQ.open = true; CONFQ.active = -1; renderConfCombo(); });
+  input.addEventListener('keydown', e => {
+    const n = CONFQ.items.length;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      if (!CONFQ.open) { CONFQ.open = true; renderConfCombo(); CONFQ.active = CONFQ.items.length ? (e.key === 'ArrowDown' ? 0 : CONFQ.items.length - 1) : -1; }
+      else if (n) CONFQ.active = e.key === 'ArrowDown' ? (CONFQ.active + 1) % n : (CONFQ.active <= 0 ? n - 1 : CONFQ.active - 1);
+      return renderConfCombo();
+    }
+    if (e.key === 'Enter') { if (CONFQ.open && CONFQ.active >= 0) { e.preventDefault(); confComboToggle(CONFQ.active); } return; }
+    if (e.key === 'Escape') {
+      if (CONFQ.open) { e.preventDefault(); e.stopPropagation(); CONFQ.open = false; CONFQ.active = -1; return renderConfCombo(); }
+      if (CONFQ.text) { e.preventDefault(); e.stopPropagation(); CONFQ.text = ''; input.value = ''; return renderConfCombo(); }
+      return;  // nothing left to undo here: the panel's own Escape closes it
+    }
+    if (e.key === 'Tab') { if (CONFQ.open) { CONFQ.open = false; CONFQ.active = -1; renderConfCombo(); } return; }
+    if (e.key === 'Backspace' && !input.value && S.filters.conf.length) {
+      e.preventDefault(); $('#mfConfChips')?.querySelector(`[data-conf-chip="${S.filters.conf.length - 1}"]`)?.focus();
+    }
+  });
+  list.addEventListener('mousedown', e => e.preventDefault());  // the box keeps focus while an option is pressed
+  list.addEventListener('click', e => { const o = e.target.closest?.('[role="option"]'); if (o) confComboToggle(Number(o.dataset.i)); });
+}
+
 /* The condition controls. Every handler ends the way a pill click does (save, rebuild the sidebar,
    re-render the view in place) and then puts focus back somewhere sensible, because rebuilding the
    sidebar would otherwise drop a keyboard user's focus on <body>. The drawer is left open while the form
@@ -2086,10 +2273,10 @@ function condFormSubmit() {
   const input = $('#condValue'); if (input) st.text = input.value;
   const r = condFromInput(st.field, st.op, st.text);
   if (r.error) { st.error = r.error; renderSidebar(); $('#condValue')?.focus(); return false; }
-  addCond(r.cond); S.condForm = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer();
+  addCond(r.cond); S.condForm = null; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawerOnPick();
   return true;
 }
-function condRemove(i) { if (!removeCond(i)) return; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawer(); }
+function condRemove(i) { if (!removeCond(i)) return; saveState(); listCommit(); renderSidebar(); rerenderForFilters(); $('#condAdd')?.focus(); closeDrawerOnPick(); }
 function wireConditions(sb) {
   sb.querySelectorAll('[data-cond-rm]').forEach(b => b.onclick = () => condRemove(Number(b.dataset.condRm)));
   const add = $('#condAdd'); if (add) add.onclick = () => (S.condForm ? condFormClose() : condFormOpen());
@@ -2104,10 +2291,40 @@ function wireConditions(sb) {
   $('#condOp').onchange = e => { st.op = e.target.value; };
   $('#condValue').oninput = e => { st.text = e.target.value; };
 }
+/* #465 D, phones on Programs: what the closed sheet holds - conferences, conditions, a highlighted class - as removable
+   chips above the results (CSS draws the row at <=768 px only; on a desktop the rail shows them). A conference chip
+   carries its index, never the raw key (#431). A removed chip hands focus to the chip after it, else the one before,
+   else the sheet's opener; "Clear these" clears all three and focuses the opener. */
+function appliedChipsHtml() {
+  if (!isProgramsView()) return '';
+  const f = S.filters;
+  const chip = (label, attr, val) => `<span class="pchip">${esc(label)}<button type="button" data-${attr}="${esc(val)}" aria-label="Remove ${esc(label)}">✕</button></span>`;
+  const confChips = f.conf.map((k, i) => chip(confLabel(k), 'chip-conf', String(i)));
+  const chips = [...confChips, ...f.cond.map((c, i) => chip(condText(c), 'chip-cond', String(i))),
+    ...f.classYear.map(y => chip(`Class of ${y} highlighted`, 'chip-class', y))];
+  return chips.length ? `<div class="pchips" role="group" aria-label="Filters on">${chips.join('')}<button type="button" class="pchips-clear" id="chipsClear">Clear these</button></div>` : '';
+}
+function wireAppliedChips(app) {
+  const f = S.filters, q = v => String(v).replace(/["\\]/g, '\\$&');
+  const commit = async sel => { saveState(); listCommit(); renderSidebar(); await renderList(); ((sel && $('#app')?.querySelector(sel)) || $('#sidebarToggle'))?.focus(); };
+  // the chip after the removed one, else the one before; null leaves focus to the opener
+  const KINDS = ['data-chip-conf', 'data-chip-cond', 'data-chip-class'];
+  const after = (attr, val) => {
+    const all = [...app.querySelectorAll('[data-chip-conf], [data-chip-cond], [data-chip-class]')], i = all.findIndex(b => b.getAttribute(attr) === val), o = all[i + 1] || all[i - 1];
+    const a = o && KINDS.find(k => o.getAttribute(k) != null);
+    return a ? [a, o.getAttribute(a)] : null;
+  };
+  // A conference or condition chip's index shifts down by one when an earlier one of its kind goes.
+  const sel = (hit, attr, i) => !hit ? null : `.pchip button[${hit[0]}="${q(hit[0] === attr && Number(hit[1]) > i ? Number(hit[1]) - 1 : hit[1])}"]`;
+  app.querySelectorAll('[data-chip-conf]').forEach(b => b.onclick = () => { const i = Number(b.dataset.chipConf); if (f.conf[i] == null) return; const hit = after('data-chip-conf', b.dataset.chipConf); f.conf.splice(i, 1); commit(sel(hit, 'data-chip-conf', i)); });
+  app.querySelectorAll('[data-chip-cond]').forEach(b => b.onclick = () => { const i = Number(b.dataset.chipCond); const hit = after('data-chip-cond', b.dataset.chipCond); if (removeCond(i)) commit(sel(hit, 'data-chip-cond', i)); });
+  app.querySelectorAll('[data-chip-class]').forEach(b => b.onclick = () => { const y = b.dataset.chipClass, hit = after('data-chip-class', y); toggleIn(f.classYear, y); commit(sel(hit, '', -1)); });
+  const clr = app.querySelector('#chipsClear'); if (clr) clr.onclick = () => { f.conf = []; f.cond = []; f.classYear = []; S.condForm = null; commit(null); };
+}
 // ID Camps is not here: the Programs filters do not narrow it (#465, owner's D4); it has its own.
 function rerenderForFilters() { const v = currentView(); if (v === 'trends') renderTrendsRoute(); else if (v === 'list' || v === 'c') renderList(); }
 /* #18: the phone drawer covers the page, so its foot carries a button that closes it on what the filters and the
-   search select. Pills and conditions already close it; this is for a reader who typed a search or wants to look
+   search select. Pills and conditions already close it (not Programs' sheet, #465 D); this is for a reader who typed a search or wants to look
    before choosing. It counts what the Program View would list (filteredPrograms: search, pills and conditions);
    the camp and Pipelines views list camps and pipelines, so there it names the view instead of a count. */
 function showResultsLabel() {
@@ -2143,11 +2360,14 @@ const filterOnlyView = v => v === 'camps' || v === 'trends';
    select and the recruiting-class pills - so it is rebuilt on the transition into or out of those
    views and at no other time. Rebuilding it on every route would take focus out of the search box
    mid-typing. */
-let sidebarIsCamps = filterOnlyView(currentView());
+// #465 D: Programs' rail has its own shape too (the Conference control, the phone sheet's heading).
+const sidebarShape = v => (filterOnlyView(v) ? 'filters' : v === 'list' || v === 'c' ? 'programs' : 'browse');
+let sidebarIsCamps = sidebarShape(currentView());
 function syncSidebarForView(view) {
-  const wantCamps = filterOnlyView(view);
-  if (wantCamps === sidebarIsCamps) return;
-  sidebarIsCamps = wantCamps;
+  const want = sidebarShape(view);
+  if (want === sidebarIsCamps) return;
+  sidebarIsCamps = want;
+  closeDrawer();  // a sheet never outlives its page
   if (S.index) renderSidebar();
 }
 document.addEventListener('keydown', e => {
@@ -2924,11 +3144,12 @@ function renderRecsList(idx) {
   const more = conf.length > shown.length ? `<button type="button" class="btn recs-more" id="recsMore">Show ${Math.min(RECS_PAGE, conf.length - shown.length)} more</button>` : '';
   const body = (conf.length ? cards + more : recsEmptyHtml(res)) + recsNvHtml(res);
   $('#app').innerHTML = pageHeader({ crumbs, title: 'Recommended for you', subtitle: bits.join(' · '), tabs: listTabs(f.view) })
-    + `<div class="content-body">${askBanner()}${bar}${body}</div>`;
+    + `<div class="content-body">${askBanner()}${appliedChipsHtml()}${bar}${body}</div>`;
   recsAnnounce(`Showing ${shown.length} of ${conf.length} confirmed matches`);
   syncShowResults();
   const app = $('#app');
   wireAskBanner();
+  wireAppliedChips(app);
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a, details')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   app.querySelectorAll('th[data-sort] .th-sort').forEach(b => b.onclick = async () => { setSort(b.closest('th').dataset.sort); syncSortControls(); listCommit(); await renderList(); });
@@ -3797,10 +4018,11 @@ async function renderList() {
   const crumbs = f.conf.length ? [{ label: 'Home', href: '#/' }, { label: 'Programs', href: listHashOf({ ...listSnapshot(), conf: [] }) }, { label: title }] : [{ label: 'Home', href: '#/' }, { label: 'Programs' }];
   const empty = S.q ? `<div class="empty">No programs match “${esc(S.qRaw)}”. Try the short name (UCLA, Ole Miss, Penn State), the mascot (Gauchos), or a state or city (Ohio, Boston).</div>` : '<div class="empty">No programs match these filters.</div>';
   const body = f.view === 'table' ? tableHtml(rows) : `<div class="grid cards">${rows.map(cardHtml).join('') || empty}</div>`;
-  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${recsPausedLine()}${body}</div>`;
+  $('#app').innerHTML = pageHeader({ crumbs, title: esc(title), subtitle: bits.join(' · '), right: extLink(NCAA_RPI_URL, `NCAA RPI ${rpiSeason() ?? ''}`.trim()), tabs }) + `<div class="content-body">${askBanner()}${appliedChipsHtml()}${recsPausedLine()}${body}</div>`;
   const app = $('#app');
   wireAskBanner();
   wireRecsPaused();
+  wireAppliedChips(app);
   app.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { f.view = b.dataset.view; saveState(); listCommit(); renderList(); });
   app.querySelectorAll('.pcard, tr.team-row').forEach(c => c.addEventListener('click', e => { if (e.target.closest('button, a')) return; location.hash = `#/p/${c.dataset.slug}`; }));
   // The table is rebuilt on a sort, so focus goes back to the header just used: Enter, Enter again flips it back.
