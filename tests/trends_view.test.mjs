@@ -206,6 +206,7 @@ function profileA(n) {
 const nameOf = (pl) => `${pl.name}${pl.pos || pl.classCode ? ` (${[pl.pos, pl.classCode].filter(Boolean).join(', ')})` : ''}`;
 const chipNames = (page, kind) => [...page.el(`#trChips-${kind}`).innerHTML.matchAll(/aria-label="Remove [^:]+: ([^"]*)"/g)].map(m => m[1]);
 const add = (page, kind, text, i = 0) => { type(page, kind, text); const o = page.sandbox.trState().opts[kind][i]; assert.ok(o, `no option for "${text}"`); page.el(`#trList-${kind}`).onclick({ target: { closest: () => ({ dataset: { i: String(i) } }) } }); return o.id; };
+const esc = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const removeChip = (page, kind, i) => page.el(`#trChips-${kind}`).onclick({ target: { closest: () => ({ dataset: { i: String(i) } }) } });
 
 /* ---------- the query ---------- */
@@ -279,7 +280,7 @@ test('#310 raw: ids resolve through the alias table, value by value; an unknown 
   page = await open('#/trends?club=raw%3Aqqq');
   assert.deepEqual(chipNames(page, 'club'), ['raw:qqq — not in the index']);
   assert.ok(page.el('#trChips-club').innerHTML.includes('tr-chip missing'));
-  assert.ok(page.results().includes('There is no club “raw:qqq” in the clubs and schools index') && page.results().includes('How to read this'), 'a box with no known value is left out');
+  assert.ok(page.results().includes('There is no club “raw:qqq” in the clubs and schools index') && !page.results().includes('trend-table'), 'a box with no known value is left out');
 });
 
 test('#339 a merged-away club id lands on the club it went into, alone or among several; a spelling two clubs claim stays put; an unknown id still reads "not in the index"', async () => {
@@ -327,7 +328,7 @@ test('#315 C1 + C2 kept: D2 commits "Not collected" (never 0) in rows, totals, c
   let page = await open('#/trends?club=lone');
   const html = page.results();
   assert.deepEqual(cellsOf(html).map(r => r.nums), [['2', '1', '1', 'Not collected']], 'the D2 row: commits Not collected; one box, so past 1 reads 1');
-  assert.ok(html.includes('1 current, 1 former, commits not collected at 1 program'), 'one box: the totals line is exact');
+  assert.ok(html.includes('<b>2 players</b> at <b>1 program</b>: 1 on current rosters and 1 former. Commits are not collected for these programs.'), 'one box: the summary is exact, and D2 commits are not collected');
   assert.ok(html.includes('Division II: 1 of 50 current players, club known for 6%') && !html.includes('Division I:'), 'the D2 rate alone');
   page = await open(`#/trends?program=${D2.slug}`);
   assert.ok(page.results().includes('Not collected</span></td>') && page.results().includes('commits not collected'), 'feeder row and coverage');
@@ -406,13 +407,14 @@ test('#448: every suggestion is named by its visible label, then what it says - 
 });
 
 /* ---------- the states ---------- */
-test('nothing selected: three boxes, the how-to card and the coverage; the live region is on the page from the start', async () => {
+test('nothing selected: the start card, the three boxes under Refine, the how-to and the coverage; the live region is on the page from the start', async () => {
   const page = await open('#/trends');
   const html = page.app();
   for (const k of ['club', 'program']) assert.ok(html.includes(`<label class="trend-label" id="trLbl-${k}" for="trIn-${k}">`) && html.includes(`aria-describedby="trSel-${k}"`), `${k}: a labelled combobox with a description`);
   assert.ok(html.includes('<div class="sr-only" id="trLive" aria-live="polite"></div>'), 'the live region is in the first render');
   assert.equal(page.el('#trLive').textContent, '', 'and says nothing on load');
-  assert.ok(page.results().includes('Division I: 100 current players, club known for 31%') && page.results().includes('combined with <b>or</b>'));
+  assert.ok(html.includes('Division I: 100 current players, club known for 31%') && html.includes('combined with <b>or</b>'), 'the how-to and coverage, in the start card');
+  assert.equal(page.results(), '', 'no result before a choice');
   assert.ok(page.sub().startsWith('Clubs and high schools behind college rosters · D1, D2 · 150 current players'), page.sub());
 });
 
@@ -487,7 +489,7 @@ test('#315 phone first load: Loading, then a failed load leaves S.trends unset a
   assert.equal(page.sandbox.S.trends, null, 'S.trends stays unset');
   page.sandbox.fetch = real;
   click(page.el('#trRetry')); await tick(40);
-  assert.ok(calls >= 1 && page.results().includes('How to read this'));
+  assert.ok(calls >= 1 && page.app().includes('How these counts work') && page.app().includes('id="trIn-start"'));
   const missing = await open('#/trends', null);
   assert.ok(missing.app().includes('Not built yet') && missing.app().includes('id="trRetry"'), 'a 404 still reads "Not built yet"');
   assert.ok(missing.app().includes(heading), 'the Not built yet state has the page title');
@@ -705,8 +707,124 @@ test('#316 on phones every tap target in the results is at least 44px', () => {
   const css = fs.readFileSync(HTML, 'utf8');
   const phone = [...css.replace(/\r\n/g, '\n').matchAll(/@media \(max-width: 480px\) \{([\s\S]*?)\n\}/g)].map(m => m[1]).join('\n');
   const rule = sel => phone.split('\n').some(l => l.includes('min-height: 44px') && l.split('{')[0].split(',').map(x => x.trim()).includes(sel));
-  for (const sel of ['.trend-table a', '.trend-players summary', '#trResults .table-footnote a', '.tr-actions .btn', '#trFailed .btn', '.tr-go'])
+  for (const sel of ['.trend-table a', '.trend-players summary', '#trResults .table-footnote a', '.tr-actions .btn', '#trFailed .btn', '.tr-go',
+    '.tr-seg label', '.tr-how > summary', '.tr-refine > summary', '#trExample', '.tr-more'])
     assert.ok(rule(sel), `${sel}: no 44px rule for phones`);
+});
+
+/* ---------- #465: start with one choice, then the first result; Refine / combine after it ---------- */
+const startOpts = page => page.sandbox.trState().opts.start.map(o => o.id);
+const startType = (page, text) => { const i = page.el('#trIn-start'); i.value = text; i.oninput(); return startOpts(page); };
+
+test('#465 start: one choice (club, high school, college program) and one labelled search field; nothing else is needed for a first result', async () => {
+  const page = await open('#/trends', fixture({ schools: true }));
+  const html = page.app();
+  assert.ok(html.includes('<fieldset class="tr-kinds" id="trKinds"><legend>Start with</legend>'), 'a real fieldset with a legend');
+  for (const [k, l] of [['club', 'A club'], ['school', 'A high school'], ['program', 'A college program']])
+    assert.ok(html.includes(`<input type="radio" name="trKind" id="trKind-${k}" value="${k}"`) && html.includes(`>${l}</label>`), k);
+  assert.ok(html.includes('id="trKind-club" value="club" checked'), 'club is the default');
+  assert.ok(html.includes('<label class="tr-start-label" id="trLbl-start" for="trIn-start">Search clubs</label>'), 'the field is labelled for the choice');
+  assert.ok(html.includes('id="trIn-start" type="text" role="combobox"') && html.includes('aria-controls="trList-start"'));
+  assert.ok(html.indexOf('id="trIn-start"') < html.indexOf('id="trResults"') && html.indexOf('id="trResults"') < html.indexOf('id="trRefine"'),
+    'the order is: start, results, then Refine or combine');
+  assert.equal(page.el('#trRefine').open, false, 'Refine starts closed');
+  // the choice changes what the field searches, and only that
+  page.el('#trKinds').onchange({ target: { value: 'program' } });
+  assert.equal(page.el('#trLbl-start').textContent, 'Search college programs');
+  assert.equal(page.el('#trIn-start').placeholder, 'Type a program, e.g. Stanford');
+  assert.equal(page.sandbox.location.hash, '#/trends', 'a choice alone changes nothing in the address');
+  page.el('#trKinds').onchange({ target: { value: 'club' } });
+  assert.deepEqual(startType(page, 'mvla'), ['mvla'], 'the club aliases work in the start field');
+  page.el('#trList-start').onclick({ target: { closest: () => ({ dataset: { i: '0' } }) } }); await tick();
+  assert.equal(page.sandbox.location.hash, '#/trends?club=mvla', 'a pick is a selection of that one value, in the #310 URL');
+  assert.equal(page.hist.pushes, 1, 'one history entry');
+  assert.deepEqual(cellsOf(page.results()).map(r => [r.name, ...r.nums]), [[disp(B), '4', '2', '2', '1'], [disp(A), '3', '3', '0', '0'], [disp(C), '0', '0', '0', '5']]);
+  assert.ok(page.results().includes('<b>7 players</b> at <b>3 programs</b>: 5 on current rosters and 2 former. Separately, 6 Division I commits, not added to the player totals.'),
+    'a plain summary first; commits beside, never in, the total');
+  assert.equal(page.sandbox.document.activeElement?._name, '#trIn-start', 'focus stays in the start field');
+  assert.ok(page.el('#trLive').textContent.startsWith('Mountain View Los Altos SC.'), page.el('#trLive').textContent);
+});
+
+test('#465 start: Arrow keys and Enter pick from the start field; it searches every value of its kind, whatever else is chosen', async () => {
+  const page = await open(`#/trends?club=mvla&program=${A.slug}`);
+  page.el('#trKinds').onchange({ target: { value: 'program' } });
+  const ids = startType(page, disp(A).slice(0, 4));
+  assert.ok(ids.includes(A.slug), 'a program already picked in Refine is still offered: the start field starts over');
+  const i = page.el('#trIn-start');
+  i.onkeydown({ key: 'ArrowDown', preventDefault() { } }); i.onkeydown({ key: 'Enter', preventDefault() { } }); await tick();
+  assert.equal(page.sandbox.location.hash, `#/trends?program=${encodeURIComponent(ids[0])}`, 'Enter starts a new selection of that one program');
+  assert.ok(page.results().includes('Clubs feeding'), 'a college shows its feeder clubs and high schools');
+});
+
+test('#465 D5: MVLA is offered as a labelled example, not a recommendation, and gives a first result in one click', async () => {
+  const page = await open('#/trends');
+  const html = page.app();
+  assert.ok(html.includes('<span class="tr-example-tag">Example</span> <button type="button" class="btn" id="trExample" data-tr-id="mvla">Try MVLA</button>'), 'labelled Example');
+  assert.ok(html.includes('An example to show how results read, not a recommendation.'));
+  page.el('#trExample').dataset.trId = 'mvla';
+  page.el('#trExample').focus(); // a click focuses the button it lands on
+  page.el('#trExample').onclick(); await tick();
+  assert.equal(page.sandbox.location.hash, '#/trends?club=mvla');
+  assert.equal(cellsOf(page.results()).length, 3);
+  // #467 (Bianque): the example must not send focus into the start field - on a phone that opens its suggestions and
+  // raises the keyboard over the first result.
+  const active = page.sandbox.document.activeElement?._name;
+  assert.notEqual(active, '#trIn-start', 'focus went into the start field after the example');
+  assert.equal(active, '#trExample', 'focus stays on the example button');
+  assert.equal(page.el('#trList-start').hidden, true, 'the start field suggestions are closed');
+  assert.equal(page.el('#trIn-start').getAttribute('aria-expanded'), 'false');
+  assert.ok(!page.sandbox.document.body.classList.contains('kbd-open'), 'no on-screen keyboard state');
+  // and a pick from the field itself still returns focus to the field
+  startType(page, 'surf');
+  page.el('#trList-start').onclick({ target: { closest: () => ({ dataset: { i: '0' } }) } }); await tick();
+  assert.equal(page.sandbox.document.activeElement?._name, '#trIn-start', 'a pick from the field keeps focus in it');
+  const none = await open('#/trends', { ...fixture(), clubs: { ...fixture().clubs, aka: {} } });
+  assert.ok(!none.app().includes('id="trExample"'), 'no MVLA in the index: no example is offered');
+});
+
+test('#465 a combined selection (a shared link or not) opens Refine and names every applied value; one value keeps Refine closed', async () => {
+  let page = await open(`#/trends?club=mvla,surf&program=${A.slug}`);
+  assert.equal(page.el('#trRefine').open, true, 'Refine opens by itself');
+  assert.equal(page.el('#trRefineSum').textContent, 'Refine or combine: 3 selections applied');
+  assert.deepEqual(chipNames(page, 'club'), ['Mountain View Los Altos SC', 'San Diego Surf']);
+  assert.ok(chipNames(page, 'program')[0].startsWith(disp(A)), 'every chip is shown');
+  const applied = page.results().match(/<p class="tr-applied">([\s\S]*?)<\/p>/)?.[1] || '';
+  assert.ok(applied.includes('Mountain View Los Altos SC or San Diego Surf') && applied.includes(esc(disp(A))) && applied.includes('<b>and</b>'), applied);
+  page = await open('#/trends?club=mvla,surf');
+  assert.equal(page.el('#trRefine').open, true, 'two values in one box is a combined selection too');
+  page = await open('#/trends?club=mvla');
+  assert.equal(page.el('#trRefine').open, false, 'one value: the first result, Refine closed');
+  assert.ok(!page.results().includes('tr-applied'));
+  assert.equal(page.el('#trRefineSum').textContent, 'Refine or combine: add clubs, high schools or programs');
+});
+
+test('#465 coverage: one short statement always visible, the methodology and per-division lines behind an expander', async () => {
+  const page = await open('#/trends?club=mvla');
+  assert.ok(page.app().includes('every count is a lower bound, and a connection is not a prediction of admission, an offer or recruiting interest.'), 'the start card statement');
+  assert.ok(page.app().includes('<details class="tr-how" id="trHow"><summary>How these counts work</summary>'));
+  const r = page.results();
+  assert.ok(r.includes('These are documented connections, so the counts are a lower bound: missing coverage is not zero.'), 'the result statement');
+  const det = r.match(/<details class="tr-how"><summary>Methodology and coverage for this result<\/summary>([\s\S]*?)<\/details>/)?.[1] || '';
+  assert.ok(det.includes('Division I: 5 of 100 current players, club known for 31%'), 'the per-division lines are inside the expander');
+});
+
+test('#465 a long destination list shows its first 10 rows and a Show all button; every row stays in the markup', async () => {
+  const progs = INDEX.programs.filter(p => p.division === 'D1').slice(0, 13).map(p => p.slug).sort();
+  const base = fixture();
+  const doc = { ...base, divisions: ['D1'], programIds: progs,
+    programs: Object.fromEntries(progs.map(s => [s, { division: 'D1', current: 1, past: 0, commits: 0, clubKnown: [1, 0, 0], schoolKnown: [0, 0, 0] }])),
+    clubs: { id: ['mvla'], name: ['Mountain View Los Altos SC'], state: ['CA'], unmatched: [], aka: { 0: ['mvla'] } }, schools: null,
+    records: { p: progs.map((_, i) => i), s: progs.map(() => 0), c: progs.map(() => 0), h: progs.map(() => -1) } };
+  const page = await open('#/trends?club=mvla', doc);
+  assert.equal(cellsOf(page.results()).length, 13, 'all 13 rows are in the table');
+  assert.ok(page.results().includes('<div class="tscroll tr-clip" id="trClip">') && page.results().includes('id="trShowAll" aria-expanded="false" aria-controls="trClip"'));
+  page.el('#trShowAll').dataset.label = 'Show all 13 programs';
+  page.el('#trClip').classList.add('tr-clip');
+  page.el('#trShowAll').onclick();
+  assert.equal(page.el('#trShowAll').getAttribute('aria-expanded'), 'true');
+  assert.equal(page.el('#trShowAll').textContent, 'Show the first 10');
+  const short = await open('#/trends?club=mvla');
+  assert.ok(!short.results().includes('id="trShowAll"') && !short.results().includes('tr-clip'), 'three rows: no button');
 });
 
 /* ---------- the rest of the site ---------- */
