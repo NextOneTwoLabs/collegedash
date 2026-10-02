@@ -410,7 +410,8 @@ test('#465 D4: Programs condition chips do not narrow the ID Camps page, and it 
   const { S, renderCamps } = pg.sb;
   const byProgram = new Map(SHIPPED.programs.map(p => [p.slug, p]));
   const today = pg.sb.todayLocal();
-  const idCamps = CAMPS.camps.filter(c => c.campType === 'id' && (byProgram.has(c.slug) || c.program) && (c.endDate || c.startDate) >= today);
+  const past = c => c.precision === 'month' ? (c.endDate || c.startDate).slice(0, 7) < today.slice(0, 7) : (c.endDate || c.startDate) < today;  // #71
+  const idCamps = CAMPS.camps.filter(c => c.campType === 'id' && (byProgram.has(c.slug) || c.program) && !past(c));
   reset(S); S.filters.cond = [{ field: 'academicRank', op: '<=', value: 100 }];
   pg.sb.location.hash = '#/camps';
   await renderCamps();

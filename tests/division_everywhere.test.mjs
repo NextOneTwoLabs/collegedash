@@ -49,7 +49,8 @@ const UCLA = readJSON('data/programs/ucla.json');
 const PROFILES = Object.fromEntries(PROGS.map(p => [p.slug, { ...clone(UCLA), slug: p.slug, name: p.name, shortName: p.shortName,
   division: p.division, conference: p.conference, school: { ...UCLA.school, city: p.city, state: p.state } }]));
 const CAMPS = { updated: '2026-09-24T00:00:00Z', window: { from: '2026-09-24', to: '2027-09-24' }, counts: { total: 3, id: 3, youth: 0, unknown: 0 },
-  camps: PROGS.map((p, i) => ({ slug: p.slug, name: `Fixture ID Camp ${i}`, startDate: `2026-10-0${i + 1}`, endDate: null, precision: 'day', campType: 'id',
+  // dated years ahead: since #465 the camps page drops a camp that has ended by the visitor's own today
+  camps: PROGS.map((p, i) => ({ slug: p.slug, name: `Fixture ID Camp ${i}`, startDate: `2030-10-0${i + 1}`, endDate: null, precision: 'day', campType: 'id',
     kind: 'camp', confidence: 'verified', location: null, ages: null, price: null, registerUrl: null, sourceUrl: 'https://example.org/camp' })) };
 const TRENDS = {
   updated: '2026-09-17T00:00:00Z', division: 'D1', season: 2026, pastSeasons: [2023, 2024, 2025],

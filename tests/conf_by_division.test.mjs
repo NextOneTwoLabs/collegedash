@@ -195,7 +195,8 @@ test('#465 D4: a keyed Programs conference selection does not narrow the ID Camp
   sb.location.hash = '#/camps';
   await sb.renderCamps();
   const today = new Date(), iso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
-  const all = CAMPS.camps.filter(c => c.campType === 'id' && (bySlug.has(c.slug) || c.program) && (c.endDate || c.startDate) >= iso).length;
+  const past = c => c.precision === 'month' ? (c.endDate || c.startDate).slice(0, 7) < iso.slice(0, 7) : (c.endDate || c.startDate) < iso;  // #71
+  const all = CAMPS.camps.filter(c => c.campType === 'id' && (bySlug.has(c.slug) || c.program) && !past(c)).length;
   const got = Number((/(\d+) upcoming ID camps? at/.exec(app()) || [])[1]);
   assert.ok(!/upcoming ID camps? of/.test(app()), 'the subtitle reads as filtered');
   assert.equal(got, all, `D2|${conf} (${n} camps) narrowed the camps page to ${got}; it lists ${all}`);
