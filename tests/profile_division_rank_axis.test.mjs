@@ -101,7 +101,8 @@ for (const [div, row] of FIXTURES) {
     }
     // Order: the division reads before the conference, in all three places.
     for (const [where, t] of Object.entries(places)) assert.ok(t.indexOf(div) < t.indexOf(row.conference), `${where}: "${t}"`);
-    assert.match(places.breadcrumb, new RegExp(`^All programs ?› ?${div} ?›`));
+    // #465: a program page's breadcrumb starts at Programs (#/programs), no longer "All programs" (#/ is Home now)
+    assert.match(places.breadcrumb, new RegExp(`^Programs ?› ?${div} ?›`));
   });
 }
 
