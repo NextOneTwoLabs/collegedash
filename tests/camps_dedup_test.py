@@ -85,7 +85,9 @@ def test_merge() -> None:
     ok("FIX ... and it lists both sources: the camp site and the news release, with the release's title and date",
        [(s.get("kind"), s.get("sourceUrl")) for s in srcs] == [("camp", CAMP["sourceUrl"]), ("news", NEWS["sourceUrl"])]
        and srcs[1].get("newsTitle") == NEWS["newsTitle"] and srcs[1].get("newsDate") == "2026-08-25", str(srcs))
-    rows = [build.camp_row("le-moyne", it) for it in got if build.camp_in_window(it, {"from": "2026-09-16", "to": None})]
+    le_moyne = {"slug": "le-moyne", "name": "Le Moyne College", "shortName": "Le Moyne", "division": "D2",
+                "city": "Syracuse", "state": "NY", "region": "Northeast"}  # its programs-index row's #465 fields
+    rows = [build.camp_row("le-moyne", it, le_moyne) for it in got if build.camp_in_window(it, {"from": "2026-09-16", "to": None})]
     ok("FIX the camps index gets one row for it, and counts one camp", len(rows) == 1 and build.camp_counts(rows)["total"] == 1, str(rows))
     ok("FIX `sources` is withheld from the published row, and declared as withheld (so check_camps_index accepts it)",
        rows and "sources" not in rows[0] and "sources" in build.CAMP_ITEM_UNPUBLISHED, str(build.CAMP_ITEM_UNPUBLISHED))

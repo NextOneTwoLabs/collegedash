@@ -52,6 +52,7 @@ import argparse
 import contextlib
 import copy
 import datetime as dt
+import gzip
 import hashlib
 import io
 import json
@@ -74,6 +75,10 @@ from collect import common  # noqa: E402
 import seasons_test  # noqa: E402
 
 LIVE_INDEX = os.path.join(common.PUBLIC_DATA_DIR, "camps", "index.json")
+# #465 size pins (gzip -9 of the file as build writes it, compact), set with headroom over the values measured for
+# the PR on 2026-10-02: 7,004 B for 98 rows (71.5 B per row), of which the program blocks are 1,803 B (18.4 B per row).
+CAMPS_GZ_PER_ROW = 85
+PROGRAM_BLOCK_GZ_PER_ROW = 24
 
 FAILS: list[str] = []
 TOTAL = 0
@@ -359,12 +364,12 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     rows = doc["camps"]
     ok("it publishes rows at all", isinstance(rows, list) and rows, str(type(rows)))
 
-    allowed = ["slug", *build.CAMP_INDEX_FIELDS]
-    ok("every row carries exactly the declared fields, in the declared order",
+    allowed = ["slug", *build.CAMP_INDEX_FIELDS, "program"]
+    ok("every row carries exactly the declared fields, in the declared order, the program block last (#465)",
        all(list(r) == allowed for r in rows),
        str(sorted({k for r in rows for k in set(r) ^ set(allowed)}))[:300])
     denormalised = {"programName", "collegeName", "region", "conference", "colors", "shortName"}
-    ok("nothing is denormalised onto a row; the view joins by slug",
+    ok("nothing else is denormalised onto a row: program fields live only in the declared `program` block",
        not any(denormalised & set(r) for r in rows))
 
     index = json.load(open(os.path.join(progs, "index.json"), encoding="utf-8"))
@@ -372,9 +377,38 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     unresolved = sorted({r["slug"] for r in rows} - known)
     ok("every row's slug resolves to a program row in programs/index.json", not unresolved,
        str(unresolved)[:200])
+    by_slug = {p["slug"]: p for p in index["programs"]}
+    want_fields = ["name", "shortName", "division", "city", "state", "region"]
+    ok("#465 the program block is exactly name, shortName, division, city, state, region",
+       list(build.CAMP_PROGRAM_FIELDS) == want_fields and all(list(r["program"]) == want_fields for r in rows))
+    drift = [(r["slug"], k) for r in rows for k in want_fields if r["program"].get(k) != by_slug[r["slug"]].get(k)]
+    ok("#465 every row's program block equals its program's programs/index.json row", not drift, str(drift[:5]))
+    ok("#465 every block has a name, so `shortName || name` is never blank",
+       all(isinstance(r["program"]["name"], str) and r["program"]["name"] for r in rows))
+    try:
+        import jsonschema
+        schema = json.load(open(os.path.join(ROOT, "schema", "camps.schema.json"), encoding="utf-8"))
+        errs = list(jsonschema.Draft202012Validator(schema).iter_errors(doc))
+        ok("#465 the built index matches schema/camps.schema.json", not errs, str([e.message for e in errs[:3]])[:300])
+    except ImportError:
+        ok("jsonschema is installed, so the schema check runs", False)
+    # #465 size pin: the camps document is what Home loads for its preview (owner decision D2), so it stays small.
+    # Pinned per row so a spring with three times the camps does not fail a correct build: the whole document, and
+    # the block's own share, gzipped as published.
+    raw = open(path, "rb").read()
+    ok("#465 the camps index is written compact, like the slim list (#395)", b"\n  " not in raw and raw.endswith(b"}\n"))
+    stripped = json.dumps({**doc, "camps": [{k: v for k, v in r.items() if k != "program"} for r in rows]},
+                          ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
+    gz, gz0 = len(gzip.compress(raw, 9)), len(gzip.compress(stripped, 9))
+    ok(f"#465 size: the gzipped camps document is at most {CAMPS_GZ_PER_ROW} B per row",
+       gz <= CAMPS_GZ_PER_ROW * len(rows), f"{gz} B for {len(rows)} rows ({gz / len(rows):.1f} B per row)")
+    ok(f"#465 size: the program block adds at most {PROGRAM_BLOCK_GZ_PER_ROW} B per row, gzipped",
+       gz - gz0 <= PROGRAM_BLOCK_GZ_PER_ROW * len(rows), f"+{gz - gz0} B for {len(rows)} rows")
+    if VERBOSE:
+        print(f"       camps index: {len(raw)} B raw, {gz} B gzipped ({gz0} B without the program blocks), {len(rows)} rows")
 
     items = profile_items(progs)
-    expected = [build.camp_row(slug, it) for slug, it in items if build.camp_in_window(it, window)]
+    expected = [build.camp_row(slug, it, by_slug.get(slug)) for slug, it in items if build.camp_in_window(it, window)]
     ok("the published row count is the windowed item count summed over the profiles",
        len(rows) == len(expected), f"published {len(rows)}, profiles hold {len(expected)}")
     key = lambda r: (r["slug"], str(r["startDate"]), str(r["name"]))
@@ -432,11 +466,21 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
 
 # ---------- the invariant ----------
 
+def index_row(slug: str) -> dict:
+    """A scratch programs-index row: the slug and the fields a camps row's `program` block copies (#465). Synthetic."""
+    return {"slug": slug, "name": f"{slug.title()} University", "shortName": slug.title(), "division": "D1",
+            "city": "Example City", "state": "SC", "region": "South"}
+
+
+def prog(slug: str) -> dict:
+    return {k: index_row(slug)[k] for k in build.CAMP_PROGRAM_FIELDS}
+
+
 GOOD_ROW = {"slug": "clemson", "name": "Spring ID Camp", "startDate": "2026-04-11",
             "endDate": "2026-04-11", "dateText": "April 11, 2026", "precision": "day",
             "yearInferred": False, "location": None, "ages": None, "price": None,
             "registerUrl": None, "sourceUrl": None, "kind": "camp", "campType": "id",
-            "confidence": "heuristic"}
+            "confidence": "heuristic", "program": prog("clemson")}
 WINDOW = {"from": "2025-09-14", "to": None}
 
 
@@ -448,7 +492,7 @@ def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> dict:
     os.makedirs(progs, exist_ok=True)
     os.makedirs(camps, exist_ok=True)
     common.write_json(os.path.join(progs, "index.json"),
-                      {"programs": [{"slug": s} for s in items]})
+                      {"programs": [index_row(s) for s in items]})
     for slug, its in items.items():
         common.write_json(os.path.join(progs, f"{slug}.json"), {"slug": slug, "camps": {"items": its}})
     path = os.path.join(camps, "index.json")
@@ -475,7 +519,7 @@ def doc(rows, window=WINDOW, counts=None) -> dict:
 
 
 def item(**kw) -> dict:
-    return {k: v for k, v in GOOD_ROW.items() if k != "slug"} | kw
+    return {k: v for k, v in GOOD_ROW.items() if k not in ("slug", "program")} | kw
 
 
 def test_invariant() -> None:
@@ -533,7 +577,7 @@ def test_invariant() -> None:
 
         # Issue #70: the other two files it opens. A raise here would end the whole validate run.
         for which in ("programs index", "profile"):
-            reg = scratch_tree(tmp, index_doc=doc([GOOD_ROW, {**GOOD_ROW, "slug": "duke", "name": "Duke ID"}]),
+            reg = scratch_tree(tmp, index_doc=doc([GOOD_ROW, {**GOOD_ROW, "slug": "duke", "name": "Duke ID", "program": prog("duke")}]),
                                items={"clemson": [item()], "duke": [item(name="Duke ID")]})
             bad = os.path.join(tmp, "programs", "index.json" if which == "programs index" else "duke.json")
             with open(bad, "w", encoding="utf-8") as f:
@@ -597,6 +641,28 @@ def test_invariant() -> None:
         passed, out = check(tmp, index_doc=doc(["June 3"]), items={"clemson": [item()]})
         ok("a row that is not an object is reported, not attribute-accessed",
            not passed and "not an object" in out, out[:300])
+
+        # ---- issue #465: the `program` block, a copy of the program's index row ----
+        passed, out = check(tmp, index_doc=doc([{k: v for k, v in GOOD_ROW.items() if k != "program"}]),
+                            items={"clemson": [item()]})
+        ok("FIX #465 a row without its program block is caught, by name", not passed and "program" in out, out[:300])
+        drifted = {**GOOD_ROW, "program": {**prog("clemson"), "division": "D2"}}
+        passed, out = check(tmp, index_doc=doc([drifted]), items={"clemson": [item()]})
+        ok("FIX #465 a program block that drifted from the program's index row is caught, by field",
+           not passed and "program block differs" in out and "division" in out, out[:400])
+        for label, block in (("an extra key", {**prog("clemson"), "conference": "ACC"}),
+                             ("a missing key", {k: v for k, v in prog("clemson").items() if k != "region"}),
+                             ("not an object", "Clemson")):
+            passed, out = check(tmp, index_doc=doc([{**GOOD_ROW, "program": block}]), items={"clemson": [item()]})
+            ok(f"FIX #465 a program block with {label} is caught", not passed and "program" in out, out[:300])
+        reg = scratch_tree(tmp, index_doc=doc([{**GOOD_ROW, "program": {**prog("clemson"), "shortName": None}}]),
+                           items={"clemson": [item()]})
+        rows_path = os.path.join(tmp, "programs", "index.json")
+        common.write_json(rows_path, {"programs": [{**index_row("clemson"), "shortName": None}]})
+        with swapped(PROGRAMS_OUT_DIR=os.path.join(tmp, "programs"), CAMPS_OUT_DIR=os.path.join(tmp, "camps")):
+            passed, out = captured(build.check_camps_index, reg)
+        ok("#465 a program with no shortName passes with its name in the block (the 89-program case, #405)",
+           passed and not out, out[:300])
 
         # The published window is the file's own, not today's: an index published yesterday must not
         # fail the morning a row ages out of a window re-derived here.
