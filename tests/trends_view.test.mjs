@@ -495,14 +495,15 @@ test('#315 phone first load: Loading, then a failed load leaves S.trends unset a
 });
 
 /* ---------- the tab's name (#322) ---------- */
-test('the tab and the breadcrumb read "Pipelines"; the page title reads "From Youth Clubs/High Schools to Colleges" (#329); the #/trends URL is unchanged', async () => {
+test('the nav and the breadcrumb read "Pipelines"; the page title reads "From Youth Clubs/High Schools to Colleges" (#329); the #/trends URL is unchanged', async () => {
   const page = await open('#/trends');
   const html = page.app();
-  const tabs = [...html.matchAll(/<a href="([^"]*)" class="view-tab[^"]*"[^>]*>([^<]*)<\/a>/g)];
-  const tab = tabs.find(m => m[1] === '#/trends');
-  assert.ok(tab, 'the tab still links to #/trends');
-  assert.equal(tab[2], 'Pipelines');
-  assert.ok(tab[0].includes('aria-selected="true"'), 'and is the selected tab');
+  // #465 B: Pipelines is a global destination - the header's nav and the phone's bottom bar link it - so the page has no
+  // tab strip; the label still reads Pipelines and still points at #/trends.
+  assert.ok(!/class="view-tab|data-view=/.test(html), 'the Pipelines page still carries a tab strip');
+  const PAGE_HTML = fs.readFileSync(HTML, 'utf8');
+  assert.match(PAGE_HTML, /<nav class="gnav" aria-label="Main">[^]*?<a href="#\/trends" data-nav="trends">Pipelines<\/a>/, 'the header nav does not link Pipelines at #/trends');
+  assert.match(PAGE_HTML, /<nav class="bottom-nav" aria-label="Main">[^]*?<a href="#\/trends" data-nav="trends">[^]*?<span>Pipelines<\/span>/, 'the bottom bar does not link Pipelines');
   assert.ok(!/Clubs &amp; schools|Clubs &amp; high schools|Clubs & high schools/.test(html), 'no old label left on the page');
   assert.ok(/class="breadcrumb-current"[^>]*>Pipelines</.test(html), 'the breadcrumb reads Pipelines');
   assert.ok(/<h1 class="content-title">From Youth Clubs\/High Schools to Colleges</.test(html), 'the page title reads the owner\'s wording (#329)');
@@ -664,16 +665,21 @@ test('suggestions follow the other boxes through the same AND query; 6 in an emp
   assert.deepEqual(await count(true), [6, 9]);
 });
 
-test('#310 sidebar filters never hide a picked program', async () => {
-  const other = INDEX.programs.find(p => p.division === 'D1' && p.conference && ![A, B, C].some(q => q.conference === p.conference)).conference;
+// #465 (the owner, 2026-10-02): Pipelines has no rail, so the saved Programs filters - and a search made on Programs -
+// never narrow it (it used to hide rows with "hidden by your sidebar filters", #310).
+test('#465 Pipelines ignores the Programs filters and search: nothing hidden, nothing named', async () => {
+  const other = INDEX.programs.find(p => p.division === 'D1' && p.conference && ![A, B, C].some(q => q.conference === p.conference));
   const page = loadPage({ 'data/trends/index.json': fixture() });
-  page.sandbox.S.filters.conf = [other];
+  const S = page.sandbox.S;
+  S.filters.conf = [other.conference]; S.filters.region = [other.region || 'West']; S.filters.division = ['D3'];
+  S.filters.cond = [{ field: 'admissionRate', op: '<', value: 0.01 }]; S.qRaw = 'zzzz'; S.q = 'zzzz';
   page.sandbox.location.hash = `#/trends?club=mvla&program=${A.slug}`; await page.sandbox.route(); await tick();
   assert.deepEqual(stats(page.results()), { players: '3', current: '3', past: '0', commits: '0' }, 'the card still shows');
-  assert.ok(page.results().includes('is outside your sidebar filters; it is shown because you picked it.'));
+  assert.ok(!/sidebar filters/.test(page.results()), 'a picked program is called outside the filters');
   page.sandbox.location.hash = '#/trends?club=mvla'; await page.sandbox.route(); await tick();
-  assert.deepEqual(cellsOf(page.results()), [], 'unpicked program rows are still filtered');
-  assert.ok(page.results().includes('3 programs with these players are hidden by your sidebar filters.'));
+  assert.equal(cellsOf(page.results()).length, 3, 'the Programs filters still hide program rows');
+  assert.ok(!/hidden by your|sidebar filters/.test(page.results()), 'a hidden-by-filters line is still drawn');
+  assert.ok(!page.sandbox.document.querySelector('#app').innerHTML.includes('zzzz'), 'the subtitle names the Programs search (and its filters)');
 });
 
 test('#316 Back and Forward close an open suggestion list, without adding a history entry', async () => {
