@@ -39,6 +39,7 @@ function makeElement(name) {
   };
 }
 const history = [];
+const DOC_ON = {}, WIN_ON = {};  // the page's document and window listeners (the camps search's Clear search, the resize)
 function loadPage() {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
@@ -47,11 +48,11 @@ function loadPage() {
     console, setTimeout, clearTimeout, Promise, Map, Set, Date, JSON, Math, Number, String, Array,
     Object, RegExp, Intl, isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
     document: { documentElement: makeElement('html'), body: makeElement('body'), querySelector: bySelector,
-                querySelectorAll: () => [], createElement: makeElement, addEventListener() { } },
+                querySelectorAll: () => [], createElement: makeElement, addEventListener(t, fn) { (DOC_ON[t] ||= []).push(fn); } },
     location: { hash: '', replace(h) { this.hash = h; } },
     history: { replaceState: (s, t, h) => { history.push(['replace', h]); sandbox.location.hash = h; },
                pushState: (s, t, h) => { history.push(['push', h]); sandbox.location.hash = h; } },
-    matchMedia: () => ({ matches: false }), innerWidth: 1400, addEventListener() { },
+    matchMedia: q => ({ matches: false, addEventListener(t, fn) { (WIN_ON[`${q} ${t}`] ||= []).push(fn); } }), innerWidth: 1400, addEventListener(t, fn) { (WIN_ON[t] ||= []).push(fn); },
     localStorage: { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) },
     fetch: async url => {
       const rel = url === '/api/v1/programs' ? 'data/programs/index.json' : null;
@@ -63,7 +64,7 @@ function loadPage() {
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = SOURCE.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast', 'campsSheet', 'setQuery', 'route'];
+  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast', 'campsSheet', 'setQuery', 'route', 'STATE_NAMES'];
   const src = lines.slice(a + 1, b).join('\n')
     + `\n;for (const k of ${JSON.stringify(handles)}) { try { globalThis[k] = eval(k); } catch { } }`
     + `\n;globalThis.campsNow = () => { try { return eval('CAMPS'); } catch { return undefined; } };\n`;
@@ -108,6 +109,9 @@ async function open(hash) {
   return app();
 }
 const settle = ms => new Promise(r => setTimeout(r, ms));
+// typing in the header box: the page's own input listener, as a keystroke reaches it
+const type = v => { el('#q').value = v; for (const fn of el('#q')._listeners.input || []) fn({ target: el('#q') }); };
+const key = (k, extra = {}) => { const e = { key: k, shiftKey: false, altKey: false, prevented: false, preventDefault() { e.prevented = true; }, ...extra }; for (const fn of el('#q')._listeners.keydown || []) fn(e); return e; };
 const rowsIn = html => [...html.matchAll(/<li class="camp-row" data-slug="[^"]+">[\s\S]*?<h3 class="camp-title">([^<]+)</g)].map(m => m[1]);
 
 test('#465 the shared past helper (#71): a camp that has ended is gone, one running today stays, months compare as months', async () => {
@@ -229,7 +233,7 @@ test('#465 the Programs sidebar is not drawn on the camps page (D4), and the pag
   assert.ok(!/matchesFilters|S\.filters\.(conf|region|division|cond)|S\.q\b/.test(body.replace(/S\.filters\.view/g, '')), 'the camps page reads a Programs filter');
 });
 
-test('#465 D4: a search made on Programs is not applied to ID Camps - the full list shows, and typing there changes nothing', async () => {
+test('#471: a search made on Programs does not carry over to ID Camps - the full list shows; the camps search is its own', async () => {
   S.camps = JSON.parse(JSON.stringify(FIXTURE));
   sb.location.hash = '#/programs';
   sb.setQuery('stanford');  // what a visitor typed in the header box on Programs
@@ -242,10 +246,15 @@ test('#465 D4: a search made on Programs is not applied to ID Camps - the full l
     'the Programs search narrowed the camps');
   assert.match(html, /6 upcoming ID camps at 5 programs/);
   assert.doesNotMatch(html, /programs matching|search matches program names|Clear search/i, 'the Programs query is named on the camps page');
-  // and typing in the (hidden) box while on ID Camps does not redraw or narrow it
-  el('#campsResults').innerHTML = 'UNCHANGED';
-  sb.setQuery('duke'); await settle(120);
-  assert.equal(el('#campsResults').innerHTML, 'UNCHANGED', 'typing redrew the camps list');
+  assert.equal(el('#q').value, '', 'the Programs query is shown in the box on ID Camps');
+  // typing in the box on ID Camps narrows the camps (#471), and leaves the Programs query as it was
+  type(P4.city);
+  await settle(120);
+  assert.deepEqual(rowsIn(results()), ['Far Winter ID Camp'], 'typing on ID Camps did not narrow the camps');
+  assert.equal(S.qRaw, 'stanford', 'the camps search wrote the Programs query');
+  assert.equal(S.q, 'stanford');
+  sb.location.hash = '#/programs'; sb.route(); await settle(50);
+  assert.equal(el('#q').value, 'stanford', 'back on Programs the box does not show the Programs query');
   sb.setQuery(''); await settle(120);
 });
 
@@ -376,4 +385,208 @@ test('#465 planted text in the camps address is dropped by the allowlists, never
   const st = sb.campsNow().st;
   assert.equal(JSON.stringify([st.when, st.from, st.to, st.region, st.state, st.div, st.program]), '[null,null,null,[],[],[],null]');  // vm arrays: compare as JSON
   assert.doesNotMatch(html, /<img|<svg|<script|onerror|onload|alert\(1\)/i, 'planted markup reached the page');
+});
+
+/* ---------- the camps search (#471; owner 2026-10-02: "keep the search box in ID camps. match the id camps with the
+   search query (be it location, program name, month, etc.)"; plan and Huatuo's additions on #471) ----------
+   Synthetic programs (blocks only, example slugs), so each field is matched by exactly one camp. */
+const prog = (name, shortName, division, city, state, region) => ({ name, shortName, division, city, state, region });
+const SC = (slug, name, start, end, program, extra = {}) => ({ slug, name, startDate: start, endDate: end, dateText: start, precision: 'day', yearInferred: false,
+  location: null, ages: null, price: null, registerUrl: null, sourceUrl: 'https://example.org/camp', kind: 'camp', campType: 'id', confidence: 'heuristic', program, ...extra });
+const SEARCH_FIXTURE = {
+  updated: '2026-10-01T18:01:10Z', window: { from: today, to: null }, counts: { total: 6, id: 6, youth: 0, unknown: 0 },
+  camps: [
+    SC('x-texas', 'Summer Elite ID Camp', '2030-06-14', '2030-06-14', prog('Example Texas University', 'Ex Texas', 'D1', 'Austin', 'TX', 'South'), { location: 'Zanzibar Stadium' }),
+    SC('x-saint', 'Prospect Day', '2030-07-31', '2030-08-01', prog("St. Mary's College", null, 'D3', 'Saint Paul', 'MN', 'Midwest')),
+    SC('x-indiana', 'Winter ID Clinic', '2030-12-05', '2030-12-05', prog('Example Indiana State', null, 'D2', 'Terre Haute', 'IN', 'Midwest')),
+    SC('x-hawaii', 'Fall Showcase', '2030-10', null, prog('University of Hawaiʻi', 'Hawaiʻi', 'D1', 'Honolulu', 'HI', 'West'), { precision: 'month' }),
+    SC('x-ohio', 'Invitational ID Camp', '2030-06-02', '2030-06-02', prog('Example Ohio Tech', null, 'D2', 'Dayton', 'OH', 'Midwest')),
+    SC('x-jose', 'Goalkeeper Camp', '2030-03-07', '2030-03-07', prog('Example San José College', null, 'D3', 'San José', 'CA', 'West')),
+  ],
+};
+const T = { texas: 'Summer Elite ID Camp', saint: 'Prospect Day', indiana: 'Winter ID Clinic', hawaii: 'Fall Showcase', ohio: 'Invitational ID Camp', jose: 'Goalkeeper Camp' };
+async function openSearch(hash) {
+  S.camps = JSON.parse(JSON.stringify(SEARCH_FIXTURE));
+  sb.location.hash = hash;
+  history.length = 0;
+  await sb.renderCamps();
+  return app();
+}
+const found = async q => rowsIn(await openSearch(`#/camps?q=${encodeURIComponent(q)}`)).sort();
+const want = (...ks) => ks.map(k => T[k]).sort();
+
+test('#471 camps search: each field is matched - program short and full name, city, state code and name, region, division, title, month', async () => {
+  const cases = [
+    ['Ex Texas', ['texas']], ['example texas university', ['texas']], ['Austin', ['texas']],
+    ['Texas', ['texas']], ['TX', ['texas']], ['tx', ['texas']], ['tex', ['texas']],  // Huatuo: TX and tx beside Texas
+    ['Minnesota', ['saint']], ['MN', ['saint']], ['south', ['texas']], ['midwest', ['saint', 'indiana', 'ohio']],
+    ['D1', ['texas', 'hawaii']], ['d3', ['saint', 'jose']],
+    ['summer elite', ['texas']], ['showcase', ['hawaii']],
+    ['June', ['texas', 'ohio']], ['Jun', ['texas', 'ohio']], ['july', ['saint']], ['august', ['saint']],  // a span touches both months
+    ['october', ['hawaii']], ['oct', ['hawaii']],  // a month-only date
+  ];
+  for (const [q, ks] of cases) assert.deepEqual(await found(q), want(...ks), `"${q}"`);
+});
+
+test('#471 camps search: normalised - case, accents, the ʻokina and apostrophes; "St." and "Saint" stand for each other', async () => {
+  for (const [q, ks] of [['SAN JOSE', ['jose']], ['san josé', ['jose']], ['hawaii', ['hawaii']], ['Hawaiʻi', ['hawaii']],
+    ['saint marys', ['saint']], ['st. mary\'s', ['saint']], ['st paul', ['saint']], ['saint paul', ['saint']]]) {
+    assert.deepEqual(await found(q), want(...ks), `"${q}"`);
+  }
+});
+
+test('#471 camps search: words are ANDed in any order; codes match whole words only; the venue is not searched', async () => {
+  assert.deepEqual(await found('texas june'), want('texas'));
+  assert.deepEqual(await found('june texas'), want('texas'));
+  assert.deepEqual(await found('ohio june'), want('ohio'));
+  assert.deepEqual(await found('texas july'), []);
+  // a typed word that starts with a state code is not that code: "inv" is Invitational, not Indiana (IN)
+  assert.deepEqual(await found('inv'), want('ohio'));
+  // a typed letter is not a division: "d" starts Dayton, Day and December, never D1 or D3 by the code
+  assert.deepEqual(await found('d'), want('ohio', 'saint', 'indiana'));
+  assert.deepEqual(await found('zanzibar'), [], 'the event venue was searched');
+});
+
+test('#471 camps search in the address: typing replaces the entry, a filter or a clear pushes one, Back restores list and box', async () => {
+  await openSearch('#/camps');
+  type('tex'); type('texas'); await settle(120);
+  type('texas jun'); await settle(120);
+  assert.deepEqual(history, [['replace', '#/camps?q=texas'], ['replace', '#/camps?q=texas+jun']], 'typing did not replace the entry');
+  assert.deepEqual(rowsIn(results()), [T.texas]);
+  assert.match(el('#app .content-subtitle').innerHTML, /1 upcoming ID camp of 6 at 1 program matching “texas jun” <button type="button" class="clear-search" data-camps-clear-q>Clear search<\/button>/);
+  // a filter ANDs with the search and pushes, keeping q; Clear all keeps the search
+  sb.campsCommit({ ...sb.campsNow().st, div: ['D2'] }, 'div-D2');
+  assert.deepEqual(history.at(-1), ['push', '#/camps?div=D2&q=texas+jun']);
+  assert.deepEqual(rowsIn(results()), []);
+  assert.match(results(), /No upcoming ID camp found in our sources matching “texas jun” with these filters/);
+  assert.match(results(), /data-camps-clear-q[^>]*>Clear search<\/button> <button type="button" class="btn" data-camps-clear/);
+  for (const fn of el('#campsMain')._listeners.click) fn({ target: { closest: s => (s === '[data-camps-clear]' ? {} : null) } });
+  assert.deepEqual(history.at(-1), ['push', '#/camps?q=texas+jun'], 'Clear all cleared the search');
+  // Back: the address before the filter; the page is drawn from it, the box shows its query
+  el('#q').value = '';
+  sb.location.hash = '#/camps?q=texas'; await sb.renderCamps();
+  assert.equal(el('#q').value, 'texas', 'Back did not restore the box');
+  assert.deepEqual(rowsIn(results()), [T.texas]);
+  // a space being typed is never taken back out of the box
+  type('texas '); await settle(120);
+  assert.equal(el('#q').value, 'texas ');
+});
+
+test('#471 Clear search (subtitle, empty state, the box\'s ✕, Escape) pushes one entry; from a button focus goes to the list heading', async () => {
+  await openSearch('#/camps?q=zzzz');
+  assert.match(app(), /<h2>No upcoming ID camp found in our sources matching “zzzz”<\/h2>/);
+  assert.doesNotMatch(app().slice(app().indexOf('camps-empty')), /data-camps-clear(?!-q)/, 'Clear filters offered with no filter on');
+  FOCUSED.el = null;
+  for (const fn of DOC_ON.click || []) fn({ target: { closest: s => (s === '[data-camps-clear-q]' ? {} : null) } });
+  assert.deepEqual(history, [['push', '#/camps']]);
+  assert.equal(sb.campsNow().st.q, '');
+  assert.equal(el('#q').value, '');
+  assert.equal(FOCUSED.el, el('#campsResults h2'), 'focus did not go to the list heading');
+  assert.equal(el('#campsResults h2').getAttribute('tabindex'), '-1');
+  // the box's ✕ and Escape clear only the camps query, and keep focus in the box
+  for (const how of ['x', 'Escape']) {
+    await openSearch('#/camps?q=ohio');
+    S.qRaw = 'stanford'; S.q = 'stanford';
+    el('#q').value = 'ohio'; FOCUSED.el = null;
+    if (how === 'x') el('#qClear').onclick(); else assert.ok(key('Escape').prevented);
+    assert.deepEqual(history, [['push', '#/camps']], `${how}: did not push one entry`);
+    assert.equal(FOCUSED.el, el('#q'), `${how}: focus left the box`);
+    assert.equal(S.qRaw, 'stanford', `${how}: cleared the Programs query`);
+  }
+  S.qRaw = ''; S.q = '';
+});
+
+test('#471 Enter on ID Camps commits the query and never navigates (#409\'s rules are Programs\' only); a phone\'s keyboard drops', async () => {
+  for (const width of [1400, 390]) {
+    sb.innerWidth = width;
+    await openSearch('#/camps');
+    let blurred = false; el('#q').blur = () => { blurred = true; };
+    type('texas');
+    const e = key('Enter');  // before the 80 ms typing timer: Enter writes it now
+    assert.ok(e.prevented);
+    assert.equal(sb.location.hash, '#/camps?q=texas', `${width}: Enter left ID Camps`);
+    assert.deepEqual(history, [['replace', '#/camps?q=texas']]);
+    assert.equal(blurred, width === 390, `${width}: the box ${blurred ? 'blurred on a desktop' : 'kept a phone\'s keyboard up'}`);
+    await settle(120);
+    assert.equal(history.length, 1, 'the typing timer wrote a second entry');
+    delete el('#q').blur;
+  }
+  sb.innerWidth = 1400;
+});
+
+test('#471 the box on ID Camps: camps wording, no Program suggestions or #447 help panel, #qStatus only the camps count when it changes', async () => {
+  sb.location.hash = '#/camps'; sb.route(); await settle(50);
+  S.camps = JSON.parse(JSON.stringify(SEARCH_FIXTURE)); await openSearch('#/camps');
+  assert.ok(!sb.document.body.classList.contains('no-search'), 'the box is hidden on ID Camps');
+  assert.equal(el('#q').placeholder, 'Camp, school, place or month…');
+  assert.equal(el('#qLabel').textContent, 'Search camps');
+  assert.match(el('#qHint').textContent, /camp name or month/);
+  const status = el('#qStatus'); let writes = 0, text = '';
+  Object.defineProperty(status, 'textContent', { configurable: true, get: () => text, set: v => { writes++; text = v; } });
+  // an empty, focused box: no help panel, no chips, no help sentence
+  for (const fn of el('#q')._listeners.focus || []) fn({});
+  assert.equal(el('#qList').hidden, true, 'a suggestions list opened on ID Camps');
+  assert.equal(el('#qPanel').hidden, true, 'the #447 help panel opened on ID Camps');
+  assert.equal(el('#qList').innerHTML, '');
+  assert.equal(el('#q').getAttribute('aria-expanded'), 'false');
+  assert.equal(text, '', `#qStatus says "${text}" on ID Camps`);
+  assert.ok(!key('ArrowDown').prevented && el('#qList').hidden, 'the arrows opened Program suggestions');
+  type('midwest'); await settle(120);
+  assert.equal(text, '3 upcoming ID camps of 6 at 3 programs matching “midwest”.');
+  assert.equal(el('#qList').innerHTML, '', 'Program options were drawn');
+  const n = writes;
+  type('midwest '); await settle(120);
+  assert.equal(writes, n, '#qStatus was rewritten with the same count');
+  type('midwest d2'); await settle(120);
+  assert.equal(text, '2 upcoming ID camps of 6 at 2 programs matching “midwest d2”.');
+  delete status.textContent; status.textContent = '';
+  // leaving for Programs puts the Programs wording back
+  sb.location.hash = '#/programs'; sb.route(); await settle(50);
+  assert.equal(el('#q').placeholder, 'School, mascot, state or city…');
+  assert.equal(el('#qLabel').textContent, 'Search programs');
+});
+
+test('#471 the camps q in the address: a malformed escape does not throw and is dropped; 150 characters in, 100 kept; drawn escaped', async () => {
+  await openSearch('#/camps?q=%E0%A4%A');
+  assert.equal(sb.campsNow().st.q, '');
+  assert.deepEqual(history, [['replace', '#/camps']]);
+  const long = 'a'.repeat(150);
+  await openSearch(`#/camps?q=${long}`);
+  assert.equal(sb.campsNow().st.q.length, 100, 'the cap is not 100');
+  assert.deepEqual(history, [['replace', `#/camps?q=${'a'.repeat(100)}`]]);
+  const html = await openSearch('#/camps?q=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E');
+  assert.doesNotMatch(html, /<img/i, 'planted markup in q reached the page unescaped');
+  assert.match(html, /matching “&lt;img src=x onerror=alert\(1\)&gt;”/);
+  assert.match(html, /<h2>No upcoming ID camp found in our sources matching “&lt;img src=x onerror=alert\(1\)&gt;”<\/h2>/);
+});
+
+test('Bianque on #476, checked on camps: widening past the phone breakpoint with the sheet open closes it - nothing stays inert', async () => {
+  sb.innerWidth = 390;
+  await open('#/camps');
+  const { R, keep } = pageTree();
+  sb.campsSheet(true);
+  assert.equal(R.header.inert, true, 'fixture: the sheet did not open');
+  const inSheet = el('#campsSideTitle');
+  sb.innerWidth = 900;
+  // the phone breakpoint's media query changes (what an emulated or rotated viewport always fires); resize alone is
+  // checked below
+  for (const fn of WIN_ON['(max-width: 768px) change'] || []) fn({ matches: false });
+  assert.ok(!keep.side.classList.contains('open') && keep.side.getAttribute('role') === null, 'the sheet is still open on a wide screen');
+  assert.equal(keep.back.hidden, true, 'the backdrop still covers the page');
+  noneInert(R, keep, 'widened to 900 (media query)');
+  assert.equal(FOCUSED.el, inSheet, 'focus was moved to the Filters button, which a wide screen hides');
+  // and through resize alone
+  sb.innerWidth = 390; sb.campsSheet(true);
+  assert.equal(R.header.inert, true, 'fixture: the sheet did not reopen');
+  sb.innerWidth = 900;
+  for (const fn of WIN_ON.resize || []) fn({});
+  noneInert(R, keep, 'widened to 900 (resize)');
+  assert.ok(!keep.side.classList.contains('open'));
+  // narrowing, or a resize that stays on a phone, leaves an open sheet open
+  sb.innerWidth = 390; sb.campsSheet(true);
+  sb.innerWidth = 375;
+  for (const fn of WIN_ON.resize || []) fn({});
+  assert.ok(keep.side.classList.contains('open') && R.header.inert === true, 'a phone-width resize closed the sheet');
+  sb.campsSheet(false);
+  sb.innerWidth = 1400;
 });

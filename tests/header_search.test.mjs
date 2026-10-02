@@ -42,7 +42,7 @@ const headerHtml = (/<div class="header">([\s\S]*?)\n<\/div>\n/.exec(body.replac
 
 test('markup: the one search box is static in the header, labelled, outside the sidebar and outside #app', () => {
   assert.match(headerHtml, /<div class="header-search" role="search">/, 'no search box in the header');
-  assert.match(headerHtml, /<label class="sr-only" for="q">Search programs<\/label>/, 'the header box has no label');
+  assert.match(headerHtml, /<label class="sr-only" for="q" id="qLabel">Search programs<\/label>/, 'the header box has no label');  // #471: "Search camps" on ID Camps
   assert.match(headerHtml, /<input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search"[^>]*>/);
   assert.match(headerHtml, /<button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕<\/button>/);
   assert.match(headerHtml, /<div class="header-recs" id="headerRecs"><\/div>/, 'no (empty) slot for "Find programs for me"');

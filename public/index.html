@@ -804,7 +804,7 @@ body.no-search .header-right { margin-left: auto; }
   <nav class="gnav" aria-label="Main"><a href="#/programs" data-nav="list">Programs</a><a href="#/camps" data-nav="camps">ID Camps</a><a href="#/trends" data-nav="trends">Pipelines</a></nav>
   <!-- #434: the one search box (static, on every page). setQuery / searchKeydown; the status is screen-reader only. -->
   <div class="header-search" role="search">
-    <label class="sr-only" for="q">Search programs</label>
+    <label class="sr-only" for="q" id="qLabel">Search programs</label>
     <input type="search" class="search-input" id="q" placeholder="School, mascot, state or city…" autocomplete="off" enterkeyhint="search" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="qList" aria-describedby="qHint">
     <button type="button" class="search-clear" id="qClear" aria-label="Clear search" hidden>✕</button>
     <div class="qpanel" id="qPanel" hidden>
@@ -2133,18 +2133,28 @@ function setQuery(v) {
   SUGG.active = -1; SUGG.open = !!S.q;
   clearTimeout(qTimer);
   // Typing filters the Programs list when it is on screen. On any other page it only suggests (#434 PR 2): a header box
-  // must not throw the reader off the page. ID Camps never reads it (#465, owner's D4): its own Program filter finds a school.
+  // must not throw the reader off the page. ID Camps never reads it: there the box types the camps' own search
+  // (campsTyped, #471), and this Programs query is left as it was.
   qTimer = setTimeout(searchApply, 80);
   listTyping();  // #14: the list's address follows the box, replacing its entry
 }
 function searchApply() { updateSearchStatus(); renderSuggestions(); syncShowResults(); syncConfCounts(); const v = currentView(); if (v === 'list' || v === 'c') return renderList(); }
-// #465: the box shows on Programs and a program's page only (body.no-search elsewhere, set by syncNav).
-const SEARCH_VIEWS = new Set(['list', 'c', 'p']);
+// #465: the box shows on Programs, a program's page and ID Camps (body.no-search elsewhere, set by syncNav). On ID Camps
+// it searches camps (owner, 2026-10-02, #471), with its own query, wording and keys.
+const SEARCH_VIEWS = new Set(['list', 'c', 'p', 'camps']);
+const campsBox = () => currentView() === 'camps';
 const searchShown = () => !document.body.classList.contains('no-search');
 // The header box's status (#434): the page's one aria-live search status, screen-reader only.
 function updateSearchStatus() {
   const el = $('#qStatus'); if (!el) return;
   let text = '';
+  // #471 (Huatuo): on ID Camps the line carries only the camps count while a search is typed - never #447's help
+  // sentence, never a Programs count - and, as below, is written only when it changes.
+  if (campsBox()) {
+    text = CAMPS?.st?.q ? `${campsSummary().count}.` : '';
+    if (el.textContent !== text) el.textContent = text;
+    return;
+  }
   if (!S.q && SUGG.open && S.index) text = `${helpScope(false)} ${SEARCH_HINT} Down arrow for examples.`;  // #447: the full sentence on every screen ("Try:" is a visual cue)
   if (S.q) {
     // #23: the count is what the active filters let through; matches they hide are named, never counted as shown.
@@ -2169,6 +2179,13 @@ function updateSearchStatus() {
    is a list too: it is already narrowed to those programs, so Enter stays there.
    #23: both read the hits the active filters let through, so Enter never opens a program the list hides. */
 function searchKeydown(e, box) {
+  // #471 (Huatuo): on ID Camps none of the Programs keys run - no suggestions to move through, no #409 Enter that opens a
+  // program or goes to #/programs, no Ask. Enter writes the query now (a phone's keyboard drops); Escape clears it.
+  if (campsBox()) {
+    if (e.key === 'Enter') { e.preventDefault(); campsTypingFlush(); if (isPhone()) box.blur?.(); }
+    else if (e.key === 'Escape' && box.value) { e.preventDefault(); campsClearSearch('box'); }
+    return;
+  }
   const open = SUGG.open && SUGG.items.length > 0;
   if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
     if (!S.index) return;
@@ -2229,7 +2246,7 @@ function helpMode(results) { return !S.q ? 'help' : results.length ? 'list' : 'n
 const SUGGEST_MAX = 6, OUTSIDE_MAX = 3;
 const SUGG = { items: [], active: -1, open: false };
 function suggestionItems() {
-  if (!S.index) return [];
+  if (!S.index || campsBox()) return [];  // #471: no Program options, chips or help panel on ID Camps
   if (!S.q) return (isPhone() ? PHONE_CHIPS : HELP_CHIPS).map(text => ({ kind: 'chip', text }));  // #447
   const visible = visibleMatches(), all = searchMatches(), shown = new Set(visible.map(h => h.p.slug));
   const items = visible.filter(h => !h.m.place).slice(0, SUGGEST_MAX).map(h => ({ kind: 'program', p: h.p }));
@@ -2310,22 +2327,47 @@ function chooseSuggestion(i) {
 }
 // The box shows S.qRaw. Written only when it differs, so typing never writes back into the box (on a phone that moves
 // the caret); Ask's apply and undo and the camps "clear" change the query in code and land here.
+// #471: on ID Camps it shows the camps query instead (compared trimmed, so a space being typed is never taken back).
 function syncSearchBox() {
-  const box = $('#q'); if (box && box.value !== S.qRaw) box.value = S.qRaw;
+  const box = $('#q');
+  if (campsBox()) {
+    const q = CAMPS?.st?.q || '';
+    if (box && box.value.trim() !== q) box.value = q;
+    const clr = $('#qClear'); if (clr) clr.hidden = !box?.value;
+    return;
+  }
+  if (box && box.value !== S.qRaw) box.value = S.qRaw;
   const clr = $('#qClear'); if (clr) clr.hidden = !S.qRaw;
 }
-// The placeholder follows Ask.
-const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'School, mascot, state or city…';
+// The placeholder follows Ask, and the page (#471).
+const searchPlaceholder = () => campsBox() ? 'Camp, school, place or month…' : S.ask ? 'School, mascot, or a question…' : 'School, mascot, state or city…';
+// The box's wording follows the page it searches; called on every route (syncNav). A status line left by the other
+// page is cleared silently, so arriving never reads out a stale count or help sentence.
+// The markup's Programs wording stands untouched until ID Camps is first shown (and while Ask is off, #179).
+let searchModeCamps = false;
+function syncSearchMode() {
+  const box = $('#q'), camps = campsBox();
+  if (camps || searchModeCamps) {
+    searchModeCamps = true;
+    if (box && box.placeholder !== searchPlaceholder()) box.placeholder = searchPlaceholder();
+    const lab = $('#qLabel'); if (lab) lab.textContent = camps ? 'Search camps' : 'Search programs';
+    const hint = $('#qHint');
+    if (hint) hint.textContent = camps ? 'Type a school, city, state, region, division, camp name or month.' : 'Type a school, mascot, state or city. Down arrow for suggestions.';
+  }
+  const st = $('#qStatus'); if (st && st.textContent) st.textContent = '';
+  if (SUGG.open) closeSuggestions();
+  syncSearchBox();
+}
 // The header box is static markup, so it is wired once, here.
 {
   const box = $('#q');
   if (box) {
-    box.addEventListener('input', e => setQuery(e.target.value));
+    box.addEventListener('input', e => (campsBox() ? campsTyped : setQuery)(e.target.value));  // #471: two searches, one box
     box.addEventListener('keydown', e => searchKeydown(e, box));
     box.addEventListener('blur', () => { if (SUGG.open) closeSuggestions(); });
     // #447: focusing the box opens the panel - the help on an empty box, the suggestions otherwise
     box.addEventListener('focus', () => { SUGG.open = true; SUGG.active = -1; renderSuggestions(); updateSearchStatus(); });
-    const clr = $('#qClear'); if (clr) clr.onclick = () => { setQuery(''); box.focus(); };
+    const clr = $('#qClear'); if (clr) clr.onclick = () => { if (campsBox()) return campsClearSearch('box'); setQuery(''); box.focus(); };
     const list = $('#qList');
     if (list) {
       list.addEventListener('mousedown', e => e.preventDefault());  // the box keeps focus while an option is pressed
@@ -2335,8 +2377,8 @@ const searchPlaceholder = () => S.ask ? 'School, mascot, or a question…' : 'Sc
   }
 }
 // "Clear search" in a list subtitle (#434): the box is no longer beside the filters, so the list says how to undo it.
-// Where the box is hidden (ID Camps, which a search made on Programs still narrows), the page is redrawn at once and
-// focus goes to its heading, as a route does (#453) - never to a box that is not drawn.
+// Where the box is hidden, the page is redrawn at once and focus goes to its heading, as a route does (#453) - never to
+// a box that is not drawn. ID Camps has its own Clear search (data-camps-clear-q, #471).
 document.addEventListener('click', e => {
   if (!e.target.closest?.('[data-clear-search]')) return;
   setQuery('');
@@ -3373,6 +3415,7 @@ function syncNav(view) {
   document.querySelectorAll('[data-nav]').forEach(a => { if (a.dataset.nav === cur) a.setAttribute('aria-current', 'page'); else a.removeAttribute?.('aria-current'); });
   document.body.classList.toggle('no-rail', NO_RAIL.has(view));
   document.body.classList.toggle('no-search', !SEARCH_VIEWS.has(view));  // #465: the search box only where it searches
+  syncSearchMode();  // #471: its wording and query follow the page (ID Camps searches camps)
   syncNavCounts();
 }
 function syncNavCounts() {
@@ -3400,6 +3443,7 @@ function route() {
   const view = parts[0] === 'programs' ? 'list' : parts[0] || 'home';
   syncNav(view);  // #465 B: aria-current on the destinations, and the filter rail only where it applies
   campsInert(false);  // #465: leaving the page with the camps sheet open (Back, a link) must not leave the page inert
+  clearTimeout(campsTypeTimer); campsTypeTimer = null;  // #471: camps typing not yet written never lands on the next entry
   const app = $('#app');
   if (view !== 'trends') TR = null;
   // Back or forward between two #/trends states updates the page in place: no re-render, no jump to the top.
@@ -3899,7 +3943,11 @@ function campProgram(c, byProgram) {
    lists sorted, defaults left out, and everything that arrives checked against what the page knows - when a preset,
    from/to real dates (a range wins over a preset; a `to` before `from` is dropped), region one of REGIONS, state a US
    state code, div D1-D3, program a known slug. The Shortlist toggle is NEVER in it (it reads the visitor's own list). */
-const CAMPS_PARAMS = ['when', 'from', 'to', 'region', 'state', 'div', 'program'];
+const CAMPS_PARAMS = ['when', 'from', 'to', 'region', 'state', 'div', 'program', 'q'];
+// The camps search (#471, owner 2026-10-02): free text, so it is not checked against a list - it is trimmed, capped and
+// only ever drawn through esc(). A malformed escape (listDec's try) drops it.
+const CAMPS_Q_MAX = 100;
+const campsQ = s => String(s ?? '').trim().slice(0, CAMPS_Q_MAX).trim();
 const CAMPS_WHEN = { '30d': ['Next 30 days', 30], '90d': ['Next 3 months', 91] };
 const CAMPS_DIVS = ['D1', 'D2', 'D3'];
 const campsDateOk = s => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(new Date(s + 'T12:00:00'));
@@ -3919,7 +3967,8 @@ function campsStateOf(query, known) {
   const program = one('program');
   return { when, from, to, region: uniq(vals('region').filter(r => REGIONS.includes(r))),
     state: uniq(vals('state').map(s => s.toUpperCase()).filter(s => US_STATES.includes(s))),
-    div: uniq(vals('div').filter(d => CAMPS_DIVS.includes(d))), program: program && known.has(program) ? program : null };
+    div: uniq(vals('div').filter(d => CAMPS_DIVS.includes(d))), program: program && known.has(program) ? program : null,
+    q: campsQ(listDec(raw.get('q') || '')) };  // the whole value: a comma is part of the text, not a list
 }
 function campsHashOf(st) {
   const out = [], put = (k, vals) => { const v = [...new Set(vals)].map(listEnc).sort(); if (v.length) out.push(`${k}=${v.join(',')}`); };
@@ -3928,9 +3977,45 @@ function campsHashOf(st) {
   if (st.to) out.push(`to=${st.to}`);
   put('region', st.region || []); put('state', st.state || []); put('div', st.div || []);
   if (st.program) out.push(`program=${listEnc(st.program)}`);
+  if (campsQ(st.q)) out.push(`q=${listEnc(campsQ(st.q))}`);
   return out.length ? `#/camps?${out.join('&')}` : '#/camps';
 }
-const campsFiltered = st => !!(st.when || st.from || st.to || st.region.length || st.state.length || st.div.length || st.program || S.campsSaved);
+// The sidebar's filters (the chips, Clear all) - the search is not one of them; it has its own Clear search.
+const campsFilterOn = st => !!(st.when || st.from || st.to || st.region.length || st.state.length || st.div.length || st.program || S.campsSaved);
+const campsFiltered = st => campsFilterOn(st) || !!st.q;  // narrowed at all: the count says "of M"
+/* The camps search (#471). Each word of the query must start a word of the camp's text, in any order (AND): "texas june"
+   is Texas camps in June. The text: the program's short and full name, its city, its state's full name, its region,
+   the camp's title, and every month the camp's dates touch (a month-only date, that month) - "jun" starts "june".
+   A state code (TX) and a division (D1) match only as WHOLE words, so "in" is not Indiana's code and "d" is not a
+   division. The event venue is not searched: the sidebar says Program location is where the school is.
+   Both sides go through campsNorm - normText (case, accents, punctuation) after dropping apostrophes and the ʻokina, so
+   "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys" - and "st" and "saint" stand for each other. */
+const campsNorm = s => normText(String(s ?? '').replace(/[ʻʼ'’`]/g, ''));
+const CAMPS_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+const CAMPS_SEARCH = new WeakMap();
+function campsSearchOf(c, info) {
+  let s = CAMPS_SEARCH.get(c);
+  if (s) return s;
+  const names = [info.name, c.program?.name, c.program?.shortName, info.row?.name, info.row?.shortName];
+  const words = new Set(wordsOf(campsNorm([...names, info.city, STATE_NAMES[info.state], info.region, c.name].filter(Boolean).join(' '))));
+  for (const w of [...words]) { if (w === 'st') words.add('saint'); if (w === 'saint') words.add('st'); }
+  const first = (c.startDate || '').slice(0, 7), last = c.precision === 'month' ? first : (c.endDate || c.startDate || '').slice(0, 7);
+  for (let ym = first, n = 0; /^\d{4}-\d{2}$/.test(ym) && ym <= last && n < 12; n++) {
+    const [y, m] = ym.split('-').map(Number);
+    words.add(CAMPS_MONTHS[m - 1]);
+    ym = m === 12 ? `${y + 1}-01` : `${y}-${String(m + 1).padStart(2, '0')}`;
+  }
+  const codes = new Set([info.state, info.division].filter(Boolean).map(x => campsNorm(x)));
+  s = { words: [...words], codes };
+  CAMPS_SEARCH.set(c, s);
+  return s;
+}
+function campsQueryMatch(c, info, q) {
+  const toks = wordsOf(campsNorm(q));
+  if (!toks.length) return true;
+  const s = campsSearchOf(c, info);
+  return toks.every(t => s.codes.has(t) || s.words.some(w => w.startsWith(t)));
+}
 // Does camp `c` (program `info`) pass the page's filters? The date filter keeps a camp that overlaps the window.
 function campsMatch(c, info, st, today) {
   if (st.div.length && !st.div.includes(info.division)) return false;
@@ -3941,6 +4026,7 @@ function campsMatch(c, info, st, today) {
   const hi = st.to || (st.when ? campAddDays(today, CAMPS_WHEN[st.when][1]) : null);
   if (st.from && end < (c.precision === 'month' ? st.from.slice(0, 7) : st.from)) return false;
   if (hi && start > hi) return false;
+  if (st.q && !campsQueryMatch(c, info, st.q)) return false;  // the search ANDs with every filter
   return true;
 }
 function campRowHtml(c, info) {
@@ -4015,10 +4101,12 @@ function campsResultsHtml(rows) {
       <p><a class="btn primary" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
   }
   if (!rows.length) {
-    const what = campsChips(st).map(([, l]) => l).join(' · ');
-    return `<div class="card camps-empty"><h2>No upcoming ID camp found in our sources for these filters</h2>
-      <p class="muted">${esc(what)}. ${CAMPS.all.length} upcoming ID camp${CAMPS.all.length === 1 ? ' is' : 's are'} listed across all programs. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here.</p>
-      <p><button type="button" class="btn primary" data-camps-clear data-camps-focus="clear-empty">Clear filters</button> <a class="btn" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
+    const what = campsChips(st).map(([, l]) => l).join(' · '), on = campsFilterOn(st);
+    // #471: a search that finds nothing says what was searched, and offers Clear search (and Clear filters when any is on)
+    const head = st.q ? `No upcoming ID camp found in our sources matching “${esc(st.q)}”${on ? ' with these filters' : ''}` : 'No upcoming ID camp found in our sources for these filters';
+    return `<div class="card camps-empty"><h2>${head}</h2>
+      <p class="muted">${what ? `${esc(what)}. ` : ''}${CAMPS.all.length} upcoming ID camp${CAMPS.all.length === 1 ? ' is' : 's are'} listed across all programs. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here.${st.q ? ' Search covers the school, its city, state and region, the division, the camp\'s title and its month.' : ''}</p>
+      <p>${st.q ? '<button type="button" class="btn primary" data-camps-clear-q data-camps-focus="clear-q-empty">Clear search</button> ' : ''}${on ? `<button type="button" class="btn${st.q ? '' : ' primary'}" data-camps-clear data-camps-focus="clear-empty">Clear filters</button> ` : ''}<a class="btn" href="#/programs">Browse programs</a></p>${footHtml}</div>`;
   }
   const months = new Map();
   rows.forEach(x => { const m = (x.c.startDate || '').slice(0, 7); if (!months.has(m)) months.set(m, []); months.get(m).push(x); });
@@ -4031,11 +4119,12 @@ function campsSummary() {
   const st = CAMPS.st, rows = campsShown(), filtered = campsFiltered(st);
   const nProg = new Set(rows.map(x => x.c.slug)).size;
   const range = !!(st.from || st.to || S.campsRange);
-  const count = campsCountText(rows.length, nProg, filtered);
+  // the count, and with a search what it matched (#471): the subtitle, the bar's status line and the header's #qStatus
+  const count = campsCountText(rows.length, nProg, filtered) + (st.q ? ` matching “${st.q}”` : '');
   const chips = campsChips(st);
   return {
     st, rows, count, range,
-    sub: `${esc(count)} · soonest first${CAMPS.doc.updated ? ` · <span class="camps-fresh">List refreshed ${esc(fmtDate(CAMPS.doc.updated))}</span>` : ''}`,
+    sub: `${esc(count)}${st.q ? ' <button type="button" class="clear-search" data-camps-clear-q>Clear search</button>' : ''} · soonest first${CAMPS.doc.updated ? ` · <span class="camps-fresh">List refreshed ${esc(fmtDate(CAMPS.doc.updated))}</span>` : ''}`,
     whenOn: k => k === 'range' ? range : k === '' ? !st.when && !range : st.when === k && !range,
     more: chips.length,  // the Filters button's count: every active filter, When included (it is in the sheet too)
     show: `Show ${rows.length} camp${rows.length === 1 ? '' : 's'}`,
@@ -4095,6 +4184,7 @@ function campsSheet(open, { focus } = {}) {
   campsInert(open);  // Huatuo on #471: aria-modal alone hides nothing from Tab, a tap or every screen reader
   btn?.setAttribute('aria-expanded', String(open));
   if (open) $('#campsSideTitle')?.focus();
+  else if (focus === 'keep') return;
   else if (focus === 'list') { const t = $('#campsResults h2'); if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else btn?.focus(); }
   else btn?.focus();
 }
@@ -4103,6 +4193,16 @@ function campsSheet(open, { focus } = {}) {
    the footer. The sheet sits inside #main, so #main itself cannot be inerted: from the sheet up to <body>, every
    sibling of each ancestor is, except the sheet's own backdrop (the tap that closes it). Only elements this set
    inert are cleared, so an element already inert for another reason stays that way. */
+/* Bianque on #476 (Programs' sheet), checked here too: a window widened past the phone breakpoint with the sheet open (a
+   phone turned to landscape) shows the sidebar again, so the sheet closes - its dialog role, backdrop and the inert page
+   with it. Focus stays where it is: inside the sheet it is now inside the visible sidebar, and the Filters button it
+   would go back to is hidden on a wide screen. Both signals: the breakpoint's own media query (which a viewport change
+   always re-evaluates) and resize. */
+{
+  const wide = () => { if (!isPhone() && campsSheetOpen()) campsSheet(false, { focus: 'keep' }); };
+  window.addEventListener('resize', wide);
+  matchMedia('(max-width: 768px)').addEventListener?.('change', wide);
+}
 let CAMPS_INERT = [];
 function campsInert(on) {
   CAMPS_INERT.forEach(e => { e.inert = false; });
@@ -4157,6 +4257,8 @@ function campsShortlistChanged() {
 // A visitor's change: the new state, one history entry for its address (never for the Shortlist toggle), then an
 // in-place update. `focus` names the control that should hold focus afterwards (its data-camps-focus).
 function campsCommit(next, focus) {
+  campsTypingFlush();  // typing not yet written belongs to the entry it was typed on, not the one about to be pushed
+  const qs = $('#qStatus'); if (qs && qs.textContent) qs.textContent = '';  // the bar's own status line says this one
   CAMPS.st = next;
   const h = campsHashOf(next);
   if (location.hash !== h) { try { history.pushState(null, '', h); } catch { /* refused: the address stays as it was */ } }
@@ -4165,6 +4267,40 @@ function campsCommit(next, focus) {
   if (el && document.activeElement !== el) el.focus();
   else if (focus && !el) campsFallbackFocus();  // the control is gone (a removed chip): never <body>
 }
+/* The camps search, typed in the header box (#471). The query is the page's own (CAMPS.st.q), never the Programs
+   query (S.qRaw): the owner's direction keeps one box and two searches. Typing narrows the list in place and REPLACES
+   the current history entry (#14's pattern), so a word typed letter by letter is one entry; a filter change or a clear
+   pushes one. The count goes to #qStatus, the header box's one live region, only when it changes (#445's rule). */
+let campsTypeTimer = null;
+function campsTyped(v) {
+  if (!CAMPS?.st || currentView() !== 'camps') return;
+  CAMPS.st = { ...CAMPS.st, q: campsQ(v) };
+  const clr = $('#qClear'); if (clr) clr.hidden = !v;
+  clearTimeout(campsTypeTimer);
+  campsTypeTimer = setTimeout(campsTypingFlush, 80);
+}
+function campsTypingFlush() {
+  if (campsTypeTimer === null) return;
+  clearTimeout(campsTypeTimer); campsTypeTimer = null;
+  if (!CAMPS?.st || currentView() !== 'camps') return;
+  const h = campsHashOf(CAMPS.st);
+  if (location.hash !== h) { try { history.replaceState(null, '', h); } catch { /* refused: the address stays as it was */ } }
+  campsUpdate();
+  updateSearchStatus();
+}
+// Clear search (the subtitle's and the empty state's buttons, the box's ✕, Escape in the box): one new entry. Focus goes
+// to the list's first heading from a button (#453's rule: never <body>), and stays in the box from the box.
+function campsClearSearch(to) {
+  const box = $('#q'); if (box) box.value = '';
+  campsCommit({ ...CAMPS.st, q: '' });
+  syncSearchBox();
+  if (to === 'box') { box?.focus(); return; }
+  const t = $('#campsResults h2');
+  if (t) { t.setAttribute('tabindex', '-1'); t.focus(); } else campsFallbackFocus();
+}
+document.addEventListener('click', e => {
+  if (e.target.closest?.('[data-camps-clear-q]') && CAMPS?.st && currentView() === 'camps') campsClearSearch('heading');
+});
 async function renderCamps() {
   const idx = await loadIndex();
   const doc = await loadCamps();
@@ -4175,6 +4311,7 @@ async function renderCamps() {
   // The address is made canonical in place (#14's rule): a link's unknown or unchecked values are dropped, no new entry.
   const canon = campsHashOf(CAMPS.st);
   if (h !== canon && currentView() === 'camps') { try { history.replaceState(null, '', canon); } catch { /* keep the address */ } }
+  if (currentView() === 'camps') syncSearchBox();  // #471: the box shows this address's search (Back restores both)
 
   const sum = campsSummary();
   $('#app').innerHTML = pageHeader({
@@ -4188,7 +4325,8 @@ async function renderCamps() {
       <div class="camps-backdrop" id="campsBackdrop" hidden></div></div>`;
 
   const bar = $('#campsBar');
-  const clearAll = focus => { S.campsSaved = false; S.campsRange = false; campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null }, focus); };
+  // Clear all clears the sidebar's filters; the search stays (it has its own Clear search, #471)
+  const clearAll = focus => { S.campsSaved = false; S.campsRange = false; campsCommit({ when: null, from: null, to: null, region: [], state: [], div: [], program: null, q: CAMPS.st.q }, focus); };
   // The chips and the Filters button live in the main column, beside the sidebar.
   $('#campsMain').addEventListener('click', e => {
     if (e.target.closest('#campsMoreBtn')) return campsSheet(true);

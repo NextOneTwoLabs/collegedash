@@ -151,7 +151,7 @@ test('typing in the header search box: a route change never takes focus from it'
 });
 
 test('#465: a route to a page that hides the search box moves focus to its heading, never leaving it in a hidden box', async () => {
-  for (const to of ['#/', '#/camps', '#/trends', '#/faq']) {
+  for (const to of ['#/', '#/trends', '#/faq']) {  // ID Camps shows the box since #471
     const pg = await open('#/programs');
     pg.sb.document.activeElement = IN_SEARCH;
     const f = await nav(pg, to, 400);
