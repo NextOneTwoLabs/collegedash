@@ -63,7 +63,7 @@ function loadPage() {
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = SOURCE.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast', 'campsSheet'];
+  const handles = ['S', 'renderCamps', 'loadIndex', 'todayLocal', 'campsCommit', 'campsStateOf', 'campsHashOf', 'campIsPast', 'campsSheet', 'setQuery', 'route'];
   const src = lines.slice(a + 1, b).join('\n')
     + `\n;for (const k of ${JSON.stringify(handles)}) { try { globalThis[k] = eval(k); } catch { } }`
     + `\n;globalThis.campsNow = () => { try { return eval('CAMPS'); } catch { return undefined; } };\n`;
@@ -107,6 +107,7 @@ async function open(hash) {
   await sb.renderCamps();
   return app();
 }
+const settle = ms => new Promise(r => setTimeout(r, ms));
 const rowsIn = html => [...html.matchAll(/<li class="camp-row" data-slug="[^"]+">[\s\S]*?<h3 class="camp-title">([^<]+)</g)].map(m => m[1]);
 
 test('#465 the shared past helper (#71): a camp that has ended is gone, one running today stays, months compare as months', async () => {
@@ -220,10 +221,32 @@ test('#465 empty states say "found in our sources", never that no camp exists', 
 });
 
 test('#465 the Programs sidebar is not drawn on the camps page (D4), and the page never re-reads the Programs filters', () => {
-  assert.match(SOURCE, /body\.view-camps \.sidebar, body\.view-camps \.sidebar-overlay, body\.view-camps #sidebarToggle \{ display: none !important; \}/);
-  assert.match(SOURCE, /document\.body\.classList\.toggle\('view-camps', view === 'camps'\)/);
+  // #465 B's one mechanism: a view in NO_RAIL draws no Programs sidebar and no button to open one
+  assert.match(SOURCE, /const NO_RAIL = new Set\(\[[^\]]*'camps'[^\]]*\]\)/, 'ID Camps is not in NO_RAIL');
+  assert.match(SOURCE, /body\.no-rail \.sidebar, body\.no-rail \.sidebar-overlay, body\.no-rail \.hamburger \{ display: none; \}/);
+  assert.ok(!/view-camps/.test(SOURCE), 'a second hiding mechanism (body.view-camps) is left over');
   const body = SOURCE.slice(SOURCE.indexOf('function campsMatch('), SOURCE.indexOf('/* ---------- trends'));
   assert.ok(!/matchesFilters|S\.filters\.(conf|region|division|cond)|S\.q\b/.test(body.replace(/S\.filters\.view/g, '')), 'the camps page reads a Programs filter');
+});
+
+test('#465 D4: a search made on Programs is not applied to ID Camps - the full list shows, and typing there changes nothing', async () => {
+  S.camps = JSON.parse(JSON.stringify(FIXTURE));
+  sb.location.hash = '#/programs';
+  sb.setQuery('stanford');  // what a visitor typed in the header box on Programs
+  await settle(120);
+  assert.equal(S.q, 'stanford', 'fixture: the Programs search did not take');
+  sb.location.hash = '#/camps';
+  await sb.renderCamps();
+  const html = app();
+  assert.deepEqual(rowsIn(html).sort(), ['Block Only ID Camp', 'Far Winter ID Camp', 'Later D3 ID Clinic', 'Month Only ID Camp', 'Running Now ID Camp', 'Soon Prospect Camp'].sort(),
+    'the Programs search narrowed the camps');
+  assert.match(html, /6 upcoming ID camps at 5 programs/);
+  assert.doesNotMatch(html, /programs matching|search matches program names|Clear search/i, 'the Programs query is named on the camps page');
+  // and typing in the (hidden) box while on ID Camps does not redraw or narrow it
+  el('#campsResults').innerHTML = 'UNCHANGED';
+  sb.setQuery('duke'); await settle(120);
+  assert.equal(el('#campsResults').innerHTML, 'UNCHANGED', 'typing redrew the camps list');
+  sb.setQuery(''); await settle(120);
 });
 
 /* ---------- the camps page's own sidebar (owner, 2026-10-02): a left column on a wide screen, a sheet on a phone ---------- */

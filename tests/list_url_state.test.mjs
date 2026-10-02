@@ -357,7 +357,9 @@ test('XSS: planted markup in q, conf and region reaches no HTML sink on the list
   // Pipelines names the search only while a club or high school is picked (and no program), so one is picked
   const club = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'trends', 'index.json'), 'utf8')).clubs.id[0];
   pg.sb.location.hash = `#/trends?club=${encodeURIComponent(club)}`; await settle(300);
-  assert.ok(pg.sinks.some(s => /^#(app|trSub)$/.test(s.el) && /programs matching “&quot;&gt;&lt;img/.test(s.html)), 'Pipelines never drew its search line, so it was not checked');
+  // #465 (owner's D4): neither ID Camps nor Pipelines reads the Programs search any more, so neither names it at all -
+  // which also means the planted text cannot reach their sinks. (Before #465 B and F, a camps subtitle named it.)
+  assert.ok(!pg.sinks.some(s => /^#(app|trSub)$/.test(s.el) && /programs matching/.test(s.html)), 'ID Camps or Pipelines names the Programs search');
   const drawn = new Set(pg.sinks.map(s => s.el));
   for (const el of ['#sidebar', '#app', '#qList']) assert.ok(drawn.has(el), `${el} was never drawn, so it was not checked`);
   // The page draws no <img> or <script> through innerHTML at all, so any one is the planted markup; an unescaped quote
@@ -459,7 +461,7 @@ test('#465: a bare #/ (and no hash at all) is Home - never rewritten, never sort
     assert.deepEqual(pg.hist.entries, [hash], `${JSON.stringify(hash)} was rewritten`);
     assert.equal(pg.writes.length, 0, `${JSON.stringify(hash)}: something was written to history`);
     assert.match(pg.$('#app').innerHTML, /<h1 class="content-title">Find your college soccer path\.<\/h1>/);
-    assert.match(pg.$('#app').innerHTML, /href="#\/programs"[^>]*>Browse Programs<\/a>.*href="#\/camps"[^>]*>Find ID Camps<\/a>.*href="#\/trends"[^>]*>Explore Pipelines<\/a>/s);
+    assert.match(pg.$('#app').innerHTML, /href="#\/programs"[^>]*>(?:(?!<\/a>)[\s\S])*Programs[\s\S]*?<\/a>[\s\S]*href="#\/camps"[^>]*>(?:(?!<\/a>)[\s\S])*ID Camps[\s\S]*?<\/a>[\s\S]*href="#\/trends"[^>]*>(?:(?!<\/a>)[\s\S])*Pipelines/);
     assert.deepEqual(JSON.parse(pg.ls.get('cd.filters')).region, ['West'], 'Home changed the saved filters');
     assert.equal(pg.sb.feedbackRoute(), '#/');
   }
@@ -493,10 +495,11 @@ test('#465 inventory: the only bare-root ("#/") addresses left are Home links an
     /history\.replaceState\(null, '', '#\/'\); \} catch/,           // the #400 pilot strip (Home)
     /if \(location\.hash !== '#\/'\) location\.replace\('#\/'\)/,   // its fallback (Home)
     /\{ label: 'Home', href: '#\/' \}/,                              // breadcrumbs that start at Home
+    /<a class="section-label" href="#\/" aria-label="College Soccer/,  // the header's product name (#465 B)
   ];
   const stray = found.filter(l => !allowed.some(re => re.test(l)));
   assert.deepEqual(stray, [], 'a bare "#/" that is not Home');
-  assert.equal(found.length, 9, `the inventory changed: ${found.length} bare-root strings (2 pilot, 7 Home crumbs: not found, the list twice, camps, Pipelines, About, Data API)`);
+  assert.equal(found.length, 10, `the inventory changed: ${found.length} bare-root strings (2 pilot, 7 Home crumbs: not found, the list twice, camps, Pipelines, About, Data API; the header's College Soccer link)`);
   assert.ok(!/location\.hash = '#\/'/.test(src) && !/location\.replace\('#\/'\)\s*;?\s*return/.test(src), 'a navigation to "#/" meant as the list');
   assert.ok((src.match(/'#\/programs'/g) || []).length >= 10, 'the list-intent navigations do not say #/programs');
 });

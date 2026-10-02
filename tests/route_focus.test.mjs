@@ -141,11 +141,22 @@ test('Back and Forward: the heading of the page returned to takes focus, without
   assert.ok(pg.focus.every(f => f.opts?.preventScroll === true), 'a focus call could scroll the page');
 });
 
+// #465 (the owner, 2026-10-02): the box shows on Programs and a program's page only, so those are the routes it can be
+// typed in during.
 test('typing in the header search box: a route change never takes focus from it', async () => {
-  const pg = await open('#/camps');
+  const pg = await open(`#/p/${SLUG}`);
   pg.sb.document.activeElement = IN_SEARCH;  // e.g. Enter on a place, which opens the list and keeps the box focused (#409)
-  assert.deepEqual(await nav(pg, '#/'), [], 'the list took focus from the search box');
+  assert.deepEqual(await nav(pg, '#/programs'), [], 'the list took focus from the search box');
   assert.deepEqual(await nav(pg, `#/p/${SLUG}`, 400), [], 'a profile took focus from the search box');
+});
+
+test('#465: a route to a page that hides the search box moves focus to its heading, never leaving it in a hidden box', async () => {
+  for (const to of ['#/', '#/camps', '#/trends', '#/faq']) {
+    const pg = await open('#/programs');
+    pg.sb.document.activeElement = IN_SEARCH;
+    const f = await nav(pg, to, 400);
+    assert.ok(headingFocus(f), `${to}: focus stayed in the hidden search box (${JSON.stringify(f)})`);
+  }
 });
 
 test('the recommendations dialog and the feedback form keep focus through a route change', async () => {
@@ -166,12 +177,14 @@ test('a profile tab switch focuses the new active tab, not the heading', async (
   assert.equal(f.at(-1).opts?.preventScroll, true);
 });
 
-test('a view tab used to reach ID Camps focuses the ID Camps tab', async () => {
+// #465 B: ID Camps is a global destination (the header's nav, the phone's bottom bar), no longer a tab beside Cards/Stats,
+// so it has no tab strip: whatever control was used, its heading takes focus. The tab rule still holds where tabs
+// exist (a profile's tab switch, above).
+test('ID Camps has no tab strip any more: reached from a focused view tab, its heading takes focus', async () => {
   const pg = await open('#/');
   pg.sb.document.activeElement = ON_VIEW_TAB;
   const f = await nav(pg, '#/camps', 400);
-  assert.equal(f.at(-1)?.el, '.view-tab.active', `ID Camps did not focus its tab (${JSON.stringify(f)})`);
-  assert.equal(f.at(-1).href, '#/camps');
+  assert.ok(headingFocus(f), `ID Camps did not focus its heading (${JSON.stringify(f)})`);
 });
 
 test('the same page drawn again (a retry, an address rewritten in place) takes no focus', async () => {

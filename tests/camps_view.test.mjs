@@ -259,15 +259,20 @@ test('the hidden count is on the page, names every class, and adds up', () => {
   assert.ok(!html.includes('Camp list checked'), '"checked" claims more than the index knows (#465)');
 });
 
-test('the tab strip is on the list and the camp view, and not on the shortlist', async () => {
+// #465 B: Cards / Stats is Programs' own switch; ID Camps and Pipelines are global destinations (the header's nav and
+// the phone's bottom bar, both static markup), so the camp view and the shortlist carry no tab strip at all.
+test('the Cards/Stats strip is on the list only; ID Camps is reached from the global nav, not a tab', async () => {
   const camps = app();
-  assert.ok(camps.includes('>Cards</button>') && camps.includes('>Stats</button>') && camps.includes('>ID Camps</a>'));
-  // #342: the tab reads Stats and keeps the view key `table`, so stored choices and old links still open it
-  assert.ok(camps.includes('data-view="table">Stats</button>') && !camps.includes('>Table</button>'), 'the tab is not "Stats" on view key table');
-  assert.ok(camps.includes('class="view-tab active" role="tab" aria-selected="true">ID Camps</a>'));
-  sandbox.location.hash = '#/';
+  assert.ok(!/class="view-tab|data-view=/.test(camps), 'the camp view still carries a tab strip');
+  sandbox.location.hash = '#/programs';
   await sandbox.renderList();
-  assert.ok(app().includes('href="#/camps"'), 'the programs list is missing the ID Camps tab');
+  const list = app();
+  // #342: the tab reads Stats and keeps the view key `table`, so stored choices and old links still open it
+  assert.ok(list.includes('data-view="table">Stats</button>') && !list.includes('>Table</button>'), 'the tab is not "Stats" on view key table');
+  assert.ok(list.includes('>Cards</button>') && !list.includes('href="#/camps"') && !list.includes('href="#/trends"'), 'the list strip still links ID Camps or Pipelines');
+  const PAGE_HTML = fs.readFileSync(path.join(PUBLIC, 'index.html'), 'utf8');
+  assert.match(PAGE_HTML, /<nav class="gnav" aria-label="Main">[^]*?<a href="#\/camps" data-nav="camps">ID Camps<\/a>/, 'the header nav does not reach ID Camps');
+  assert.match(PAGE_HTML, /<nav class="bottom-nav" aria-label="Main">[^]*?<a href="#\/camps" data-nav="camps">[^]*?<span>ID Camps<\/span>/, 'the bottom bar does not reach ID Camps');
   await sandbox.renderShortlist();
   assert.ok(!app().includes('#/camps'), 'the shortlist carries a strip it should not - camps are not shortlist-scoped');
 });

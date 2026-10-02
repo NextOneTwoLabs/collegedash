@@ -96,7 +96,9 @@ const watched = sel => {
 // the header and the two-row phone grid; the rest is what main already had.
 const EXPECTED = {
   '|input': { font: 'inherit' },
-  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100' },
+  '|.header': { padding: '0 20px', height: 'var(--header-height)', display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', position: 'fixed', top: '0', left: '0', right: '0', 'z-index': '100',
+    // #465 B: viewport-fit=cover - the header keeps its content inside the safe area (top inset, side insets in landscape)
+    'padding-top': 'var(--safe-top)', 'padding-left': 'max(20px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(20px, env(safe-area-inset-right, 0px))' },
   '|.search-input': { width: '100%', height: '40px', padding: '8px 32px 8px 34px', 'font-size': '13px' },
   '|.header-search': { position: 'relative', flex: '1 1 auto', 'min-width': '0', 'max-width': '520px', margin: '0 16px' },
   '|.header-search .search-input': { height: '38px' },
@@ -104,7 +106,7 @@ const EXPECTED = {
   '@media (max-width: 768px)|.header-search': { 'grid-row': '2', 'grid-column': '1 / -1', 'max-width': 'none', margin: '0' },
   '@media (max-width: 768px)|.header.has-recs .header-search': { 'grid-column': '1' },
   '@media (max-width: 768px)|.header-search .search-input': { 'font-size': '16px' },
-  '@media (max-width: 460px)|.header': { padding: '0 12px' },
+  '@media (max-width: 460px)|.header': { 'padding-left': 'max(12px, env(safe-area-inset-left, 0px))', 'padding-right': 'max(12px, env(safe-area-inset-right, 0px))' },  // #465 B: was padding: 0 12px; now side padding only, so the top safe-area inset stays
   '@media print|.header': { display: 'none' },
 };
 function check(css) {
@@ -160,8 +162,8 @@ test('#404 phase 1: the box is drawn at 375 px without opening the menu, and at 
 test('#434: at <=768 px the header is two rows and --header-height follows them', () => {
   const root = parseCss(CSS).filter(r => r.selectors.includes(':root'));
   const v = at => root.filter(r => r.at.join(' ') === at).flatMap(r => decls(r.body)).filter(d => d.prop === '--header-height').map(d => d.value).pop();
-  assert.equal(v(''), '60px', 'the desktop header height changed');
-  assert.equal(v('@media (max-width: 768px)'), '112px', 'the phone header height does not cover both rows');
+  assert.equal(v(''), 'calc(60px + env(safe-area-inset-top, 0px))', 'the desktop header height changed');  // #465 B: + the top safe-area inset
+  assert.equal(v('@media (max-width: 768px)'), 'calc(112px + env(safe-area-inset-top, 0px))', 'the phone header height does not cover both rows');
   assert.equal(EXPECTED['@media (max-width: 768px)|.header']['grid-template-rows'], '52px 52px');
   assert.ok(52 + 52 <= 112);
 });
