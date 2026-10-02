@@ -98,6 +98,8 @@ test('FIX sorted by a fact the card does not show: the row is that value, labell
   const t = (p, sort) => text(factOf(card(p, { sort })));
   assert.match(t(withAll, 'admit'), new RegExp(`^Admission rate \\d+(\\.\\d)?%$`));
   assert.equal(t(withAll, 'academicRank'), `US rank (THE) #${withAll.academicRank}`);
+  assert.match(factOf(card(withAll, { sort: 'academicRank' })), /title="Times Higher Education, Best universities in the United States 2026[^"]*">#\d+</,
+    'a shown rank names its source (#46)');
   assert.equal(t(withAll, 'tuition'), `Tuition (out-of-state) $${num(withAll.tuitionOutOfState)} / yr`);
   assert.equal(t(withAll, 'undergrads'), `Undergrads ${num(withAll.undergradEnrollment)}`);
   assert.equal(t(withAll, 'region'), `Region ${withAll.region}`);

@@ -690,7 +690,10 @@ def test_card() -> None:
     html = open(os.path.join(ROOT, "public", "index.html"), encoding="utf-8").read()
     card = html[html.index("function cardHtml("):html.index("function tableHtml(")]
 
-    ok("the card's fact names the source", "fact('US rank (THE)', rankHtml(p), rankTitle(p))" in card)
+    # #465 E: the card shows the rank only when the list is sorted by it, in its one fact row - still naming the source
+    ok("the card's fact names the source",
+       "academicRank: p => p.academicRank != null ? `<span title=\"${esc(rankTitle(p))}\">${rankHtml(p)}</span>`"
+       " : factNa('Not ranked', rankTitle(p))," in html)
     ok("the card no longer reads the admission rate", "admissionRate" not in card, card)
     ok("the rank is always '#' plus the number, with no tie marker",
        "const rankHtml = p => p.academicRank == null ? 'N/A' : `#${p.academicRank}`;" in html)
@@ -725,8 +728,8 @@ def test_card() -> None:
            "shared with other universities" in f["title"] and "=" not in f["title"], f["title"])
     ok("the title attribute spells out the ranking",
        "Times Higher Education, Best universities in the United States 2026" in html)
-    ok("fact() renders a title attribute when given one",
-       'const fact = (label, value, title) =>' in html and 'title="${esc(title)}"' in html)
+    ok("a missing card fact carries its reason as a title and as accessible text",
+       'const factNa = (word, why) => `<span class="na" title="${esc(why)}">${esc(word)}<span class="sr-only">: ${esc(why)}</span></span>`;' in html)
 
     for what, needle in (
             ("the sort options keep Admission rate", "['admit', 'Admission rate']"),

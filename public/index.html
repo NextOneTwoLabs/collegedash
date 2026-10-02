@@ -3947,7 +3947,7 @@ const factNa = (word, why) => `<span class="na" title="${esc(why)}">${esc(word)}
 const NOT_REPORTED = 'The school reports none to College Scorecard';
 const CARD_SORT_FACTS = {
   admit: p => p.admissionRate != null ? fmtPct(p.admissionRate) : factNa('Not reported', NOT_REPORTED),
-  academicRank: p => p.academicRank != null ? `#${p.academicRank}` : factNa('Not ranked', rankTitle(p)),
+  academicRank: p => p.academicRank != null ? `<span title="${esc(rankTitle(p))}">${rankHtml(p)}</span>` : factNa('Not ranked', rankTitle(p)),
   tuition: p => { const v = p.tuitionOutOfState ?? p.tuitionInState; return v != null ? `$${fmtNum(v)} / yr` : factNa('Not reported', NOT_REPORTED); },
   undergrads: p => p.undergradEnrollment != null ? fmtNum(p.undergradEnrollment) : factNa('Not reported', NOT_REPORTED),
   commits: p => cardCommits(p, S.filters.classYear),
