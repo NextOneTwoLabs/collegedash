@@ -322,12 +322,12 @@
       "confRecord": "0-0-1",
       "inProgress": true,
       "headCoach": "Missy Strasburg",
-      "rpiRank": 172,
+      "rpiRank": 197,
       "rpi": {
-        "rank": 172,
-        "record": "5-2-1",
-        "through": "2026-09-30",
-        "prevRank": 177,
+        "rank": 197,
+        "record": "5-2-2",
+        "through": "2026-10-01",
+        "prevRank": 172,
         "source": "NCAA.com weekly RPI",
         "weekly": [
           {
@@ -369,6 +369,11 @@
             "through": "2026-09-30",
             "rank": 172,
             "record": "5-2-1"
+          },
+          {
+            "through": "2026-10-01",
+            "rank": 197,
+            "record": "5-2-2"
           }
         ]
       }
@@ -3665,7 +3670,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/devyn-giraldo/",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null,
           "profileCreated": "2025-02-28"
         }
@@ -3810,7 +3815,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/kenzie-shuler/",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null,
           "profileCreated": "2025-01-17"
         }
@@ -3871,7 +3876,7 @@
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/lauren-dunn/",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null,
           "profileCreated": "2025-06-06"
         }
@@ -4014,14 +4019,14 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/olivia-lorella/pid-171515",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/eastern-washington/clgid-221/tab-commitments",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null
         },
         {
           "kind": "soccerwire",
           "url": "https://www.soccerwire.com/player/olivia-lorella/",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null,
           "profileCreated": "2025-02-06"
         }
@@ -4035,7 +4040,7 @@
         "club": "Pacific NW",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-10-02",
+        "updated": "2026-10-03",
         "state": null,
         "country": null,
         "conflict": [
@@ -4077,7 +4082,7 @@
           "url": "https://www.topdrawersoccer.com/club-player-profile/reese-maich/pid-177318",
           "listUrl": "https://www.topdrawersoccer.com/college-soccer/college-soccer-details/women/eastern-washington/clgid-221/tab-commitments",
           "firstSeen": "2026-09-07",
-          "lastSeen": "2026-10-02",
+          "lastSeen": "2026-10-03",
           "missingSince": null
         }
       ],
@@ -4090,7 +4095,7 @@
         "club": "Pickering FC",
         "status": "matched",
         "source": "TopDrawerSoccer",
-        "updated": "2026-10-02",
+        "updated": "2026-10-03",
         "state": null,
         "country": "CA",
         "outsideUS": true
@@ -4214,7 +4219,7 @@
     "2027": 2
   },
   "_build": {
-    "builtAt": "2026-10-02T17:04:47Z",
+    "builtAt": "2026-10-03T15:36:11Z",
     "completeness": 1.0,
     "sections": {
       "school": true,
@@ -4228,7 +4233,23 @@
       "news": true
     },
     "stale": [],
-    "failed": [],
+    "failed": [
+      {
+        "collector": "athletics",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='goeags.com', port=443): Max retries exceeded with url: /sports/womens-soccer/roster (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))",
+        "at": "2026-10-03T15:10:15Z"
+      },
+      {
+        "collector": "camps",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='goeags.com', port=443): Max retries exceeded with url: /sports/womens-soccer/roster (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))",
+        "at": "2026-10-03T15:15:47Z"
+      },
+      {
+        "collector": "news",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='goeags.com', port=443): Max retries exceeded with url: /sports/womens-soccer/archives (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)')))",
+        "at": "2026-10-03T15:12:34Z"
+      }
+    ],
     "skipped": [
       {
         "collector": "wikipedia",
