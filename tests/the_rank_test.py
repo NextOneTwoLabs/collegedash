@@ -709,7 +709,7 @@ const sb = {
 sb.window = sb; sb.globalThis = sb;
 const lines = fs.readFileSync(pagePath, 'utf8').split(/\r?\n/);
 const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, cardFactHtml, CARD_SORT_FACTS });\n';
+const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, cardFactHtml, CARD_SORT_FACTS, SORT_SPECS });\n';
 vm.createContext(sb);
 new vm.Script(src, { filename: 'public/index.html' }).runInContext(sb);
 (async () => {
@@ -719,7 +719,10 @@ new vm.Script(src, { filename: 'public/index.html' }).runInContext(sb);
   const spy = reads => new Proxy(row, { get: (t, k) => { if (k === 'admissionRate') reads.push(1); return t[k]; },
                                         has: (t, k) => { if (k === 'admissionRate') reads.push(1); return k in t; } });
   const f = sb.S.filters, out = { defaults: {}, entries: {} };
-  for (const sort of ['name', 'rpi', 'record', 'conference']) {
+  // Every sort the list offers that has no card fact of its own, so a sort added later is covered automatically.
+  const plainSorts = Object.keys(sb.SORT_SPECS).filter(k => !(k in sb.CARD_SORT_FACTS));
+  out.plainSorts = plainSorts;
+  for (const sort of plainSorts) {
     f.sort = sort; f.classYear = [];
     const reads = []; sb.cardFactHtml(spy(reads)); out.defaults[sort] = reads.length;
   }
@@ -768,9 +771,10 @@ def test_card() -> None:
     ok("D6 (b): no default card reads the admission rate (cardHtml does not mention it)", "admissionRate" not in card, card)
     # Behaviour, not source text: a Proxy counts the reads of admissionRate by the page's own code.
     reads = _card_admission_reads(os.path.join(ROOT, "public", "index.html"))
-    ok("D6 (b): no default card reads the admission rate (default fact row, every non-fact sort, no class years)",
-       set(reads["defaults"]) == {"name", "rpi", "record", "conference"} and not any(reads["defaults"].values()),
-       str(reads["defaults"]))
+    ok("the default-sort list is derived from SORT_SPECS minus CARD_SORT_FACTS, is non-empty and includes 'name'",
+       "name" in reads["plainSorts"] and set(reads["defaults"]) == set(reads["plainSorts"]), str(reads["plainSorts"]))
+    ok("D6 (b): no default card reads the admission rate (default fact row, every sort without a card fact, no class years)",
+       bool(reads["defaults"]) and not any(reads["defaults"].values()), str(reads["defaults"]))
     readers = sorted(k for k, n in reads["entries"].items() if n)
     ok("D6 (b): only the 'admit' sort fact reads the admission rate",
        readers == ["admit"] and "admit" in reads["entries"] and not any(isinstance(n, str) for n in reads["entries"].values()),
