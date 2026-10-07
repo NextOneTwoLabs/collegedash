@@ -1511,7 +1511,18 @@ $('#sidebarOverlay').onclick = () => closeDrawer({ focus: true });
 $('#sidebar').addEventListener('keydown', e => {
   if (e.key === 'Escape' && !e.defaultPrevented && isPhone() && isProgramsView() && $('#sidebar').classList.contains('open')) { e.preventDefault(); closeDrawer({ focus: true }); }
 });
-if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) { $('#layout').classList.add('sidebar-collapsed'); $('#sidebarToggle').setAttribute('aria-expanded', 'false'); }
+if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) $('#layout').classList.add('sidebar-collapsed');
+// #485: the Filters toggle says what is shown at the current width - the sheet (open or shut) on a phone, the rail (shown
+// unless collapsed) past 768 px. Set on load (the markup's static "true" is only right for the desktop rail) and on every
+// viewport change, so narrowing again cannot leave a shut sheet announced as open. Registered after the widening
+// listeners above, so a sheet they end is already shut when this reads it.
+function syncFiltersAria() {
+  const btn = $('#sidebarToggle'), sb = $('#sidebar'), layout = $('#layout');
+  if (btn && sb && layout) btn.setAttribute('aria-expanded', String(isPhone() ? sb.classList.contains('open') : !layout.classList.contains('sidebar-collapsed')));
+}
+window.addEventListener('resize', syncFiltersAria);
+matchMedia('(max-width: 768px)').addEventListener?.('change', syncFiltersAria);
+syncFiltersAria();
 
 /* ---------- data ---------- */
 // Every data call is the site's own: it travels on the session cookie "/" set (issue #345, api/session.mjs), which
