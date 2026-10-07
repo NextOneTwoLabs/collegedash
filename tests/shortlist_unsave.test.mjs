@@ -232,6 +232,7 @@ function withButtonQuery(fn) {
         const cls = b[1].split(/\s+/);
         if (b[2] !== m[1] || excluded.some(c => cls.includes(c))) continue;
         out.push({ region, cls, dataset: { [b[2]]: b[3] }, textContent: b[4], setAttribute() { },
+          getAttribute: name => { const v = new RegExp(`\\s${name}="([^"]*)"`).exec(b[0]); return v ? v[1] : null; },
           classList: { contains: c => cls.includes(c), toggle() { } },
           matches: s => s.split(',').some(x => x.trim().startsWith('.') && cls.includes(x.trim().slice(1))) });
       }
