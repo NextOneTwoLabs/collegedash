@@ -75,6 +75,14 @@ for (const wide of [false, true]) for (const on of [false, true]) {
   });
 }
 
+test('GUARD a name with & or \' is escaped in the accessible name, selected or not', () => {
+  for (const on of [false, true]) {
+    sb.S.compare = on ? ['x'] : [];
+    const html = sb.cmpBtn('x', false, "Texas A&M O'Brien");
+    assert.equal(labelOf(html), `${on ? 'Comparing' : 'Compare'} Texas A&amp;M O&#39;Brien`);
+  }
+});
+
 function fakeButton(slug, label) {
   const attrs = { 'aria-pressed': 'false' };
   if (label != null) attrs['aria-label'] = label;
