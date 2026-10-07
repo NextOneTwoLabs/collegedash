@@ -4,17 +4,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
-import { parseCss, decls } from './lib/css_cascade.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
 const HTML = fs.readFileSync(process.env.FILTERS_ARIA_TEST_HTML || path.join(PUBLIC, 'index.html'), 'utf8');
-const CSS = parseCss([...HTML.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(m => m[1]).join('\n'));
-const decl = (at, sel, prop) => CSS.filter(r => r.at.join(' ') === at && r.selectors.includes(sel)).flatMap(r => decls(r.body)).filter(d => d.prop === prop).map(d => d.value).pop();
-const INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8'));
 const unesc = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
 const camel = s => s.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
-const decodeId = id => decodeURIComponent(id.replace(/^mfConf-/, '').replace(/_/g, '%'));
 
 function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   const FOCUS = { el: null, log: [] };

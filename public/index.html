@@ -1514,8 +1514,9 @@ $('#sidebar').addEventListener('keydown', e => {
 if (lsGet('cd.sidebar', 'open') === 'collapsed' && !isPhone()) $('#layout').classList.add('sidebar-collapsed');
 // #485: the Filters toggle says what is shown at the current width - the sheet (open or shut) on a phone, the rail (shown
 // unless collapsed) past 768 px. Set on load (the markup's static "true" is only right for the desktop rail) and on every
-// viewport change, so narrowing again cannot leave a shut sheet announced as open. Registered after the widening
-// listeners above, so a sheet they end is already shut when this reads it.
+// viewport change, so narrowing again cannot leave a shut sheet announced as open. Listener order does not matter: past
+// 768 px this reads only the rail (sidebar-collapsed), never the sheet's open class, and at phone width the widening
+// listeners above do nothing, so they cannot change what it reads.
 function syncFiltersAria() {
   const btn = $('#sidebarToggle'), sb = $('#sidebar'), layout = $('#layout');
   if (btn && sb && layout) btn.setAttribute('aria-expanded', String(isPhone() ? sb.classList.contains('open') : !layout.classList.contains('sidebar-collapsed')));
