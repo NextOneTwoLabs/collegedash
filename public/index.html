@@ -1957,7 +1957,9 @@ function toggleCompare(slug) {
 // `name` (#465 E): a card's buttons are named for their program ("Save Stanford", "Compare Stanford"), so a list of
 // cards does not read as a list of identical "Save" buttons; aria-pressed still says whether it is on.
 const starBtn = (slug, wide, name) => { const on = S.favorites.has(slug); return `<button class="star-btn${on ? ' starred' : ''}${wide ? ' star-btn-label' : ''}" data-fav="${esc(slug)}" aria-pressed="${on}"${name ? ` aria-label="Save ${esc(name)}"` : ''} title="${on ? 'Remove from shortlist' : 'Save to shortlist'}">${wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆')}</button>`; };
-const cmpBtn = (slug, wide, name) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}"${name ? ` aria-label="Compare ${esc(name)}"` : ''} title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${on ? 'Comparing' : 'Compare'}</button>`; };
+/* The Compare button's visible word. Its accessible name starts with the same word (WCAG 2.5.3, #486). */
+const cmpWord = on => on ? 'Comparing' : 'Compare';
+const cmpBtn = (slug, wide, name) => { const on = S.compare.includes(slug); return `<button class="${wide ? 'btn pillbtn' + (on ? ' on' : '') : 'cmp-btn' + (on ? ' on' : '')}" data-cmp="${esc(slug)}" aria-pressed="${on}"${name ? ` aria-label="${cmpWord(on)} ${esc(name)}"` : ''} title="${on ? 'Remove from comparison' : 'Add to comparison'}">⇄ ${cmpWord(on)}</button>`; };
 // delegated: works for cards, table rows, glance panel and sidebar lists
 document.addEventListener('click', e => {
   const f = e.target.closest('[data-fav]'); if (f) { e.stopPropagation(); e.preventDefault(); toggleFav(f.dataset.fav, f); syncToggles(); return; }
@@ -1968,7 +1970,7 @@ document.addEventListener('click', e => {
 const NOT_RM = ':not(.rm):not(.chip-x)';
 function syncToggles() {
   document.querySelectorAll('[data-fav]' + NOT_RM).forEach(b => { const on = S.favorites.has(b.dataset.fav), wide = b.classList.contains('star-btn-label'); b.classList.toggle('starred', on); b.setAttribute('aria-pressed', String(on)); b.textContent = wide ? (on ? '★ Saved' : '☆ Save') : (on ? '★' : '☆'); });
-  document.querySelectorAll('[data-cmp]' + NOT_RM).forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${on ? 'Comparing' : 'Compare'}`; });
+  document.querySelectorAll('[data-cmp]' + NOT_RM).forEach(b => { const on = S.compare.includes(b.dataset.cmp); b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.textContent = `⇄ ${cmpWord(on)}`; const nm = b.getAttribute('aria-label'); if (nm) b.setAttribute('aria-label', nm.replace(/^Compar(?:e|ing)(?= )/, cmpWord(on))); });
   document.querySelectorAll('.pcard').forEach(c => c.classList.toggle('in-compare', S.compare.includes(c.dataset.slug)));
   cmpTraySync();
   if (currentView() === 'camps' && CAMPS) campsShortlistChanged();  // #465: the "Shortlisted programs only" toggle reads it

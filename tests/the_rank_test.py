@@ -685,7 +685,7 @@ console.log(JSON.stringify(rows.map(p => ({ slug: p.slug, html: rankHtml(p), tit
 
 
 def test_card() -> None:
-    """The card shows the rank; every other admission-rate surface is left alone (issue #46)."""
+    """The card shows the rank only as a sort fact; no default card reads the admission rate (D6 (b), #465/#480); every other admission-rate surface is left alone."""
     print("card: public/index.html")
     html = open(os.path.join(ROOT, "public", "index.html"), encoding="utf-8").read()
     card = html[html.index("function cardHtml("):html.index("function tableHtml(")]
@@ -694,7 +694,13 @@ def test_card() -> None:
     ok("the card's fact names the source",
        "academicRank: p => p.academicRank != null ? `<span title=\"${esc(rankTitle(p))}\">${rankHtml(p)}</span>`"
        " : factNa('Not ranked', rankTitle(p))," in html)
-    ok("the card no longer reads the admission rate", "admissionRate" not in card, card)
+    # D6 (b) (#465, #480): the card has ONE fact row, and no default card shows the admission rate. Only the 'admit'
+    # sort puts it there, through CARD_SORT_FACTS, outside cardHtml. So cardHtml itself never reads it, and the one
+    # sort fact that does is 'admit'.
+    ok("D6 (b): no default card reads the admission rate (cardHtml does not mention it)", "admissionRate" not in card, card)
+    sort_facts = html[html.index("const CARD_SORT_FACTS = {"):html.index("function cardFactHtml(")]
+    readers = re.findall(r"^\s*(\w+): p => [^\n]*admissionRate", sort_facts, re.M)
+    ok("D6 (b): only the 'admit' sort shows the admission rate on a card", readers == ["admit"], str(readers))
     ok("the rank is always '#' plus the number, with no tie marker",
        "const rankHtml = p => p.academicRank == null ? 'N/A' : `#${p.academicRank}`;" in html)
     ok("rankHtml no longer consults academicRankTied",
