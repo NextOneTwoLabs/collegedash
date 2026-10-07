@@ -30,3 +30,8 @@ scratchpad/
 node_modules/
 
 # programs/, data/ and public/ ARE committed - they are the durable database.
+
+# Claude Code: agent worktrees (one per engineer, issue #487) and per-user local settings. Untracked files that
+# aren't ignored are swept into working-tree scans (tests/rpi_attribution_test.py) and into a `git add -A`.
+.claude/worktrees/
+.claude/settings.local.json

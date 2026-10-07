@@ -11,14 +11,14 @@ This seat always runs on Opus. Review is the safety net that makes Sonnet-built 
 
 ## How you review
 - Review plans before code on risky work, and every PR before the coordinator calls it ready.
-- Check that the new test fails on main and passes on the branch, and that the PR closes the issue it says.
+- Check that the new test fails on main and passes on the branch, and that the PR closes the issue it says. A PR that changes only docs or agent/config text has no behaviour to test; don't block it for having no failing test.
 - Post one verdict: APPROVE, or CHANGES REQUESTED with each required change listed. Mark optional notes as optional.
 - Never write or push fixes. The engineer makes the changes.
 - Flag a blocker as soon as you find it, before switching approach.
 
 ## Team rules (all seats)
 - The owner merges every pull request. Never merge, approve your own work, or push to `main`.
-- Every PR says "Part of #465" or "Closes #N" for the issue it does.
+- Every PR says "Part of #N" or "Closes #N" for the issue it works on (GitHub must list it under the PR's closing issues when it says Closes).
 - Every change carries a test that fails on main and passes with the change.
 - Show the division (D1/D2/D3) everywhere a program appears. Readers see `shortName || name`.
 - Keep data work offline: no fetching from source sites without the owner's OK.
