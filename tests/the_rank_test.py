@@ -684,8 +684,79 @@ console.log(JSON.stringify(rows.map(p => ({ slug: p.slug, html: rankHtml(p), tit
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+_CARD_READS_JS = r"""
+const fs = require('fs'), path = require('path'), vm = require('vm');
+const [pagePath, publicDir] = process.argv.slice(2);
+const el = () => ({ innerHTML: '', textContent: '', value: '', dataset: {}, style: {}, hidden: false,
+  classList: { add() { }, remove() { }, toggle() { }, contains: () => false }, setAttribute() { }, getAttribute: () => null,
+  addEventListener() { }, removeEventListener() { }, querySelector: () => el(), querySelectorAll: () => [], closest: () => null,
+  matches: () => false, focus() { }, contains: () => false });
+const els = new Map();
+const sb = {
+  console, setTimeout, clearTimeout, Promise, Map, Set, Date, JSON, Math, Number, String, Array, Object, RegExp, Intl, Proxy,
+  isNaN, parseInt, parseFloat, URL, encodeURIComponent, decodeURIComponent,
+  document: { documentElement: el(), body: el(), querySelector: s => (els.has(s) ? els.get(s) : (els.set(s, el()), els.get(s))),
+    querySelectorAll: () => [], createElement: el, addEventListener() { } },
+  location: { hash: '', replace(h) { this.hash = h; } }, history: { replaceState() { } }, matchMedia: () => ({ matches: false }),
+  localStorage: { getItem: () => null, setItem() { }, removeItem() { } }, innerWidth: 1400, addEventListener() { },
+  fetch: async url => {
+    let rel = url.replace(/^\//, ''); if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    const f = path.join(publicDir, rel.replace(/\?.*$/, ''));
+    if (!f.startsWith(publicDir) || !fs.existsSync(f)) return { ok: false, status: 404, async json() { throw new Error('404'); } };
+    const body = fs.readFileSync(f, 'utf8'); return { ok: true, status: 200, async json() { return JSON.parse(body); } };
+  },
+};
+sb.window = sb; sb.globalThis = sb;
+const lines = fs.readFileSync(pagePath, 'utf8').split(/\r?\n/);
+const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
+const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, cardFactHtml, CARD_SORT_FACTS, SORT_SPECS });\n';
+vm.createContext(sb);
+new vm.Script(src, { filename: 'public/index.html' }).runInContext(sb);
+(async () => {
+  await sb.loadIndex();
+  const row = sb.S.index.programs.find(p => p.admissionRate != null && p.division === 'D1');
+  // A program whose every read of admissionRate is recorded.
+  const spy = reads => new Proxy(row, { get: (t, k) => { if (k === 'admissionRate') reads.push(1); return t[k]; },
+                                        has: (t, k) => { if (k === 'admissionRate') reads.push(1); return k in t; } });
+  const f = sb.S.filters, out = { defaults: {}, entries: {} };
+  // Every sort the list offers that has no card fact of its own, so a sort added later is covered automatically.
+  const plainSorts = Object.keys(sb.SORT_SPECS).filter(k => !(k in sb.CARD_SORT_FACTS));
+  out.plainSorts = plainSorts;
+  for (const sort of plainSorts) {
+    f.sort = sort; f.classYear = [];
+    const reads = []; sb.cardFactHtml(spy(reads)); out.defaults[sort] = reads.length;
+  }
+  f.sort = 'name'; f.classYear = [];
+  for (const k of Object.keys(sb.CARD_SORT_FACTS)) {
+    const reads = []; try { sb.CARD_SORT_FACTS[k](spy(reads)); } catch (e) { out.entries[k] = 'threw: ' + e.message; continue; }
+    out.entries[k] = reads.length;
+  }
+  console.log(JSON.stringify(out));
+})();
+"""
+
+
+def _card_admission_reads(html_path: str) -> dict:
+    """Run the page's own card-fact code in node over a program wrapped in a Proxy that counts reads of admissionRate.
+
+    Source-text matching misses a read through a helper or across lines and trips on harmless rewrites, so this
+    tests behaviour: how many times each code path touches the field.
+    """
+    tmp = tempfile.mkdtemp(prefix="card-reads-")
+    try:
+        js = os.path.join(tmp, "reads.js")
+        io.open(js, "w", encoding="utf-8").write(_CARD_READS_JS)
+        out = subprocess.run([NODE, js, html_path, os.path.join(ROOT, "public")],
+                             capture_output=True, text=True, encoding="utf-8")
+        if out.returncode != 0:
+            raise RuntimeError(f"node failed probing the card facts: {out.stderr.strip()}")
+        return json.loads(out.stdout.strip().splitlines()[-1])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def test_card() -> None:
-    """The card shows the rank; every other admission-rate surface is left alone (issue #46)."""
+    """The card shows the rank only as a sort fact; no default card reads the admission rate (D6 (b), #465/#480); every other admission-rate surface is left alone."""
     print("card: public/index.html")
     html = open(os.path.join(ROOT, "public", "index.html"), encoding="utf-8").read()
     card = html[html.index("function cardHtml("):html.index("function tableHtml(")]
@@ -694,7 +765,20 @@ def test_card() -> None:
     ok("the card's fact names the source",
        "academicRank: p => p.academicRank != null ? `<span title=\"${esc(rankTitle(p))}\">${rankHtml(p)}</span>`"
        " : factNa('Not ranked', rankTitle(p))," in html)
-    ok("the card no longer reads the admission rate", "admissionRate" not in card, card)
+    # D6 (b) (#465, #480): the card has ONE fact row, and no default card shows the admission rate. Only the 'admit'
+    # sort puts it there, through CARD_SORT_FACTS, outside cardHtml. So cardHtml itself never reads it, and the one
+    # sort fact that does is 'admit'.
+    ok("D6 (b): no default card reads the admission rate (cardHtml does not mention it)", "admissionRate" not in card, card)
+    # Behaviour, not source text: a Proxy counts the reads of admissionRate by the page's own code.
+    reads = _card_admission_reads(os.path.join(ROOT, "public", "index.html"))
+    ok("the default-sort list is derived from SORT_SPECS minus CARD_SORT_FACTS, is non-empty and includes 'name'",
+       "name" in reads["plainSorts"] and set(reads["defaults"]) == set(reads["plainSorts"]), str(reads["plainSorts"]))
+    ok("D6 (b): no default card reads the admission rate (default fact row, every sort without a card fact, no class years)",
+       bool(reads["defaults"]) and not any(reads["defaults"].values()), str(reads["defaults"]))
+    readers = sorted(k for k, n in reads["entries"].items() if n)
+    ok("D6 (b): only the 'admit' sort fact reads the admission rate",
+       readers == ["admit"] and "admit" in reads["entries"] and not any(isinstance(n, str) for n in reads["entries"].values()),
+       str(reads["entries"]))
     ok("the rank is always '#' plus the number, with no tie marker",
        "const rankHtml = p => p.academicRank == null ? 'N/A' : `#${p.academicRank}`;" in html)
     ok("rankHtml no longer consults academicRankTied",
