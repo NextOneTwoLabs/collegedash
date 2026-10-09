@@ -89,6 +89,10 @@ def test_publish() -> None:
                          ("in the future", future), ("a date with no time", "2026-10-09")):
         got = run(value, state())
         ok(f"a {label} `updated` fails", got.get("publish") == "fail", str(got))
+    soon = (NOW + dt.timedelta(minutes=30)).strftime("%Y-%m-%dT%H:%M:%SZ")
+    ok("an `updated` 30 minutes ahead of the clock is ok (skew, not a fault)", run(soon, state()).get("publish") == "ok",
+       str(run(soon, state())))
+    ok("and 2h ahead fails", run(future, state()).get("publish") == "fail")
 
 
 def test_collectors() -> None:

@@ -45,6 +45,7 @@ REFRESH_STATE = os.path.join(ROOT, "public", "archive", "refresh-state.json")
 
 WARN_HOURS = 12
 FAIL_HOURS = 36
+SKEW_HOURS = 1  # a stamp this far ahead of the clock is skew and reads as ok; further ahead fails
 COLLECTORS = ("camps", "tds", "soccerwire", "news")
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -71,8 +72,9 @@ def judge(dataset: str, what: str, stamp: dt.datetime | None, now: dt.datetime, 
     if stamp is None:
         return Finding(dataset, "fail", None, f"{dataset}: {what} is missing or unreadable ({raw!r}), so its age cannot be judged")
     hours = (now - stamp).total_seconds() / 3600
-    if hours < 0:
+    if hours < -SKEW_HOURS:
         return Finding(dataset, "fail", hours, f"{dataset}: {what} {stamp.strftime(TIME_FORMAT)} is {-hours:.1f}h in the future")
+    hours = max(hours, 0.0)  # up to SKEW_HOURS ahead is clock skew between runners, not a fault
     age = f"{what} {stamp.strftime(TIME_FORMAT)} is {hours:.1f}h old"
     if hours > FAIL_HOURS:
         return Finding(dataset, "fail", hours, f"{dataset}: {age} (fails above {FAIL_HOURS}h)")

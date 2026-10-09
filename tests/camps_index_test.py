@@ -783,9 +783,9 @@ def test_invariant() -> None:
             utcnow = classmethod(boom)
             today = classmethod(boom)
 
-        real_now, real_dt = common.now_iso, build.dt
+        real_now, real_today, real_dt = common.now_iso, common.today, build.dt
         stale = "2020-01-02T03:04:05Z"
-        common.now_iso = boom
+        common.now_iso = common.today = boom
         build.dt = types.SimpleNamespace(**{**vars(dt), "date": NoDate, "datetime": NoDatetime})
         try:
             passed, out = check(tmp, index_doc={**doc([{**GOOD_ROW, "startDate": "2020-03-01", "endDate": "2020-03-01"}],
@@ -795,7 +795,7 @@ def test_invariant() -> None:
         except AssertionError as e:
             passed, out = False, str(e)
         finally:
-            common.now_iso, build.dt = real_now, real_dt
+            common.now_iso, common.today, build.dt = real_now, real_today, real_dt
         ok("T3c a self-consistent index from 2020 passes with the clock patched to raise: validate never reads it",
            passed and not out, out[:300])
 

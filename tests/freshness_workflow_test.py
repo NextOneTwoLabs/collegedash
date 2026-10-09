@@ -91,6 +91,7 @@ def main(argv=None) -> int:
     ok("it checks out main explicitly",
        bool(re.search(r"uses:\s*actions/checkout@\S+\s*\n\s+with:\s*\n\s+ref:\s*main\b", "\n".join(lines))),
        "expected actions/checkout with ref: main")
+    ok("the checkout does not persist credentials", "persist-credentials: false" in "\n".join(lines))
     ok("it runs tools/freshness_check.py", "python tools/freshness_check.py" in text)
 
     run_text = "\n".join(l for l in lines if re.match(r"^\s+(-\s+)?run:|^\s{8,}\S", l))

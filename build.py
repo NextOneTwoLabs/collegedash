@@ -1540,6 +1540,8 @@ def camp_item_drift(fields) -> list[str]:
     profiles carry, and tests/camps_field_drift_test.py over every key the code can emit, so a new field is
     caught in the pull request that adds it (#69) rather than in the refresh that first publishes it."""
     return sorted(set(fields) - set(CAMP_INDEX_FIELDS) - set(CAMP_ITEM_UNPUBLISHED))
+
+
 # Issue #465 (PR C): the program fields each row carries in its `program` block, equal to the same keys of the
 # program's programs/index.json row (summary_row). `name` is there because 89 programs have no shortName, and a
 # camp must never be shown under a blank name or a slug (#405): a view renders `shortName || name`.

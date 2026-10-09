@@ -85,7 +85,7 @@ def main(argv=None) -> int:
     ok("camp_item_drift exists", hasattr(build, "camp_item_drift"))
     drift = build.camp_item_drift
     ok("the real emitted keys give no drift", drift(fields) == [], str(drift(fields)))
-    ok("neither do the keys recorded in extract-snapshot.json plus campType", drift(snapshot_fields()) == [],
+    ok("neither do the keys recorded in extract-snapshot.json (campType is already in it)",drift(snapshot_fields()) == [],
        str(drift(snapshot_fields())))
     ok("the result is a sorted list of names", drift({"zzz", "aaa", "name"}) == ["aaa", "zzz"], str(drift({"zzz", "aaa", "name"})))
     ok("a field withheld on purpose is not drift", drift({"newsTitle", "sources"}) == [])
