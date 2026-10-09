@@ -709,27 +709,24 @@ const sb = {
 sb.window = sb; sb.globalThis = sb;
 const lines = fs.readFileSync(pagePath, 'utf8').split(/\r?\n/);
 const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, cardFactHtml, CARD_SORT_FACTS, SORT_SPECS });\n';
+const src = lines.slice(a + 1, b).join('\n') + '\n;Object.assign(globalThis, { S, loadIndex, cardHtml, SORT_SPECS });\n';
 vm.createContext(sb);
 new vm.Script(src, { filename: 'public/index.html' }).runInContext(sb);
 (async () => {
   await sb.loadIndex();
-  const row = sb.S.index.programs.find(p => p.admissionRate != null && p.division === 'D1');
-  // A program whose every read of admissionRate is recorded.
-  const spy = reads => new Proxy(row, { get: (t, k) => { if (k === 'admissionRate') reads.push(1); return t[k]; },
-                                        has: (t, k) => { if (k === 'admissionRate') reads.push(1); return k in t; } });
-  const f = sb.S.filters, out = { defaults: {}, entries: {} };
-  // Every sort the list offers that has no card fact of its own, so a sort added later is covered automatically.
-  const plainSorts = Object.keys(sb.SORT_SPECS).filter(k => !(k in sb.CARD_SORT_FACTS));
-  out.plainSorts = plainSorts;
-  for (const sort of plainSorts) {
-    f.sort = sort; f.classYear = [];
-    const reads = []; sb.cardFactHtml(spy(reads)); out.defaults[sort] = reads.length;
-  }
-  f.sort = 'name'; f.classYear = [];
-  for (const k of Object.keys(sb.CARD_SORT_FACTS)) {
-    const reads = []; try { sb.CARD_SORT_FACTS[k](spy(reads)); } catch (e) { out.entries[k] = 'threw: ' + e.message; continue; }
-    out.entries[k] = reads.length;
+  const row = sb.S.index.programs.find(p => p.admissionRate != null && p.academicRank != null && p.division === 'D1');
+  // A program whose every read of admissionRate and of academicRank is recorded.
+  const FIELDS = ['admissionRate', 'academicRank'];
+  const spy = reads => new Proxy(row, { get: (t, k) => { if (FIELDS.includes(k)) reads.push(k); return t[k]; },
+                                        has: (t, k) => { if (FIELDS.includes(k)) reads.push(k); return k in t; } });
+  const f = sb.S.filters, out = { reads: {} };
+  // Every sort the list offers (and name, the default), with no class highlighted and with a class highlighted, so a
+  // sort added later is covered automatically: no card may read either field under any of them (#492).
+  out.sorts = [...new Set([...Object.keys(sb.SORT_SPECS), 'name', 'admit'])];
+  for (const sort of out.sorts) for (const classes of [[], ['2027']]) {
+    f.sort = sort; f.classYear = classes;
+    const reads = []; sb.cardHtml(spy(reads));
+    out.reads[sort + '|' + classes.join(',')] = reads.length;
   }
   console.log(JSON.stringify(out));
 })();
@@ -756,54 +753,53 @@ def _card_admission_reads(html_path: str) -> dict:
 
 
 def test_card() -> None:
-    """The card shows the rank only as a sort fact; no default card reads the admission rate (D6 (b), #465/#480); every other admission-rate surface is left alone."""
+    """No program card carries a rank or reads the admission rate under any sort (D6 (b), #465/#480, #492); the rank stays in Stats; every other admission-rate surface is left alone."""
     print("card: public/index.html")
     html = open(os.path.join(ROOT, "public", "index.html"), encoding="utf-8").read()
-    card = html[html.index("function cardHtml("):html.index("function tableHtml(")]
+    card = html[html.index("function cardHtml("):html.index("function cmpTrayHtml(")]
 
-    # #465 E: the card shows the rank only when the list is sorted by it, in its one fact row - still naming the source
-    ok("the card's fact names the source",
-       "academicRank: p => p.academicRank != null ? `<span title=\"${esc(rankTitle(p))}\">${rankHtml(p)}</span>`"
-       " : factNa('Not ranked', rankTitle(p))," in html)
-    # D6 (b) (#465, #480): the card has ONE fact row, and no default card shows the admission rate. Only the 'admit'
-    # sort puts it there, through CARD_SORT_FACTS, outside cardHtml. So cardHtml itself never reads it, and the one
-    # sort fact that does is 'admit'.
-    ok("D6 (b): no default card reads the admission rate (cardHtml does not mention it)", "admissionRate" not in card, card)
-    # Behaviour, not source text: a Proxy counts the reads of admissionRate by the page's own code.
+    # #492: the card shows no ranking at all. The rank appears only in Stats (the US rank (THE) column under More
+    # statistics), which still names its source in the cell's title.
+    ok("the Stats US rank cell names the source (rankTitle in its title)",
+       "['usrank', 'US rank (THE)', 'num col-extra', p => `<span title=\"${esc(rankTitle(p))}\">${rankHtml(p)}</span>`, 'academicRank']" in html)
+    # D6 (b) (#465, #480), restated by #492: cardHtml never reads the admission rate or the THE rank.
+    ok("D6 (b): cardHtml does not mention the admission rate", "admissionRate" not in card, card)
+    ok("#492: cardHtml does not mention the THE rank (academicRank, rankHtml, rankTitle)",
+       not any(w in card for w in ("academicRank", "rankHtml", "rankTitle")), card)
+    # Behaviour, not source text: a Proxy counts the reads of both fields by the page's own code.
     reads = _card_admission_reads(os.path.join(ROOT, "public", "index.html"))
-    ok("the default-sort list is derived from SORT_SPECS minus CARD_SORT_FACTS, is non-empty and includes 'name'",
-       "name" in reads["plainSorts"] and set(reads["defaults"]) == set(reads["plainSorts"]), str(reads["plainSorts"]))
-    ok("D6 (b): no default card reads the admission rate (default fact row, every sort without a card fact, no class years)",
-       bool(reads["defaults"]) and not any(reads["defaults"].values()), str(reads["defaults"]))
-    readers = sorted(k for k, n in reads["entries"].items() if n)
-    ok("D6 (b): only the 'admit' sort fact reads the admission rate",
-       readers == ["admit"] and "admit" in reads["entries"] and not any(isinstance(n, str) for n in reads["entries"].values()),
-       str(reads["entries"]))
+    ok("the sort list is derived from SORT_SPECS, is non-empty and includes 'name' and 'admit'",
+       {"name", "admit"} <= set(reads["sorts"]) and len(reads["sorts"]) > 8, str(reads["sorts"]))
+    ok("#492: no card reads the admission rate or the THE rank (every sort, no class and class 2027)",
+       len(reads["reads"]) == 2 * len(reads["sorts"]) and not any(reads["reads"].values()), str(reads["reads"]))
     ok("the rank is always '#' plus the number, with no tie marker",
-       "const rankHtml = p => p.academicRank == null ? 'N/A' : `#${p.academicRank}`;" in html)
+       "const rankHtml = p => p.academicRank == null ? '\u2014' : `#${p.academicRank}`;" in html)
     ok("rankHtml no longer consults academicRankTied",
        "academicRankTied" not in html.split("const rankHtml")[1].splitlines()[0])
-    ok("an unranked program renders N/A", "p.academicRank == null ? 'N/A'" in html)
+    ok("an unranked program renders an em dash, as Stats always showed", "p.academicRank == null ? '\u2014'" in html)
     ok("the tooltip still says a tied rank is shared, naming no symbol",
        "this rank is shared with other universities" in html and "marks a rank shared" not in html)
-    ok("the tooltip still explains N/A", "is not among the 171 it ranks" in html)
+    ok("the tooltip still explains the dash", "is not among the 171 it ranks" in html)
     ok("the FAQ no longer explains a tie marker", "marks a tie" not in html)
+    ok("the sources text points at the Stats column, not at a card",
+       "The \u201cUS rank (THE)\u201d column in Stats (under More statistics)" in html
+       and "on each program card" not in html.split("THE_RANK_URL, 'Times Higher Education'")[1].split("]")[0])
 
     # Rendered output, not source text: run the page's own rankHtml/rankTitle over every published row.
     facts = _render_ranks(html)
     published = {p["slug"] for p in build.published_programs(common.load_registry())}
     want_ranked = set(json.load(open(ALIAS_PATH, encoding="utf-8"))["aliases"]) & published
-    ok("every published program renders a fact", {f["slug"] for f in facts} == published and len(facts) == len(published),
+    ok("every published program renders a Stats rank cell", {f["slug"] for f in facts} == published and len(facts) == len(published),
        f"{len(facts)} facts, {len(published)} published")
-    ok("no card fact carries the '=#' tie form on any card",
+    ok("no Stats rank cell carries the '=#' tie form",
        not [f for f in facts if "=#" in f["html"]],
        str([f["slug"] for f in facts if "=#" in f["html"]][:5]))
     hashed = [f for f in facts if re.fullmatch(r"#\d+", f["html"])]
-    na = [f for f in facts if f["html"] == "N/A"]
+    dash = [f for f in facts if f["html"] == "\u2014"]
     ok("exactly the aliased published programs render '#' plus a number",
        bool(want_ranked) and {f["slug"] for f in hashed} == want_ranked, str(len(hashed)))
-    ok("exactly the rest render N/A", {f["slug"] for f in na} == published - want_ranked, str(len(na)))
-    ok("the two forms account for every card", len(hashed) + len(na) == len(facts))
+    ok("exactly the rest render an em dash", {f["slug"] for f in dash} == published - want_ranked, str(len(dash)))
+    ok("the two forms account for every cell", len(hashed) + len(dash) == len(facts))
     by_slug = {f["slug"]: f for f in facts}
     for slug, want in (("stanford", "#3"), ("penn-state", "#39"), ("rutgers", "#66")):
         f = by_slug[slug]
@@ -812,7 +808,7 @@ def test_card() -> None:
            "shared with other universities" in f["title"] and "=" not in f["title"], f["title"])
     ok("the title attribute spells out the ranking",
        "Times Higher Education, Best universities in the United States 2026" in html)
-    ok("a missing card fact carries its reason as a title and as accessible text",
+    ok("a missing fact carries its reason as a title and as accessible text",
        'const factNa = (word, why) => `<span class="na" title="${esc(why)}">${esc(word)}<span class="sr-only">: ${esc(why)}</span></span>`;' in html)
 
     for what, needle in (

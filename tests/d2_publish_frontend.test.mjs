@@ -291,7 +291,7 @@ test('RPI and College Cups are left out for Division II: card, table, profile, g
   const pg = await ready(MIXED_FILES);
   const cards = await list(pg);
   assert.doesNotMatch(card(cards, 'test-d2-champion'), /RPI/, 'the Division II card shows an RPI fact');
-  assert.ok(card(cards, 'north-carolina').includes(RPI.label), `the Division I card lacks its ${RPI.label} fact`);
+  assert.doesNotMatch(card(cards, 'north-carolina'), /RPI/, 'a Division I card shows an RPI fact (#492: no card carries a ranking)');
   const table = await list(pg, { view: 'table', moreStats: true });
   const champ = cells(tableRow(table, 'test-d2-champion'));
   const cupsIdx = cells(tableRow(table, 'north-carolina')).findIndex((x) => x.html === String(row('north-carolina').collegeCups));

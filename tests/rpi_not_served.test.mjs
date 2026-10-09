@@ -12,7 +12,7 @@
 //
 // Deleting either one exposes every table again, and nothing on the site would look different. So this
 // file checks each one on its own terms, against every file actually under public/data/rpi (not a sample),
-// and a third group checks that the page no longer asks for the table and that each card's RPI is what the
+// and a third group checks that the page no longer asks for the table, that no card shows an RPI (#492) and that each table row's RPI is what the
 // table would have given it.
 //
 // How the pattern is matched. Workers static assets compile each run_worker_first entry the way
@@ -251,7 +251,7 @@ test('loading the page requests no RPI table', async () => {
 // What the page used to show: the NCAA table's rank under the program's shortName || name, when the table
 // is for the ranking season, else the program's own row. This is that rule, written against the committed
 // table, so a program whose published row disagrees with the table it was built from fails here by name.
-test('every program shows the RPI it showed when the page read the table, on the card and in the table', async () => {
+test('every program shows the RPI it showed when the page read the table, in the table (and on no card: #492)', async () => {
   const { sandbox } = loadPage();
   const idx = await sandbox.loadIndex();
   const table = JSON.parse(fs.readFileSync(path.join(RPI_DIR, 'current.json'), 'utf8'));
@@ -283,16 +283,15 @@ test('every program shows the RPI it showed when the page read the table, on the
     const shown = before == null ? '—' : '#' + before;
     const card = sandbox.cardHtml(p);
     const tableRow = sandbox.tableHtml([p]);
-    // #465 E: the card's season line reads "2026: 7-2-2 · RPI 2026 (in progress) #13"
-    const cardFact = card.match(/<div class="card-sum">[^<]*· RPI \d{4}(?: \(in progress\))? (#\d+)<\/div>/);
+    // #492: no card carries an RPI (it used to read "2026: 7-2-2 · RPI 2026 (in progress) #13" in its season line)
+    const cardFact = card.match(/RPI/);
     const rankCell = tableRow.match(/<span class="rank-num[^"]*">([^<]*)<\/span>/);
-    // Since issue #115 a program with no RPI shows no RPI fact on its card, and a one-row table for it has
-    // no rank column at all - the em dash is only for a program that shares a table with a ranked one.
+    // A one-row table for a program with no RPI has no rank column at all - the em dash is only for a program that shares a table with a ranked one.
     // Every Division II program is such a program.
-    const cardOk = before == null ? cardFact === null : cardFact?.[1] === shown;
+    const cardOk = cardFact === null;
     const tableOk = before == null ? rankCell === null : rankCell?.[1] === String(before);
     if (sandbox.rpiOf(p) !== before || sandbox.rpiCell(p) !== shown || !cardOk || !tableOk) {
-      wrong.push(`${p.slug}: was ${shown}, now rpiOf ${sandbox.rpiOf(p)}, card ${cardFact?.[1] ?? '(no fact)'}, table ${rankCell?.[1] ?? '(no column)'}`);
+      wrong.push(`${p.slug}: was ${shown}, now rpiOf ${sandbox.rpiOf(p)}, card ${cardFact ? 'shows an RPI' : '(no RPI)'}, table ${rankCell?.[1] ?? '(no column)'}`);
     }
   }
   assert.deepEqual(wrong, [], `${wrong.length} of ${programs.length} programs changed`);

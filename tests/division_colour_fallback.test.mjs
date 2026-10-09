@@ -7,10 +7,11 @@
 // are read from the real theme blocks in the same file.
 //
 // What this proves:
-//   - a program WITH colours renders exactly the pinned markup (since #465 E: a small crest, its colours as CSS
-//     variables on the card's band, and the swatches);
-//   - a program with no colours renders its own division's tint in the crest and swatches;
-//   - a program with no colours and an unknown or missing division keeps the old grey placeholder;
+//   - a program WITH colours renders exactly the pinned markup (since #492: its colours and the ink that reads on
+//     the first as CSS variables on the card's title band, and the swatches);
+//   - a program with no colours gets the grey band (#492, owner: no band variables) but the swatches keep its
+//     own division's tint (#276);
+//   - a program with no colours and an unknown or missing division keeps the old grey swatch placeholder;
 //   - each tint is defined in both themes and body text on it clears WCAG AA (4.5:1) in both.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
@@ -23,29 +24,29 @@ const start = html.indexOf('/* ---------- team colours ---------- */');
 const end = html.indexOf('\n', html.indexOf('const swatchesHtml'));
 assert.ok(start > 0 && end > start, 'team-colour block found in index.html');
 const ctx = vm.createContext({});
-vm.runInContext(`${escLine}\n${html.slice(start, end)}\nthis.api = { teamColors, crestVars, swatchesHtml };`, ctx);
-const { teamColors, crestVars, swatchesHtml } = ctx.api;
-// #465 E: the card shows the colours as a small crest (CSS variables on the band) rather than a coloured band and stripe.
-const render = p => { const tc = teamColors(p); return [crestVars(tc), swatchesHtml(p)]; };
+vm.runInContext(`${escLine}\n${html.slice(start, end)}\nthis.api = { teamColors, bandVars, swatchesHtml };`, ctx);
+const { bandVars, swatchesHtml } = ctx.api;
+// #492: the card shows the colours as CSS variables on its title band (none when the program has no colours: grey band).
+const render = p => [bandVars(p), swatchesHtml(p)];
 
-test('a program with team colours renders its crest from them, and the swatches as before', () => {
+test('a program with team colours renders its band from them, and the swatches as before', () => {
   assert.deepEqual(render({ division: 'D2', colors: ['#8C1D40', 'FFC627'] }), [
-    ' style="--crest:#8C1D40;--crest2:#FFC627;--crest-ink:#ffffff"',
+    ' style="--band:#8C1D40;--band2:#FFC627;--band-ink:#ffffff"',
     '<span class="swatches" aria-hidden="true"><i style="background:#8C1D40"></i><i style="background:#FFC627"></i></span>',
   ]);
-  // one colour only: the crest's edge repeats it; the swatches' second slot is still the old grey, not a division tint
+  // one colour only: the band's edge repeats it; the swatches' second slot is still the old grey, not a division tint
   assert.deepEqual(render({ division: 'D3', colors: ['#ffcc00'] }), [
-    ' style="--crest:#ffcc00;--crest2:#ffcc00;--crest-ink:#111111"',
+    ' style="--band:#ffcc00;--band2:#ffcc00;--band-ink:#000000"',
     '<span class="swatches" aria-hidden="true"><i style="background:#ffcc00"></i><i style="background:var(--border-light)"></i></span>',
   ]);
 });
 
-test('a program with no colours renders its division tint', () => {
+test('a program with no colours gets the grey band (no variables) and its division tint in the swatches', () => {
   for (const d of ['D1', 'D2', 'D3']) {
     const v = `var(--div-${d.toLowerCase()})`;
     for (const colors of [undefined, [], ['not-a-colour']]) {
       assert.deepEqual(render({ division: d, colors }), [
-        ` style="--crest:${v};--crest2:${v};--crest-ink:var(--text-primary)"`,
+        '',  // no style on the band: the CSS fallback, the grey var(--bg-surface-alt) with var(--text-primary) ink
         `<span class="swatches" aria-hidden="true"><i style="background:${v}"></i><i style="background:${v}"></i></span>`,
       ], `${d} ${JSON.stringify(colors)}`);
     }
@@ -55,7 +56,7 @@ test('a program with no colours renders its division tint', () => {
 test('no colours and an unknown division falls back to the old grey', () => {
   for (const division of ['NAIA', undefined, null, 'd1']) {
     assert.deepEqual(render({ division }), [
-      '',  // no style on the band: the crest's own CSS fallback, the old grey (var(--bg-surface-alt))
+      '',  // no style on the band: the CSS fallback, the old grey (var(--bg-surface-alt))
       '<span class="swatches" aria-hidden="true"><i style="background:var(--border)"></i><i style="background:var(--border-light)"></i></span>',
     ], String(division));
   }

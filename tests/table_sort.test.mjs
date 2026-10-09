@@ -192,7 +192,7 @@ test('the tuition header says what it sorts by', async () => {
 });
 
 // Issue #342 (owner): the Stats view shows no Record column in either mode, not even while record is the sort.
-// The record stays on cards, the profile and Compare.
+// The record shows on the profile and in Compare.
 test('#342: no Record column under Fewer or More statistics, sorted by record or not', async () => {
   for (const moreStats of [false, true]) {
     for (const sort of ['name', 'record']) {

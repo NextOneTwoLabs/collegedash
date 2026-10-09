@@ -1,5 +1,5 @@
 // Tests for issue #15 (#404 phase 1, decision 4(b)): the recruiting-class buttons only highlight a class (they
-// change the Commits column, its sort and the bold count on each card), they do not filter. Before the fix the
+// change the Commits column and its sort; since #492 no card shows commits), they do not filter. Before the fix the
 // group was labelled "Recruiting class" and the list subtitle read "class of 2027", next to "South region",
 // as if a class filter were on.
 //
@@ -153,8 +153,8 @@ test('each year button\'s accessible name is "\'27, class of 2027" (visible text
 // No subtitle bit may open with "class of" / "classes of": that is the shape of a filter bit ("South region").
 const filterLike = sub => sub.split(' · ').filter(bit => /^class(es)? of\b/i.test(bit.trim()));
 
-test('with a class highlighted, the subtitle says it is highlighting, never "class of 2027" as if it were a filter', async () => {
-  reset({ classYear: ['2027'] });
+test('with a class highlighted (table view), the subtitle says it is highlighting, never "class of 2027" as if it were a filter', async () => {
+  reset({ classYear: ['2027'], view: 'table' });
   sb.location.hash = '#/';
   await sb.renderList();
   const sub = subtitle();
@@ -166,16 +166,32 @@ test('with a class highlighted, the subtitle says it is highlighting, never "cla
   assert.match(sub, new RegExp(`\\b${INDEX.programs.length} of ${INDEX.programs.length} programs\\b`), 'the class narrowed the list');
 });
 
-test('the coverage note names only the divisions on screen that lack commit data, and the classes read in order', async () => {
-  reset({ classYear: ['2027'], division: ['D1'] });
+test('the coverage note (table view) names only the divisions on screen that lack commit data, and the classes read in order', async () => {
+  reset({ classYear: ['2027'], division: ['D1'], view: 'table' });
   await sb.renderList();
   assert.ok(subtitle().split(' · ').includes('highlighting commits for the class of 2027'), `D1 only: ${subtitle()}`);
-  reset({ classYear: ['2027', '2026'], division: ['D1', 'D3'] });
+  reset({ classYear: ['2027', '2026'], division: ['D1', 'D3'], view: 'table' });
   await sb.renderList();
   assert.deepEqual(filterLike(subtitle()), [], subtitle());
   assert.ok(subtitle().split(' · ').includes('highlighting commits for the classes of 2026 and 2027 (D3 commits rarely collected)'),
     `D1 + D3, two classes: ${subtitle()}`);
-  reset({});
+  reset({ view: 'table' });
   await sb.renderList();
   assert.doesNotMatch(subtitle(), /highlighting|class/, 'no class highlighted, yet the subtitle mentions one');
+});
+
+// #492 (owner, D-class): the cards carry no commits, so in cards view the subtitle says where they are.
+test('cards view: the subtitle says the class\'s commits are in Stats - no "rarely collected" note, never a bit opening "class of"', async () => {
+  reset({ classYear: ['2027'] });
+  sb.location.hash = '#/';
+  await sb.renderList();
+  assert.ok(subtitle().split(' · ').includes('commits for the class of 2027 are in Stats'), `one class: ${subtitle()}`);
+  reset({ classYear: ['2027', '2026'], division: ['D1', 'D3'] });
+  await sb.renderList();
+  assert.ok(subtitle().split(' · ').includes('commits for the classes of 2026 and 2027 are in Stats'), `two classes: ${subtitle()}`);
+  assert.doesNotMatch(subtitle(), /rarely collected|highlighting/, subtitle());
+  assert.deepEqual(filterLike(subtitle()), [], subtitle());
+  reset({});
+  await sb.renderList();
+  assert.doesNotMatch(subtitle(), /highlighting|class|Stats/, 'no class highlighted, yet the subtitle mentions one');
 });
