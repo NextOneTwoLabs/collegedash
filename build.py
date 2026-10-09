@@ -1532,6 +1532,16 @@ CAMP_INDEX_FIELDS = ("name", "startDate", "endDate", "dateText", "precision", "y
 # purpose" from "forgotten", which is the whole point of #69.
 # `sources` (issue #74): every place a merged camp was found; the row's own sourceUrl and kind are the kept entry's.
 CAMP_ITEM_UNPUBLISHED = ("newsTitle", "newsUrl", "newsDate", "sources")
+
+
+def camp_item_drift(fields) -> list[str]:
+    """The per-item camp fields in `fields` that nobody decided about: on neither CAMP_INDEX_FIELDS (published)
+    nor CAMP_ITEM_UNPUBLISHED (withheld on purpose), sorted. check_camps_index calls this over the fields the
+    profiles carry, and tests/camps_field_drift_test.py over every key the code can emit, so a new field is
+    caught in the pull request that adds it (#69) rather than in the refresh that first publishes it."""
+    return sorted(set(fields) - set(CAMP_INDEX_FIELDS) - set(CAMP_ITEM_UNPUBLISHED))
+
+
 # Issue #465 (PR C): the program fields each row carries in its `program` block, equal to the same keys of the
 # program's programs/index.json row (summary_row). `name` is there because 89 programs have no shortName, and a
 # camp must never be shown under a blank name or a slug (#405): a view renders `shortName || name`.
@@ -2234,18 +2244,21 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
         common.log(f"build: {program['slug']} completeness {profile['_build']['completeness']} "
                    f"({len(profile['commitments'])} commits, {len(profile['seasons'])} seasons)"
                    + (f" stale: {profile['_build']['stale']}" if profile["_build"]["stale"] else ""))
-    index_doc = {"updated": common.now_iso(), "season": index_season(registry, rpi_hist, rpi_finals, rpi_final),
+    # Issue #69: one stamp for the programs, commitments and camps indexes, so check_camps_index can date the
+    # camps index against the programs index without a clock. (The list and fit indexes already copy it.)
+    updated = common.now_iso()
+    index_doc = {"updated": updated, "season": index_season(registry, rpi_hist, rpi_finals, rpi_final),
                  "programs": rows}
     common.write_json(os.path.join(common.PROGRAMS_OUT_DIR, "index.json"), index_doc)
     common.write_json(list_path(), list_index(index_doc), compact=True)  # issue #395
     common.write_json(fit_path(), fit_index(index_doc["updated"], fit_entries), compact=True)  # issue #400
     prune_profiles(prune_plan, {r["slug"] for r in rows}, common.PROGRAMS_OUT_DIR)
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "commitments": all_commits})
+                      {"updated": updated, "commitments": all_commits})
     camp_tally = camp_counts(all_camps)
     # Written compact (#465), like the slim list (#395): Home loads it for its camp preview (owner decision D2).
     common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
-                      {"updated": common.now_iso(), "window": window, "counts": camp_tally, "camps": all_camps},
+                      {"updated": updated, "window": window, "counts": camp_tally, "camps": all_camps},
                       compact=True)
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
                f"window from {window['from']}; "
@@ -2454,8 +2467,13 @@ def check_camps_index(registry: dict) -> bool:
 
     It is checked against the window **the file declares**, not against today's window. A published
     index is a day old by definition the morning after a refresh, and re-deriving the window here
-    would fail the check on correct data the first time a row aged out overnight. Staleness is what
-    `updated` and the declared `from` are for; this check is about internal consistency.
+    would fail the check on correct data the first time a row aged out overnight. This check is about
+    internal consistency and never reads the clock. How old the data is, is judged elsewhere, by
+    tools/freshness_check.py in the scheduled freshness.yml (#69). What it does check, with the file's own
+    fields and no clock, is that the camps index is dated against the programs index: its `updated` must be
+    the programs index's (one build stamps both), and `window.from` must fall within a day of that stamp's
+    UTC date (camps_window uses the builder's local date), so a camps index left over from another build is
+    named.
 
     Like check_seasons it reports and does not raise: everything it reads is a file on disk that a
     hand-edit or a half-written build can have left any shape at all. That holds for all three kinds
@@ -2519,6 +2537,33 @@ def check_camps_index(registry: dict) -> bool:
     if not known:
         print(f"CAMPS: cannot read program slugs from {index_path}, so no row's slug can be resolved")
         return False
+    # Issue #69, Detector B: date the camps index against the programs index, with no clock. Placed after the
+    # programs index is read, so an index that is unreadable is reported once, as that.
+    stamp = idx.get("updated") if isinstance(idx, dict) else None
+    try:
+        stamped = dt.datetime.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ") if isinstance(stamp, str) else None
+    except ValueError:
+        stamped = None
+    if stamped is None:
+        print(f"CAMPS: programs/index.json declares updated {stamp!r}; the camps index cannot be dated against it")
+        ok = False
+    else:
+        if doc.get("updated") != stamp:
+            print(f"CAMPS: the camps index declares updated {doc.get('updated')!r}, but programs/index.json "
+                  f"declares {stamp!r}; one build writes both, so one of them is left over from another build")
+            ok = False
+        try:
+            from_date = dt.date.fromisoformat(window["from"])
+        except ValueError:
+            from_date = None
+        if from_date is None:
+            print(f"CAMPS: window.from {window['from']!r} is not a YYYY-MM-DD date")
+            ok = False
+        elif abs((from_date - stamped.date()).days) > 1:
+            print(f"CAMPS: window.from {window['from']!r} is {abs((from_date - stamped.date()).days)} days from "
+                  f"the build's date {stamped.date().isoformat()} (updated {stamp!r}); camps_window starts the "
+                  f"window on the build's own day, so this index was not built with its stamp")
+            ok = False
     allowed = {"slug", *CAMP_INDEX_FIELDS, "program"}
     for i, row in enumerate(published):
         if not isinstance(row, dict):
@@ -2579,7 +2624,7 @@ def check_camps_index(registry: dict) -> bool:
     # dropped on the way out and nothing said so - which is how `campType` would have reached no
     # row at all while every other check here passed. Withheld-on-purpose is declared, so the only
     # thing this can report is a field nobody decided about.
-    forgotten = sorted(item_fields - set(CAMP_INDEX_FIELDS) - set(CAMP_ITEM_UNPUBLISHED))
+    forgotten = camp_item_drift(item_fields)
     if forgotten:
         print(f"CAMPS: the profiles carry per-item field(s) {forgotten} that the index publishes on no "
               f"row; add them to CAMP_INDEX_FIELDS, or to CAMP_ITEM_UNPUBLISHED if withholding them "

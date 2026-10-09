@@ -107,6 +107,19 @@ the failed collectors are printed at the end, recorded as `lastRun` in `public/a
 GitHub Actions shown as annotations and in the run's Summary tab. The workflow's `fail_threshold` input changes
 the limit for a manual run.
 
+### Data freshness (`freshness.yml`)
+
+`validate` checks that the published files agree with each other, so a refresh that never started leaves data
+that is stale *together* and passes every check. `.github/workflows/freshness.yml` runs
+`tools/freshness_check.py` daily at 23:47 UTC against `main`'s committed files (nothing is fetched) and judges
+two ages: the programs index `updated` (when the data was last built) and, for `camps`, `tds`, `soccerwire` and
+`news`, the newest `refresh-state.json` entry that really collected (`ok` and not `skipped`), which catches a
+`build_only` republish of old sources. Up to 12 hours is fine; above 12 hours it warns (a warning annotation and
+a Step Summary line, run still green); above 36 hours the run goes **red** naming the dataset and its age, and
+GitHub's failure email is the alert. When it is red: open the latest `Refresh program data` run (did it start, did it
+fail, was the schedule disabled?), re-run it from the Actions tab, and re-run `Data freshness` once it has
+published. The clock is read only there, never in `build`, `validate` or pull-request checks.
+
 ### `rpi: no season table resolved for [<year>]`
 
 The build refuses to publish rather than blank a season. Every finished season after the RPI archive's last
