@@ -188,7 +188,7 @@ test('reason, tradeoff and unknown text is built only from the object, locale-fr
   const q = R.validatePrefs(prefs({ region: { mode: 'prefer', values: ['Midwest'] }, division: { mode: 'must', values: ['D3'] },
                                     size: { mode: 'prefer', values: ['ge15k'] } }), C).prefs;
   const r = R.reasons(R.contributions(p, q, S));
-  assert.deepEqual(r.reasons.map(R.reasonText), ['Midwest region (OH)', 'D3', '163,164 undergraduates']);
+  assert.deepEqual(r.reasons.map(R.reasonText), ['Midwest region (OH)', 'D3', 'Very large (30K+)']);
   const c = R.validatePrefs(prefs({ climate: { mode: 'prefer', values: ['four-season'] } }), C).prefs;
   assert.equal(R.reasonText(R.reasons(R.contributions(p, c, S)).reasons[0]), 'Four seasons: coldest month averages 27°F (weather station 10.2 km away)', 'D2: the figure and the station distance');
   const u = proj(row('u', { region: null, undergradEnrollment: null }), entry({ climate: null, climateUnknown: 'far-station', stationKm: 63.4 }));

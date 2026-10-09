@@ -219,10 +219,18 @@
     while (s.length > 3) { out = ',' + s.slice(-3) + out; s = s.slice(0, -3); }
     return s + out;
   }
+  // #492 (owner): a size reason names the bracket the program card shows, not the exact count. These edges and names are
+  // a copy of public/index.html's UNDERGRAD_EDGES / UNDERGRAD_SIZES (tests/card_brackets.test.mjs fails if they drift).
+  const BRACKET_EDGES = [2000, 5000, 15000, 30000];
+  const BRACKETS = [['Very small', 'under 2K'], ['Small', '2K–5K'], ['Medium', '5K–15K'], ['Large', '15K–30K'], ['Very large', '30K+']];
+  function sizeBracketText(n) {
+    const i = BRACKET_EDGES.filter(e => n >= e).length;
+    return `${BRACKETS[i][0]} (${BRACKETS[i][1]})`;
+  }
   function valueText(k) {
     if (k.category === 'region') return `${k.value} region${k.detail.state ? ` (${k.detail.state})` : ''}`;
     if (k.category === 'division') return k.value;
-    if (k.category === 'size') return `${fmtInt(k.detail.undergrad)} undergraduates`;
+    if (k.category === 'size') return sizeBracketText(k.detail.undergrad);
     // D2 (owner): the label always comes with the figure it was taken from AND the station distance.
     const w = ENUM_WORDS.climate[k.value];
     return `${w[0].toUpperCase()}${w.slice(1)}: coldest month averages ${k.detail.coldMonthMeanF}°F${stationText(k.detail.stationKm)}`;
@@ -471,7 +479,7 @@
   const API = Object.freeze({
     RANKER, PREFS_V, TAXONOMIES, CATEGORIES, MODES, DIVISIONS, SIZES, CLIMATES, MAX_REASONS,
     enums, defaultPrefs, isActive, validatePrefs, sizeBand, project, fact, contributions, mustHave, score, reasons,
-    reasonText, tradeoffText, unknownText,
+    reasonText, tradeoffText, unknownText, sizeBracketText,
     compareRanked, nameOrder, applyFilters, applyHidden, group, evaluate, rank, stamp, staleness, DOC_V, MIGRATIONS, migrateDoc,
   });
   if (typeof module === 'object' && module && module.exports) module.exports = API;
