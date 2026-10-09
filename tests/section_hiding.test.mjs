@@ -112,12 +112,14 @@ function loadPage(overrides = {}) {
 /* ---------- what each section needs, written from the data and not from the page ---------- */
 const nonEmpty = v => Array.isArray(v) ? v.length > 0 : v != null && typeof v === 'object' ? Object.keys(v).length > 0 : v != null;
 const HONORS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaAppearances', 'confRegularSeasonTitles', 'confTournamentTitles'];
-// #465 E (D6 b): the card keeps the RPI on its summary line and ONE fact row - Undergrads in the default list, shown
-// exactly when the school reports it; US rank, tuition, commits and the roster moved to Stats and the profile.
+// #492: the card keeps two rows that are ALWAYS there - Undergrads and Tuition, each a bracket when the school reports
+// the figure and "Not reported" when it does not (so no card has a hole); RPI, US rank, commits and the roster are in
+// Stats and on the profile, never on the card.
 const expectRow = r => ({
-  'RPI on the card': (r.lastSeason?.year === RPI_SEASON && r.lastSeason.rpiRank != null) || (r.rpiHistory || []).some(h => h.year === RPI_SEASON),
-  'Undergrads fact': r.undergradEnrollment != null,
-  'US rank on the card': false, 'Tuition on the card': false, 'Commits on the card': false, 'roster on the card': false,
+  'RPI on the card': false,
+  'Undergrads row': true, 'Undergrads bracket': r.undergradEnrollment != null,
+  'Tuition row': true, 'Tuition bracket': r.tuitionInState != null || r.tuitionOutOfState != null,
+  'US rank on the card': false, 'Commits on the card': false, 'roster on the card': false,
 });
 const expectProfile = p => {
   const pr = p.program || {}, sch = p.school || {};
@@ -178,12 +180,15 @@ const expectProfile = p => {
 /* ---------- how each section shows itself in the rendered markup ---------- */
 const factShown = (html, label) => html.includes(`<div class="label">${label}</div>`);
 const foot = html => (html.match(/<div class="foot"><span>([\s\S]*?)<span class="foot-actions">/) || [])[1] || '';
-const cardSum = html => (html.match(/<div class="card-sum">([\s\S]*?)<\/div>/) || [])[1] || '';
-const cardFact = html => (html.match(/<div class="card-fact">([\s\S]*?)<\/div>/) || [])[1] || '';
+const cardRow = (html, cls) => (html.match(new RegExp(`<div class="card-fact ${cls}">([\\s\\S]*?)</div>\\s*<div class="(?:card-fact|card-detail)`)) || [])[1] || '';
 const seeRow = html => ({
-  'RPI on the card': /RPI [^<]*#\d+/.test(cardSum(html)), 'Undergrads fact': cardFact(html).includes('<span class="fl">Undergrads</span>'),
-  'US rank on the card': /US rank/.test(html), 'Tuition on the card': /Tuition/.test(html),
-  'Commits on the card': /Commits|commits/.test(cardFact(html) + foot(html)), 'roster on the card': /on roster/.test(html),
+  'RPI on the card': /RPI/.test(html),
+  'Undergrads row': cardRow(html, 'card-ug').includes('<span class="fl">Undergrads</span>'),
+  'Undergrads bracket': /<span class="fv">(Very small|Small|Medium|Large|Very large)<span aria-hidden/.test(cardRow(html, 'card-ug')),
+  'Tuition row': cardRow(html, 'card-tuition').includes('<span class="fl">Tuition</span>'),
+  'Tuition bracket': /(Under \$15K|\$\d+K)/.test(cardRow(html, 'card-tuition').replace(/<span class="sr-only">[\s\S]*?<\/span>/g, '')),
+  'US rank on the card': /US rank/.test(html),
+  'Commits on the card': /Commits|commits/.test(cardRow(html, 'card-ug') + cardRow(html, 'card-tuition') + foot(html)), 'roster on the card': /on roster/.test(html),
 });
 const tile = (html, re) => [...html.matchAll(/<div class="tile"><div class="label">([^<]*)<\/div>/g)].some(m => re.test(m[1]));
 const glance = html => (html.match(/<aside class="glance-panel"[^>]*>([\s\S]*)<\/aside>/) || [])[1] || '';
@@ -301,6 +306,7 @@ test('a synthetic D2 program with almost nothing shows only what it has', async 
     'the bare program should offer exactly Overview and School & Location');
   const card = page.sandbox.cardHtml(rowOf(bare.slug));
   assert.ok(!card.includes('N/A') && !card.includes('>—<'), 'the bare card still shows an empty value');
+  assert.ok(card.includes('Small<span aria-hidden="true"> · 2K–5K</span>') && card.includes('Under $15K in-state') && card.includes('$15K–30K out-of-state'), 'the bare card shows its undergrads and both tuition brackets (#492)');
 });
 
 test('the rule is per program: a D2 program with commitments gets the commitments tab, one without does not', async () => {
@@ -354,7 +360,7 @@ test('table columns: a data column is left out only when no row on screen has da
   // a sortable header carries its label in a button (#285)
   const heads = html => [...html.matchAll(/<th class="[^"]*"[^>]*>(?:<button[^>]*>)?([^<]*)(?:<\/button>)?<\/th>/g)].map(m => m[1]);
   const all = heads(page.sandbox.tableHtml(REAL_INDEX.programs));
-  // no Record column since #342: the record stays on cards, the profile and Compare
+  // no Record column since #342: the record shows on the profile and in Compare (no card carries it since #492)
   assert.deepEqual(all, [RPI.label, '', 'Program', 'Admit', 'US rank (THE)', 'Undergrads', 'Tuition / yr', 'Commits', 'Titles', 'College Cups', 'Region', 'Type', ''],
     'the full D1 table lost a column');
   const d2 = heads(page.sandbox.tableHtml([rowOf(bare.slug), rowOf(committed.slug)]));

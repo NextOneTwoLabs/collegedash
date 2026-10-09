@@ -82,22 +82,22 @@ test('setup: fifteen programs outside D1 carry a count, carson-newman among them
   assert.ok(D1_WITH.length > 100);
 });
 
-// #465 E: commits left the default card; they are its fact row when the list is sorted by Commits (or a class is
-// highlighted), so the cards are checked in that state.
-const sortedByCommits = fn => { const was = sb.S.filters.sort; sb.S.filters.sort = 'commits'; try { return fn(); } finally { sb.S.filters.sort = was; } };
-test('cards: every one of the fifteen says "partial", and no D1 card with commits does', () => sortedByCommits(() => {
-  for (const p of PARTIAL) {
+// #492: no card shows commits under any sort or class highlight (they are in Stats, the profile and Compare), so the
+// "partial" note has no card to sit on. The cards are checked sorted by Commits with a class highlighted - the state
+// in which #465 E put the count on them - and carry neither a count nor the note.
+const sortedByCommits = fn => { const was = [sb.S.filters.sort, sb.S.filters.classYear]; sb.S.filters.sort = 'commits'; sb.S.filters.classYear = ['2027']; try { return fn(); } finally { [sb.S.filters.sort, sb.S.filters.classYear] = was; } };
+test('cards: none of the fifteen, and no D1 card with commits, shows a commit count or the "partial" note', () => sortedByCommits(() => {
+  for (const p of [...PARTIAL, ...D1_WITH]) {
     const html = sb.cardHtml(row(p.slug));
-    assert.ok(partialIn(html), `${p.slug}: the card shows its count without the note`);
-    assert.match(html, /\(partial<span class="sr-only">: not systematically collected<\/span>\)/, `${p.slug}: the card's note text`);
+    assert.ok(!partialIn(html), `${p.slug}: the card carries the partial note`);
+    assert.ok(!/ommits|partial/.test(html), `${p.slug}: the card mentions commits`);
   }
-  for (const p of D1_WITH) assert.ok(!partialIn(sb.cardHtml(row(p.slug))), `${p.slug} (D1): the note is on a collected program`);
 }));
 
-test('the card and the Commits column now agree, by the same rule', () => {
+test('the Commits column keeps saying Not collected; the card shows no commits to disagree with it', () => {
   const cn = row('carson-newman');
   assert.match(sb.tableHtml([cn]), /<span class="sr-only">Not collected<\/span>/, 'the column says Not collected');
-  assert.ok(sortedByCommits(() => partialIn(sb.cardHtml(cn))), 'the card shows the count without saying it is partial');
+  assert.ok(!sortedByCommits(() => partialIn(sb.cardHtml(cn))), 'the card shows commits');
   const fn = /const commitsPartial = \(p, short = false\) => ([^\n]*)/.exec(PAGE)?.[1] || '';
   assert.match(fn, /^commitsCollected\(p\)/, 'the note does not use the column\'s commitsCollected');
 });

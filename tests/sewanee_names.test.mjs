@@ -132,11 +132,11 @@ test('FIX official name and explicit old alias find Sewanee with honest compatib
 
 test('FIX real cards, table, Shortlist and Compare labels show Sewanee', async () => {
   const { sb, el, row } = await loadPage();
-  assert.equal(sb.cardHtml(row).match(/<h3>([^<]*)<span class="nick">/)?.[1], 'Sewanee');
+  assert.equal(sb.cardHtml(row).match(/<h3[^>]*><span class="nm">([^<]*)<\/span>/)?.[1], 'Sewanee');
   assert.equal(sb.tableHtml([row]).match(/class="team-name" title="University of the South">([^<]*)</)?.[1], 'Sewanee');
   sb.S.favorites = new Set(['sewanee']);
   await sb.renderShortlist();
-  assert.equal(el('#app').innerHTML.match(/<h3>([^<]*)<span class="nick">/)?.[1], 'Sewanee');
+  assert.equal(el('#app').innerHTML.match(/<h3[^>]*><span class="nm">([^<]*)<\/span>/)?.[1], 'Sewanee');
   sb.S.compare = ['sewanee'];
   assert.equal(sb.cmpTrayHtml().match(/<li><span>([^<]*)<\/span>/)?.[1], 'Sewanee');
 });

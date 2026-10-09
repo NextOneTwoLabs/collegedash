@@ -26,16 +26,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Alabama | D1 · SEC · AL | 0 of 1 | ✓ South region (AL)<br>✓ 33,227 undergraduates | ↔ Mild winters: coldest month averages 45.6°F (weather station 4.2 km away); you preferred cold winters | — |
-| 2 | Appalachian State | D1 · Sun Belt · NC | 0 of 1 | ✓ South region (NC)<br>✓ 19,444 undergraduates | — | ? Climate unknown: the nearest weather station is 59.1 km away, too far to label |
-| 3 | Arkansas | D1 · SEC · AR | 0 of 1 | ✓ South region (AR)<br>✓ 28,677 undergraduates | ↔ Four seasons: coldest month averages 36.4°F (weather station 6.7 km away); you preferred cold winters | — |
-| 4 | Auburn | D1 · SEC · AL | 0 of 1 | ✓ South region (AL)<br>✓ 26,816 undergraduates | — | ? Climate unknown: the nearest weather station is 52 km away, too far to label |
-| 5 | Charlotte | D1 · American · NC | 0 of 1 | ✓ South region (NC)<br>✓ 24,453 undergraduates | ↔ Four seasons: coldest month averages 42.1°F (weather station 22.3 km away); you preferred cold winters | — |
-| 6 | Clemson | D1 · ACC · SC | 0 of 1 | ✓ South region (SC)<br>✓ 23,300 undergraduates | ↔ Four seasons: coldest month averages 42.8°F (weather station 4.8 km away); you preferred cold winters | — |
-| 7 | East Carolina | D1 · American · NC | 0 of 1 | ✓ South region (NC)<br>✓ 19,896 undergraduates | — | ? Climate unknown: the nearest weather station is 54.8 km away, too far to label |
-| 8 | FIU | D1 · CUSA · FL | 0 of 1 | ✓ South region (FL)<br>✓ 39,508 undergraduates | ↔ Mild winters: coldest month averages 68.6°F (weather station 6.8 km away); you preferred cold winters | — |
-| 9 | Florida | D1 · SEC · FL | 0 of 1 | ✓ South region (FL)<br>✓ 35,629 undergraduates | ↔ Mild winters: coldest month averages 54.9°F (weather station 8.6 km away); you preferred cold winters | — |
-| 10 | Florida Atlantic | D1 · American · FL | 0 of 1 | ✓ South region (FL)<br>✓ 23,757 undergraduates | ↔ Mild winters: coldest month averages 68.4°F (weather station 13.6 km away); you preferred cold winters | — |
+| 1 | Alabama | D1 · SEC · AL | 0 of 1 | ✓ South region (AL)<br>✓ Very large (30K+) | ↔ Mild winters: coldest month averages 45.6°F (weather station 4.2 km away); you preferred cold winters | — |
+| 2 | Appalachian State | D1 · Sun Belt · NC | 0 of 1 | ✓ South region (NC)<br>✓ Large (15K–30K) | — | ? Climate unknown: the nearest weather station is 59.1 km away, too far to label |
+| 3 | Arkansas | D1 · SEC · AR | 0 of 1 | ✓ South region (AR)<br>✓ Large (15K–30K) | ↔ Four seasons: coldest month averages 36.4°F (weather station 6.7 km away); you preferred cold winters | — |
+| 4 | Auburn | D1 · SEC · AL | 0 of 1 | ✓ South region (AL)<br>✓ Large (15K–30K) | — | ? Climate unknown: the nearest weather station is 52 km away, too far to label |
+| 5 | Charlotte | D1 · American · NC | 0 of 1 | ✓ South region (NC)<br>✓ Large (15K–30K) | ↔ Four seasons: coldest month averages 42.1°F (weather station 22.3 km away); you preferred cold winters | — |
+| 6 | Clemson | D1 · ACC · SC | 0 of 1 | ✓ South region (SC)<br>✓ Large (15K–30K) | ↔ Four seasons: coldest month averages 42.8°F (weather station 4.8 km away); you preferred cold winters | — |
+| 7 | East Carolina | D1 · American · NC | 0 of 1 | ✓ South region (NC)<br>✓ Large (15K–30K) | — | ? Climate unknown: the nearest weather station is 54.8 km away, too far to label |
+| 8 | FIU | D1 · CUSA · FL | 0 of 1 | ✓ South region (FL)<br>✓ Very large (30K+) | ↔ Mild winters: coldest month averages 68.6°F (weather station 6.8 km away); you preferred cold winters | — |
+| 9 | Florida | D1 · SEC · FL | 0 of 1 | ✓ South region (FL)<br>✓ Very large (30K+) | ↔ Mild winters: coldest month averages 54.9°F (weather station 8.6 km away); you preferred cold winters | — |
+| 10 | Florida Atlantic | D1 · American · FL | 0 of 1 | ✓ South region (FL)<br>✓ Large (15K–30K) | ↔ Mild winters: coldest month averages 68.4°F (weather station 13.6 km away); you preferred cold winters | — |
 
 **Need verification:** Claremont McKenna-Harvey Mudd-Scripps Colleges (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record; Climate unknown: no weather station data) · Emmanuel (GA) (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record; Climate unknown: no weather station data) · Simon Fraser (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record; Climate unknown: no weather station data)
 
@@ -56,16 +56,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Post | D2 · Central Atlantic Collegiate Conference · CT | 3 of 3 | ✓ Northeast region (CT)<br>✓ 13,603 undergraduates<br>✓ Four seasons: coldest month averages 27.9°F (weather station 21.3 km away) | — | — |
-| 2 | Southern Connecticut | D2 · Northeast 10 Conference · CT | 3 of 3 | ✓ Northeast region (CT)<br>✓ 6,295 undergraduates<br>✓ Four seasons: coldest month averages 30.6°F (weather station 9.2 km away) | — | — |
-| 3 | Adelphi | D2 · Northeast 10 Conference · NY | 2 of 3 | ✓ 5,276 undergraduates<br>✓ Four seasons: coldest month averages 32.9°F (weather station 13 km away) | ↔ Mid-Atlantic region (NY); you preferred Northeast | — |
-| 4 | Bentley | D2 · Northeast 10 Conference · MA | 2 of 3 | ✓ Northeast region (MA)<br>✓ Four seasons: coldest month averages 27.5°F (weather station 10.8 km away) | ↔ 4,474 undergraduates; you preferred 5,000–14,999 undergraduates | — |
-| 5 | Bridgeport | D2 · Central Atlantic Collegiate Conference · CT | 2 of 3 | ✓ Northeast region (CT)<br>✓ Four seasons: coldest month averages 31.4°F (weather station 5.2 km away) | ↔ 1,534 undergraduates; you preferred 5,000–14,999 undergraduates | — |
-| 6 | Central Missouri | D2 · Mid-America Intercollegiate Athletics Association · MO | 2 of 3 | ✓ 5,648 undergraduates<br>✓ Four seasons: coldest month averages 29.9°F (weather station 48.5 km away) | ↔ Midwest region (MO); you preferred Northeast | — |
-| 7 | Central Oklahoma | D2 · Mid-America Intercollegiate Athletics Association · OK | 2 of 3 | ✓ 10,170 undergraduates<br>✓ Four seasons: coldest month averages 39.2°F (weather station 20.8 km away) | ↔ South region (OK); you preferred Northeast | — |
-| 8 | Central Washington | D2 · Great Northwest Athletic Conference · WA | 2 of 3 | ✓ 7,833 undergraduates<br>✓ Four seasons: coldest month averages 30.1°F (weather station 3.5 km away) | ↔ West region (WA); you preferred Northeast | — |
-| 9 | Colorado Christian | D2 · Rocky Mountain Athletic Conference · CO | 2 of 3 | ✓ 5,549 undergraduates<br>✓ Four seasons: coldest month averages 31.8°F (weather station 20 km away) | ↔ West region (CO); you preferred Northeast | — |
-| 10 | Colorado Colorado Springs | D2 · Rocky Mountain Athletic Conference · CO | 2 of 3 | ✓ 8,697 undergraduates<br>✓ Four seasons: coldest month averages 31.7°F (weather station 13.4 km away) | ↔ West region (CO); you preferred Northeast | — |
+| 1 | Post | D2 · Central Atlantic Collegiate Conference · CT | 3 of 3 | ✓ Northeast region (CT)<br>✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 27.9°F (weather station 21.3 km away) | — | — |
+| 2 | Southern Connecticut | D2 · Northeast 10 Conference · CT | 3 of 3 | ✓ Northeast region (CT)<br>✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 30.6°F (weather station 9.2 km away) | — | — |
+| 3 | Adelphi | D2 · Northeast 10 Conference · NY | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 32.9°F (weather station 13 km away) | ↔ Mid-Atlantic region (NY); you preferred Northeast | — |
+| 4 | Bentley | D2 · Northeast 10 Conference · MA | 2 of 3 | ✓ Northeast region (MA)<br>✓ Four seasons: coldest month averages 27.5°F (weather station 10.8 km away) | ↔ Small (2K–5K); you preferred 5,000–14,999 undergraduates | — |
+| 5 | Bridgeport | D2 · Central Atlantic Collegiate Conference · CT | 2 of 3 | ✓ Northeast region (CT)<br>✓ Four seasons: coldest month averages 31.4°F (weather station 5.2 km away) | ↔ Very small (under 2K); you preferred 5,000–14,999 undergraduates | — |
+| 6 | Central Missouri | D2 · Mid-America Intercollegiate Athletics Association · MO | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 29.9°F (weather station 48.5 km away) | ↔ Midwest region (MO); you preferred Northeast | — |
+| 7 | Central Oklahoma | D2 · Mid-America Intercollegiate Athletics Association · OK | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 39.2°F (weather station 20.8 km away) | ↔ South region (OK); you preferred Northeast | — |
+| 8 | Central Washington | D2 · Great Northwest Athletic Conference · WA | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 30.1°F (weather station 3.5 km away) | ↔ West region (WA); you preferred Northeast | — |
+| 9 | Colorado Christian | D2 · Rocky Mountain Athletic Conference · CO | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 31.8°F (weather station 20 km away) | ↔ West region (CO); you preferred Northeast | — |
+| 10 | Colorado Colorado Springs | D2 · Rocky Mountain Athletic Conference · CO | 2 of 3 | ✓ Medium (5K–15K)<br>✓ Four seasons: coldest month averages 31.7°F (weather station 13.4 km away) | ↔ West region (CO); you preferred Northeast | — |
 
 - [ ] Reasons true and sourced
 - [ ] Tradeoffs and unknowns honest
@@ -112,16 +112,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Adams State | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 1,250 undergraduates | — | — |
-| 2 | Biola | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 3,474 undergraduates | — | — |
-| 3 | Chaminade | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ 1,672 undergraduates | — | — |
-| 4 | Colorado State University Pueblo | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 3,042 undergraduates | — | — |
-| 5 | Concordia University Irvine | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,536 undergraduates | — | — |
-| 6 | Dominican University of California | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,114 undergraduates | — | — |
-| 7 | Eastern New Mexico | D2 · Lone Star Conference · NM | 1 of 1 | ✓ West region (NM)<br>✓ D2<br>✓ 3,357 undergraduates | — | — |
-| 8 | Fort Lewis | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 3,079 undergraduates | — | — |
-| 9 | Fresno Pacific | D2 · California Collegiate Athletic Association · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,544 undergraduates | — | — |
-| 10 | Hawaii Pacific | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ 2,392 undergraduates | — | — |
+| 1 | Adams State | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 2 | Biola | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 3 | Chaminade | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 4 | Colorado State University Pueblo | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 5 | Concordia University Irvine | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 6 | Dominican University of California | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 7 | Eastern New Mexico | D2 · Lone Star Conference · NM | 1 of 1 | ✓ West region (NM)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 8 | Fort Lewis | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 9 | Fresno Pacific | D2 · California Collegiate Athletic Association · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 10 | Hawaii Pacific | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
 
 **Need verification:** Emmanuel (GA) (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record) · Simon Fraser (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record) · Claremont McKenna-Harvey Mudd-Scripps Colleges (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record)
 
@@ -170,14 +170,14 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Cornell | D1 · Ivy League · NY | 1 of 1 | ✓ D1<br>✓ 15,995 undergraduates | — | — |
-| 2 | Brown | D1 · Ivy League · RI | 0 of 1 | ✓ D1 | ↔ 7,226 undergraduates; you preferred 15,000+ undergraduates | — |
-| 3 | Columbia | D1 · Ivy League · NY | 0 of 1 | ✓ D1 | ↔ 8,973 undergraduates; you preferred 15,000+ undergraduates | — |
-| 4 | Dartmouth | D1 · Ivy League · NH | 0 of 1 | ✓ D1 | ↔ 4,541 undergraduates; you preferred 15,000+ undergraduates | — |
-| 5 | Harvard | D1 · Ivy League · MA | 0 of 1 | ✓ D1 | ↔ 7,601 undergraduates; you preferred 15,000+ undergraduates | — |
-| 6 | Penn | D1 · Ivy League · PA | 0 of 1 | ✓ D1 | ↔ 10,650 undergraduates; you preferred 15,000+ undergraduates | — |
-| 7 | Princeton | D1 · Ivy League · NJ | 0 of 1 | ✓ D1 | ↔ 5,709 undergraduates; you preferred 15,000+ undergraduates | — |
-| 8 | Yale | D1 · Ivy League · CT | 0 of 1 | ✓ D1 | ↔ 6,758 undergraduates; you preferred 15,000+ undergraduates | — |
+| 1 | Cornell | D1 · Ivy League · NY | 1 of 1 | ✓ D1<br>✓ Large (15K–30K) | — | — |
+| 2 | Brown | D1 · Ivy League · RI | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
+| 3 | Columbia | D1 · Ivy League · NY | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
+| 4 | Dartmouth | D1 · Ivy League · NH | 0 of 1 | ✓ D1 | ↔ Small (2K–5K); you preferred 15,000+ undergraduates | — |
+| 5 | Harvard | D1 · Ivy League · MA | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
+| 6 | Penn | D1 · Ivy League · PA | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
+| 7 | Princeton | D1 · Ivy League · NJ | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
+| 8 | Yale | D1 · Ivy League · CT | 0 of 1 | ✓ D1 | ↔ Medium (5K–15K); you preferred 15,000+ undergraduates | — |
 
 - [ ] Reasons true and sourced
 - [ ] Tradeoffs and unknowns honest
@@ -226,16 +226,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Amherst | D3 · New England Small College Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ 1,911 undergraduates<br>✓ Cold winters: coldest month averages 23.7°F (weather station 28.8 km away) | — | — |
-| 2 | Bates | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ 1,760 undergraduates<br>✓ Cold winters: coldest month averages 21°F (weather station 31.4 km away) | — | — |
-| 3 | Bowdoin | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ 1,873 undergraduates<br>✓ Cold winters: coldest month averages 21°F (weather station 2.6 km away) | — | — |
-| 4 | Clark | D3 · New England Women's and Men's Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ 2,214 undergraduates<br>✓ Cold winters: coldest month averages 24.7°F (weather station 4.7 km away) | — | — |
-| 5 | Colby | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ 2,407 undergraduates<br>✓ Cold winters: coldest month averages 20.5°F (weather station 29.1 km away) | — | — |
-| 6 | Colby-Sawyer | D3 · Great Northeast Athletic Conference · NH | 2 of 2 | ✓ Northeast region (NH)<br>✓ 771 undergraduates<br>✓ Cold winters: coldest month averages 19.8°F (weather station 35.7 km away) | — | — |
-| 7 | Elms | D3 · Great Northeast Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ 949 undergraduates<br>✓ Cold winters: coldest month averages 25.2°F (weather station 9.6 km away) | — | — |
-| 8 | Fitchburg State | D3 · Massachusetts State Collegiate Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ 2,752 undergraduates<br>✓ Cold winters: coldest month averages 24.9°F (weather station 4.9 km away) | — | — |
-| 9 | Husson | D3 · North Atlantic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ 2,618 undergraduates<br>✓ Cold winters: coldest month averages 18.6°F (weather station 4.1 km away) | — | — |
-| 10 | Keene State | D3 · Little East Conference · NH | 2 of 2 | ✓ Northeast region (NH)<br>✓ 2,699 undergraduates<br>✓ Cold winters: coldest month averages 22.3°F (weather station 26.2 km away) | — | — |
+| 1 | Amherst | D3 · New England Small College Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ Very small (under 2K)<br>✓ Cold winters: coldest month averages 23.7°F (weather station 28.8 km away) | — | — |
+| 2 | Bates | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ Very small (under 2K)<br>✓ Cold winters: coldest month averages 21°F (weather station 31.4 km away) | — | — |
+| 3 | Bowdoin | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ Very small (under 2K)<br>✓ Cold winters: coldest month averages 21°F (weather station 2.6 km away) | — | — |
+| 4 | Clark | D3 · New England Women's and Men's Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ Small (2K–5K)<br>✓ Cold winters: coldest month averages 24.7°F (weather station 4.7 km away) | — | — |
+| 5 | Colby | D3 · New England Small College Athletic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ Small (2K–5K)<br>✓ Cold winters: coldest month averages 20.5°F (weather station 29.1 km away) | — | — |
+| 6 | Colby-Sawyer | D3 · Great Northeast Athletic Conference · NH | 2 of 2 | ✓ Northeast region (NH)<br>✓ Very small (under 2K)<br>✓ Cold winters: coldest month averages 19.8°F (weather station 35.7 km away) | — | — |
+| 7 | Elms | D3 · Great Northeast Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ Very small (under 2K)<br>✓ Cold winters: coldest month averages 25.2°F (weather station 9.6 km away) | — | — |
+| 8 | Fitchburg State | D3 · Massachusetts State Collegiate Athletic Conference · MA | 2 of 2 | ✓ Northeast region (MA)<br>✓ Small (2K–5K)<br>✓ Cold winters: coldest month averages 24.9°F (weather station 4.9 km away) | — | — |
+| 9 | Husson | D3 · North Atlantic Conference · ME | 2 of 2 | ✓ Northeast region (ME)<br>✓ Small (2K–5K)<br>✓ Cold winters: coldest month averages 18.6°F (weather station 4.1 km away) | — | — |
+| 10 | Keene State | D3 · Little East Conference · NH | 2 of 2 | ✓ Northeast region (NH)<br>✓ Small (2K–5K)<br>✓ Cold winters: coldest month averages 22.3°F (weather station 26.2 km away) | — | — |
 
 - [ ] Reasons true and sourced
 - [ ] Tradeoffs and unknowns honest
@@ -254,16 +254,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Adams State | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 1,250 undergraduates | — | — |
-| 2 | Biola | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 3,474 undergraduates | — | — |
-| 3 | Chaminade | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ 1,672 undergraduates | — | — |
-| 4 | Colorado State University Pueblo | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 3,042 undergraduates | — | — |
-| 5 | Concordia University Irvine | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,536 undergraduates | — | — |
-| 6 | Dominican University of California | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,114 undergraduates | — | — |
-| 7 | Eastern New Mexico | D2 · Lone Star Conference · NM | 1 of 1 | ✓ West region (NM)<br>✓ D2<br>✓ 3,357 undergraduates | — | — |
-| 8 | Fort Lewis | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ 3,079 undergraduates | — | — |
-| 9 | Fresno Pacific | D2 · California Collegiate Athletic Association · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ 1,544 undergraduates | — | — |
-| 10 | Hawaii Pacific | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ 2,392 undergraduates | — | — |
+| 1 | Adams State | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 2 | Biola | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 3 | Chaminade | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 4 | Colorado State University Pueblo | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 5 | Concordia University Irvine | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 6 | Dominican University of California | D2 · Pacific West Conference · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 7 | Eastern New Mexico | D2 · Lone Star Conference · NM | 1 of 1 | ✓ West region (NM)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 8 | Fort Lewis | D2 · Rocky Mountain Athletic Conference · CO | 1 of 1 | ✓ West region (CO)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
+| 9 | Fresno Pacific | D2 · California Collegiate Athletic Association · CA | 1 of 1 | ✓ West region (CA)<br>✓ D2<br>✓ Very small (under 2K) | — | — |
+| 10 | Hawaii Pacific | D2 · Pacific West Conference · HI | 1 of 1 | ✓ West region (HI)<br>✓ D2<br>✓ Small (2K–5K) | — | — |
 
 **Need verification:** Emmanuel (GA) (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record) · Simon Fraser (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record)
 
@@ -342,16 +342,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Illinois | D1 · Big Ten · IL | 2 of 3 | ✓ 36,258 undergraduates<br>✓ Cold winters: coldest month averages 26°F (weather station 8.3 km away) | ↔ Midwest region (IL); you preferred West or Northeast | — |
-| 2 | Iowa | D1 · Big Ten · IA | 2 of 3 | ✓ 22,264 undergraduates<br>✓ Cold winters: coldest month averages 22.8°F (weather station 3.3 km away) | ↔ Midwest region (IA); you preferred West or Northeast | — |
-| 3 | Michigan State | D1 · Big Ten · MI | 2 of 3 | ✓ 40,922 undergraduates<br>✓ Cold winters: coldest month averages 23.9°F (weather station 10 km away) | ↔ Midwest region (MI); you preferred West or Northeast | — |
-| 4 | Minnesota | D1 · Big Ten · MN | 2 of 3 | ✓ 31,855 undergraduates<br>✓ Cold winters: coldest month averages 16.2°F (weather station 10 km away) | ↔ Midwest region (MN); you preferred West or Northeast | — |
-| 5 | Nebraska | D1 · Big Ten · NE | 2 of 3 | ✓ 19,178 undergraduates<br>✓ Cold winters: coldest month averages 25°F (weather station 5.4 km away) | ↔ Midwest region (NE); you preferred West or Northeast | — |
-| 6 | Oregon | D1 · Big Ten · OR | 2 of 3 | ✓ West region (OR)<br>✓ 20,497 undergraduates | ↔ Four seasons: coldest month averages 40.6°F (weather station 14.8 km away); you preferred cold winters | — |
-| 7 | Purdue | D1 · Big Ten · IN | 2 of 3 | ✓ 44,503 undergraduates<br>✓ Cold winters: coldest month averages 25.8°F (weather station 2.6 km away) | ↔ Midwest region (IN); you preferred West or Northeast | — |
-| 8 | UCLA | D1 · Big Ten · CA | 2 of 3 | ✓ West region (CA)<br>✓ 33,475 undergraduates | ↔ Mild winters: coldest month averages 57°F (weather station 6.3 km away); you preferred cold winters | — |
-| 9 | USC | D1 · Big Ten · CA | 2 of 3 | ✓ West region (CA)<br>✓ 20,443 undergraduates | ↔ Mild winters: coldest month averages 57.8°F (weather station 5.6 km away); you preferred cold winters | — |
-| 10 | Washington | D1 · Big Ten · WA | 2 of 3 | ✓ West region (WA)<br>✓ 31,942 undergraduates | ↔ Four seasons: coldest month averages 41.8°F (weather station 5.1 km away); you preferred cold winters | — |
+| 1 | Illinois | D1 · Big Ten · IL | 2 of 3 | ✓ Very large (30K+)<br>✓ Cold winters: coldest month averages 26°F (weather station 8.3 km away) | ↔ Midwest region (IL); you preferred West or Northeast | — |
+| 2 | Iowa | D1 · Big Ten · IA | 2 of 3 | ✓ Large (15K–30K)<br>✓ Cold winters: coldest month averages 22.8°F (weather station 3.3 km away) | ↔ Midwest region (IA); you preferred West or Northeast | — |
+| 3 | Michigan State | D1 · Big Ten · MI | 2 of 3 | ✓ Very large (30K+)<br>✓ Cold winters: coldest month averages 23.9°F (weather station 10 km away) | ↔ Midwest region (MI); you preferred West or Northeast | — |
+| 4 | Minnesota | D1 · Big Ten · MN | 2 of 3 | ✓ Very large (30K+)<br>✓ Cold winters: coldest month averages 16.2°F (weather station 10 km away) | ↔ Midwest region (MN); you preferred West or Northeast | — |
+| 5 | Nebraska | D1 · Big Ten · NE | 2 of 3 | ✓ Large (15K–30K)<br>✓ Cold winters: coldest month averages 25°F (weather station 5.4 km away) | ↔ Midwest region (NE); you preferred West or Northeast | — |
+| 6 | Oregon | D1 · Big Ten · OR | 2 of 3 | ✓ West region (OR)<br>✓ Large (15K–30K) | ↔ Four seasons: coldest month averages 40.6°F (weather station 14.8 km away); you preferred cold winters | — |
+| 7 | Purdue | D1 · Big Ten · IN | 2 of 3 | ✓ Very large (30K+)<br>✓ Cold winters: coldest month averages 25.8°F (weather station 2.6 km away) | ↔ Midwest region (IN); you preferred West or Northeast | — |
+| 8 | UCLA | D1 · Big Ten · CA | 2 of 3 | ✓ West region (CA)<br>✓ Very large (30K+) | ↔ Mild winters: coldest month averages 57°F (weather station 6.3 km away); you preferred cold winters | — |
+| 9 | USC | D1 · Big Ten · CA | 2 of 3 | ✓ West region (CA)<br>✓ Large (15K–30K) | ↔ Mild winters: coldest month averages 57.8°F (weather station 5.6 km away); you preferred cold winters | — |
+| 10 | Washington | D1 · Big Ten · WA | 2 of 3 | ✓ West region (WA)<br>✓ Very large (30K+) | ↔ Four seasons: coldest month averages 41.8°F (weather station 5.1 km away); you preferred cold winters | — |
 
 - [ ] Reasons true and sourced
 - [ ] Tradeoffs and unknowns honest
@@ -370,16 +370,16 @@ Check each scenario for:
 
 | # | Program | Line | Matched | Reasons | Tradeoff | Unknowns |
 |---|---|---|---|---|---|---|
-| 1 | Albertus Magnus | D3 · Great Northeast Athletic Conference · CT | 1 of 1 | ✓ Northeast region (CT)<br>✓ D3<br>✓ 991 undergraduates | — | — |
-| 2 | Amherst | D3 · New England Small College Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ 1,911 undergraduates | — | — |
-| 3 | Babson | D3 · New England Women's and Men's Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ 2,728 undergraduates | — | — |
-| 4 | Bates | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ 1,760 undergraduates | — | — |
-| 5 | Bowdoin | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ 1,873 undergraduates | — | — |
-| 6 | Brandeis | D3 · University Athletic Association · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ 3,618 undergraduates | — | — |
-| 7 | Clark | D3 · New England Women's and Men's Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ 2,214 undergraduates | — | — |
-| 8 | Colby | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ 2,407 undergraduates | — | — |
-| 9 | Colby-Sawyer | D3 · Great Northeast Athletic Conference · NH | 1 of 1 | ✓ Northeast region (NH)<br>✓ D3<br>✓ 771 undergraduates | — | — |
-| 10 | Connecticut | D3 · New England Small College Athletic Conference · CT | 1 of 1 | ✓ Northeast region (CT)<br>✓ D3<br>✓ 1,937 undergraduates | — | — |
+| 1 | Albertus Magnus | D3 · Great Northeast Athletic Conference · CT | 1 of 1 | ✓ Northeast region (CT)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
+| 2 | Amherst | D3 · New England Small College Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
+| 3 | Babson | D3 · New England Women's and Men's Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ Small (2K–5K) | — | — |
+| 4 | Bates | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
+| 5 | Bowdoin | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
+| 6 | Brandeis | D3 · University Athletic Association · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ Small (2K–5K) | — | — |
+| 7 | Clark | D3 · New England Women's and Men's Athletic Conference · MA | 1 of 1 | ✓ Northeast region (MA)<br>✓ D3<br>✓ Small (2K–5K) | — | — |
+| 8 | Colby | D3 · New England Small College Athletic Conference · ME | 1 of 1 | ✓ Northeast region (ME)<br>✓ D3<br>✓ Small (2K–5K) | — | — |
+| 9 | Colby-Sawyer | D3 · Great Northeast Athletic Conference · NH | 1 of 1 | ✓ Northeast region (NH)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
+| 10 | Connecticut | D3 · New England Small College Athletic Conference · CT | 1 of 1 | ✓ Northeast region (CT)<br>✓ D3<br>✓ Very small (under 2K) | — | — |
 
 **Need verification:** Claremont McKenna-Harvey Mudd-Scripps Colleges (Region unknown: no College Scorecard record; Size unknown: no College Scorecard record)
 

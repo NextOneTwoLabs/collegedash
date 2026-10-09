@@ -1,8 +1,9 @@
 // Issue #426: program cards in one row of the grid had bands, meta lines and stats at different heights (a long name,
-// a title badge beside the name, a long conference). (a) Each card is a subgrid of five row tracks - since #465 E:
-// band (crest, name, badge), meta, summary, detail (the ONE fact row, or Recommended's reasons, in one wrapper), foot -
-// each part placed on its own track, inside @supports (grid-template-rows: subgrid) so older browsers keep the flex
-// card. (c) The title badge sits on its own line under the name, not beside it.
+// a title badge beside the name, a long conference). (a) Each card is a subgrid of six row tracks - since #492:
+// band (name, nickname, badge on its right), meta, undergrads, tuition, detail (empty, or Recommended's reasons, in one
+// wrapper), foot - each part placed on its own track, inside @supports (grid-template-rows: subgrid) so older browsers
+// keep the flex card. (c) Since #492 the title badge sits on the band's right, on the name's row (it was under the name),
+// and the name is cut to one line with an ellipsis (it used to wrap; #426 said names never truncate).
 //
 //     node --test tests/card_rows.test.mjs
 //
@@ -33,7 +34,7 @@ const CANNOT = 'the card-rows test cannot read';
 // A selector "targets a card part" when its LAST compound carries one of the card's own classes, or a generic part
 // class (.body .meta .foot) under .pcard, or no class at all (a tag, `*`, a pseudo-class) under .pcard - so
 // `.band .nick` (inside the band) is not a part, but `.pcard > *:last-child` and `.pcard .band h3` are.
-const OWN = /\.(pcard|band|stripe|card-detail|card-sum|card-fact|titles|facts)(?![\w-])/, GENERIC = /\.(body|meta|foot)(?![\w-])/;
+const OWN = /\.(pcard|band|stripe|card-detail|card-ug|card-tuition|card-fact|titles|facts)(?![\w-])/, GENERIC = /\.(body|meta|foot)(?![\w-])/;
 const isPart = sel => {
   const parts = sel.split(/\s*[>+~]\s*|\s+/).filter(Boolean), last = parts.pop(), under = /\.pcard(?![\w-])/.test(parts.join(' '));
   return OWN.test(last) || (under && GENERIC.test(last)) || (under && !/\./.test(last.replace(/:[\w-]+(\([^)]*\))?/g, '')) && !/\./.test(last));
@@ -43,21 +44,23 @@ const SUBGRID_AT = '@supports (grid-template-rows: subgrid)';
 // properties it sets (#430: a property added to a known selector - `.pcard .foot { order: -1 }` - must fail too).
 const EXPECTED = {
   [`|.pcard`]: { display: 'flex', 'flex-direction': 'column', padding: '0', overflow: 'hidden' },  // the fallback card
-  [`|.band`]: { display: 'grid', 'grid-template-columns': '36px minmax(0, 1fr)', 'align-items': 'start', gap: '4px 12px', padding: '14px 16px 6px' },
-  [`|.band .titles`]: { 'grid-column': '2', 'justify-self': 'start', 'font-size': '11px', padding: '2px 8px', 'white-space': 'nowrap' },
+  [`|.band`]: { display: 'flex', 'align-items': 'center', gap: '10px', height: '4.75rem', padding: '0 16px' },
+  [`|.band .titles`]: { flex: 'none', 'white-space': 'nowrap', 'font-size': '11px', padding: '2px 8px' },
   [`|.pcard .band h3`]: { 'font-size': '17px', 'line-height': '1.2' },
   [`|.pcard .body`]: { flex: '1', padding: '0 16px 12px' },
-  [`|.pcard .meta`]: { 'font-size': '12px', 'margin-bottom': '6px' },
-  [`|.pcard .card-sum`]: { 'font-size': '13px', 'margin-bottom': '4px' },
-  [`|.pcard .card-fact`]: { 'font-size': '13px' },
+  [`|.pcard .meta`]: { 'font-size': '12px', 'line-height': '1.4', height: '2.8em', margin: '8px 0 6px', overflow: 'hidden', display: '-webkit-box' },
+  [`|.pcard .card-fact`]: { 'font-size': '13px', 'line-height': '1.4' },
+  [`|.pcard .card-ug`]: { display: 'flex', gap: '6px', height: '1.4em', 'margin-bottom': '4px' },
+  [`|.pcard .card-tuition`]: { display: 'flex', gap: '6px', height: '2.8em' },
   [`|.pcard .foot`]: { display: 'flex', 'align-items': 'center', 'justify-content': 'space-between', gap: '8px', padding: '6px 8px 6px 16px', 'font-size': '12px' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard`]: { display: 'grid', 'grid-row': 'span 5', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard`]: { display: 'grid', 'grid-row': 'span 6', 'grid-template-columns': 'minmax(0, 1fr)', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .band`]: { 'grid-row': '1' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .body`]: { 'grid-row': '2 / span 3', display: 'grid', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body`]: { 'grid-row': '2 / span 4', display: 'grid', 'grid-template-columns': 'minmax(0, 1fr)', 'grid-template-rows': 'subgrid', 'row-gap': '0' },
   [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .meta`]: { 'grid-row': '1' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-sum`]: { 'grid-row': '2' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-detail`]: { 'grid-row': '3' },
-  [`${SUBGRID_AT}|.grid.cards > .pcard > .foot`]: { 'grid-row': '5' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-ug`]: { 'grid-row': '2' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-tuition`]: { 'grid-row': '3' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .body > .card-detail`]: { 'grid-row': '4' },
+  [`${SUBGRID_AT}|.grid.cards > .pcard > .foot`]: { 'grid-row': '6' },
 };
 // The card parts' layout, exactly as EXPECTED; fails loudly on anything else, and on a subgrid outside @supports.
 function cardLayout(rules) {
@@ -80,28 +83,32 @@ test('the cascade check fails loudly on every form it cannot read', () => {
     ['a universal child', `${SUBGRID_AT} { .pcard > *:last-child { grid-row: 2; } }`],
     ['the badge taken out of flow', '.band .titles { position: absolute; }'],
     ['subgrid outside @supports', '.grid.cards > .pcard { grid-template-rows: subgrid; }'],
-    ['the band back to a column', '.pcard .band { grid-template-columns: 1fr; }'],
+    ['the band back to a column', '.pcard .band { flex-direction: column; }'],
     // #430: a layout property added to, or changed on, a selector the check already knows (Bianque's three first)
     ['order on the foot (Bianque)', '.pcard .foot { order: -1; }'],
     ['order on the band (Bianque)', '.band { order: 1; }'],
     ['position on the card (Bianque)', '.pcard { position: absolute; }'],
     ['a changed value on a known selector', '.pcard .meta { margin-bottom: 40px; }'],
-    ['a transform on a subgrid part', `${SUBGRID_AT} { .grid.cards > .pcard > .body > .card-sum { transform: translateY(-20px); } }`],
+    ['the tuition row shortened to one line (#492)', '.pcard .card-tuition { height: 1.4em; }'],
+    ['the undergrads row allowed to grow (#492)', '.pcard .card-ug { height: auto; }'],
+    ['the band allowed to grow (#492)', '.band { height: auto; }'],
+    ['a transform on a subgrid part', `${SUBGRID_AT} { .grid.cards > .pcard > .body > .card-ug { transform: translateY(-20px); } }`],
     ['the fact row moved', `${SUBGRID_AT} { .grid.cards > .pcard > .body > .card-detail { grid-row: 2; } }`],
   ]) assert.throws(run(extra), new RegExp(CANNOT), `${name}: the check did not fail`);
 });
 
-test('inside @supports subgrid: the card spans five tracks and every part names its own (exactly)', () => {
+test('inside @supports subgrid: the card spans six tracks and every part names its own (exactly)', () => {
   const got = cardLayout(parseCss(CSS));
   assert.deepEqual(Object.keys(got).sort(), Object.keys(EXPECTED).sort());
   for (const [key, want] of Object.entries(EXPECTED)) assert.deepEqual({ ...got[key] }, want, key);
 });
 
-test('(c) the badge sits under the name, in the name\'s column, at its own width (#465 E: the crest takes column 1)', () => {
+test('(c) #492: the badge sits on the band\'s right, on the name\'s row, at its own width; the band is a fixed-height row', () => {
   const got = cardLayout(parseCss(CSS));
-  assert.equal(got['|.band']?.['grid-template-columns'], '36px minmax(0, 1fr)', 'the band is no longer crest | name');
-  assert.equal(got['|.band .titles']?.['grid-column'], '2', 'the badge left the name\'s column');
-  assert.equal(got['|.band .titles']?.['justify-self'], 'start', 'the badge pill would stretch to the column width');
+  assert.equal(got['|.band']?.display, 'flex', 'the band is no longer a row');
+  assert.equal(got['|.band']?.height, '4.75rem', 'the band is not a fixed height');
+  assert.equal(got['|.band .titles']?.flex, 'none', 'the badge pill would shrink or stretch');
+  assert.equal(got['|.band .titles']?.['white-space'], 'nowrap');
 });
 
 // ---------- (1) the card, rendered by the page ----------
@@ -159,25 +166,26 @@ test('setup: the index loads', async () => {
   assert.ok(sb.S.index.programs.length > 900);
 });
 
-test('every card: band, body, foot; the body: meta, summary, then ONE detail wrapper holding the fact row or the reasons', () => {
+test('every card: band, body, foot; the body: meta, undergrads, tuition, then ONE detail wrapper (empty, or the reasons)', () => {
   const ps = sb.S.index.programs;
   const withFact = ps.find(p => p.undergradEnrollment != null && p.nationalTitles > 0 && p.division !== 'D1');
   const noFact = ps.find(p => p.undergradEnrollment == null);
   assert.ok(withFact && noFact, 'fixture: need a card with a fact and a badge, and one without');
-  for (const [p, why, label] of [[withFact, undefined, 'fact + badge'], [withFact, WHY, 'reasons'], [noFact, undefined, 'empty fact row'], [noFact, WHY, 'reasons only']]) {
+  for (const [p, why, label] of [[withFact, undefined, 'bracket + badge'], [withFact, WHY, 'reasons'], [noFact, undefined, 'Not reported'], [noFact, WHY, 'reasons only']]) {
     const html = sb.cardHtml(p, why);
     assert.deepEqual(childrenOf(html, 'card pcard').map(c => c.split('.')[1].split(' ')[0]), ['band', 'body', 'foot'], `${label}: card parts`);
-    assert.deepEqual(childrenOf(html, 'body').map(c => c.split('.')[1]), ['meta', 'card-sum', 'card-detail'], `${label}: the body has meta, summary and one detail wrapper`);
+    assert.deepEqual(childrenOf(html, 'body').map(c => c.split('.').slice(1).join('.')), ['meta', 'card-fact card-ug', 'card-fact card-tuition', 'card-detail'],
+      `${label}: the body has meta, the two bracket rows and one detail wrapper`);
     const detail = childrenOf(html, 'card-detail').map(c => c.split('.')[1]);
-    assert.deepEqual(detail, why ? ['recs-why'] : ['card-fact'], `${label}: the detail wrapper holds the fact row, or the reasons in its place`);
+    assert.deepEqual(detail, why ? ['recs-why'] : [], `${label}: the detail wrapper is empty, or holds the reasons`);
   }
 });
 
-test('(c) the badge is the band\'s own child after the name, never inside the name\'s heading', () => {
+test('(c) #492: the badge is the band\'s own child after the name, on its right, never inside the name\'s heading', () => {
   const p = sb.S.index.programs.find(x => x.nationalTitles > 0 && x.division === 'D3');
   const html = sb.cardHtml(p);
   const band = childrenOf(html, 'band');
-  assert.deepEqual(band.map(c => c.split('.')[0] + (c.split('.')[1] ? '.' + c.split('.')[1] : '')), ['span.crest', 'h3', 'span.titles'], 'band children: the crest, the name, the badge');
+  assert.deepEqual(band, ['h3.', 'span.titles'], 'band children: the name, then the badge (no crest)');
   assert.match(html, /<span class="titles">\d+ NCAA D3 titles?<\/span>/, 'the badge text (its accessible name) is unchanged');
 });
 
@@ -185,7 +193,7 @@ test('constraints: D1/D2/D3 on every card, and the name readers see is shortName
   for (const d of ['D1', 'D2', 'D3']) {
     const p = sb.S.index.programs.find(x => x.division === d && x.shortName && x.shortName !== x.name);
     const html = sb.cardHtml(p);
-    assert.ok(html.includes(`<h3>${p.shortName.replace(/&/g, '&amp;').replace(/'/g, '&#39;')}<span class="nick">`), `${d}: the card is not titled with shortName`);
+    assert.ok(html.includes(`<span class="nm">${p.shortName.replace(/&/g, '&amp;').replace(/'/g, '&#39;')}</span>`), `${d}: the card is not titled with shortName`);
     assert.match(childrenOf(html, 'meta').length >= 0 && html.split('class="meta">')[1].slice(0, 400), new RegExp(`\\b${d}\\b`), `${d}: the meta line lost its division`);
   }
 });
