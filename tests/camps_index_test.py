@@ -61,6 +61,7 @@ import random
 import shutil
 import sys
 import tempfile
+import types
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -559,9 +560,13 @@ GOOD_ROW = {"slug": "clemson", "name": "Spring ID Camp", "startDate": "2026-04-1
             "registerUrl": None, "sourceUrl": None, "kind": "camp", "campType": "id",
             "confidence": "heuristic", "program": prog("clemson")}
 WINDOW = {"from": "2025-09-14", "to": None}
+# The one build stamp every index carries (#69): the programs, camps and commitments indexes are written from
+# the same `updated`, and check_camps_index requires the camps one to equal the programs one. Its date is
+# WINDOW["from"]'s, because a build that stamps a window stamps it on the same day.
+FIXTURE_UPDATED = "2025-09-14T00:00:00Z"
 
 
-def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> dict:
+def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]], programs_updated=FIXTURE_UPDATED) -> dict:
     """A scratch published tree: a programs index and one profile per slug carrying `items`, plus
     whatever `index_doc` is (an object, a string to write raw, or None to write no file at all).
     Returns the registry naming those slugs."""
@@ -569,7 +574,7 @@ def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> dict:
     os.makedirs(progs, exist_ok=True)
     os.makedirs(camps, exist_ok=True)
     common.write_json(os.path.join(progs, "index.json"),
-                      {"programs": [index_row(s) for s in items]})
+                      {"updated": programs_updated, "programs": [index_row(s) for s in items]})
     for slug, its in items.items():
         common.write_json(os.path.join(progs, f"{slug}.json"), {"slug": slug, "camps": {"items": its}})
     path = os.path.join(camps, "index.json")
@@ -584,14 +589,14 @@ def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> dict:
     return {"programs": [{"slug": s, "onboarded": True} for s in items]}
 
 
-def check(tmp: str, *, index_doc, items: dict[str, list[dict]]) -> tuple[bool, str]:
-    reg = scratch_tree(tmp, index_doc=index_doc, items=items)
+def check(tmp: str, *, index_doc, items: dict[str, list[dict]], programs_updated=FIXTURE_UPDATED) -> tuple[bool, str]:
+    reg = scratch_tree(tmp, index_doc=index_doc, items=items, programs_updated=programs_updated)
     with swapped(PROGRAMS_OUT_DIR=os.path.join(tmp, "programs"), CAMPS_OUT_DIR=os.path.join(tmp, "camps")):
         return captured(build.check_camps_index, reg)
 
 
 def doc(rows, window=WINDOW, counts=None) -> dict:
-    return {"updated": "2026-09-14T00:00:00Z", "window": window,
+    return {"updated": FIXTURE_UPDATED, "window": window,
             "counts": build.camp_counts(rows) if counts is None else counts, "camps": rows}
 
 
@@ -735,7 +740,7 @@ def test_invariant() -> None:
         reg = scratch_tree(tmp, index_doc=doc([{**GOOD_ROW, "program": {**prog("clemson"), "shortName": None}}]),
                            items={"clemson": [item()]})
         rows_path = os.path.join(tmp, "programs", "index.json")
-        common.write_json(rows_path, {"programs": [{**index_row("clemson"), "shortName": None}]})
+        common.write_json(rows_path, {"updated": FIXTURE_UPDATED, "programs": [{**index_row("clemson"), "shortName": None}]})
         with swapped(PROGRAMS_OUT_DIR=os.path.join(tmp, "programs"), CAMPS_OUT_DIR=os.path.join(tmp, "camps")):
             passed, out = captured(build.check_camps_index, reg)
         ok("#465 a program with no shortName passes with its name in the block (the 89-program case, #405)",
@@ -749,6 +754,55 @@ def test_invariant() -> None:
                             items={"clemson": [item(startDate="2025-09-13", endDate="2025-09-13")]})
         ok("an index is judged against the window it declares, not against today's",
            passed and not out, out[:300])
+
+        # ---- issue #69, Detector B: the camps index is dated against the programs index, never the clock ----
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW]), items={"clemson": [item()]},
+                            programs_updated="2025-09-14T00:00:01Z")
+        ok("T3a a camps `updated` that is not the programs index's is reported, both values shown",
+           not passed and "updated" in out and FIXTURE_UPDATED in out and "2025-09-14T00:00:01Z" in out, out[:400])
+
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW], window={"from": "2025-08-15", "to": None}),
+                            items={"clemson": [item()]})  # 30 days before FIXTURE_UPDATED
+        ok("T3b a window.from 30 days before `updated` is reported",
+           not passed and "window.from" in out and "2025-08-15" in out, out[:400])
+        passed, out = check(tmp, index_doc=doc([GOOD_ROW], window={"from": "2025-09-15", "to": None}),
+                            items={"clemson": [item()]})
+        ok("T3b and a window.from a day after `updated` is tolerated (the +1 side of the +-1 day rule)",
+           passed and not out, out[:300])
+
+        # T3c pins the absence of a clock: a self-consistent index from 2020 is correct data and must pass.
+        # Every clock reader build.py has is made to raise, so reading any of them fails the check.
+        def boom(*a, **kw):
+            raise AssertionError("check_camps_index read the clock")
+
+        class NoDate(dt.date):
+            today = classmethod(boom)
+
+        class NoDatetime(dt.datetime):
+            now = classmethod(boom)
+            utcnow = classmethod(boom)
+            today = classmethod(boom)
+
+        real_now, real_dt = common.now_iso, build.dt
+        stale = "2020-01-02T03:04:05Z"
+        common.now_iso = boom
+        build.dt = types.SimpleNamespace(**{**vars(dt), "date": NoDate, "datetime": NoDatetime})
+        try:
+            passed, out = check(tmp, index_doc={**doc([{**GOOD_ROW, "startDate": "2020-03-01", "endDate": "2020-03-01"}],
+                                                       window={"from": "2020-01-02", "to": None}), "updated": stale},
+                                items={"clemson": [item(startDate="2020-03-01", endDate="2020-03-01")]},
+                                programs_updated=stale)
+        except AssertionError as e:
+            passed, out = False, str(e)
+        finally:
+            common.now_iso, build.dt = real_now, real_dt
+        ok("T3c a self-consistent index from 2020 passes with the clock patched to raise: validate never reads it",
+           passed and not out, out[:300])
+
+        for label, value in (("None", None), ("'x'", "x"), ("a number", 7), ("a date with no time", "2025-09-14")):
+            passed, out = check(tmp, index_doc=doc([GOOD_ROW]), items={"clemson": [item()]}, programs_updated=value)
+            ok(f"T3d a programs `updated` of {label} fails: the camps index cannot be dated against it",
+               not passed and "cannot be dated" in out and repr(value) in out, out[:400])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
 

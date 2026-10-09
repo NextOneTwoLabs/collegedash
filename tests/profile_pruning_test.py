@@ -35,6 +35,7 @@ import argparse
 import contextlib
 import copy
 import io
+import itertools
 import json
 import os
 import shutil
@@ -333,6 +334,21 @@ def test_build() -> None:
             ok("index.json lists exactly the published programs", {r["slug"] for r in index["programs"]} == want)
             ok("the build's validate reports no stale profile", "STALE " not in buf.getvalue(),
                [l for l in buf.getvalue().splitlines() if l.startswith("STALE")][:3])
+            # Issue #69 (T4): the programs, camps and commitments indexes carry ONE build stamp. now_iso is made to
+            # return a different value on every call, so three separate calls would write three different stamps.
+            # Fails on main, where the three indexes each call common.now_iso() for themselves.
+            ticks = (f"2026-10-09T{n // 3600:02d}:{n // 60 % 60:02d}:{n % 60:02d}Z" for n in itertools.count())
+            real_now_iso = common.now_iso
+            common.now_iso = lambda: next(ticks)
+            try:
+                with contextlib.redirect_stdout(io.StringIO()):
+                    build.build(reg2)
+            finally:
+                common.now_iso = real_now_iso
+            stamps = {name: json.load(open(os.path.join(tmp, name, "index.json"), encoding="utf-8"))["updated"]
+                      for name in ("programs", "commitments", "camps")}
+            ok("T4 a full build writes one equal `updated` to the programs, camps and commitments indexes",
+               len(set(stamps.values())) == 1, str(stamps))
             with contextlib.redirect_stdout(io.StringIO()):
                 ok("check_no_stale_profiles passes on the pruned tree", build.check_no_stale_profiles(reg2))
                 ok("and validate as a whole passes on it, so the failure below is the stale file's", build.validate(reg2))
