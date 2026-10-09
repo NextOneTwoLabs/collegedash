@@ -22,11 +22,11 @@ counts, hosts and paths only, never a query string or page content:
 - `crawlDelay`: the values asked for, and how many are applied today versus only recorded;
 - `projection`: this run's minutes and an estimate of an enforced run (every `Crawl-delay` applied, capped at 30 s);
 - `resolverErrors`: requests the hook could not get a verdict for (the step budget ran out): allowed in report mode,
-  denied in enforce mode;
+  denied in enforce mode; `explicitResolverErrors`: the same in an explicit `robots_allowed()` check, always denied;
+- `truncatedHosts` (a robots.txt over 500 KiB) and `truncatedRules` (a pattern over 4096 octets);
 - `resolverDiff` (#87, for 3 scheduled runs, then removed): verdicts the RFC 9309 resolver gives differently from
   `urllib.robotparser` on the same robots.txt, from the hook and from the explicit checks alike, each host and path
-  counted once per run. `newlyAllowed`, `newlyBlocked`, `comparisonErrors`, `truncatedHosts` (a robots.txt over
-  500 KiB) and `truncatedRules` (a pattern over 4096 octets), `topHosts` (at most 20) and `samplePaths` (at most 50,
+  counted once per run. `newlyAllowed`, `newlyBlocked`, `comparisonErrors`, `topHosts` (at most 20) and `samplePaths` (at most 50,
   each with its call site and whether the explicit check or the hook saw it). It is published at `/api/v1/status`
   with the rest of `refresh-state.json` (owner decision 9).
 
@@ -44,7 +44,7 @@ both, as before and as the RFC says. Its callers, which block for real in every 
 
 | Caller | What a deny does |
 | --- | --- |
-| `collect/camps.py` `fetch_checked` (an off-site camp page, and a redirect onto another host) | `robotsBlocked`; the camps stored for the same `campsUrl` are kept (#87, owner decision 8) |
+| `collect/camps.py` `fetch_checked` (an off-site camp page, and a redirect onto another host) | `robotsBlocked` and `robotsDisallowed`: the camps stored for the same `campsUrl` are kept (#87, owner decision 8), whatever the reason for the deny, including a 5xx, unreachable or offline robots.txt |
 | `collect/wikipedia.py` | raises `FetchError` |
 | `collect/registry_builder.py` | raises `FetchError` |
 | `collect/the_rank.py` | raises `FetchError` |
@@ -65,7 +65,9 @@ largest value across the merged groups wins.
 
 - **Groups.** One or more `User-agent` lines and the rules after them. Only an `Allow` or `Disallow` line closes a run
   of `User-agent` lines; `Crawl-delay`, `Sitemap`, unknown lines and blank lines do not (decision 12). Rules before any
-  `User-agent` line are ignored.
+  `User-agent` line are ignored. So a `*` group holding only `Crawl-delay` or `Sitemap`, followed by another bot's group,
+  merges with it: `User-agent: *` / `Crawl-delay: 10` / `User-agent: AhrefsBot` / `Disallow: /` disallows everything
+  for us too (matrix row X9; decision 12 awaits one more owner confirmation, and X9 flips if it is reversed).
 - **Which group.** A `User-agent` value names us when its leading `[A-Za-z_-]+` token is `CollegeDashBot`, in any case
   (`CollegeDashBot/1.0` does; `bot`, `*bot` and `CollegeDash` do not). Every group naming us is merged; failing that,
   every `*` group; failing that, everything is allowed.

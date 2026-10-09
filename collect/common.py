@@ -706,6 +706,10 @@ def robots_allowed(url: str) -> bool:
     except Exception as e:  # noqa: BLE001 - fail closed
         log(f"robots: {host} verdict not reached ({type(e).__name__}); explicit check disallows "
             f"{redact(url)[:200]} (#87)")
+        with _robots_lock:  # a real block: counted as explicitResolverErrors
+            if not _robots_counts:
+                _reset_counts_locked()
+            _robots_counts["explicit_resolver_errors"][host] += 1
         return False
     _diff_record(host, url, allowed, "explicit")
     return allowed
@@ -771,7 +775,7 @@ def _reset_counts_locked() -> None:
     _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
                           by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
                           loaded=collections.Counter(), failed=collections.Counter(),
-                          resolver_errors=collections.Counter(),
+                          resolver_errors=collections.Counter(), explicit_resolver_errors=collections.Counter(),
                           # the #87 shadow diff: differing (host, path) pairs, each counted once per run
                           diff_allowed=collections.Counter(), diff_blocked=collections.Counter(), diff_seen=set(),
                           diff_paths=[], comparison_errors=collections.Counter())
@@ -880,6 +884,7 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
         states = dict(_robots_state)
         delays = dict(_robots_delay)
         explicit = set(_explicit_hosts)
+    loaded = list(_robots.values())
     requests_ = c.get("requests", collections.Counter())
     blocked = c.get("blocked", collections.Counter())
     checked = set(requests_)
@@ -913,6 +918,10 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
             "samplePaths": [{"host": h, "path": p, "site": s} for (h, p), s in list(c.get("paths", {}).items())[:50]],
         },
         "resolverErrors": sum(c.get("resolver_errors", {}).values()),
+        "explicitResolverErrors": sum(c.get("explicit_resolver_errors", {}).values()),
+        # kept when the shadow diff is removed: robots.txt files cut at 500 KiB, patterns cut at 4096 octets (#87)
+        "truncatedHosts": sum(1 for rb in loaded if rb.truncated_body),
+        "truncatedRules": sum(rb.truncated_rules for rb in loaded),
         "resolverDiff": _diff_report(c),
         "crawlDelay": {
             "hosts": len(with_delay),
@@ -937,14 +946,11 @@ def _diff_report(c: dict) -> dict:
     newly_allowed = c.get("diff_allowed", collections.Counter())
     newly_blocked = c.get("diff_blocked", collections.Counter())
     both = newly_allowed + newly_blocked
-    loaded = list(_robots.values())
     return {
         "comparedWith": "urllib.robotparser (shadow diff for 3 scheduled runs, owner decision 2 on #87)",
         "newlyAllowed": sum(newly_allowed.values()),
         "newlyBlocked": sum(newly_blocked.values()),
         "comparisonErrors": sum(c.get("comparison_errors", {}).values()),
-        "truncatedHosts": sum(1 for rb in loaded if rb.truncated_body),
-        "truncatedRules": sum(rb.truncated_rules for rb in loaded),
         "topHosts": [{"host": h, "newlyAllowed": newly_allowed.get(h, 0), "newlyBlocked": newly_blocked.get(h, 0)}
                      for h, _ in sorted(both.items(), key=lambda kv: (-kv[1], kv[0]))[:DIFF_TOP_HOSTS]],
         "samplePaths": [dict(p) for p in c.get("diff_paths", [])[:DIFF_SAMPLE_PATHS]],

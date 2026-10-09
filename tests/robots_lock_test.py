@@ -121,6 +121,7 @@ def test_reset_still_resets():
     ok("reset_robots_report() returns and empties the counters",
        done and common._robots_counts["requests"] == {} and set(common._robots_counts) ==
        {"requests", "blocked", "by_site", "by_collector", "paths", "loaded", "failed", "resolver_errors",
+        "explicit_resolver_errors",
         # the #87 shadow diff's counters, set up by the same _reset_counts_locked()
         "diff_allowed", "diff_blocked", "diff_seen", "diff_paths", "comparison_errors"}, dict(common._robots_counts))
     done, rep = within_timeout(lambda: common.robots_report(elapsed_seconds=1.0, workers=1))

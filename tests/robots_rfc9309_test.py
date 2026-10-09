@@ -247,6 +247,12 @@ def test_w13a() -> None:
     got, secs = _timed(lambda: common.robots_allowed(url(W13A_PATH)))
     ok("W13a (F) the budget runs out: the explicit check denies, within 1 s", got is False and secs < 1.0,
        (got, round(secs, 3)))
+    common.reset_robots_report()
+    common.robots_allowed(url(W13A_PATH))
+    rep = common.robots_report(elapsed_seconds=1, workers=1)
+    ok("W13a-explicit-count (N) the explicit block is counted as explicitResolverErrors",
+       rep.get("explicitResolverErrors") == 1 and rep.get("resolverErrors") == 0,
+       (rep.get("explicitResolverErrors"), rep.get("resolverErrors")))
     with env(COLLEGEDASH_ROBOTS="report"):
         common.reset_robots_report()
         got = common._robots_check(url(W13A_PATH))
@@ -377,8 +383,9 @@ def test_loader() -> None:
     with served(host, _Resp(200, T1_BODY)):
         ok("T1-loaded (F) fetched: a rule past 500 KiB is not read", common.robots_allowed(url("/z", host)) is True)
         rep = common.robots_report(elapsed_seconds=1, workers=1)
-        ok("T1-count (N) truncated hosts are counted", rep.get("resolverDiff", {}).get("truncatedHosts", 0) >= 1,
-           rep.get("resolverDiff"))
+        ok("T1-count (N) truncated hosts are counted, at the top level (kept when resolverDiff goes)",
+           rep.get("truncatedHosts", 0) >= 1 and "truncatedHosts" not in rep.get("resolverDiff", {}),
+           {k: rep.get(k) for k in ("truncatedHosts", "truncatedRules")})
     # 1800 comment lines of 100 'ツ' each: about 185,000 characters but 545,000 octets
     t2 = (STAR + ("# " + "ツ" * 100 + "\n") * 1800 + "Disallow: /z\n").encode()
     assert len(t2.decode()) < 500 * 1024 < len(t2)
