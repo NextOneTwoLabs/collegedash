@@ -678,7 +678,8 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0, slug
     recorded unless record=False (news articles). Returns {url, finalUrl, html, robotsBlocked,
     hostRefused, error, status, nonHtml}; nonHtml is True when the page was fetched but is not HTML (a
     PDF, an empty body, another content type), so nothing could be parsed; status is the HTTP status
-    of a failed fetch."""
+    of a failed fetch. A robots.txt block also sets robotsDisallowed, so collect() keeps the camps stored for the
+    same campsUrl (issue #101 for the hook in enforce mode; issue #87, owner decision 8, for the explicit checks)."""
     out = {"url": url, "finalUrl": None, "html": None, "robotsBlocked": False, "hostRefused": False,
            "error": None, "status": None, "nonHtml": False}
     why = refused_reason(_host(url))
@@ -686,7 +687,8 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0, slug
         out["hostRefused"], out["error"] = True, why
         return out
     if not _same_site(url, base_host) and not common.robots_allowed(url):
-        out["robotsBlocked"] = True
+        # robotsDisallowed: collect() keeps the camps stored for this campsUrl (issue #87, owner decision 8)
+        out["robotsBlocked"] = out["robotsDisallowed"] = True
         return out
     try:
         with common.host_guard(_CampGuard(slug, base_host, record)), \
@@ -704,7 +706,8 @@ def fetch_checked(url: str, base_host: str, *, max_age_hours: float = 24.0, slug
     final = meta.get("finalUrl") or url
     out["finalUrl"] = final
     if _host(final) != _host(url) and not _same_site(final, base_host) and not common.robots_allowed(final):
-        out["robotsBlocked"] = True  # redirected onto a host that disallows crawling: keep the link, drop the body
+        # redirected onto a host that disallows crawling: keep the link, drop the body, keep the stored camps (#87)
+        out["robotsBlocked"] = out["robotsDisallowed"] = True
         common.forget_cached(url)    # common.fetch stored it before the final host could be checked
         return out
     ctype = (meta.get("contentType") or "").lower()
@@ -2097,8 +2100,9 @@ def collect(program: dict, registry: dict) -> dict:
             data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title,
                                           page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]))
         elif r.get("robotsDisallowed"):
-            # issue #101, enforce mode: the camp page is disallowed, so nothing was read. The camps stored for the
-            # same campsUrl (the stable key) are kept, not replaced by an empty list; the page stays robotsBlocked.
+            # the camp page is disallowed (the hook in enforce mode, issue #101, or an explicit check, issue #87
+            # decision 8), so nothing was read. The camps stored for the same campsUrl (the stable key) are kept,
+            # not replaced by an empty list; the page stays robotsBlocked.
             stored = (common.load_source(slug, NAME) or {}).get("data") or {}
             if stored.get("campsUrl") and stored.get("campsUrl") == data["campsUrl"]:
                 data["camps"] = stored.get("camps") or []

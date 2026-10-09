@@ -99,6 +99,19 @@ def test_note_answer_without_a_reset():
            dict(common._robots_counts["loaded"]))
 
 
+def test_diff_without_a_reset():
+    """Issue #87: robots_allowed() records the shadow diff, setting the counters up under _robots_lock through
+    _reset_counts_locked(), never through reset_robots_report()."""
+    never_reset("off")
+    common.set_robots_txt(HOST, "User-agent: *\nDisallow: /*.pdf$\n")  # the stdlib comparison allows /a.pdf
+    done, got = within_timeout(lambda: common.robots_allowed(f"https://{HOST}/a.pdf"))
+    ok("robots_allowed() returns on a never-reset report while recording the shadow diff", done,
+       f"still blocked after {TIMEOUT:.0f}s")
+    if done:
+        ok("... with the RFC verdict, and the difference counted", got is False
+           and common._robots_counts.get("diff_blocked", {}).get(HOST) == 1, (got, common._robots_counts.get("diff_blocked")))
+
+
 def test_reset_still_resets():
     never_reset("report")
     done, _ = within_timeout(lambda: common._robots_check(f"https://{HOST}/a"))
@@ -107,7 +120,10 @@ def test_reset_still_resets():
     done, _ = within_timeout(common.reset_robots_report)
     ok("reset_robots_report() returns and empties the counters",
        done and common._robots_counts["requests"] == {} and set(common._robots_counts) ==
-       {"requests", "blocked", "by_site", "by_collector", "paths", "loaded", "failed"}, dict(common._robots_counts))
+       {"requests", "blocked", "by_site", "by_collector", "paths", "loaded", "failed", "resolver_errors",
+        "explicit_resolver_errors",
+        # the #87 shadow diff's counters, set up by the same _reset_counts_locked()
+        "diff_allowed", "diff_blocked", "diff_seen", "diff_paths", "comparison_errors"}, dict(common._robots_counts))
     done, rep = within_timeout(lambda: common.robots_report(elapsed_seconds=1.0, workers=1))
     ok("robots_report() still builds", done and isinstance(rep, dict) and rep.get("mode") == "report", rep)
 
@@ -121,7 +137,8 @@ def main(argv=None) -> int:
     VERBOSE = args.verbose
     saved = os.environ.get("COLLEGEDASH_ROBOTS")
     try:
-        cases = (test_check_without_a_reset, test_note_answer_without_a_reset, test_reset_still_resets)
+        cases = (test_check_without_a_reset, test_note_answer_without_a_reset, test_diff_without_a_reset,
+                 test_reset_still_resets)
         for case in [c for c in cases if not args.case or c.__name__ == args.case]:
             if BLOCKED:
                 ok(f"{case.__name__} skipped: an earlier call is still blocked holding the lock", False)

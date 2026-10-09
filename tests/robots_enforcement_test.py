@@ -253,13 +253,13 @@ def test_delays(tmp: str) -> None:
             t = arrivals(z, "/p")
             ok("enforce applies the host's Crawl-delay from its first page", len(t) == 2 and t[1] - t[0] >= DELAY - pol.TOL,
                [round(b - a, 3) for a, b in zip(t, t[1:])])
-        rp = common.robotparser.RobotFileParser()
-        text = "User-agent: *\nCrawl-delay: 2.5\n\nUser-agent: CollegeDashBot\nCrawl-delay: 0.5\n"
-        rp.parse(text.splitlines())
-        ok("a non-integer Crawl-delay is read, from the group naming us", common._crawl_delay_of(rp, text) == 0.5)
-        rp2 = common.robotparser.RobotFileParser()
-        rp2.parse("User-agent: *\nCrawl-delay: 2.5\n".splitlines())
-        ok("... and from the '*' group", common._crawl_delay_of(rp2, "User-agent: *\nCrawl-delay: 2.5\n") == 2.5)
+        # issue #87: the resolver reads Crawl-delay as a float from the chosen group. Each group has a rule line:
+        # Crawl-delay does not close a run of User-agent lines (owner decision 12).
+        text = "User-agent: *\nAllow: /\nCrawl-delay: 2.5\n\nUser-agent: CollegeDashBot\nAllow: /\nCrawl-delay: 0.5\n"
+        ok("a non-integer Crawl-delay is read, from the group naming us",
+           common.rfc9309.Robots.parse(text).crawl_delay(common.ROBOTS_AGENT) == 0.5)
+        ok("... and from the '*' group",
+           common.rfc9309.Robots.parse("User-agent: *\nCrawl-delay: 2.5\n").crawl_delay(common.ROBOTS_AGENT) == 2.5)
     finally:
         x.close(); y.close(); z.close()
 

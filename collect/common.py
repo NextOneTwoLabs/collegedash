@@ -24,13 +24,15 @@ import tempfile
 import threading
 import time
 import unicodedata
-from urllib import robotparser
+from urllib import robotparser  # the #87 shadow diff's comparison parser only; removed with it
 from urllib.parse import parse_qsl, urlsplit
 
 import requests
 from requests.adapters import HTTPAdapter
 from urllib3.connection import HTTPConnection, HTTPSConnection
 from urllib3.connectionpool import HTTPConnectionPool, HTTPSConnectionPool
+
+from . import robots as rfc9309  # the RFC 9309 robots.txt resolver (issue #87)
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PUBLIC_DIR = os.path.join(ROOT, "public")
@@ -556,87 +558,47 @@ def _key_lock(key: str) -> threading.Lock:
 # instructions given to it. Token only, no '/1.0': that is what a robots.txt group is written
 # against.
 #
-# What urllib.robotparser actually guarantees, verified against the CPython source and pinned in
-# tests/robots_ua_test.py: a group naming us beats the '*' group, for can_fetch and crawl_delay
-# alike. That single guarantee is what this change rests on, and it is enough -- before it, a group
-# addressed to us was never consulted at all.
+# Since issue #87 the verdicts and the Crawl-delay come from collect/robots.py, an RFC 9309 resolver
+# whose module docstring is the spec (approved plan on #87, revisions 2, 3 and 3.1). It replaces
+# urllib.robotparser, which matched agents by substring, took the first group and the first rule line
+# that matched instead of the most specific, ignored '*' and '$' in paths (fails open), and kept only
+# the first of several groups for the same agent.
 #
-# It is NOT full RFC 9309 precedence. Four gaps, all pre-existing library behaviour and none a
-# regression introduced here (the rule-line ones behaved identically when ROBOTS_AGENT was '*'):
-#   * Agent match is substring, not token (Entry.applies_to does `agent in useragent`), so
-#     'User-agent: bot', 'dash' or 'college' now apply to us where we used to fall through to '*'.
-#     This is the only gap this change newly exposes us to.
-#   * Among named groups the FIRST in file order wins, not the most specific (RFC 9309 2.2.1). A
-#     loose 'User-agent: bot' group listed above a 'User-agent: CollegeDashBot' group hides the one
-#     naming us exactly -- so this gap fails OPEN.
-#   * Within a group the FIRST matching rule line wins, not the longest path (RFC 9309 2.2.2). The
-#     ordinary operator carve-out 'Disallow: /' then 'Allow: /camps/' therefore denies /camps/
-#     (fails closed), while 'Allow: /' then 'Disallow: /admin/' permits /admin/ (fails open).
-#   * No path wildcards at all: RuleLine.applies_to is a plain startswith, so 'Disallow: /*.pdf$'
-#     matches nothing and is silently ignored. Fails open.
-# Sampled three times for issue #73 -- 187 hosts, then 63, then 100 -- and no robots.txt in any of
-# them names us or any substring of our token, so none of the four gaps changes a verdict on the web
-# as it stands. Those are samples of a 604-host frame, not the frame. Fixing the gaps means a real
-# resolver with its own test matrix, including the wildcard support none of this has, so it is
-# tracked as a follow-up rather than bolted onto this change.
-_robots: dict[str, "robotparser.RobotFileParser"] = {}
+# Shadow diff (owner decision 2, 2026-10-09): for 3 scheduled runs urllib.robotparser still parses the
+# same text, as a comparison only. Every verdict that differs is counted in refresh-state.robots.
+# resolverDiff (see _diff_record). The comparison never decides anything, and an error in it is
+# counted, never raised. A follow-up PR deletes it, with the `robotparser` import.
+_robots: dict[str, "rfc9309.Robots"] = {}
+_robots_cmp: dict[str, object] = {}  # host -> urllib.robotparser parser (comparison only), or _CMP_FAILED
+_CMP_FAILED = object()
 _host_delay: dict[str, float] = {}
 ROBOTS_AGENT = USER_AGENT_PRODUCT
+
+
+def _comparison_parser(text: str | None):
+    """The urllib.robotparser parser the shadow diff compares against; _CMP_FAILED when it cannot be built."""
+    try:
+        rp = robotparser.RobotFileParser()
+        if text is None:
+            rp.allow_all = True
+        else:
+            rp.parse(text.splitlines())
+        return rp
+    except Exception:  # noqa: BLE001 - the comparison must never break a fetch
+        return _CMP_FAILED
 
 
 def set_robots_txt(host: str, text: str | None) -> None:
     """Seed the robots cache for `host` (tests, offline runs). None = no robots.txt (allow all). A seeded host
     counts as explicitly loaded: its Crawl-delay applies."""
-    rp = robotparser.RobotFileParser()
-    if text is None:
-        rp.allow_all = True
-    else:
-        rp.parse(text.splitlines())
+    rb = rfc9309.Robots.parse(text)
     with _robots_lock:
-        _robots_delay[host] = _crawl_delay_of(rp, text)
+        _robots_delay[host] = rb.crawl_delay(ROBOTS_AGENT)
         _robots_state[host] = "seeded"
         _explicit_hosts.add(host)
     _use_crawl_delay(host)
-    _robots[host] = rp
-
-
-def _crawl_delay_of(rp, text: str | None) -> float | None:
-    """The Crawl-delay that applies to us, in seconds, or None. urllib.robotparser reads only whole numbers
-    ('Crawl-delay: 0.5' or '2.5' come back as None), so a value it drops is read from the raw lines with the
-    same group choice it makes: the first group naming us (substring match, as Entry.applies_to does), else
-    the '*' group."""
-    try:
-        delay = rp.crawl_delay(ROBOTS_AGENT)
-    except Exception:  # robotparser raises on a parser that has not been fed
-        delay = None
-    if delay is not None or not text:
-        return float(delay) if delay is not None else None
-    groups, agents, in_rules = [], [], False
-    for raw in text.splitlines():
-        line = raw.split("#", 1)[0].strip()
-        if ":" not in line:
-            continue
-        field, value = (s.strip() for s in line.split(":", 1))
-        field = field.lower()
-        if field == "user-agent":
-            if in_rules:
-                agents, in_rules = [], False
-            if not agents:
-                groups.append((agents, {}))
-            agents.append(value.lower())
-        elif groups:
-            in_rules = True
-            if field == "crawl-delay":
-                try:
-                    groups[-1][1].setdefault("delay", float(value))
-                except ValueError:
-                    pass
-    me = ROBOTS_AGENT.lower()
-    named = next((g for a, g in groups if any(x != "*" and x in me for x in a)), None)
-    star = next((g for a, g in groups if "*" in a), None)
-    chosen = named if named is not None else star
-    delay = (chosen or {}).get("delay")
-    return delay if delay is not None and delay >= 0 else None
+    _robots_cmp[host] = _comparison_parser(text)
+    _robots[host] = rb
 
 
 def _use_crawl_delay(host: str) -> None:
@@ -647,27 +609,25 @@ def _use_crawl_delay(host: str) -> None:
         log(f"robots: {host} asks Crawl-delay {delay:g}s; using {_host_delay[host]:.0f}s between requests")
 
 
-def _apply_crawl_delay(host: str, rp) -> None:
-    """Apply the host's Crawl-delay: the one recorded when its robots.txt was read (raw lines included), else the
-    parser's."""
+def _apply_crawl_delay(host: str, rb: "rfc9309.Robots") -> None:
+    """Apply the host's Crawl-delay: the one recorded when its robots.txt was read, else the resolver's."""
     if host not in _robots_delay:
         with _robots_lock:
-            _robots_delay[host] = _crawl_delay_of(rp, None)
+            _robots_delay[host] = rb.crawl_delay(ROBOTS_AGENT)
     _use_crawl_delay(host)
 
 
-def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser", str, str | None]:
-    """(parser, state, text). state: ok, 4xx, 5xx, unreachable or offline.
+def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str, object]:
+    """(resolver, state, comparison parser). state: ok, 4xx, 5xx, unreachable or offline.
 
-    The parser for an unreachable or 5xx robots.txt allows everything; which callers honour that is decided by
+    The resolver for an unreachable or 5xx robots.txt allows everything; which callers honour that is decided by
     the state. Issue #101, owner decision 1 = B (2026-09-25), narrowed by the owner on 2026-09-26: B (allowed and
     counted, departing from RFC 9309 section 2.3.1.4, which says assume complete disallow) applies ONLY to the new
-    hook in _PoliteAdapter.send, in report mode. robots_allowed() - the explicit checks: off-site camp hosts, THE,
-    site_colors, the registry builder - keeps the strict rule for these states: disallowed."""
-    rp = robotparser.RobotFileParser()
+    hook in _PoliteAdapter.send, in report mode. robots_allowed() - the explicit checks: off-site camp hosts,
+    Wikipedia, THE, site_colors, staff_dir_probe and the registry builder - keeps the strict rule for these states:
+    disallowed. The comparison parser (the #87 shadow diff) is None for every state but ok."""
     if os.environ.get("COLLEGEDASH_OFFLINE"):
-        rp.disallow_all = True  # unknown = do not fetch (no request can be made to find out)
-        return rp, "offline", None
+        return rfc9309.DISALLOW_ALL, "offline", None  # unknown = do not fetch (no request can be made to find out)
     url = f"{scheme}://{host}/robots.txt"
     _robots_fetching.on = True  # the robots.txt request itself is exempt from the check: no recursion
     try:
@@ -675,13 +635,15 @@ def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser",
             resp = s.get(url, headers=DEFAULT_HEADERS, timeout=20)
     except requests.RequestException as e:
         log(f"robots: {host} unreachable ({type(e).__name__}); explicit checks disallow it, the hook counts it (#101)")
-        rp.allow_all = True
-        return rp, "unreachable", None
+        return rfc9309.ALLOW_ALL, "unreachable", None
     finally:
         _robots_fetching.on = False
     if 200 <= resp.status_code < 300:
-        rp.parse(resp.text.splitlines())
-        return rp, "ok", resp.text
+        rb = rfc9309.Robots.parse(resp.content)  # the 500 KiB cap counts octets of the raw body (decision 7)
+        if rb.truncated_body:
+            log(f"robots: {host} robots.txt is over {rfc9309.MAX_BODY_OCTETS // 1024} KiB; read up to the last line "
+                f"break before the limit (#87)")
+        return rb, "ok", _comparison_parser(resp.text)
     if 400 <= resp.status_code < 500:
         # No robots.txt = no restrictions. Note this fails OPEN, and that this request carries the
         # same User-Agent as everything else: a host that served robots.txt to the old Chrome string
@@ -690,62 +652,67 @@ def _load_robots(host: str, scheme: str) -> tuple["robotparser.RobotFileParser",
         # families -- 91 x 200, 6 x 404, 3 connection failures, and *zero* hosts where the status
         # differed between the two agents, so the risk is real in principle and absent in practice.
         # Worth re-checking if 4xx rates on robots.txt ever climb after an agent change.
-        rp.allow_all = True
-        return rp, "4xx", None
+        return rfc9309.ALLOW_ALL, "4xx", None
     log(f"robots: {host} returned HTTP {resp.status_code}; explicit checks disallow it, the hook counts it (#101)")
-    rp.allow_all = True
-    return rp, "5xx", None
+    return rfc9309.ALLOW_ALL, "5xx", None
 
 
-def _robots_for(host: str, scheme: str, *, explicit: bool) -> "robotparser.RobotFileParser":
-    """The host's parser, loaded once per host per run (a second worker waits for the first's answer).
+def _robots_for(host: str, scheme: str, *, explicit: bool) -> "rfc9309.Robots":
+    """The host's resolver, loaded once per host per run (a second worker waits for the first's answer).
 
     Crawl-delay (issue #101, Bianque's condition 1): a host checked by an EXPLICIT robots_allowed() call (off-site
-    camp hosts, THE, site_colors, the registry builder) has its delay applied, as before #101, including when the
-    adapter's check loaded the host first. A host only the adapter has checked in report mode has its delay
-    recorded, not applied; enforce mode applies every host's delay. Applied before the parser is published, so a
-    worker that sees the parser also sees its delay."""
-    rp = _robots.get(host)
-    if rp is not None and (not explicit or host in _explicit_hosts):
-        return rp
+    camp hosts, Wikipedia, THE, site_colors, staff_dir_probe, the registry builder) has its delay applied, as before
+    #101, including when the adapter's check loaded the host first. A host only the adapter has checked in report
+    mode has its delay recorded, not applied; enforce mode applies every host's delay. Applied before the resolver is
+    published, so a worker that sees the resolver also sees its delay."""
+    rb = _robots.get(host)
+    if rb is not None and (not explicit or host in _explicit_hosts):
+        return rb
     with _key_lock("robots:" + host):
-        rp = _robots.get(host)
-        if rp is None:
-            rp, state, text = _load_robots(host, scheme)
+        rb = _robots.get(host)
+        if rb is None:
+            rb, state, cmp = _load_robots(host, scheme)
             with _robots_lock:
                 _robots_state[host] = state
-                _robots_delay[host] = _crawl_delay_of(rp, text)
-                _explicit_hosts.discard(host)  # a fresh parser: its delay is applied afresh below
+                _robots_delay[host] = rb.crawl_delay(ROBOTS_AGENT)
+                _explicit_hosts.discard(host)  # a fresh resolver: its delay is applied afresh below
+            _robots_cmp[host] = cmp
         if explicit and host not in _explicit_hosts:
             with _robots_lock:
                 _explicit_hosts.add(host)
-            _apply_crawl_delay(host, rp)
-        _robots[host] = rp
-    return rp
+            _apply_crawl_delay(host, rb)
+        _robots[host] = rb
+    return rb
 
 
 def robots_allowed(url: str) -> bool:
-    """True when `url` may be fetched under the host's robots.txt, evaluated as ROBOTS_AGENT --
-    the product token this collector puts in its User-Agent -- falling back to the '*' group when
-    no group names us.
-
-    Named-over-'*' is the only precedence urllib.robotparser implements. Among named groups the
-    first in file order wins rather than the most specific; within a group the first matching rule
-    line wins rather than the longest path, so an 'Allow:' carve-out written after a blanket
-    'Disallow: /' is not honoured; agent matching is substring; and path wildcards are unsupported.
-    See the notes above ROBOTS_AGENT for which of those fail open and which fail closed.
+    """True when `url` may be fetched under the host's robots.txt, evaluated as ROBOTS_AGENT -- the product token
+    this collector puts in its User-Agent -- by the RFC 9309 resolver in collect/robots.py: the merged groups naming
+    us, else the merged '*' groups; the longest matching rule wins, Allow on a tie; '*' and '$' in paths.
 
     4xx = allowed; unreachable or 5xx = DISALLOWED, as before #101 and as RFC 9309 asks (the owner, 2026-09-26:
-    decision B does not extend to these explicit checks). Applies the host's Crawl-delay to its politeness gate
-    (_polite)."""
+    decision B does not extend to these explicit checks). A verdict the resolver cannot reach (its step budget runs
+    out, or it fails) is DISALLOWED and logged (#87, decision 11). Applies the host's Crawl-delay to its politeness
+    gate (_polite)."""
     m = re.match(r"^(https?)://([^/]+)", url)
     if not m:
         return False
     scheme, host = m.group(1), m.group(2).lower()
-    rp = _robots_for(host, scheme, explicit=True)
+    rb = _robots_for(host, scheme, explicit=True)
     if _robots_state.get(host) in ("unreachable", "5xx"):
         return False
-    return rp.can_fetch(ROBOTS_AGENT, url)
+    try:
+        allowed = rb.allowed(url, ROBOTS_AGENT)
+    except Exception as e:  # noqa: BLE001 - fail closed
+        log(f"robots: {host} verdict not reached ({type(e).__name__}); explicit check disallows "
+            f"{redact(url)[:200]} (#87)")
+        with _robots_lock:  # a real block: counted as explicitResolverErrors
+            if not _robots_counts:
+                _reset_counts_locked()
+            _robots_counts["explicit_resolver_errors"][host] += 1
+        return False
+    _diff_record(host, url, allowed, "explicit")
+    return allowed
 
 
 # ---------- robots.txt in the shared fetch path (issue #101) ----------
@@ -807,7 +774,59 @@ def _reset_counts_locked() -> None:
     _robots_counts.clear()
     _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
                           by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
-                          loaded=collections.Counter(), failed=collections.Counter())
+                          loaded=collections.Counter(), failed=collections.Counter(),
+                          resolver_errors=collections.Counter(), explicit_resolver_errors=collections.Counter(),
+                          # the #87 shadow diff: differing (host, path) pairs, each counted once per run
+                          diff_allowed=collections.Counter(), diff_blocked=collections.Counter(), diff_seen=set(),
+                          diff_paths=[], comparison_errors=collections.Counter())
+
+
+DIFF_TOP_HOSTS = 20
+DIFF_SAMPLE_PATHS = 50
+
+
+def _count_comparison_error(host: str) -> None:
+    with _robots_lock:
+        if not _robots_counts:
+            _reset_counts_locked()
+        _robots_counts["comparison_errors"][host] += 1
+
+
+def _diff_record(host: str, url: str, allowed: bool, check: str) -> None:
+    """The #87 shadow diff (owner decisions 2 and 9): compare the deciding verdict with urllib.robotparser's on the
+    same text, and count a difference once per (host, path) per run. `check` is 'explicit' (robots_allowed) or
+    'hook'. Hosts and paths only: never a query string or page content. Never raises."""
+    try:
+        cmp = _robots_cmp.get(host)
+        if cmp is None:
+            return
+        try:
+            if cmp is _CMP_FAILED:
+                raise ValueError("the comparison parser could not be built")
+            before = bool(cmp.can_fetch(ROBOTS_AGENT, url))
+        except Exception:  # noqa: BLE001
+            _count_comparison_error(host)
+            return
+        if before == allowed:
+            return
+        path = urlsplit(url).path or "/"
+        site = current_site()
+        with _robots_lock:
+            if not _robots_counts:
+                _reset_counts_locked()
+            c = _robots_counts
+            if (host, path) in c["diff_seen"]:
+                return
+            c["diff_seen"].add((host, path))
+            (c["diff_allowed"] if allowed else c["diff_blocked"])[host] += 1
+            if len(c["diff_paths"]) < DIFF_SAMPLE_PATHS:
+                c["diff_paths"].append({"host": host, "path": path, "site": site, "check": check,
+                                        "change": "newlyAllowed" if allowed else "newlyBlocked"})
+    except Exception:  # noqa: BLE001 - the comparison must never break a fetch
+        try:
+            _count_comparison_error(host)
+        except Exception:  # noqa: BLE001
+            pass
 
 
 def _robots_check(url: str) -> str | None:
@@ -820,14 +839,22 @@ def _robots_check(url: str) -> str | None:
     if not m:
         return None
     host = m.group(2).lower()
-    rp = _robots_for(host, m.group(1), explicit=(mode == "enforce"))
-    allowed = rp.can_fetch(ROBOTS_AGENT, url)
+    rb = _robots_for(host, m.group(1), explicit=(mode == "enforce"))
+    try:
+        allowed, failed = rb.allowed(url, ROBOTS_AGENT), False
+    except Exception as e:  # noqa: BLE001 - #87: report mode allows, enforce mode denies; counted either way
+        allowed, failed = mode != "enforce", True
+        log(f"robots: {host} verdict not reached ({type(e).__name__}); the hook counts a resolver error (#87)")
+    if not failed:
+        _diff_record(host, url, allowed, "hook")
     site = current_site()
     with _robots_lock:
         if not _robots_counts:
             _reset_counts_locked()
         c = _robots_counts
         c["requests"][host] += 1
+        if failed:
+            c["resolver_errors"][host] += 1
         if not allowed:
             c["blocked"][host] += 1
             c["by_site"][site] += 1
@@ -857,6 +884,7 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
         states = dict(_robots_state)
         delays = dict(_robots_delay)
         explicit = set(_explicit_hosts)
+    loaded = list(_robots.values())
     requests_ = c.get("requests", collections.Counter())
     blocked = c.get("blocked", collections.Counter())
     checked = set(requests_)
@@ -889,6 +917,12 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
             "topHosts": [{"host": h, "count": n} for h, n in blocked.most_common(20)],
             "samplePaths": [{"host": h, "path": p, "site": s} for (h, p), s in list(c.get("paths", {}).items())[:50]],
         },
+        "resolverErrors": sum(c.get("resolver_errors", {}).values()),
+        "explicitResolverErrors": sum(c.get("explicit_resolver_errors", {}).values()),
+        # kept when the shadow diff is removed: robots.txt files cut at 500 KiB, patterns cut at 4096 octets (#87)
+        "truncatedHosts": sum(1 for rb in loaded if rb.truncated_body),
+        "truncatedRules": sum(rb.truncated_rules for rb in loaded),
+        "resolverDiff": _diff_report(c),
         "crawlDelay": {
             "hosts": len(with_delay),
             "values": dict(sorted(collections.Counter(f"{d:g}" for d in with_delay.values()).items(),
@@ -902,6 +936,24 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
                                         "crawlDelay": with_delay.get(slowest), "minutes": round(slowest_s / 60, 1)}
                                        if slowest else None),
                        "note": "estimate: this run's requests with every host's Crawl-delay applied (capped at 30 s)"},
+    }
+
+
+def _diff_report(c: dict) -> dict:
+    """refresh-state.robots.resolverDiff (#87): verdicts the RFC 9309 resolver gives differently from
+    urllib.robotparser on the same text, each (host, path) once per run. At most DIFF_TOP_HOSTS hosts and
+    DIFF_SAMPLE_PATHS paths; no query strings, no page content. Published at /api/v1/status (owner decision 9)."""
+    newly_allowed = c.get("diff_allowed", collections.Counter())
+    newly_blocked = c.get("diff_blocked", collections.Counter())
+    both = newly_allowed + newly_blocked
+    return {
+        "comparedWith": "urllib.robotparser (shadow diff for 3 scheduled runs, owner decision 2 on #87)",
+        "newlyAllowed": sum(newly_allowed.values()),
+        "newlyBlocked": sum(newly_blocked.values()),
+        "comparisonErrors": sum(c.get("comparison_errors", {}).values()),
+        "topHosts": [{"host": h, "newlyAllowed": newly_allowed.get(h, 0), "newlyBlocked": newly_blocked.get(h, 0)}
+                     for h, _ in sorted(both.items(), key=lambda kv: (-kv[1], kv[0]))[:DIFF_TOP_HOSTS]],
+        "samplePaths": [dict(p) for p in c.get("diff_paths", [])[:DIFF_SAMPLE_PATHS]],
     }
 
 
