@@ -243,7 +243,10 @@ def run_threads(jobs, workers: int = 12):
 def load_mixed(shared: Stub, own: list[Stub], redirector: Stub, delayed: Stub) -> list[str]:
     """What a refresh looks like to the network: every worker hits the shared host once per program,
     its own host several times, some redirect onto the shared host, one host asks a Crawl-delay."""
-    common.set_robots_txt(delayed.host, f"User-agent: *\nCrawl-delay: 5\n\nUser-agent: CollegeDashBot\nCrawl-delay: {CRAWL_DELAY}\n")
+    # Each group has a rule line: since #87 (owner decision 12) Crawl-delay does not close a run of User-agent
+    # lines, so without one the two groups would be read as a single group naming both agents.
+    common.set_robots_txt(delayed.host, f"User-agent: *\nAllow: /\nCrawl-delay: 5\n\n"
+                                        f"User-agent: CollegeDashBot\nAllow: /\nCrawl-delay: {CRAWL_DELAY}\n")
     jobs = []
     for i in range(24):
         jobs.append(lambda i=i: common.fetch(shared.url(f"/team/{i}"), max_age_hours=None))
