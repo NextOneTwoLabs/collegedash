@@ -45,7 +45,9 @@ async function quietly(fn) {
 
 test('wrangler.toml: the three phase-1 limiters with their approved limits and ids, the stats binding, no secret', async () => {
   const toml = (await readFile(new URL('../wrangler.toml', import.meta.url), 'utf8')).replace(/\r\n/g, '\n');
-  for (const [name, id, limit] of [['RL_SESSION', '3461', 180], ['RL_ANON', '3462', 60], ['RL_IP', '3463', 1200]]) {
+  // ROLLBACK (claude/345-rollback-limits): RL_SESSION and RL_ANON are removed; revert with the rollback commit
+  for (const name of ['RL_SESSION', 'RL_ANON']) assert.doesNotMatch(toml, new RegExp(`^name = "${name}"`, 'm'), `${name} is rolled back`);
+  for (const [name, id, limit] of [['RL_IP', '3463', 1200]]) {
     assert.match(toml, new RegExp(`\\[\\[ratelimits\\]\\]\\nname = "${name}"[^\\n]*\\nnamespace_id = "${id}"\\nsimple = \\{ limit = ${limit}, period = 60 \\}`), name);
   }
   assert.doesNotMatch(toml, /namespace_id = "(9\d{3}|345[1-3])"/, 'an ECNL id or a retired #355 id');
