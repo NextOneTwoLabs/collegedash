@@ -1,0 +1,41 @@
+name: Data freshness
+
+# Is the published data recent? (issue #69)
+#
+# validate checks that the files agree with each other, so an index and profiles that are stale together
+# (a refresh that never started, a disabled schedule) pass every check while the data ages. This is the one
+# place the clock is read: tools/freshness_check.py judges the programs index `updated` (publish age) and the
+# newest real collection of camps, tds, soccerwire and news in refresh-state.json (collection age).
+#
+#   up to 12h   ok
+#   above 12h   a warning annotation and a Step Summary line; the run stays green
+#   above 36h   the run goes red, naming the dataset and its age
+#
+# The alert is the red run plus GitHub's own failure email (owner decision, #69): this workflow opens no issue
+# and has no token beyond contents: read. The thresholds were derived from the pair of crons, refresh.yml at
+# 0 11 * * * and this one at 47 23 * * *; tests/freshness_workflow_test.py fails if either moves.
+#
+# It reads main's committed files and fetches nothing. If GitHub disables scheduled workflows for the
+# repository, this stops along with refresh.yml, and this check cannot see that.
+
+on:
+  schedule:
+    - cron: "47 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Judge the age of the published data
+        run: python tools/freshness_check.py
