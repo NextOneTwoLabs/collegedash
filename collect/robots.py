@@ -20,7 +20,8 @@ Choosing the group
 Rules
   * An empty Allow or Disallow is ignored. A pattern without a leading '/' gets one (decision 10).
   * A pattern longer than MAX_PATTERN_OCTETS (4096 raw octets, decision 11): a Disallow keeps its first 4096 octets,
-    moved back to just before a '%' whose escape the cut would split; an Allow is dropped. Both fail closed and are
+    moved back to just before a '%' whose escape the cut would split, with any '$' it leaves trailing removed (it
+    was mid-pattern, so it must not become an anchor); an Allow is dropped. Both fail closed and are
     counted in truncated_rules.
   * '*' matches any run of octets; '$' anchors only as the final character and is literal elsewhere; '**' is '*'.
 What is matched
@@ -91,12 +92,15 @@ def normalise(raw: bytes) -> bytes:
 
 def _cut_pattern(raw: bytes) -> bytes:
     """An overlong Disallow pattern's first MAX_PATTERN_OCTETS octets, moved back to just before a '%' whose escape
-    the cut would split (a cut through raw multi-byte UTF-8 stays: its octets encode to a prefix of the URL's)."""
+    the cut would split (a cut through raw multi-byte UTF-8 stays: its octets encode to a prefix of the URL's). Every
+    trailing '$' is then removed: it was mid-pattern, so it must not become an end anchor, which would narrow the rule
+    and fail open (W13f)."""
     cut = raw[:MAX_PATTERN_OCTETS]
     for back in (1, 2):
         if len(raw) > MAX_PATTERN_OCTETS and len(cut) >= back and cut[-back] == _PCT:
-            return cut[:-back]
-    return cut
+            cut = cut[:-back]
+            break
+    return cut.rstrip(b"$")
 
 
 class _Rule:
