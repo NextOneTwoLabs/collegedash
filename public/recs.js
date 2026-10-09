@@ -214,11 +214,6 @@
 
   /* ---------- reasons ---------- */
 
-  function fmtInt(n) {   // locale-free, so the text is the same in every browser
-    let s = String(Math.trunc(n)), out = '';
-    while (s.length > 3) { out = ',' + s.slice(-3) + out; s = s.slice(0, -3); }
-    return s + out;
-  }
   // #492 (owner): a size reason names the bracket the program card shows, not the exact count. These edges and names are
   // a copy of public/index.html's UNDERGRAD_EDGES / UNDERGRAD_SIZES (tests/card_brackets.test.mjs fails if they drift).
   const BRACKET_EDGES = [2000, 5000, 15000, 30000];

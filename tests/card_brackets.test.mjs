@@ -5,7 +5,7 @@
 //     node --test tests/card_brackets.test.mjs
 //
 // Offline: the page's own inline script runs in a vm over the committed index. Expected values are computed here
-// from the index rows by independent code (the data refreshes daily). Every test below fails on origin/main.
+// from the index rows by independent code (the data refreshes daily). Every test below fails on origin/main except the one marked GUARD (8).
 //
 // CARD_BRACKETS_TEST_HTML (optional) points at another copy of index.html, to run these checks against it.
 import { test } from 'node:test';
@@ -236,7 +236,10 @@ test('7. CSS: the exact heights (lines x line-height), band 4.75rem, one-line el
   const ugv = sel('.card-ug .fv');
   assert.deepEqual([ugv.overflow, ugv['text-overflow'], ugv['white-space'], ugv['min-width']], ['hidden', 'ellipsis', 'nowrap', '0']);
   const fl = sel('.card-fact .fl');
-  assert.deepEqual([fl.width, fl.flex], ['96px', 'none']);
+  assert.deepEqual([fl.width, fl.flex], ['7.4em', 'none'], 'the label column scales with text zoom (7.4em = 96px at 13px)');
+  const why = sel('.pcard .foot .why'), fw = sel('.pcard .foot .fw');
+  assert.deepEqual([why.display, why['max-width'], why.overflow, why['text-overflow'], why['white-space']], ['block', '100%', 'hidden', 'ellipsis', 'nowrap'], 'the search tag is one line');
+  assert.deepEqual([fw['min-width'], fw.overflow], ['0', 'hidden'], 'the foot\'s first span can shrink');
   for (const s of ['.band .nm', '.band .nick']) {
     const d = sel(s);
     assert.deepEqual([d['white-space'], d['text-overflow'], d.overflow], ['nowrap', 'ellipsis', 'hidden'], s);
@@ -248,7 +251,7 @@ test('7. CSS: the exact heights (lines x line-height), band 4.75rem, one-line el
   assert.ok(!cssRules.some(r => r.selectors.some(s => /\.(crest|card-sum)\b/.test(s))), 'crest / card-sum CSS is still there');
 });
 
-test('8. Stats\' US rank (THE) cell is unchanged for every program (the rank moved off the card, the column stays)', () => {
+test('8. GUARD (passes on main too): Stats\' US rank (THE) cell is unchanged for every program (the rank moved off the card, the column stays)', () => {
   const rows = P.slice();
   const html = sb.tableHtml(rows, {});
   const want = p => `<span title="${esc(p.academicRank == null

@@ -397,14 +397,15 @@ tr:hover td { background: var(--row-hover); }
 .pcard .card-fact { font-size: 13px; line-height: 1.4; }
 .pcard .card-ug { display: flex; gap: 6px; height: 1.4em; margin-bottom: 4px; }
 .pcard .card-tuition { display: flex; gap: 6px; height: 2.8em; }
-.card-fact .fl { color: var(--text-secondary); width: 96px; flex: none; }
+.card-fact .fl { color: var(--text-secondary); width: 7.4em; flex: none; }
 .card-fact .fv { font-weight: 600; font-variant-numeric: tabular-nums; }
 .card-ug .fv { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-tuition .tv { display: flex; flex-direction: column; gap: 0; min-width: 0; flex: 1 1 auto; font-weight: 600; font-variant-numeric: tabular-nums; }
 .card-tuition .tl { display: block; height: 1.4em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .card-fact .na { color: var(--text-secondary); font-weight: 500; }
 .pcard .foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 6px 8px 6px 16px; border-top: 1px solid var(--border-light); color: var(--text-secondary); font-size: 12px; }
-.pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; font-size: 11px; }
+.pcard .foot .why { color: var(--text-secondary); background: var(--bg-surface-alt); border-radius: 4px; padding: 0 5px; font-size: 11px; display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcard .foot .fw { min-width: 0; overflow: hidden; }
 .foot-actions { display: flex; align-items: center; gap: 2px; flex-shrink: 0; margin-left: auto; }
 /* #426 (a), six tracks since #492: 1 band, 2 meta, 3 undergrads, 4 tuition, 5 detail (empty, or Recommended's reasons,
    one wrapper), 6 foot. Every row has a fixed height, so every card is the same height; in Recommended mode the cards in
@@ -4157,7 +4158,7 @@ function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); an
       <div class="card-fact card-ug"><span class="fl">Undergrads</span> <span class="fv">${undergradsHtml(p)}</span></div>
       <div class="card-fact card-tuition"><span class="fl">Tuition</span><span class="tv">${tuitionLinesHtml(p)}</span></div>
       <div class="card-detail">${recs ? why : ''}</div></div>
-    <div class="foot"><span>${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
+    <div class="foot"><span class="fw">${S.q && p._why ? `<span class="why" title="Why this matched">${esc(p._why)}</span>` : ''}</span>
       <span class="foot-actions">${cmpBtn(p.slug, false, name)}${starBtn(p.slug, false, name)}</span></div>
   </div>`;
 }
