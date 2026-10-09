@@ -169,6 +169,10 @@ ROWS = [
     ("U1", "G", STAR + "Disallow: /a|b\n", "/a%7Cb", False),
     ("U2", "G", STAR + "Disallow: /a%7Cb\n", "/a|b", False),
     ("U3", "G", STAR + "Disallow: /a%zz\n", "/a%25zz", False),
+    # decision 12's consequence (Huatuo, review of the #87 build): a '*' group holding only Crawl-delay, followed by
+    # another bot's group, is ONE group naming both, so its Disallow applies to us through '*'. Flips if the owner
+    # reverses decision 12.
+    ("X9", "F", STAR + "Crawl-delay: 10\n\nUser-agent: AhrefsBot\nDisallow: /\n", "/x", False),
 ]
 
 
@@ -284,6 +288,10 @@ def test_w13_lines() -> None:
        allowed(STAR + "Allow: /" + "a" * 6000 + "\nDisallow: /\n", "/" + "a" * 6000) is False)
     tail = "/" + "a" * 4093 + "%E3%83%84"
     ok("W13d (G) a cut inside %E3 moves back before the '%'", allowed(STAR + f"Disallow: {tail}\n", tail) is False)
+    # a cut just after a mid-pattern '$' must not turn it into an end anchor (that narrows the rule: fails open).
+    # A guard against main (urllib.robotparser has no cap); it failed on this branch before the fix (Huatuo's review).
+    ok("W13f (G) a cut ending on a mid-pattern '$' does not anchor",
+       allowed(STAR + "Disallow: /" + "a" * 4094 + "$bbb\n", "/" + "a" * 4094 + "$bbbzzz") is False)
     w13e = STAR + "".join(f"Disallow: /p{i:05d}/\n" for i in range(20000)) \
         + "".join(f"Disallow: /*.x{i:03d}$\n" for i in range(200))
     path = "/q" + "z" * 298
