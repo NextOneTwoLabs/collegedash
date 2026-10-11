@@ -3636,7 +3636,7 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-10-10T16:43:37Z",
+    "builtAt": "2026-10-11T17:08:13Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3650,12 +3650,28 @@
       "news": true
     },
     "stale": [],
-    "failed": [],
+    "failed": [
+      {
+        "collector": "athletics",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='www.ucgoldeneagles.com', port=443): Max retries exceeded with url: /sports/womens-soccer/roster (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)')))",
+        "at": "2026-10-11T16:45:36Z"
+      },
+      {
+        "collector": "camps",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='www.ucgoldeneagles.com', port=443): Max retries exceeded with url: /sports/womens-soccer/roster (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)')))",
+        "at": "2026-10-11T16:46:03Z"
+      },
+      {
+        "collector": "news",
+        "error": "giving up after 3 attempts: _StampingHTTPSPool(host='www.ucgoldeneagles.com', port=443): Max retries exceeded with url: /sports/womens-soccer/archives (Caused by SSLError(SSLCertVerificationError(1, '[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)'))",
+        "at": "2026-10-11T16:45:50Z"
+      }
+    ],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-10-10T16:20:53Z"
+        "at": "2026-10-11T16:45:36Z"
       },
       {
         "collector": "wikipedia",
