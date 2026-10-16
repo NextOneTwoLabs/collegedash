@@ -1413,6 +1413,7 @@ for (const k of ['conf', 'region', 'division', 'classYear']) { const v = S.filte
 // allows and a finite number is dropped here, silently, and never thrown on (a save from before #166 has none).
 S.filters.cond = sanitizeConds(S.filters.cond);
 // Sort direction (#285): 'asc', 'desc', or null for the sort's own natural direction; anything else a save holds is dropped.
+// (The saved sort itself is checked once SORT_SPECS exists, right after it.)
 if (S.filters.sortDir !== 'asc' && S.filters.sortDir !== 'desc') S.filters.sortDir = null;
 // multi-select pill groups: toggling a value removes it or adds it; "All" clears the group, so All and a value are never both active
 function toggleIn(arr, value) { if (!value) { arr.length = 0; return; } const i = arr.indexOf(value); if (i >= 0) arr.splice(i, 1); else arr.push(value); }
@@ -4000,8 +4001,8 @@ function classSubtitle(years, rows, view) {
    miss(p) orders the rows without one (1 = no value, 2 = the measure does not apply to the division, #198).
    Rows without a value come last in BOTH directions; only the rows with one are reversed. Ties, and the rows
    without a value, fall back to Name A-Z so the order is total. dir is the column's natural first click.
-   Record sorts by win percentage, ties counting half a win: (W + T/2) / (W + L + T). A season of fewer than
-   SHORT_SEASON games sorts after the full ones in both directions (#287), and says how many it had.
+   There is no Record sort (#494): it ordered the list by a value no list or card shows. The record stays on the
+   profile page and in Compare, where a finished season of fewer than SHORT_SEASON games says how many it had (#287).
    Tuition sorts by the out-of-state figure (the in-state one when that is all a school publishes), as the
    sidebar's "Tuition (out-of-state)" always has. Titles stay grouped by division (#198) twice over: among the
    programs with titles, then among the '—' rows after them. Keys are read once per row per sort (the comparator memoises them), not once per comparison. */
@@ -4012,12 +4013,10 @@ const gamesNote = s => s && !s.inProgress && s.gamesPlayed != null && s.gamesPla
 const D1_ONLY_TITLE = 'From the NCAA RPI table, which counts only games against Division I opponents; games against non-Division I teams are not in this record';
 const recordNote = s => { const g = gamesNote(s); return (g ? `<span class="muted small">${g}</span>` : '')
   + (s?.recordSource === 'ncaa-rpi-d1' ? `<span class="muted small" title="${D1_ONLY_TITLE}"> (D1 games)</span>` : ''); };
-const winPct = rec => { const m = /^(\d+)-(\d+)(?:-(\d+))?$/.exec(rec || ''); if (!m) return null; const w = +m[1], l = +m[2], t = +(m[3] || 0); return w + l + t ? (w + t / 2) / (w + l + t) : null; };
 const byText = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'accent' }) || a.localeCompare(b);
 const SORT_SPECS = {
   name: { dir: 'asc', label: () => 'Name', key: p => p, cmp: byDisplayName },
   rpi: { dir: 'asc', label: rpiLabel, key: p => appliesTo('rpi', p) ? rpiOf(p) : null, miss: p => appliesTo('rpi', p) ? 1 : 2 },
-  record: { dir: 'desc', label: () => `Record ${finishedSeason() ?? ''}`.trim(), key: p => p.lastSeason?.year === finishedSeason() ? winPct(p.lastSeason.record) : null, group: p => gamesNote(p.lastSeason) ? 1 : 0 },
   admit: { dir: 'asc', label: () => 'Admission rate', key: p => p.admissionRate ?? null },
   academicRank: { dir: 'asc', label: () => 'US rank (THE)', key: p => p.academicRank ?? null },
   tuition: { dir: 'asc', label: () => 'Tuition (out-of-state)', key: p => p.tuitionOutOfState ?? p.tuitionInState ?? null },
@@ -4029,6 +4028,9 @@ const SORT_SPECS = {
   type: { dir: 'asc', label: () => 'Type', key: p => (p.ownership || '').replace(/ (nonprofit|for-profit)$/, '') || null, cmp: byText },
   conference: { dir: 'asc', label: () => 'Conference', key: p => p.conference || null, cmp: byText },
 };
+// A saved cd.filters can name a sort the page no longer has (Record, #494): it opens on Name, the default, as a link
+// does (listStateOf). Checked here because SORT_SPECS does not exist yet where the saved filters are read, above.
+if (!Object.prototype.hasOwnProperty.call(SORT_SPECS, S.filters.sort)) S.filters.sort = 'name';
 // The direction on screen: the visitor's choice, else the sort's natural one.
 const sortDir = () => S.filters.sortDir || SORT_SPECS[S.filters.sort]?.dir || 'asc';
 // The one writer of the sort (table header, sidebar select, sidebar direction button): a new key starts in its

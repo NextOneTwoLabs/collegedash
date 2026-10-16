@@ -2062,7 +2062,8 @@ LIST_KEEP = ("slug", "name", "shortName", "nickname", "searchNames", "conference
              "tuitionInState", "tuitionOutOfState", "nationalTitles", "collegeCups", "rosterSize", "commitmentsByYear",
              "completeness")
 # Three index fields are carried changed: rpiHistory -> rpi (the ranking season's rank only), lastSeason -> the three
-# fields the Record sort reads, fallClimate -> fallAvgHighF (the Fall-high condition). Everything else is dropped:
+# fields the Record sort read (the sort is gone, #494, and no list code reads them now), fallClimate -> fallAvgHighF
+# (the Fall-high condition). Everything else is dropped:
 # nothing reads it from a list row (the profile page and Compare read it from the profile).
 LIST_LAST_SEASON = ("year", "record", "gamesPlayed")
 LIST_DROPPED = ("currentSeason", "headCoach", "coachSince", "sat75", "stale", "failed", "builtAt", "tags",
