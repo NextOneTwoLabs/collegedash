@@ -6017,10 +6017,16 @@ const FEEDBACK_EMAIL = 'nextonetwolabs@gmail.com';
 const feedbackLink = (text = FEEDBACK_EMAIL) => `<a href="mailto:${esc(FEEDBACK_EMAIL)}?subject=${encodeURIComponent('College Soccer feedback')}">${esc(text)}</a>`;
 async function renderFaq() {
   const ext = (href, text) => `<a href="${esc(href)}" target="_blank" rel="noopener">${esc(text)}</a>`;
+  await loadIndex(); // boot() has already loaded it; the service academies' names and divisions below come off its rows
+  // #493: the academies are named as readers see them everywhere (shortName || name) with their division, "Army (D1)", both
+  // read off the index rows and never written down here; one the data does not carry is left out.
+  const academies = Object.entries(SERVICE_ACADEMY_SOURCES).map(([slug, source]) => ({ p: programBySlug(slug), source })).filter(a => a.p);
+  const academyNames = academies.map(a => `${displayName(a.p)}${a.p.division ? ` (${a.p.division})` : ''}`);
+  const and = xs => xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs.join('');
   const sources = [
     ['Official athletics websites', 'Roster, coaching staff, schedule and results, news', 'Each program’s own site (linked at the top of every profile)'],
     [ext('https://collegescorecard.ed.gov/', 'College Scorecard'), 'Admission rate, SAT range, enrollment, tuition, net price, graduation rate', 'U.S. Department of Education'],
-    [Object.values(SERVICE_ACADEMY_SOURCES).map(a => ext(a.url, a.name)).join('<br>'), 'Why a program card for Army, Navy, Air Force or Coast Guard says “No tuition” (service academy) rather than “Not reported”: the service academies charge no tuition, so College Scorecard has no tuition figure for them', 'Each academy’s own admissions office'],
+    ...(academies.length ? [[academies.map(a => ext(a.source.url, a.source.name)).join('<br>'), `That ${and(academyNames)} charge no tuition: their program cards say “No tuition (service academy)” where College Scorecard has no tuition figure`, 'Each academy’s own admissions office']] : []),
     [ext(THE_RANK_URL, 'Times Higher Education'), 'The “US rank (THE)” column in Stats (under More statistics), from their Best universities in the United States 2026 table; “—” means the university is not one of the 171 they rank', 'Times Higher Education; the ranking is theirs and all rights are reserved'],
     [ext('https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA NCEI Climate Normals'), 'Monthly temperature and rainfall averages for 1991–2020 at the weather station nearest campus', 'U.S. National Oceanic and Atmospheric Administration'],
     [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, conference and NCAA honours, stadium (national titles are checked against each division’s NCAA champions list)', 'Team articles, where one exists'],
