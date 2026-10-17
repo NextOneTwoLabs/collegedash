@@ -13,8 +13,9 @@
 // written out here by independent code; the academies' URLs are NOT repeated here (they live in one constant so they
 // are easy to change) - the tests read them from the page and check they are used, not what they are.
 //
-// Tests 1, 2, 5, 6 and 7 fail on origin/main. Tests 3 and 4 are GUARDS that pass on main too: they stop the new rule
-// from reaching a program with a figure, or a program that is not one of the four.
+// Tests 1, 2, 5, 6, 6b and 7 fail on origin/main. Tests 3, 4 and 8 are GUARDS that pass on main too: they stop the new rule
+// from reaching a program with a figure, a program that is not one of the four, or another view (Stats, the profile's School
+// tab, Compare), which keep their dash.
 //
 // SERVICE_ACADEMY_TEST_HTML (optional) points at another copy of index.html, to run these checks against it.
 import { test } from 'node:test';
@@ -45,6 +46,7 @@ function loadPage() {
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } }, innerWidth: 1400, addEventListener() { },
     fetch: async url => {
       let rel = url.replace(/^\//, ''); if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+      else if (rel.startsWith('api/v1/programs/')) rel = `data/programs/${rel.slice('api/v1/programs/'.length)}.json`; // a profile (the School tab, Compare)
       const p = path.join(PUBLIC, rel.replace(/\?.*$/, ''));
       if (!p.startsWith(PUBLIC) || !fs.existsSync(p)) return { ok: false, status: 404, async json() { throw new Error('404'); } };
       const body = fs.readFileSync(p, 'utf8'); return { ok: true, status: 200, async json() { return JSON.parse(body); } };
@@ -55,7 +57,7 @@ function loadPage() {
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   const names = ['SERVICE_ACADEMY_SOURCES'];
   const src = lines.slice(a + 1, b).join('\n')
-    + `\n;Object.assign(globalThis, { S, loadIndex, cardHtml, renderFaq, ${names.map(n => `${n}: typeof ${n} === 'undefined' ? undefined : ${n}`).join(', ')} });\n`;
+    + `\n;Object.assign(globalThis, { S, loadIndex, cardHtml, renderFaq, renderProfile, renderCompare, tableHtml, ${names.map(n => `${n}: typeof ${n} === 'undefined' ? undefined : ${n}`).join(', ')} });\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
   return sandbox;
@@ -95,6 +97,9 @@ const unesc = t => String(t).replace(/&quot;/g, '"').replace(/&#39;/g, "'").repl
 const ACADEMY_UNITIDS = { 'air-force': 128328, 'army': 197036, 'navy': 164155, 'coast-guard': 130624 };
 const ACADEMIES = Object.keys(ACADEMY_UNITIDS);
 const noFigure = p => ({ ...p, tuitionInState: null, tuitionOutOfState: null });
+// How the FAQ's prose names a program: as readers see it everywhere (shortName || name), then its division.
+const academyName = p => `${p.shortName || p.name} (${p.division})`;
+const andList = xs => (xs.length > 1 ? `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}` : xs.join(''));
 
 test('1. the four academies\' cards read "No tuition" over "(service academy)": line 1 plain bold, line 2 muted (.na), two lines, the row\'s own height', () => {
   for (const slug of ACADEMIES) {
@@ -217,12 +222,40 @@ test('6. the About-the-data table credits the academies: one row, a link to each
     assert.ok(/target="_blank"/.test(link[0]) && /rel="noopener"/.test(link[0]), `${s.url}: opens in a new tab with noopener, as the other sources do`);
     assert.ok(text(link[1]), `${s.url}: link text`);
   }
-  assert.match(text(supplies), /No tuition/, 'says it supplies the card\'s "No tuition"');
-  assert.match(text(supplies), /Army/);
-  assert.match(text(supplies), /Navy/);
-  assert.match(text(supplies), /Air Force/);
-  assert.match(text(supplies), /Coast Guard/);
+  // What the source supplies, in the THE and Scorecard rows' manner: the fact, then what the card does with it.
+  const slugs = Object.keys(sb.SERVICE_ACADEMY_SOURCES);
+  const named = slugs.map(s => academyName(bySlug[s]));
+  assert.equal(text(supplies),
+    `That ${andList(named)} charge no tuition: their program cards say “No tuition (service academy)” where College Scorecard has no tuition figure`);
   assert.ok(text(who), 'says who publishes it');
+});
+
+// The division rule (D1/D2/D3 wherever a program appears) reaches the FAQ's prose: each academy is named as readers see it
+// everywhere (shortName || name) with its division, "Army (D1)" as the trends chips' "not in the index" text does, and the
+// divisions are read off the index rows, not written down in the page.
+test('6b. the FAQ names every academy with its division, and reads the division from the data (change a row and the prose follows)', async () => {
+  const supplies = async () => {
+    const row = (await faqRows()).find(r => Object.values(sb.SERVICE_ACADEMY_SOURCES || {}).some(s => r[0].includes(s.url)));
+    return text(row?.[1]);
+  };
+  const slugs = ACADEMIES.slice().sort();
+  const before = await supplies();
+  for (const slug of slugs) {
+    const p = bySlug[slug], label = academyName(p);
+    assert.match(p.division, /^D[123]$/, `${slug}: the index row has a division`);
+    assert.ok(before.includes(label), `${slug}: "${label}" is not in the FAQ prose: ${before}`);
+  }
+  // no academy appears bare: take every "Name (Dn)" out and none of the names is left
+  let rest = before; for (const slug of slugs) rest = rest.replace(academyName(bySlug[slug]), '');
+  for (const slug of slugs) assert.ok(!rest.includes(bySlug[slug].shortName || bySlug[slug].name), `${slug}: named without its division: ${before}`);
+  // and it is the DATA that says it: move Army and Coast Guard to other divisions in the loaded rows and the prose follows
+  const army = bySlug['army'], cg = bySlug['coast-guard'], was = [army.division, cg.division];
+  try {
+    army.division = was[0] === 'D2' ? 'D3' : 'D2'; cg.division = was[1] === 'D1' ? 'D3' : 'D1';
+    const after = await supplies();
+    assert.ok(after.includes(academyName(army)) && after.includes(academyName(cg)), `the prose did not follow the data: ${after}`);
+    assert.notEqual(after, before);
+  } finally { [army.division, cg.division] = was; }
 });
 
 test('7. one constant: each academy URL appears once in the page source, and the constant is the only place the card and the FAQ get it', () => {
@@ -231,4 +264,49 @@ test('7. one constant: each academy URL appears once in the page source, and the
     assert.equal(PAGE.split(s.url).length - 1, 1, `${slug}: ${s.url} is written ${PAGE.split(s.url).length - 1} times in index.html (want 1)`);
     assert.equal(new URL(s.url).protocol, 'https:', slug);
   }
+});
+
+// GUARD. The owner decided "the card change only": Stats, the profile and Compare keep their dash for a missing tuition, and
+// the academy wording lives in the card's tuitionLinesHtml and nowhere else. This passes on main too. What it protects is a
+// future refactor that routes those views through tuitionLinesHtml (or the card's academy helpers) to "share the tuition
+// logic": it would flip these three dashes to "No tuition (service academy)", in a table column, a facts row and a
+// side-by-side comparison, none of which reserve two lines or carry the source.
+test('8. GUARD (passes on main too): Stats, the profile\'s School tab and Compare still show "—" for the four academies\' tuition', async () => {
+  const wording = /No tuition|service academy|Not reported/;
+  // Stats: the Tuition / yr column. It is only on the table when a program in it has a figure, so a program with one goes in too.
+  const control = bySlug['florida-state'];
+  assert.ok(control && control.tuitionOutOfState != null, 'fixture: florida-state has a tuition figure');
+  const table = sb.tableHtml([...ACADEMIES.map(s => bySlug[s]), control], {});
+  const heads = [...table.matchAll(/<th\b[^>]*>([\s\S]*?)<\/th>/g)].map(m => text(m[1]));
+  const at = heads.findIndex(h => /Tuition \/ yr/.test(h));
+  assert.ok(at >= 0, `fixture: the Tuition / yr column is on the table (columns: ${heads.join(' | ')})`);
+  const statsCells = slug => [...((table.match(new RegExp(`<tr class="team-row[^"]*" data-slug="${slug}"[^>]*>([\\s\\S]*?)</tr>`)) || [, ''])[1]).matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/g)].map(m => m[1]);
+  assert.equal(statsCells('florida-state').length, heads.length, 'fixture: one cell per column');
+  assert.match(text(statsCells('florida-state')[at]), /\$/, 'fixture: the control row shows a dollar figure in that column');
+  for (const slug of ACADEMIES) assert.equal(text(statsCells(slug)[at]), '—', `Stats, ${slug}`);
+
+  // The profile's School tab: the Cost card's two rows.
+  const school = async slug => { await sb.renderProfile(slug, 'school'); return sb.document.querySelector('#tab').innerHTML; };
+  const mmTab = await school('merchant-marine');
+  assert.match(mmTab, /<tr><th>Tuition \(in-state\)<\/th><td>\$895<\/td><\/tr>/, 'fixture: the control profile shows its figure in these rows');
+  for (const slug of ACADEMIES) {
+    const tab = await school(slug);
+    assert.match(tab, /<tr><th>Tuition \(in-state\)<\/th><td>—<\/td><\/tr>/, `profile, ${slug}: in-state`);
+    assert.match(tab, /<tr><th>Tuition \(out-of-state\)<\/th><td>—<\/td><\/tr>/, `profile, ${slug}: out-of-state`);
+    assert.doesNotMatch(tab, wording, `profile, ${slug}: the card's wording is on the School tab`);
+  }
+
+  // Compare: the Tuition / yr row, one cell per program.
+  const compareRow = async slugs => {
+    sb.S.compare = slugs; await sb.renderCompare();
+    const m = sb.document.querySelector('#app').innerHTML.match(/<tr><th>Tuition \/ yr<\/th>((?:<td\b[^>]*>[\s\S]*?<\/td>)+)<\/tr>/);
+    assert.ok(m, `fixture: Compare has a Tuition / yr row for ${slugs.join(', ')}`);
+    return [...m[1].matchAll(/<td\b[^>]*>([\s\S]*?)<\/td>/g)].map(c => c[1]);
+  };
+  try {
+    assert.deepEqual((await compareRow(['air-force', 'merchant-marine'])).map(text), ['—', '$895 in / $895 out'], 'fixture: the control column shows its figure');
+    const four = await compareRow([...ACADEMIES]);
+    assert.deepEqual(four.map(text), ['—', '—', '—', '—'], 'Compare, the four academies');
+    for (const c of four) assert.doesNotMatch(c, wording, 'Compare: the card\'s wording is in a Compare cell');
+  } finally { sb.S.compare = []; }
 });
