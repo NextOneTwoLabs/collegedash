@@ -27,7 +27,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 WORKFLOW = ROOT / ".github" / "workflows" / "tests.yml"
 JOB = "suites"  # the job in tests.yml that installs and runs the check suites
-CACHE = Path.home() / ".cache" / "collegedash"  # shared by every worktree; outside any repository
+# Where the venv and the fetched Node live: shared by every worktree, outside any repository. $CD_CACHE moves it.
+CACHE = Path(os.environ.get("CD_CACHE") or Path.home() / ".cache" / "collegedash")
 SHOTS = ROOT / ".claude" / "skills" / "evidence" / "shots.js"
 
 # Prints the names (one per line) that are not installed in the interpreter it runs under.
@@ -217,7 +218,7 @@ def report(wf: Workflow, venv: Path) -> bool:
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--install", action="store_true", help="create the venv, install requirements, fetch Node")
-    ap.add_argument("--venv", help="venv location (default: $CD_VENV, else ~/.cache/collegedash/venv<ver>)")
+    ap.add_argument("--venv", help="venv location (default: $CD_VENV, else venv<ver> in ~/.cache/collegedash or $CD_CACHE)")
     args = ap.parse_args()
     wf = read_workflow()
     venv = venv_dir(wf.python, args.venv)
