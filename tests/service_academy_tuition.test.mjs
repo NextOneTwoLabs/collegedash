@@ -13,9 +13,10 @@
 // written out here by independent code; the academies' URLs are NOT repeated here (they live in one constant so they
 // are easy to change) - the tests read them from the page and check they are used, not what they are.
 //
-// Tests 1, 2, 5, 6, 6b and 7 fail on origin/main. Tests 3, 4 and 8 are GUARDS that pass on main too: they stop the new rule
-// from reaching a program with a figure, a program that is not one of the four, or another view (Stats, the profile's School
-// tab, Compare), which keep their dash.
+// Tests 1, 2, 5, 6, 6b, 7, 11 and 12 fail on origin/main. Tests 3, 4, 8, 9 and 10 are GUARDS that pass on main too: they stop
+// the new rule from reaching a program with a figure, a program that is not one of the four, or another view (Stats, the
+// profile's School tab, Compare), which keep their dash; and they keep About the data independent of the program index (it
+// draws with the index failing or still loading; the academies row is the one part that reads it).
 //
 // SERVICE_ACADEMY_TEST_HTML (optional) points at another copy of index.html, to run these checks against it.
 import { test } from 'node:test';
@@ -31,7 +32,10 @@ const PUBLIC = path.join(ROOT, 'public');
 const HTML = process.env.SERVICE_ACADEMY_TEST_HTML || path.join(PUBLIC, 'index.html');
 const PAGE = fs.readFileSync(HTML, 'utf8');
 
-function loadPage() {
+// `index` says what the page's request for the program index does: 'ok' (the default), 'http500' (an error answer), 'abort'
+// (no answer at all) or 'hold' (no answer until the test calls __test.release()). __test.calls lists every URL the page fetched.
+function loadPage({ index = 'ok' } = {}) {
+  const calls = []; let release; const held = new Promise(r => { release = r; });
   const el = () => ({ innerHTML: '', textContent: '', value: '', dataset: {}, style: {}, hidden: false,
     classList: { add() { }, remove() { }, toggle: () => false, contains: () => false }, setAttribute() { }, getAttribute: () => null,
     addEventListener() { }, removeEventListener() { }, querySelector: () => el(), querySelectorAll: () => [], closest: () => null,
@@ -45,6 +49,12 @@ function loadPage() {
     location: { hash: '', replace(h) { this.hash = h; } }, history: { replaceState() { } }, matchMedia: () => ({ matches: false }),
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } }, innerWidth: 1400, addEventListener() { },
     fetch: async url => {
+      calls.push(url);
+      if (url.replace(/^\//, '') === 'api/v1/programs') {
+        if (index === 'http500') return { ok: false, status: 500, async json() { throw new Error('HTTP 500'); } };
+        if (index === 'abort') throw new TypeError('Failed to fetch');
+        if (index === 'hold') await held;
+      }
       let rel = url.replace(/^\//, ''); if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
       else if (rel.startsWith('api/v1/programs/')) rel = `data/programs/${rel.slice('api/v1/programs/'.length)}.json`; // a profile (the School tab, Compare)
       const p = path.join(PUBLIC, rel.replace(/\?.*$/, ''));
@@ -53,6 +63,7 @@ function loadPage() {
     },
   };
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
+  sandbox.__test = { calls, release: () => release() };
   const lines = PAGE.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   const names = ['SERVICE_ACADEMY_SOURCES'];
@@ -197,14 +208,18 @@ test('5. the set is exactly air-force, army, navy and coast-guard, and each slug
 });
 
 // The "Where does the data come from?" table, as rows of cells.
-async function faqRows() {
-  await sb.renderFaq();
-  const app = sb.document.querySelector('#app').innerHTML;
+const tableRowsOf = app => {
   const at = app.indexOf('<h3>Where does the data come from?</h3>');
   assert.ok(at >= 0, 'the FAQ has no "Where does the data come from?" card');
   const table = app.slice(at, app.indexOf('</table>', at));
   return [...table.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(m => [...m[1].matchAll(/<t[dh][^>]*>([\s\S]*?)<\/t[dh]>/g)].map(c => c[1]));
-}
+};
+async function faqRows(pg = sb) { await pg.renderFaq(); return tableRowsOf(pg.document.querySelector('#app').innerHTML); }
+// A promise that rejects (and so fails the test) when it has not settled in ms, instead of a test that hangs.
+const within = (promise, ms, what) => { let t; return Promise.race([promise, new Promise((_, no) => { t = setTimeout(() => no(new Error(`${what} did not finish in ${ms} ms`)), ms); })]).finally(() => clearTimeout(t)); };
+const settle = async () => { for (let i = 0; i < 30; i++) await new Promise(r => setTimeout(r, 0)); };
+const indexRequests = pg => pg.__test.calls.filter(u => u.replace(/^\//, '') === 'api/v1/programs').length;
+const isAcademyRow = r => Object.values(sb.SERVICE_ACADEMY_SOURCES || {}).some(s => r[0].includes(s.url));
 
 test('6. the About-the-data table credits the academies: one row, a link to each admissions page from the constant, saying what it supplies', async () => {
   const rows = await faqRows();
@@ -309,4 +324,67 @@ test('8. GUARD (passes on main too): Stats, the profile\'s School tab and Compar
     assert.deepEqual(four.map(text), ['—', '—', '—', '—'], 'Compare, the four academies');
     for (const c of four) assert.doesNotMatch(c, wording, 'Compare: the card\'s wording is in a Compare cell');
   } finally { sb.S.compare = []; }
+});
+
+// About the data must not depend on the program index (Bianque, #493). It is static prose; the academies row is the one
+// thing in it that reads the index (names and divisions), so with no index the row is simply left out and the rest of the
+// page - the source table, the feedback email, the speed note - draws as it always has. boot() redraws the page when the
+// index arrives. Rendering it must never fetch the index itself: that would turn a failed index into the whole page replaced
+// by "Couldn't load the data", and a slow one into a blank page and a second request.
+test('9. GUARD (passes on main too): with the index request failing, About the data still renders its whole source table, without the academies row, and asks for no index of its own', async () => {
+  const healthy = await faqRows();
+  assert.ok(healthy.length >= 8, 'fixture: the healthy source table');
+  for (const how of ['http500', 'abort']) {
+    const pg = loadPage({ index: how });
+    await settle(); // boot() asked for the index and was refused: it has drawn its try-again card, S.index stays empty
+    assert.ok(!pg.S.index, `fixture (${how}): the index did not load`);
+    const asked = indexRequests(pg);
+    assert.equal(asked, 1, `fixture (${how}): boot() asked for the index once`);
+    const rows = await within(faqRows(pg), 2000, `About the data with the index failing (${how})`);
+    const app = pg.document.querySelector('#app').innerHTML;
+    assert.doesNotMatch(app, /Couldn’t load the data|load-failed/, `${how}: the FAQ was replaced by the try-again card`);
+    assert.equal(indexRequests(pg), asked, `${how}: rendering About the data asked for the index itself`);
+    assert.equal(rows.filter(isAcademyRow).length, 0, `${how}: an academies row with no index to name them from`);
+    assert.deepEqual(rows, healthy.filter(r => !isAcademyRow(r)), `${how}: every other source row is there, unchanged`);
+    assert.ok(app.includes('nextonetwolabs@gmail.com'), `${how}: the feedback email is hidden`);
+    assert.ok(app.includes('<h3>Speed measurements</h3>'), `${how}: the speed notice is hidden`);
+  }
+});
+
+test('10. GUARD (passes on main too): with the index still loading, About the data draws at once and asks for no second index', async () => {
+  const pg = loadPage({ index: 'hold' });
+  await settle();
+  assert.equal(indexRequests(pg), 1, 'fixture: boot() has asked for the index and is waiting');
+  const rows = await within(faqRows(pg), 1000, 'About the data while the index is still loading');
+  assert.equal(indexRequests(pg), 1, 'rendering About the data asked for a second index');
+  assert.equal(rows.filter(isAcademyRow).length, 0, 'an academies row before the index arrived');
+  assert.ok(rows.length >= 7, 'the rest of the source table is there');
+});
+
+test('11. when the index arrives, boot() redraws About the data and the academies row appears', async () => {
+  const pg = loadPage({ index: 'hold' });
+  await settle();
+  pg.location.hash = '#/faq';
+  const early = await within(faqRows(pg), 1000, 'About the data while the index is still loading'); // what a hashchange to #/faq draws meanwhile
+  assert.equal(early.filter(isAcademyRow).length, 0);
+  pg.__test.release();
+  await settle(); // boot() now has the index and routes #/faq
+  const rows = tableRowsOf(pg.document.querySelector('#app').innerHTML);
+  assert.equal(rows.filter(isAcademyRow).length, 1, 'no academies row after the index arrived');
+  assert.equal(rows.length, early.length + 1);
+});
+
+test('12. the prose agrees in number: one academy in the data "charges ... its program card says"; none leaves the row out', async () => {
+  const all = sb.S.index.programs;
+  const keep = slugs => all.filter(p => !ACADEMIES.includes(p.slug) || slugs.includes(p.slug));
+  const supplies = async () => (await faqRows()).filter(isAcademyRow).map(r => text(r[1]));
+  try {
+    sb.S.index.programs = keep(['army']);
+    assert.deepEqual(await supplies(), [`That ${academyName(bySlug['army'])} charges no tuition: its program card says “No tuition (service academy)” where College Scorecard has no tuition figure`]);
+    sb.S.index.programs = keep(['army', 'navy']);
+    assert.deepEqual(await supplies(), [`That ${academyName(bySlug['army'])} and ${academyName(bySlug['navy'])} charge no tuition: their program cards say “No tuition (service academy)” where College Scorecard has no tuition figure`]);
+    sb.S.index.programs = keep([]);
+    assert.deepEqual(await supplies(), [], 'a row with no academy to name');
+    assert.ok((await faqRows()).length >= 7, 'the rest of the table is there');
+  } finally { sb.S.index.programs = all; }
 });
