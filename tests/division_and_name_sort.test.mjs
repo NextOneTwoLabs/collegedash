@@ -572,14 +572,19 @@ test('a saved sort survives the new default, and an unknown one does not break t
   assert.ok(kept.sandbox.document.querySelector('#app').innerHTML.includes(`sorted by ${expectedRpi(SHIPPED).label}`), // the season is read from the data (#62)
     'the page does not say which sort a returning visitor is on');
 
-  // and a value this page has never written, or no longer writes
-  const odd = loadPage({}, { 'cd.filters': JSON.stringify({ conf: [], region: [], sort: 'nonsense' }) });
-  await ready(odd.sandbox);
-  odd.sandbox.location.hash = '#/';
-  await odd.sandbox.renderList();
-  assert.equal(odd.sandbox.filteredPrograms().length, REAL.programs.length, 'an unknown sort lost rows');
-  assert.ok(odd.sandbox.document.querySelector('#app').innerHTML.includes('sorted by RPI'),
-    'an unknown sort is not labelled as the RPI fallback it actually falls through to');
+  // and a value this page has never written, or no longer writes (Record, #494). It used to fall through to the RPI
+  // order under an RPI label; since #494 it is dropped on the way in, as an address's is (listStateOf): the list opens
+  // on Name, the default, and says so.
+  for (const sort of ['nonsense', 'record']) {
+    const odd = loadPage({}, { 'cd.filters': JSON.stringify({ conf: [], region: [], sort }) });
+    assert.equal(odd.sandbox.S.filters.sort, 'name', `a saved "${sort}" sort was kept`);
+    await ready(odd.sandbox);
+    odd.sandbox.location.hash = '#/';
+    await odd.sandbox.renderList();
+    assert.equal(odd.sandbox.filteredPrograms().length, REAL.programs.length, `a saved "${sort}" sort lost rows`);
+    assert.ok(odd.sandbox.document.querySelector('#app').innerHTML.includes('sorted by Name'),
+      `a saved "${sort}" sort is not labelled as the Name order the list opens on`);
+  }
 });
 
 test('the camp view still omits the sort select and hands f.sort back untouched', () => {

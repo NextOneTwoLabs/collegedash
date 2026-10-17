@@ -196,7 +196,7 @@ function subtitleBefore(sb, rows) {
   if (S.q) bits.push(`matching “${escFor(S.qRaw)}” <button type="button" class="clear-search" data-clear-search>Clear search</button>`);
   // The RPI option names its season, in progress or not, since issue #62; every other label is as it shipped,
   // except that the header-only sorts name themselves since #285 (they used to fall back to "RPI", which was wrong).
-  const headerOnly = { record: `Record ${expectedRpi(SHIPPED).finished}`, commits: 'Commits', conference: 'Conference' };
+  const headerOnly = { commits: 'Commits', conference: 'Conference' };
   bits.push(`sorted by ${f.sort === 'rpi' ? RPI_LABEL : sb.SORTS.find(s => s[0] === f.sort)?.[1] || headerOnly[f.sort] || 'RPI'}`);
   return bits.join(' · ');
 }
@@ -433,10 +433,11 @@ test('no chips: Program View rows are in byte-identical order to the code that s
   const { S, filteredPrograms, matchScore, normText, renderList } = real.sb;
   // #285 changed the ordering itself on purpose (blanks last, record by win percentage, name as the tiebreak), so
   // from then on the ordering is the page's and this test guards the predicate; tests/table_sort.test.mjs pins
-  // the ordering. sortCmpBefore stays above as the record of what shipped before #166.
+  // the ordering. sortCmpBefore stays above as the record of what shipped before #166 (its 'record' branch included:
+  // there has been no Record sort since #494, so it is no longer among the sorts below).
   const sortCmp = key => real.sb.sortCmp(key);
   // every key sortCmp handles: the sidebar's sorts and the table-header-only ones
-  const sorts = ['name', 'rpi', 'admit', 'academicRank', 'tuition', 'undergrads', 'titles', 'record', 'commits', 'conference'];
+  const sorts = ['name', 'rpi', 'admit', 'academicRank', 'tuition', 'undergrads', 'titles', 'commits', 'conference'];
   const confs = [[], ['SEC'], ['ACC', 'Big Ten']];
   const regions = [[], ['South'], ['West', 'Midwest']];
   const queries = ['', 'state', 'u'];
@@ -449,7 +450,7 @@ test('no chips: Program View rows are in byte-identical order to the code that s
     assert.equal(after, before, `row order differs: sort=${sort} conf=${conf} region=${region} q=${q}`);
     states++;
   }
-  assert.equal(states, 270);
+  assert.equal(states, 243);
   for (const view of views) for (const sort of sorts) for (const conf of confs) {
     reset(S); Object.assign(S.filters, { sort, conf: [...conf], region: ['South'], view }); S.q = normText('a'); S.qRaw = 'a';
     const rows = filteredProgramsBefore(S, matchScore, sortCmp);
