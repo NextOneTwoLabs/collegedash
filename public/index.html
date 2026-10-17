@@ -4144,9 +4144,29 @@ function tuitionLine(v, who) {
   const [label, sr] = TUITION_BRACKETS[i];
   return `<span class="tl"><span aria-hidden="true">${label}${who ? ` ${who}` : ''}</span><span class="sr-only">${sr}${who ? `, ${who}` : ''}</span></span>`;
 }
+/* #493: the four service academies charge no tuition, so College Scorecard has no tuition figure for them and the card
+   used to say "Not reported", which reads as a hole in the data. While their tuition is missing the card says "No tuition"
+   over "(service academy)": two lines inside the two the row already reserves, so no card changes height. A published
+   figure still wins. Keyed by slug and nothing else; Merchant Marine, the one other military academy in the data, has a
+   figure and is not here (tests/service_academy_tuition.test.mjs pins each slug to its Scorecard unitId). Each academy's
+   official admissions page is its source: named in the card's tooltip and screen-reader text and linked in About the
+   data. These URLs are the only place they are written. Stats, the profile and Compare keep their dash. */
+const SERVICE_ACADEMY_SOURCES = {
+  'army': { name: 'U.S. Military Academy admissions', url: 'https://www.westpoint.edu/admissions' },
+  'navy': { name: 'U.S. Naval Academy admissions', url: 'https://www.usna.edu/Admissions/' },
+  'air-force': { name: 'U.S. Air Force Academy admissions', url: 'https://www.academyadmissions.com/' },
+  'coast-guard': { name: 'U.S. Coast Guard Academy admissions', url: 'https://www.uscga.edu/admissions/' },
+};
+const serviceAcademyOf = slug => (Object.prototype.hasOwnProperty.call(SERVICE_ACADEMY_SOURCES, slug) ? SERVICE_ACADEMY_SOURCES[slug] : null);
+function academyTuitionHtml(academy) {
+  const why = `Service academies charge no tuition. Source: ${academy.name}`;
+  return `<span class="tl"><span title="${esc(why)}">No tuition</span></span><span class="tl">${factNa('(service academy)', why)}</span>`;
+}
 function tuitionLinesHtml(p) {
   const inS = p.tuitionInState, out = p.tuitionOutOfState;
   if (p.ownership === 'Public' && (inS != null || out != null)) return tuitionLine(inS, 'in-state') + tuitionLine(out, 'out-of-state');
+  const academy = inS == null && out == null ? serviceAcademyOf(p.slug) : null; // a published figure wins
+  if (academy) return academyTuitionHtml(academy);
   return tuitionLine(out ?? inS, '');
 }
 function cardHtml(p, why) { // `why`: Recommended mode's reasons (#400 PR 4); anything but a string is ignored (map's index)
@@ -6000,6 +6020,7 @@ async function renderFaq() {
   const sources = [
     ['Official athletics websites', 'Roster, coaching staff, schedule and results, news', 'Each program’s own site (linked at the top of every profile)'],
     [ext('https://collegescorecard.ed.gov/', 'College Scorecard'), 'Admission rate, SAT range, enrollment, tuition, net price, graduation rate', 'U.S. Department of Education'],
+    [Object.values(SERVICE_ACADEMY_SOURCES).map(a => ext(a.url, a.name)).join('<br>'), 'Why a program card for Army, Navy, Air Force or Coast Guard says “No tuition” (service academy) rather than “Not reported”: the service academies charge no tuition, so College Scorecard has no tuition figure for them', 'Each academy’s own admissions office'],
     [ext(THE_RANK_URL, 'Times Higher Education'), 'The “US rank (THE)” column in Stats (under More statistics), from their Best universities in the United States 2026 table; “—” means the university is not one of the 171 they rank', 'Times Higher Education; the ranking is theirs and all rights are reserved'],
     [ext('https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA NCEI Climate Normals'), 'Monthly temperature and rainfall averages for 1991–2020 at the weather station nearest campus', 'U.S. National Oceanic and Atmospheric Administration'],
     [ext('https://en.wikipedia.org/', 'Wikipedia'), 'Program history, season-by-season records, conference and NCAA honours, stadium (national titles are checked against each division’s NCAA champions list)', 'Team articles, where one exists'],
