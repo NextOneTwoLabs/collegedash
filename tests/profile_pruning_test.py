@@ -34,6 +34,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import copy
+import datetime as dt
 import io
 import itertools
 import json
@@ -337,7 +338,12 @@ def test_build() -> None:
             # Issue #69 (T4): the programs, camps and commitments indexes carry ONE build stamp. now_iso is made to
             # return a different value on every call, so three separate calls would write three different stamps.
             # Fails on main, where the three indexes each call common.now_iso() for themselves.
-            ticks = (f"2026-10-09T{n // 3600:02d}:{n // 60 % 60:02d}:{n % 60:02d}Z" for n in itertools.count())
+            # The ticks start on the day build.camps_window() reads (dt.date.today()), not on a date written here: the
+            # build's own validate (Detector B, check_camps_index) holds the camps index's window.from to within a
+            # day of the stamp, so ticks fixed on 2026-10-09 passed only on the 9th and 10th (issue #503). Only the
+            # time of day is made up, and it still differs on every call.
+            day = dt.date.today().isoformat()
+            ticks = (f"{day}T{n // 3600:02d}:{n // 60 % 60:02d}:{n % 60:02d}Z" for n in itertools.count())
             real_now_iso = common.now_iso
             common.now_iso = lambda: next(ticks)
             try:
@@ -351,7 +357,12 @@ def test_build() -> None:
                len(set(stamps.values())) == 1, str(stamps))
             with contextlib.redirect_stdout(io.StringIO()):
                 ok("check_no_stale_profiles passes on the pruned tree", build.check_no_stale_profiles(reg2))
-                ok("and validate as a whole passes on it, so the failure below is the stale file's", build.validate(reg2))
+            report = io.StringIO()
+            with contextlib.redirect_stdout(report):
+                passed = build.validate(reg2)
+            # the detail is what validate printed, so a red check names its own cause (issue #503 took a log dig)
+            ok("and validate as a whole passes on it, so the failure below is the stale file's", passed,
+               "\n".join(l for l in report.getvalue().splitlines() if l.strip())[:600])
             plant(progs, ["ghost-program.json"])
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
