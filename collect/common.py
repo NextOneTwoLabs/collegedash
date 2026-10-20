@@ -24,7 +24,6 @@ import tempfile
 import threading
 import time
 import unicodedata
-from urllib import robotparser  # the #87 shadow diff's comparison parser only; removed with it
 from urllib.parse import parse_qsl, urlsplit
 
 import requests
@@ -564,28 +563,13 @@ def _key_lock(key: str) -> threading.Lock:
 # that matched instead of the most specific, ignored '*' and '$' in paths (fails open), and kept only
 # the first of several groups for the same agent.
 #
-# Shadow diff (owner decision 2, 2026-10-09): for 3 scheduled runs urllib.robotparser still parses the
-# same text, as a comparison only. Every verdict that differs is counted in refresh-state.robots.
-# resolverDiff (see _diff_record). The comparison never decides anything, and an error in it is
-# counted, never raised. A follow-up PR deletes it, with the `robotparser` import.
+# For 7 scheduled refreshes (2026-10-10 to 10-16) the resolver was also compared with urllib.robotparser on
+# the same text (the #87 "shadow diff"). It found nothing newly blocked and no errors, and was removed in
+# #501, with the `robotparser` import. refresh-state.robots still reports truncatedHosts, truncatedRules and
+# explicitResolverErrors.
 _robots: dict[str, "rfc9309.Robots"] = {}
-_robots_cmp: dict[str, object] = {}  # host -> urllib.robotparser parser (comparison only), or _CMP_FAILED
-_CMP_FAILED = object()
 _host_delay: dict[str, float] = {}
 ROBOTS_AGENT = USER_AGENT_PRODUCT
-
-
-def _comparison_parser(text: str | None):
-    """The urllib.robotparser parser the shadow diff compares against; _CMP_FAILED when it cannot be built."""
-    try:
-        rp = robotparser.RobotFileParser()
-        if text is None:
-            rp.allow_all = True
-        else:
-            rp.parse(text.splitlines())
-        return rp
-    except Exception:  # noqa: BLE001 - the comparison must never break a fetch
-        return _CMP_FAILED
 
 
 def set_robots_txt(host: str, text: str | None) -> None:
@@ -597,7 +581,6 @@ def set_robots_txt(host: str, text: str | None) -> None:
         _robots_state[host] = "seeded"
         _explicit_hosts.add(host)
     _use_crawl_delay(host)
-    _robots_cmp[host] = _comparison_parser(text)
     _robots[host] = rb
 
 
@@ -617,17 +600,17 @@ def _apply_crawl_delay(host: str, rb: "rfc9309.Robots") -> None:
     _use_crawl_delay(host)
 
 
-def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str, object]:
-    """(resolver, state, comparison parser). state: ok, 4xx, 5xx, unreachable or offline.
+def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str]:
+    """(resolver, state). state: ok, 4xx, 5xx, unreachable or offline.
 
     The resolver for an unreachable or 5xx robots.txt allows everything; which callers honour that is decided by
     the state. Issue #101, owner decision 1 = B (2026-09-25), narrowed by the owner on 2026-09-26: B (allowed and
     counted, departing from RFC 9309 section 2.3.1.4, which says assume complete disallow) applies ONLY to the new
     hook in _PoliteAdapter.send, in report mode. robots_allowed() - the explicit checks: off-site camp hosts,
     Wikipedia, THE, site_colors, staff_dir_probe and the registry builder - keeps the strict rule for these states:
-    disallowed. The comparison parser (the #87 shadow diff) is None for every state but ok."""
+    disallowed."""
     if os.environ.get("COLLEGEDASH_OFFLINE"):
-        return rfc9309.DISALLOW_ALL, "offline", None  # unknown = do not fetch (no request can be made to find out)
+        return rfc9309.DISALLOW_ALL, "offline"  # unknown = do not fetch (no request can be made to find out)
     url = f"{scheme}://{host}/robots.txt"
     _robots_fetching.on = True  # the robots.txt request itself is exempt from the check: no recursion
     try:
@@ -635,7 +618,7 @@ def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str, object]
             resp = s.get(url, headers=DEFAULT_HEADERS, timeout=20)
     except requests.RequestException as e:
         log(f"robots: {host} unreachable ({type(e).__name__}); explicit checks disallow it, the hook counts it (#101)")
-        return rfc9309.ALLOW_ALL, "unreachable", None
+        return rfc9309.ALLOW_ALL, "unreachable"
     finally:
         _robots_fetching.on = False
     if 200 <= resp.status_code < 300:
@@ -643,7 +626,7 @@ def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str, object]
         if rb.truncated_body:
             log(f"robots: {host} robots.txt is over {rfc9309.MAX_BODY_OCTETS // 1024} KiB; read up to the last line "
                 f"break before the limit (#87)")
-        return rb, "ok", _comparison_parser(resp.text)
+        return rb, "ok"
     if 400 <= resp.status_code < 500:
         # No robots.txt = no restrictions. Note this fails OPEN, and that this request carries the
         # same User-Agent as everything else: a host that served robots.txt to the old Chrome string
@@ -652,9 +635,9 @@ def _load_robots(host: str, scheme: str) -> tuple["rfc9309.Robots", str, object]
         # families -- 91 x 200, 6 x 404, 3 connection failures, and *zero* hosts where the status
         # differed between the two agents, so the risk is real in principle and absent in practice.
         # Worth re-checking if 4xx rates on robots.txt ever climb after an agent change.
-        return rfc9309.ALLOW_ALL, "4xx", None
+        return rfc9309.ALLOW_ALL, "4xx"
     log(f"robots: {host} returned HTTP {resp.status_code}; explicit checks disallow it, the hook counts it (#101)")
-    return rfc9309.ALLOW_ALL, "5xx", None
+    return rfc9309.ALLOW_ALL, "5xx"
 
 
 def _robots_for(host: str, scheme: str, *, explicit: bool) -> "rfc9309.Robots":
@@ -671,12 +654,11 @@ def _robots_for(host: str, scheme: str, *, explicit: bool) -> "rfc9309.Robots":
     with _key_lock("robots:" + host):
         rb = _robots.get(host)
         if rb is None:
-            rb, state, cmp = _load_robots(host, scheme)
+            rb, state = _load_robots(host, scheme)
             with _robots_lock:
                 _robots_state[host] = state
                 _robots_delay[host] = rb.crawl_delay(ROBOTS_AGENT)
                 _explicit_hosts.discard(host)  # a fresh resolver: its delay is applied afresh below
-            _robots_cmp[host] = cmp
         if explicit and host not in _explicit_hosts:
             with _robots_lock:
                 _explicit_hosts.add(host)
@@ -711,7 +693,6 @@ def robots_allowed(url: str) -> bool:
                 _reset_counts_locked()
             _robots_counts["explicit_resolver_errors"][host] += 1
         return False
-    _diff_record(host, url, allowed, "explicit")
     return allowed
 
 
@@ -775,58 +756,7 @@ def _reset_counts_locked() -> None:
     _robots_counts.update(requests=collections.Counter(), blocked=collections.Counter(),
                           by_site=collections.Counter(), by_collector=collections.Counter(), paths={},
                           loaded=collections.Counter(), failed=collections.Counter(),
-                          resolver_errors=collections.Counter(), explicit_resolver_errors=collections.Counter(),
-                          # the #87 shadow diff: differing (host, path) pairs, each counted once per run
-                          diff_allowed=collections.Counter(), diff_blocked=collections.Counter(), diff_seen=set(),
-                          diff_paths=[], comparison_errors=collections.Counter())
-
-
-DIFF_TOP_HOSTS = 20
-DIFF_SAMPLE_PATHS = 50
-
-
-def _count_comparison_error(host: str) -> None:
-    with _robots_lock:
-        if not _robots_counts:
-            _reset_counts_locked()
-        _robots_counts["comparison_errors"][host] += 1
-
-
-def _diff_record(host: str, url: str, allowed: bool, check: str) -> None:
-    """The #87 shadow diff (owner decisions 2 and 9): compare the deciding verdict with urllib.robotparser's on the
-    same text, and count a difference once per (host, path) per run. `check` is 'explicit' (robots_allowed) or
-    'hook'. Hosts and paths only: never a query string or page content. Never raises."""
-    try:
-        cmp = _robots_cmp.get(host)
-        if cmp is None:
-            return
-        try:
-            if cmp is _CMP_FAILED:
-                raise ValueError("the comparison parser could not be built")
-            before = bool(cmp.can_fetch(ROBOTS_AGENT, url))
-        except Exception:  # noqa: BLE001
-            _count_comparison_error(host)
-            return
-        if before == allowed:
-            return
-        path = urlsplit(url).path or "/"
-        site = current_site()
-        with _robots_lock:
-            if not _robots_counts:
-                _reset_counts_locked()
-            c = _robots_counts
-            if (host, path) in c["diff_seen"]:
-                return
-            c["diff_seen"].add((host, path))
-            (c["diff_allowed"] if allowed else c["diff_blocked"])[host] += 1
-            if len(c["diff_paths"]) < DIFF_SAMPLE_PATHS:
-                c["diff_paths"].append({"host": host, "path": path, "site": site, "check": check,
-                                        "change": "newlyAllowed" if allowed else "newlyBlocked"})
-    except Exception:  # noqa: BLE001 - the comparison must never break a fetch
-        try:
-            _count_comparison_error(host)
-        except Exception:  # noqa: BLE001
-            pass
+                          resolver_errors=collections.Counter(), explicit_resolver_errors=collections.Counter())
 
 
 def _robots_check(url: str) -> str | None:
@@ -845,8 +775,6 @@ def _robots_check(url: str) -> str | None:
     except Exception as e:  # noqa: BLE001 - #87: report mode allows, enforce mode denies; counted either way
         allowed, failed = mode != "enforce", True
         log(f"robots: {host} verdict not reached ({type(e).__name__}); the hook counts a resolver error (#87)")
-    if not failed:
-        _diff_record(host, url, allowed, "hook")
     site = current_site()
     with _robots_lock:
         if not _robots_counts:
@@ -919,10 +847,9 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
         },
         "resolverErrors": sum(c.get("resolver_errors", {}).values()),
         "explicitResolverErrors": sum(c.get("explicit_resolver_errors", {}).values()),
-        # kept when the shadow diff is removed: robots.txt files cut at 500 KiB, patterns cut at 4096 octets (#87)
+        # robots.txt files cut at 500 KiB, patterns cut at 4096 octets (#87)
         "truncatedHosts": sum(1 for rb in loaded if rb.truncated_body),
         "truncatedRules": sum(rb.truncated_rules for rb in loaded),
-        "resolverDiff": _diff_report(c),
         "crawlDelay": {
             "hosts": len(with_delay),
             "values": dict(sorted(collections.Counter(f"{d:g}" for d in with_delay.values()).items(),
@@ -936,24 +863,6 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
                                         "crawlDelay": with_delay.get(slowest), "minutes": round(slowest_s / 60, 1)}
                                        if slowest else None),
                        "note": "estimate: this run's requests with every host's Crawl-delay applied (capped at 30 s)"},
-    }
-
-
-def _diff_report(c: dict) -> dict:
-    """refresh-state.robots.resolverDiff (#87): verdicts the RFC 9309 resolver gives differently from
-    urllib.robotparser on the same text, each (host, path) once per run. At most DIFF_TOP_HOSTS hosts and
-    DIFF_SAMPLE_PATHS paths; no query strings, no page content. Published at /api/v1/status (owner decision 9)."""
-    newly_allowed = c.get("diff_allowed", collections.Counter())
-    newly_blocked = c.get("diff_blocked", collections.Counter())
-    both = newly_allowed + newly_blocked
-    return {
-        "comparedWith": "urllib.robotparser (shadow diff for 3 scheduled runs, owner decision 2 on #87)",
-        "newlyAllowed": sum(newly_allowed.values()),
-        "newlyBlocked": sum(newly_blocked.values()),
-        "comparisonErrors": sum(c.get("comparison_errors", {}).values()),
-        "topHosts": [{"host": h, "newlyAllowed": newly_allowed.get(h, 0), "newlyBlocked": newly_blocked.get(h, 0)}
-                     for h, _ in sorted(both.items(), key=lambda kv: (-kv[1], kv[0]))[:DIFF_TOP_HOSTS]],
-        "samplePaths": [dict(p) for p in c.get("diff_paths", [])[:DIFF_SAMPLE_PATHS]],
     }
 
 
