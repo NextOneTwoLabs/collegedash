@@ -43,7 +43,9 @@ ROOT = env.ROOT
 TIMING_SUITES = {"recs_perf.test.mjs"}  # measure wall-clock time; known to fail under load on this machine
 NETGUARD = "./tests/netguard/netguard.mjs"  # the preload run_node_suites.py gives every Node suite (#345)
 NODE_BLIND = re.compile(r"reported 0 passing|reported no tests")  # what run_node_suites.py says on Node < 24
-COUNT_LINE = re.compile(r"(\d[\d,]*) (?:checks|tests) passed in ([\d.]+)s")
+# How the three runners in .github/scripts/ state their count: "N checks passed in 3.1s" / "N checks passed across 40
+# discovered suites" / "N tests passed in ..." when they pass; "(reported N passing of ..." / "(reported 7/9 checks)" when not.
+COUNT_LINE = re.compile(r"(\d[\d,]*) (?:checks|tests) passed\b|reported (\d[\d,/]*) (?:checks|passing)")
 BAD = re.compile(r"^\s*(not ok\b|::error|Traceback)|\bFAIL\b")  # lines worth showing when something failed
 GOOD = re.compile(r"passed in [\d.]+s|^# (?:tests|pass|fail|skipped) ")  # the totals
 
@@ -127,7 +129,7 @@ def highlights(text: str, limit: int = 20) -> list:
 
 def result_of(name: str, cmd: str, code: int, secs: float, text: str) -> dict:
     counts = COUNT_LINE.findall(text)
-    n = counts[-1][0].replace(",", "") if counts else "?"
+    n = (counts[-1][0] or counts[-1][1]).replace(",", "") if counts else "?"
     return {"name": name, "status": "PASS" if code == 0 else "FAIL", "checks": n, "secs": secs, "floor": floor_of(cmd),
             "note": ""}
 
