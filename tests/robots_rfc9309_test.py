@@ -1,5 +1,5 @@
-"""The RFC 9309 robots.txt resolver (issue #87): every row of the approved matrix, plus the shadow diff and the camps
-keep rule.
+"""The RFC 9309 robots.txt resolver (issue #87): every row of the approved matrix, plus the camps keep rule and, since
+#501, the check that the urllib.robotparser comparison (the "shadow diff") is gone.
 
     python tests/robots_rfc9309_test.py            # offline: robots.txt is seeded, or served by a fake session
     python tests/robots_rfc9309_test.py --verbose  # print every check, not only the failures
@@ -7,7 +7,7 @@ keep rule.
 The spec is the plan on issue #87, revisions 2, 3 and 3.1 (approved by Huatuo), with the owner's decisions of
 2026-10-09 (all as recommended). Each check is named by its matrix row. F rows fail on the code before #87
 (urllib.robotparser); G rows are guards that passed before and must keep passing; N rows are new checks with no
-before (the step bounds, the shadow diff, the camps keep rule). ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
+before (the step bounds, the camps keep rule, the removed comparison). ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
 at another checkout, so the code from before the change can be run through these same checks to show the F rows
 failing.
 
@@ -384,9 +384,8 @@ def test_loader() -> None:
     with served(host, _Resp(200, T1_BODY)):
         ok("T1-loaded (F) fetched: a rule past 500 KiB is not read", common.robots_allowed(url("/z", host)) is True)
         rep = common.robots_report(elapsed_seconds=1, workers=1)
-        ok("T1-count (N) truncated hosts are counted, at the top level (kept when resolverDiff goes)",
-           rep.get("truncatedHosts", 0) >= 1 and "truncatedHosts" not in rep.get("resolverDiff", {}),
-           {k: rep.get(k) for k in ("truncatedHosts", "truncatedRules")})
+        ok("T1-count (N) truncated hosts are counted, at the top level of the report",
+           rep.get("truncatedHosts", 0) >= 1, {k: rep.get(k) for k in ("truncatedHosts", "truncatedRules")})
     # 1800 comment lines of 100 'ツ' each: about 185,000 characters but 545,000 octets
     t2 = (STAR + ("# " + "ツ" * 100 + "\n") * 1800 + "Disallow: /z\n").encode()
     assert len(t2.decode()) < 500 * 1024 < len(t2)
@@ -510,79 +509,6 @@ def test_no_comparison() -> None:
         common.reset_robots_report()
 
 
-# ---------- the shadow diff ----------
-
-def diff() -> dict:
-    return common.robots_report(elapsed_seconds=1, workers=1)["resolverDiff"]
-
-
-@guarded("D1")
-def test_d1() -> None:
-    print("D1-D4: the shadow diff (decision 2): capped, no query strings, errors isolated, counted once")
-    common.reset_robots_report()
-    hosts = [f"d{i:02d}.example" for i in range(30)]
-    for h in hosts:
-        seed(STAR + "Disallow: /*/private/\n", h)
-    for i in range(80):
-        common.robots_allowed(url(f"/a{i}/private/x?token=secret{i}", hosts[i % 30]))
-    d = diff()
-    ok("D1 (N) 80 newly blocked paths on 30 hosts are all counted", d["newlyBlocked"] == 80 and d["newlyAllowed"] == 0,
-       {k: d[k] for k in ("newlyBlocked", "newlyAllowed")})
-    ok("D1 (N) topHosts is capped at 20", len(d["topHosts"]) == 20, len(d["topHosts"]))
-    ok("D1 (N) samplePaths is capped at 50", len(d["samplePaths"]) == 50, len(d["samplePaths"]))
-    ok("D1 (N) no query string reaches the report", "?" not in repr(d) and "secret" not in repr(d))
-    ok("D1 (N) each sample is labelled with its check and change", all(
-        p["check"] == "explicit" and p["change"] == "newlyBlocked" and set(p) == {"host", "path", "site", "check", "change"}
-        for p in d["samplePaths"]), d["samplePaths"][:2])
-
-
-@guarded("D2")
-def test_d2() -> None:
-    common.reset_robots_report()
-    seed(STAR + "Disallow: /*.pdf$\n")
-
-    class Boom:
-        def can_fetch(self, *a):
-            raise RuntimeError("comparison parser exploded")
-    common._robots_cmp[HOST] = Boom()
-    got = common.robots_allowed(url("/a.pdf"))
-    ok("D2 (N) a comparison error leaves the explicit verdict unchanged", got is False, got)
-    with env(COLLEGEDASH_ROBOTS="report"):
-        got = common._robots_check(url("/b.pdf"))
-    d = diff()
-    ok("D2 (N) ... and the hook's", got == HOST)
-    ok("D2 (N) comparisonErrors counts both", d["comparisonErrors"] == 2 and d["newlyBlocked"] == 0, d)
-    common.reset_robots_report()
-
-
-@guarded("D3")
-def test_d3() -> None:
-    common.reset_robots_report()
-    seed(STAR + "Disallow: /*/private/\n")
-    u = url("/a/private/x?q=1")
-    with env(COLLEGEDASH_ROBOTS="report"), common.fetch_site("camps.page"):
-        common.robots_allowed(u)
-        common._robots_check(u)
-        common._robots_check(url("/a/private/x?q=2"))
-    d = diff()
-    ok("D3 (N) the same (host, path) through the explicit check and the hook is counted once",
-       d["newlyBlocked"] == 1 and len(d["samplePaths"]) == 1, d)
-    ok("D3 (N) the first sighting labels it", d["samplePaths"][0] == {
-        "host": HOST, "path": "/a/private/x", "site": "camps.page", "check": "explicit", "change": "newlyBlocked"},
-       d["samplePaths"])
-    with env(COLLEGEDASH_ROBOTS="report"):
-        common._robots_check(url("/b/private/y"))
-    d = diff()
-    ok("D4 (N) a difference only the hook sees is recorded, labelled hook",
-       d["newlyBlocked"] == 2 and d["samplePaths"][1]["check"] == "hook", d)
-    seed(OURS + "Disallow: /\nAllow: /camps/\n")
-    common.robots_allowed(url("/camps/x"))
-    d = diff()
-    ok("D4 (N) a widening is counted as newlyAllowed", d["newlyAllowed"] == 1 and d["topHosts"][0] == {
-        "host": HOST, "newlyAllowed": 1, "newlyBlocked": 2}, d)
-    common.reset_robots_report()
-
-
 # ---------- camps: an explicit block keeps the stored camps (decision 8) ----------
 
 SCHOOL = "https://school.invalid"
@@ -654,7 +580,7 @@ def main(argv=None) -> int:
     saved_mode = os.environ.get("COLLEGEDASH_ROBOTS")
     try:
         for case in (test_matrix, test_glob_reference, test_w9, test_w13a, test_w13_lines, test_crawl_delay, test_loader, test_no_comparison,
-                     test_d1, test_d2, test_d3, test_camps_keep):
+                     test_camps_keep):
             case()
     finally:
         if saved_mode is None:
