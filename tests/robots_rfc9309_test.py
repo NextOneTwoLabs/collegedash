@@ -412,9 +412,10 @@ def test_loader() -> None:
 
 
 # ---------- no urllib.robotparser comparison (issue #501) ----------
-# #87 compared the resolver with urllib.robotparser for 3 scheduled refreshes. It ran for 7, every one clean, and the
-# owner approved removing it on 2026-10-16. R1-R3 pin what is left: the stdlib parser is never touched, the report has
-# no resolverDiff, and the counters #496 moved to the top level of refresh-state.robots are still there.
+# #87 compared the resolver with urllib.robotparser for 3 scheduled refreshes. It ran for 7 and found nothing newly
+# blocked and no errors; the owner approved removing it on 2026-10-16. R1-R3 pin what is left: the stdlib parser is
+# never touched, the report has no resolverDiff, and the counters #496 moved to the top level of
+# refresh-state.robots are still there.
 
 @contextlib.contextmanager
 def robotparser_spy():
