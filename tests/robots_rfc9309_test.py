@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import contextlib
 import copy
+import json
 import os
 import sys
 import time
@@ -411,6 +412,104 @@ def test_loader() -> None:
     common.reset_robots_report()
 
 
+# ---------- no urllib.robotparser comparison (issue #501) ----------
+# #87 compared the resolver with urllib.robotparser for 3 scheduled refreshes. It ran for 7, every one clean, and the
+# owner approved removing it on 2026-10-16. R1-R3 pin what is left: the stdlib parser is never touched, the report has
+# no resolverDiff, and the counters #496 moved to the top level of refresh-state.robots are still there.
+
+@contextlib.contextmanager
+def robotparser_spy():
+    """The list of every call made on urllib.robotparser.RobotFileParser while the block runs. The class still works."""
+    import urllib.robotparser as stdlib
+    cls, calls = stdlib.RobotFileParser, []
+    names = ("__init__", "parse", "read", "can_fetch", "crawl_delay")
+    real = {n: getattr(cls, n) for n in names}
+
+    def spy(name):
+        def wrapper(self, *a, **kw):
+            calls.append(name)
+            return real[name](self, *a, **kw)
+        return wrapper
+    for n in names:
+        setattr(cls, n, spy(n))
+    try:
+        yield calls
+    finally:
+        for n in names:
+            setattr(cls, n, real[n])
+
+
+def refresh_state_robots(rep: dict) -> dict:
+    """What a refresh writes to refresh-state.robots for this report (collegedash.report_robots), captured, not saved."""
+    import collegedash
+    written, real = {}, common.update_refresh_state
+    common.update_refresh_state = lambda key, info: written.__setitem__(key, copy.deepcopy(info))
+    try:
+        with env(GITHUB_ACTIONS=None):  # no step summary written from a test run inside CI
+            collegedash.report_robots(rep)
+    finally:
+        common.update_refresh_state = real
+    return written["robots"]
+
+
+@guarded("R")
+def test_no_comparison() -> None:
+    print("R1-R3: no urllib.robotparser comparison (issue #501): never called, no resolverDiff, the counters stay")
+    saved_cache, real_allowed = dict(common._robots), R.Robots.allowed
+    common._robots.clear()
+    try:
+        with robotparser_spy() as calls:
+            common.reset_robots_report()
+            # a rule the stdlib parser ignores ('*' and '$' in a path): the kind of difference the diff used to count
+            seed(STAR + "Disallow: /*.pdf$\n")
+            explicit = common.robots_allowed(url("/a.pdf"))
+            with env(COLLEGEDASH_ROBOTS="report"):
+                hook = common._robots_check(url("/b.pdf"))
+            # every state the loader can fetch a robots.txt in
+            with served("r1.example", _Resp(200, T1_BODY)):
+                loaded = common.robots_allowed(url("/z", "r1.example"))
+            with served("r1b.example", _Resp(404)):
+                missing = common.robots_allowed(url("/x", "r1b.example"))
+            with served("r1c.example", _Resp(503)):
+                failing = common.robots_allowed(url("/x", "r1c.example"))
+            with served("r1d.example", requests.ConnectionError("down")):
+                down = common.robots_allowed(url("/x", "r1d.example"))
+            # one robots.txt over 500 KiB and one pattern over 4096 octets, for the truncation counters
+            seed(T1_BODY.decode(), "r1big.example")
+            seed(STAR + "Disallow: /" + "a" * 6000 + "\n", "r1long.example")
+            # one resolver error through the explicit check and one through the hook
+            common.reset_robots_report()
+            R.Robots.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
+            try:
+                denied = common.robots_allowed(url("/x"))
+                with env(COLLEGEDASH_ROBOTS="report"):
+                    hook_err = common._robots_check(url("/x"))
+            finally:
+                R.Robots.allowed = real_allowed
+            rep = common.robots_report(elapsed_seconds=1, workers=1)
+            entry = refresh_state_robots(rep)
+        ok("R1 the verdicts are still the resolver's", (explicit, hook, loaded, missing, failing, down, denied, hook_err)
+           == (False, HOST, True, True, False, False, False, HOST),
+           (explicit, hook, loaded, missing, failing, down, denied, hook_err))
+        ok("R1 urllib.robotparser is never called (seeded, fetched, explicit, hook)", calls == [], calls)
+        ok("R1 collect.common no longer imports it", not hasattr(common, "robotparser"))
+        ok("R2 the report has no resolverDiff", "resolverDiff" not in rep, sorted(rep))
+        ok("R2 ... and neither has the refresh-state entry a refresh writes", "resolverDiff" not in entry, sorted(entry))
+        text = json.dumps(entry)
+        ok("R2 ... and nothing in it names the comparison",
+           not any(w in text for w in ("robotparser", "newlyAllowed", "newlyBlocked", "comparisonErrors", "comparedWith")))
+        ok("R3 truncatedHosts stays at the top level", entry.get("truncatedHosts") == 1, entry.get("truncatedHosts"))
+        ok("R3 truncatedRules stays at the top level", entry.get("truncatedRules") == 1, entry.get("truncatedRules"))
+        ok("R3 explicitResolverErrors stays at the top level", entry.get("explicitResolverErrors") == 1,
+           entry.get("explicitResolverErrors"))
+        ok("R3 resolverErrors stays at the top level", entry.get("resolverErrors") == 1, entry.get("resolverErrors"))
+    finally:
+        R.Robots.allowed = real_allowed
+        common._robots.clear()
+        common._robots.update(saved_cache)
+        common.reset_robots_report()
+
+
 # ---------- the shadow diff ----------
 
 def diff() -> dict:
@@ -554,8 +653,8 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     saved_mode = os.environ.get("COLLEGEDASH_ROBOTS")
     try:
-        for case in (test_matrix, test_glob_reference, test_w9, test_w13a, test_w13_lines, test_crawl_delay, test_loader, test_d1, test_d2,
-                     test_d3, test_camps_keep):
+        for case in (test_matrix, test_glob_reference, test_w9, test_w13a, test_w13_lines, test_crawl_delay, test_loader, test_no_comparison,
+                     test_d1, test_d2, test_d3, test_camps_keep):
             case()
     finally:
         if saved_mode is None:
