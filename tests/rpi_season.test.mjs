@@ -136,7 +136,6 @@ test('an in-progress season is never the finished season: last-season figures st
   assert.doesNotMatch(table, /Record 20\d\d|18-4-2/, 'the Stats view shows a record');
   assert.match(table, /RPI is the 2026 season, in progress: the NCAA's latest weekly table ·/, 'the footnote does not say the RPI season');
   assert.doesNotMatch(table, /Record is the/, 'the footnote names a column that is gone');
-  assert.equal(sb.sortLabel('record'), 'Record 2025', 'a stored record sort is not labelled with the finished season');
   await sb.renderProfile('alpha');
   // Compare's finished-season row is 2025's record, and the in-progress record is only under "Current record"
   sb.S.compare = ['alpha', 'beta']; await sb.renderCompare();

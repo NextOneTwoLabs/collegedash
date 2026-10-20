@@ -14,9 +14,10 @@
 // What this proves:
 //   - every data column sorts both ways, and a row showing '—' (or nothing, where the measure does not apply to
 //     the division) sorts last in BOTH directions;
-//   - Record sorts by win percentage (ties count half a win), Tuition by the out-of-state figure (the in-state
-//     one when that is all a school publishes), Titles grouped by division within each run. The Record column is
-//     gone from the Stats view (#342); a stored record sort still orders the rows;
+//   - Tuition sorts by the out-of-state figure (the in-state one when that is all a school publishes), Titles
+//     grouped by division within each run. There is no Record column in the Stats view (#342) and no Record sort
+//     (#494: it ordered by a value nothing shows); tests/list_url_state.test.mjs checks that an old link or saved
+//     filter that names it opens on Name;
 //   - the '#' column is labelled with the RPI season, each sortable header is a button, the active one carries
 //     aria-sort and a direction class, the others carry none;
 //   - the Program line shows the division first for D1, D2 and D3;
@@ -71,8 +72,6 @@ const EXPECTED = {
   name: ['asc', [A, B, C, D, E, F, G], [G, F, E, D, C, B, A]],
   // ranked, then unranked D1 ('—': C, G), then D2/D3 where RPI does not apply
   rpi: ['asc', [A, B, C, G, D, E, F], [B, A, C, G, D, E, F]],
-  // win %: F .9375, A .833, B (8-2-2) = C (9-3-0) = .75, D (12-4-4) .70; E and G have no record
-  record: ['desc', [D, B, C, A, F, E, G], [F, A, B, C, D, E, G]],
   admit: ['asc', [F, B, E, A, D, C, G], [D, A, E, B, F, C, G]],
   academicRank: ['asc', [C, A, E, B, D, F, G], [E, A, C, B, D, F, G]],
   // out-of-state: D 5000 (in-state only), C 25000, A 30000, B 40000, F 50000; E, G none. In-state would put A before C.
@@ -98,7 +97,7 @@ function makeElement(name) {
     querySelector: () => makeElement('child'), querySelectorAll: () => [], closest: () => null, matches: () => false, focus() { }, contains: () => false,
   };
 }
-const HANDLES = ['S', 'renderList', 'renderSidebar', 'loadIndex', 'setSort', 'sortCmp', 'syncSortControls'];
+const HANDLES = ['S', 'renderList', 'renderSidebar', 'loadIndex', 'setSort', 'sortCmp', 'syncSortControls', 'SORT_SPECS'];
 function loadPage() {
   const els = new Map();
   const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
@@ -170,34 +169,20 @@ test("the '#' column is labelled with the RPI season, and the footnote no longer
   assert.doesNotMatch(html, /<th[^>]*>#<\/th>|RPI \(#\)/);
 });
 
-// Issue #287 (owner decision): a finished season of fewer than 10 games sorts after the full ones in both
-// directions, ahead of the rows with no record, and says how many games it had; a full season says nothing.
-test('Record: a season under 10 games sorts after the full ones', async () => {
-  const pg = await page();
-  const fox = (await pg.sb.loadIndex()).programs.find((p) => p.slug === F);
-  const saved = fox.lastSeason;
-  try {
-    fox.lastSeason = { year: 2025, record: '5-0-0', gamesPlayed: 5 };
-    assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'desc', moreStats: true })), [A, B, C, D, F, E, G], 'descending');
-    assert.deepEqual(rowSlugs(await table({ sort: 'record', sortDir: 'asc', moreStats: true })), [D, B, C, A, F, E, G], 'ascending');
-    fox.lastSeason = { year: 2025, record: '15-1-0', gamesPlayed: 16 };
-    const full = await table({ sort: 'record', sortDir: 'desc', moreStats: true });
-    assert.deepEqual(rowSlugs(full), EXPECTED.record[2]);
-  } finally { fox.lastSeason = saved; }
-});
-
 test('the tuition header says what it sorts by', async () => {
   const html = await table({});
   assert.match(th(html, 'tuition'), /title="Sorts by out-of-state tuition"/);
 });
 
-// Issue #342 (owner): the Stats view shows no Record column in either mode, not even while record is the sort.
-// The record shows on the profile and in Compare.
-test('#342: no Record column under Fewer or More statistics, sorted by record or not', async () => {
+// Issue #342 (owner): the Stats view shows no Record column in either mode, whatever the sort (there has been no
+// Record sort since #494). The record shows on the profile and in Compare.
+test('#342: no Record column under Fewer or More statistics, under any sort', async () => {
+  const pg = await page();
+  const sorts = Object.keys(pg.sb.SORT_SPECS);
+  assert.ok(sorts.length > 8 && sorts.includes('name'), 'fixture: the sort keys');
   for (const moreStats of [false, true]) {
-    for (const sort of ['name', 'record']) {
-      // the table only: a stored record sort still names itself in the page subtitle ("sorted by Record 2025")
-      const html = (await table({ sort, moreStats })).split('<table class="standings-table">')[1] || '';
+    for (const sort of sorts) {
+      const html = await table({ sort, moreStats });
       assert.ok(html.includes('data-sort="name"'), 'the table is not there');
       assert.equal(th(html, 'record'), '', `moreStats ${moreStats}, sort ${sort}: a record header`);
       assert.doesNotMatch(html, /Record 20\d\d/, `moreStats ${moreStats}, sort ${sort}: a Record label`);
@@ -229,8 +214,7 @@ test('the table header, the sidebar select and the sidebar direction button stay
       rows: rowSlugs(pg.app()),
     };
   };
-  // a header-only sort (commits; record was the example until #342 removed its column): the select lists it while
-  // it is active and shows it selected
+  // a header-only sort (commits): the select lists it while it is active and shows it selected
   pg.sb.setSort('commits');
   let s = await state();
   assert.equal(s.selected, 'commits'); assert.ok(s.options.includes('commits'));
