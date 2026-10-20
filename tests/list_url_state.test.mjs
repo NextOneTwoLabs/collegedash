@@ -129,7 +129,7 @@ function loadPage({ hash = '#/programs', store = {}, session = {}, ask = false }
   const lines = HTML.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'index.html: could not find the inline <script>');
-  const names = ['S', 'route', 'setQuery', 'renderSidebar', 'loadIndex', 'listHashOf', 'listStateOf', 'condFormOpen', 'condFormSubmit', 'condRemove', 'feedbackRoute'];
+  const names = ['S', 'route', 'setQuery', 'renderSidebar', 'loadIndex', 'listHashOf', 'listStateOf', 'condFormOpen', 'condFormSubmit', 'condRemove', 'feedbackRoute', 'SORT_SPECS'];
   const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
@@ -272,6 +272,57 @@ test('a link whose every value is dropped is replaced, never pushed (the old-for
   assert.deepEqual(pg.hist.entries, ['#/programs?sort=name']);
   assert.deepEqual(plain(pg.sb.S.filters.region), []);
   assert.equal(pushes(pg), 0);
+});
+
+// #494: the Record sort is gone. It ordered the list by a value no list or card shows (#342 took Stats' Record column
+// away, #492 the card's record), and the Sort menu never offered it, so only an old link or a saved cd.filters can still
+// name it. Each opens on Name, the default, as for any sort the page does not have. The order on screen is checked
+// against the programs sorted here by display name, not against the page's own comparator.
+const byName = (a, b) => a.localeCompare(b, undefined, { sensitivity: 'accent' }) || a.localeCompare(b);
+const NAME_ORDER = INDEX.programs.map(p => p.shortName || p.name || '').sort(byName);
+const shownNames = pg => {
+  const bySlug = new Map(INDEX.programs.map(p => [p.slug, p.shortName || p.name || '']));
+  return [...pg.$('#app').innerHTML.matchAll(/<div class="card pcard[^"]*" data-slug="([^"]+)"/g)].map(m => bySlug.get(m[1]));
+};
+function assertOnName(pg, what) {
+  assert.equal(pg.sb.S.filters.sort, 'name', `${what}: the sort is not Name`);
+  const names = shownNames(pg);
+  assert.equal(names.length, NAME_ORDER.length, `${what}: the list does not show every program`);
+  assert.deepEqual(names, NAME_ORDER, `${what}: the list is not in Name order`);
+  assert.match(pg.$('#app').innerHTML, /sorted by Name(?![\w ])/, `${what}: the subtitle does not say Name`);
+  assert.match(pg.$('#sidebar').innerHTML, /<option value="name" selected>Name<\/option>/, `${what}: the Sort select does not show Name`);
+  assert.doesNotMatch(pg.$('#sidebar').innerHTML, /value="record"/, `${what}: the Sort select lists Record`);
+}
+test('#494: record is not a sort key', async () => {
+  const pg = await base();
+  assert.ok(!Object.keys(pg.sb.SORT_SPECS).includes('record'), 'record is still a sort key');
+  assert.equal(pg.sb.SORT_SPECS.record, undefined);
+});
+test('#494: a link that names the record sort opens on Name', async () => {
+  const pg = await base();
+  // read: the sort is dropped, the rest of the link kept
+  const st = plain(pg.sb.listStateOf('div=D1&sort=record'));
+  assert.equal(st.sort, 'name'); assert.deepEqual(st.division, ['D1']);
+  assert.equal(pg.sb.listHashOf(st), '#/programs?div=D1&sort=name');
+  // arriving on it, over a different saved sort: Name on screen, in the select, in the saved filters and in the address
+  // (replaced, not pushed)
+  const link = await open({ hash: '#/programs?sort=record', store: { 'cd.filters': { sort: 'rpi' } } });
+  assertOnName(link, 'link');
+  assert.deepEqual(link.hist.entries, ['#/programs?sort=name']); assert.equal(pushes(link), 0);
+  assert.equal(JSON.parse(link.ls.get('cd.filters')).sort, 'name', 'the link\'s Name is not saved');
+});
+test('#494: a saved filter that names the record sort opens on Name, on a bare #/programs and from Home', async () => {
+  // on a bare #/programs the saved filters are kept, bar the sort: and it must not be carried into the address either
+  const saved = await open({ hash: '#/programs', store: { 'cd.filters': { region: ['West'], sort: 'record' } } });
+  assert.deepEqual(plain(saved.sb.S.filters.region), ['West'], 'the rest of the saved filters were lost');
+  assert.deepEqual(saved.hist.entries, ['#/programs?region=West&sort=name']); assert.equal(pushes(saved), 0);
+  const all = await open({ hash: '#/programs', store: { 'cd.filters': { sort: 'record' } } });
+  assertOnName(all, 'saved filter');
+  assert.deepEqual(all.hist.entries, ['#/programs?sort=name']);
+  const home = await open({ hash: '#/', store: { 'cd.filters': { sort: 'record' } } });
+  home.sb.location.hash = '#/programs'; await settle(300);
+  assert.deepEqual(home.hist.entries, ['#/', '#/programs?sort=name']);
+  assertOnName(home, 'saved filter, from Home');
 });
 
 // ---------- 4. history (amendment 2) ----------
