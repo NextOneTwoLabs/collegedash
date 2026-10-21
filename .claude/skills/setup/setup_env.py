@@ -21,7 +21,7 @@ import shlex
 import shutil
 import subprocess
 import sys
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[3]
@@ -46,6 +46,7 @@ class Workflow:
     node: str  # "24"
     install: list  # the pip install line(s), as written in the workflow
     steps: list  # [(step name, command)] for every single-line `run:` that is not a pip install
+    skipped: list = field(default_factory=list)  # names of the multi-line `run: |` steps, which are not read or run here
 
 
 def read_workflow(path: Path = WORKFLOW, job: str = JOB) -> Workflow:
@@ -56,7 +57,7 @@ def read_workflow(path: Path = WORKFLOW, job: str = JOB) -> Workflow:
         sys.exit(f"{path.name} has no job named '{job}' any more: update JOB in {Path(__file__).name}")
     end = next((i for i in range(start + 1, len(lines)) if re.match(r"  \S", lines[i])), len(lines))
     python = node = name = None
-    install, steps = [], []
+    install, steps, skipped = [], [], []
     for line in lines[start:end]:
         if re.match(r"\s*- ", line):
             name = None  # a new step
@@ -66,15 +67,19 @@ def read_workflow(path: Path = WORKFLOW, job: str = JOB) -> Workflow:
             python = m.group(1)
         elif m := re.match(r"""\s*node-version:\s*["']?([\d.]+)""", line):
             node = m.group(1)
-        elif (m := re.match(r"\s*run:\s*(\S.*?)\s*$", line)) and m.group(1)[0] not in "|>":
-            cmd = m.group(1)  # a `run: |` block (the Summary table) is deliberately not picked up
-            if cmd.split()[0] == "pip":
+        elif m := re.match(r"\s*run:\s*(\S.*?)\s*$", line):
+            cmd = m.group(1)
+            if cmd[0] in "|>":
+                # A multi-line `run: |` block (today only the Summary table) is not picked up. It is named, so a future
+                # multi-line test step shows up in --list and in the run header instead of silently not running.
+                skipped.append(name or "(unnamed step)")
+            elif cmd.split()[0] == "pip":
                 install.append(cmd)
             else:
                 steps.append((name or cmd, cmd))
     if not (python and node and steps):
         sys.exit(f"could not read Python version, Node version and test steps from job '{job}' in {path.name}")
-    return Workflow(python, node, install, steps)
+    return Workflow(python, node, install, steps, skipped)
 
 
 def venv_dir(python_version: str, arg: str | None = None) -> Path:

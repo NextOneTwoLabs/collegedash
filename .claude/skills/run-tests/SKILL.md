@@ -45,6 +45,8 @@ ran on: Python 3.12.3 (CI 3.12); Node v24.x (CI 24)
 - If `ran on` says `DIFFERS`, the result is not CI's. Say so next to the numbers.
 - Exit code: `0` every step passed; `1` something failed; `2` only timing tests failed under load and then passed alone (see below). Anything but `0` needs an explanation in the report.
 - Each step is judged separately, as in CI: an early failure does not stop the later steps.
+- **What it does not run.** `ci_tests.py` reads only the `suites` job of `tests.yml`, and only its single-line `run:` steps. Any multi-line `run: |` step in that job (today only the Summary table) is named under `NOT RUN here` in `--list` and at the top of every run; if a future one runs tests, run its commands by hand and report them.
+- **The `generated-reports` job** (pull requests only) is a separate job in `tests.yml`, so `ci_tests.py` does not run it. It fails a PR that changes `data/clubs-review.json` or `data/schools-review.json`, which only the data refresh may commit. Check it before you push with `python .github/scripts/check_generated_reports.py --base origin/main --head HEAD` (offline; exit 0 means neither file changed), and take those files out of the branch if it fails.
 
 ## Known quirks on this machine
 

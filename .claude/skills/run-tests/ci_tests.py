@@ -200,6 +200,9 @@ def main() -> int:
     print()
     for i, (name, cmd) in enumerate(steps, 1):
         print(f"{i}. {name}\n     {cmd}\n     floor {floor_of(cmd)}")
+    if wf.skipped:
+        print(f"\nNOT RUN here: {len(wf.skipped)} multi-line `run: |` step(s) in tests.yml, which this script does not read: "
+              f"{'; '.join(wf.skipped)}.\n     If one of them runs tests, run its commands by hand and report them.")
     if args.list:
         return 0
 
