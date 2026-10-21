@@ -130,6 +130,8 @@ def highlights(text: str, limit: int = 20) -> list:
 def result_of(name: str, cmd: str, code: int, secs: float, text: str) -> dict:
     counts = COUNT_LINE.findall(text)
     n = (counts[-1][0] or counts[-1][1]).replace(",", "") if counts else "?"
+    if code != 0 and (tap := tap_counts(text)):
+        n = str(tap[0])  # a failed Node run: show node's own `# pass N`, not the runner's "reported N passing" (a junit sum)
     return {"name": name, "status": "PASS" if code == 0 else "FAIL", "checks": n, "secs": secs, "floor": floor_of(cmd),
             "note": ""}
 
