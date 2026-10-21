@@ -53,7 +53,7 @@ Options (all in the header of `shots.js`):
 - **Say what you looked at.** Open the screenshots (the file-reading tool shows images) and describe what changed, and what did not. A measurement table with no description is half the evidence.
 - **Card heights.** Cards in one grid row should stay equal; `rowSpread` above 0 is a layout change worth explaining. Compare min and max before and after.
 - **Horizontal scroll.** `hScroll` must be `no` at 390 px on both. A `YES` that appears only on the branch is a regression.
-- **Contrast.** Needed only where colours change, but it is cheap, so read the row anyway. A new `belowAA` count is a regression; an existing one is not yours, but mention it. Compare the lowest ratio and its element.
+- **Contrast.** Needed only where colours change, but it is cheap, so read the row anyway. Compare the count and the lowest ratio with its element between main and the branch: a count that goes up is a regression; one that is the same is not yours, but name it. The script counts every text node, so an icon glyph (the card's star `☆`) is measured against 4.5, though WCAG asks only 3 of icons. On main today the star reads 2.22 (light) and 2.88 (dark), so `text below AA` is 1011 on both main and the branch, one per card: expect that, and look at `worst` in the JSON for what the elements are before calling a number good or bad.
 - **The Inter font cannot load in this sandbox.** The page falls back to another font, so text is wider than in production. That makes the widths worst-case, and it is the same on main and on the branch, so the comparison holds. Say so in the PR instead of presenting the screenshot as pixel-exact.
 - **A card or value that only appears under some data.** Use `--card SLUG` for a card that has it, and say which slug.
 - If a view fails (the cards never appear), the run writes `LABEL-WIDTH-THEME-FAILED.png`, records the error in the JSON and exits 1. Look at that screenshot before you do anything else; it is usually a server on the wrong port or a script error on the page.
@@ -76,7 +76,7 @@ python3 .claude/skills/evidence/data_counts.py --count division --count roster -
 It prints Markdown for the PR:
 
 1. files added, removed and changed per folder under `public/data` (`--path` narrows it; `--depth` sets the folder depth);
-2. for the program profiles that changed: how many changed in each top-level field (`_build` is left out, since it changes on every build; add `--ignore FIELD` for others);
+2. for the program profiles that changed (`programs/index.json` is not one): how many changed in each top-level field. `_build` is left out of the field table, since it changes on every build, and the profiles that differ only there are counted on their own line (add `--ignore FIELD` for other fields);
 3. for each `--count FIELD` (a dotted path into a profile, e.g. `division` or `tuition.in_state`): the profiles where it is present and non-empty, the items in it, and its values when there are at most 12 distinct ones (so `division` shows D1, D2 and D3 side by side).
 
 Use `--before` and `--after` with a revision or a directory. When the change is a script that writes data, build once on main and once on the branch into two directories and compare those; the script never has to fetch anything.

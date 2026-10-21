@@ -12,8 +12,9 @@ adds a table of that profile field over every public/data/programs/<slug>.json, 
 
 It prints Markdown, ready to paste into the PR:
   1. files added, removed and changed, per folder;
-  2. for the program profiles that changed: how many changed in each top-level field (--ignore skips fields, `_build`
-     by default, that change on every build);
+  2. for the program profiles that changed (programs/index.json is not one): how many changed in each top-level field
+     (--ignore skips fields, `_build` by default, that change on every build; a profile that differs only there is
+     counted on its own line, not hidden);
   3. one table per --count: profiles where the field is present and non-empty, items in it (lists and objects),
      and its values when there are at most 12 distinct scalars (so `division` shows D1/D2/D3).
 Exact counts here describe one tree on one day. They go in a PR as evidence; a test never pins them on live data.
@@ -103,14 +104,21 @@ def file_table(a: Tree, b: Tree, depth: int) -> list[str]:
 
 
 def field_table(a: Tree, b: Tree, ignore: set) -> list[str]:
-    changed = [p for p in a.ids.keys() & b.ids.keys() if p.startswith(PROFILES + "/") and a.ids[p] != b.ids[p]]
     per = Counter()
-    for p in changed:
+    real = ignored_only = 0
+    for p in sorted(a.ids.keys() & b.ids.keys()):
+        if not p.startswith(PROFILES + "/") or a.ids[p] == b.ids[p]:
+            continue
         x, y = a.json(p) or {}, b.json(p) or {}
-        for k in (x.keys() | y.keys()) - ignore:
-            if x.get(k) != y.get(k):
-                per[k] += 1
-    out = [f"{len(changed)} program profiles changed (fields in {', '.join(sorted(ignore))} left out).", "",
+        if not (x.get("slug") and y.get("slug")):  # programs/index.json sits beside the profiles; it is not one
+            continue
+        fields = {k for k in (x.keys() | y.keys()) - ignore if x.get(k) != y.get(k)}
+        per.update(fields)
+        if fields:
+            real += 1
+        else:
+            ignored_only += 1
+    out = [f"{real} program profiles changed in a field that counts; {ignored_only} more differ only in {', '.join(sorted(ignore))}.", "",
            "| field | profiles where it changed |", "| --- | ---: |"]
     out += [f"| {k} | {n} |" for k, n in per.most_common()] or ["| (none) | 0 |"]
     return out
@@ -122,7 +130,8 @@ def count_table(a: Tree, b: Tree, field: str) -> list[str]:
         vals = Counter()
         for p in t.ids:
             if p.startswith(PROFILES + "/") and p.endswith(".json"):
-                v = dig(t.json(p), field)
+                prof = t.json(p)
+                v = dig(prof, field) if isinstance(prof, dict) and prof.get("slug") else None
                 if present(v):
                     n += 1
                     if isinstance(v, (list, dict)):
