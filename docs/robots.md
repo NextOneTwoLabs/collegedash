@@ -88,9 +88,10 @@ robots.txt, and each difference was counted in `refresh-state.robots.resolverDif
 refreshes; nothing switched it off, so it ran on every daily refresh from 2026-10-10 until it was removed. The first 7
 runs (to 10-16) are reported on #501, and the 11 committed through 10-20 all gave the same result, each over about 1,900
 hosts and 16,300 to 17,800 requests: no path newly blocked, one newly allowed (`app.campdoc.com /!/dn/login`, in camps'
-own robots.txt check), no resolver, explicit-check or comparison errors, and no truncations. The owner approved opening
-#501, to remove it, on 2026-10-16. The stdlib parser is no longer imported or called, and the report no longer has a
-`resolverDiff` key. The counters it shared the report with stayed where #496 put them, at the top level.
+own robots.txt check), no resolver, explicit-check or comparison errors, and no truncations. The owner approved
+removing it on 2026-10-16, with #501 opened to do it. The stdlib parser is no longer imported or called, and the report
+no longer has a `resolverDiff` key. The counters it shared the report with stayed where #496 put them, at the top
+level.
 
 A `refresh-state.json` written while the comparison ran still holds the old `resolverDiff`. A refresh replaces the whole
 `robots` entry, so the next one drops it, but only while `COLLEGEDASH_ROBOTS` is `report` or `enforce` (`refresh.yml`
