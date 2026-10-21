@@ -7,7 +7,8 @@
     python3 .claude/skills/evidence/data_counts.py --count division --count roster --count commitments
 
 --before and --after each take a git revision, or a directory that has the repository's layout (a worktree, or the
-temporary tree a build wrote). --path (repeatable) is the part of the tree to compare. --count FIELD (repeatable)
+temporary tree a build wrote). --path (repeatable) is the part of the tree to compare, a folder or a file; the profile tables
+(items 2 and 3 below) appear only when it takes in public/data/programs. --count FIELD (repeatable)
 adds a table of that profile field over every public/data/programs/<slug>.json, before and after.
 
 It prints Markdown, ready to paste into the PR:
@@ -34,6 +35,11 @@ from pathlib import Path
 PROFILES = "public/data/programs"
 
 
+def blob_id(data: bytes) -> str:
+    """The id a revision holds for a file with these bytes, so a directory side and a revision side agree."""
+    return hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
 class Tree:
     """The files of one revision or directory: path -> id (equal ids mean equal bytes), and a way to read them."""
 
@@ -42,14 +48,16 @@ class Tree:
         if os.path.isdir(spec):
             self._dir = Path(spec)
             for p in paths:
-                for f in sorted((self._dir / p).rglob("*")) if (self._dir / p).is_dir() else []:
-                    if f.is_file():
-                        self.ids[str(f.relative_to(self._dir))] = hashlib.sha1(f.read_bytes()).hexdigest()
+                top = self._dir / p
+                for f in sorted(top.rglob("*")) if top.is_dir() else [top] if top.is_file() else []:
+                    if f.is_file() and not f.is_symlink():
+                        self.ids[str(f.relative_to(self._dir))] = blob_id(f.read_bytes())
             return
         out = git("ls-tree", "-r", "-z", spec, "--", *paths).split("\0")
         for rec in filter(None, out):
             meta, path = rec.split("\t", 1)
-            self.ids[path] = meta.split()[2]
+            if meta.split()[1] == "blob":
+                self.ids[path] = meta.split()[2]
 
     def read(self, path: str) -> bytes:
         if self._dir:
@@ -159,12 +167,17 @@ def main() -> int:
     ap.add_argument("--ignore", action="append", default=None, metavar="FIELD", help="top-level profile field to leave out (default _build)")
     ap.add_argument("--depth", type=int, default=3, help="folder depth for the file table (default 3: public/data/programs)")
     args = ap.parse_args()
-    paths = args.path or ["public/data"]
+    paths = [p.strip().removeprefix("./").rstrip("/") for p in (args.path or ["public/data"])]
     ignore = set(args.ignore or ["_build"])
-    a, b = Tree(args.before, paths + [PROFILES]), Tree(args.after, paths + [PROFILES])
+    # The profile tables only make sense when the compared part of the tree takes in the profiles.
+    profiles_in_scope = any(PROFILES == p or PROFILES.startswith(p + "/") or p.startswith(PROFILES + "/") for p in paths)
+    if args.count and not profiles_in_scope:
+        sys.exit(f"--count reads the program profiles, which are under {PROFILES}: add --path {PROFILES}, or leave --path out.")
+    a, b = Tree(args.before, paths), Tree(args.after, paths)
     print(f"Data change: `{args.before}` -> `{args.after}`, under {', '.join(paths)} (read from git/disk only; nothing fetched)\n")
     print("\n".join(file_table(a, b, args.depth)) + "\n")
-    print("\n".join(field_table(a, b, ignore)) + "\n")
+    if profiles_in_scope:
+        print("\n".join(field_table(a, b, ignore)) + "\n")
     for f in args.count:
         print("\n".join(count_table(a, b, f)) + "\n")
     return 0
