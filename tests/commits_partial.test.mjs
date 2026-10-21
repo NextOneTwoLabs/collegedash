@@ -84,7 +84,7 @@ const partialIn = html => html.includes('class="commits-partial');
 
 // Rules about the live index, never its size (#508): the count of programs outside D1 that carry commits changes with
 // the data refresh, so the checks below hold for any number of them from one up.
-test('setup: programs outside D1 carry a count, carson-newman among them; the rest of the tests loop over whichever they are', async () => {
+test('setup: some programs outside D1 carry a count (a rule, not a number), carson-newman among them, all of them D2 or D3', async () => {
   await sb.loadIndex();
   assert.ok(PARTIAL.length >= 1, 'fixture: at least one program outside D1 should carry commits, or these tests check nothing');
   assert.ok(PARTIAL.some(p => p.slug === 'carson-newman'), 'fixture: carson-newman (D2) should carry commits; the profile and Compare tests use it');
