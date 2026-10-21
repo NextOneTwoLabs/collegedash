@@ -19,10 +19,13 @@
 //   --filters JSON    localStorage cd.filters to seed (default: the unfiltered card view, sorted by name)
 //
 // What is measured per width/theme/zoom: card count and height min/max, the tallest gap between cards in
-// one row, page horizontal scroll (scrollWidth against the window), and text contrast inside the cards
-// (WCAG ratio of each text element's colour against the colour behind it; text on a gradient or image is
-// counted as unmeasured, not guessed). The Inter web font cannot load in this sandbox, so text is set in
-// the fallback font: widths are worst-case, and the same on main and the branch.
+// one row, page horizontal scroll (scrollWidth against the window), and contrast inside the cards (WCAG ratio
+// of each element's text colour against the colour behind it; text on a gradient or image is counted as
+// unmeasured, not guessed). Text (a text node with a letter or digit) is judged at 4.5:1, or 3:1 when large.
+// An icon glyph (a text node with no letter or digit, such as the star) is judged at 3:1 (WCAG 1.4.11) and
+// reported on its own (contrast.icons), so it never moves the text figures. `worst` lists the lowest ratios
+// once per element, foreground and background, with a count. The Inter web font cannot load in this
+// sandbox, so text is set in the fallback font: widths are worst-case, and the same on main and the branch.
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -92,34 +95,46 @@ function measureInPage({ sel }) {
   };
   const opacityOf = el => { let o = 1; for (let e = el; e; e = e.parentElement) o *= parseFloat(getComputedStyle(e).opacity); return o; };
 
-  const worst = [];
-  let texts = 0, unmeasured = 0, below = 0, min = Infinity;
+  // Two groups, judged separately. Text (a text node with a letter or digit) needs 4.5:1, or 3:1 when large (WCAG 1.4.3).
+  // An icon glyph (a text node with no letter or digit, such as the star ☆) is a graphical object and needs 3:1 (WCAG 1.4.11).
+  // `worst` keeps one entry per element, foreground and background, with how many times it occurs: 1000 identical stars are one line.
+  const group = () => ({ n: 0, unmeasured: 0, below: 0, min: Infinity, seen: new Map() });
+  const text = group(), icon = group();
+  const own = el => [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join(' ').trim();
+  const finish = g => ({ n: g.n, unmeasured: g.unmeasured, below: g.below, min: Number.isFinite(g.min) ? g.min : null,
+    worst: [...g.seen.values()].sort((a, b) => a.cr - b.cr).slice(0, 5).map(w => ({ ...w, cr: +w.cr.toFixed(2) })) });
   cards.forEach(card => {
     [card, ...card.querySelectorAll('*')].forEach(el => {
-      if (![...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return;
+      const label = own(el);
+      if (!label) return;
       const cs = getComputedStyle(el), r = rect(el);
       if (cs.display === 'none' || cs.visibility === 'hidden' || r.width === 0 || r.height === 0) return;
-      texts++;
+      const g = /[\p{L}\p{N}]/u.test(label) ? text : icon;
+      g.n++;
       const bg = behind(el);
-      if (!bg) { unmeasured++; return; }
+      if (!bg) { g.unmeasured++; return; }
       const fg = rgba(cs.color), a = fg[3] * opacityOf(el);
       const ink = over([fg[0], fg[1], fg[2], a], [...bg, 1]);
       const cr = ratio(ink, bg);
       const size = parseFloat(cs.fontSize), bold = parseInt(cs.fontWeight, 10) >= 700;
-      const need = size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
-      if (cr < need) below++;
-      min = Math.min(min, cr);
-      worst.push({ cr, el: el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : ''),
-        text: el.textContent.trim().slice(0, 32), fg: ink.map(Math.round).join(','), bg: bg.map(Math.round).join(','), need });
+      const need = g === icon || size >= 24 || (size >= 18.66 && bold) ? 3 : 4.5;
+      if (cr < need) g.below++;
+      g.min = Math.min(g.min, cr);
+      const name = el.tagName.toLowerCase() + (el.className && typeof el.className === 'string' ? '.' + el.className.trim().split(/\s+/).join('.') : '');
+      const fgs = ink.map(Math.round).join(','), bgs = bg.map(Math.round).join(',');
+      const key = `${name}|${fgs}|${bgs}`, hit = g.seen.get(key);
+      if (hit) hit.count++; else g.seen.set(key, { cr, el: name, text: label.slice(0, 32), fg: fgs, bg: bgs, need, count: 1 });
     });
   });
-  worst.sort((a, b) => a.cr - b.cr);
+  const t = finish(text), i = finish(icon);
   return {
     cards: cards.length,
     hMin: cards.length ? Math.min(...hs) : null, hMax: cards.length ? Math.max(...hs) : null, rowSpread,
     innerWidth, scrollWidth: document.documentElement.scrollWidth,
     hScroll: document.documentElement.scrollWidth > innerWidth + 1,
-    contrast: { texts, unmeasured, belowAA: below, min: Number.isFinite(min) ? min : null, worst: worst.slice(0, 5).map(w => ({ ...w, cr: +w.cr.toFixed(2) })) },
+    // texts, unmeasured, belowAA, min and worst are text only; icons are reported apart so a glyph never lowers the text figures.
+    contrast: { texts: t.n, unmeasured: t.unmeasured, belowAA: t.below, min: t.min, worst: t.worst,
+      icons: { count: i.n, unmeasured: i.unmeasured, below3: i.below, min: i.min, worst: i.worst } },
   };
 }
 
@@ -138,7 +153,8 @@ function compare(beforeFile, afterFile) {
     const a = A.results[key], b = B.results[key];
     if (!b) { rows.push([key, '(missing in after)', '', '', '']); continue; }
     for (const [name, get] of [['cards', r => r.cards], ['card height min', r => r.hMin], ['card height max', r => r.hMax], ['row spread', r => r.rowSpread],
-      ['horizontal scroll', r => r.hScroll ? 'YES' : 'no'], ['contrast min', r => r.contrast.min], ['text below AA', r => r.contrast.belowAA], ['text unmeasured', r => r.contrast.unmeasured]]) {
+      ['horizontal scroll', r => r.hScroll ? 'YES' : 'no'], ['contrast min', r => r.contrast.min], ['text below AA', r => r.contrast.belowAA], ['text unmeasured', r => r.contrast.unmeasured],
+      ['icons below 3:1', r => r.contrast.icons?.below3], ['icon min', r => r.contrast.icons?.min]]) {
       const x = get(a), y = get(b);
       rows.push([key, name, typeof x === 'string' ? x : n(x), typeof y === 'string' ? y : n(y), String(x) === String(y) ? '' : 'changed']);
     }
@@ -193,7 +209,8 @@ function compare(beforeFile, afterFile) {
       }
       const r = results[key];
       console.log(`${o.label} ${key}: cards ${r.cards}, height ${r.hMin}..${r.hMax}, rowSpread ${r.rowSpread}, scrollW ${r.scrollWidth}/${r.innerWidth}${r.hScroll ? ' HORIZONTAL SCROLL' : ''}, ` +
-        `contrast min ${r.contrast.min == null ? '-' : r.contrast.min.toFixed(2)}${r.contrast.worst[0] ? ` (${r.contrast.worst[0].el})` : ''}, below AA ${r.contrast.belowAA}/${r.contrast.texts} (unmeasured ${r.contrast.unmeasured}) -> ${stem}.png`);
+        `text contrast min ${r.contrast.min == null ? '-' : r.contrast.min.toFixed(2)}${r.contrast.worst[0] ? ` (${r.contrast.worst[0].el})` : ''}, below AA ${r.contrast.belowAA}/${r.contrast.texts} (unmeasured ${r.contrast.unmeasured}); ` +
+        `icons min ${r.contrast.icons.min == null ? '-' : r.contrast.icons.min.toFixed(2)}${r.contrast.icons.worst[0] ? ` (${r.contrast.icons.worst[0].el})` : ''}, below 3:1 ${r.contrast.icons.below3}/${r.contrast.icons.count} (unmeasured ${r.contrast.icons.unmeasured}) -> ${stem}.png`);
     } catch (e) {
       results[key] = { error: String(e.message).split('\n')[0] };
       console.error(`${o.label} ${key}: FAILED ${results[key].error}`);
