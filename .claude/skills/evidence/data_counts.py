@@ -11,7 +11,7 @@ temporary tree a build wrote). --path (repeatable) is the part of the tree to co
 (items 2 and 3 below) appear only when it takes in public/data/programs. --count FIELD (repeatable)
 adds a table of that profile field over every public/data/programs/<slug>.json, before and after.
 
-It prints Markdown, ready to paste into the PR:
+It prints Markdown, ready to paste into a report or PR description:
   1. files added, removed and changed, per folder;
   2. for the program profiles that changed (programs/index.json is not one): how many changed in each top-level field
      (--ignore skips fields, `_build` by default, that change on every build; a profile that differs only there is

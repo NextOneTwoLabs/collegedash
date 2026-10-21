@@ -5,7 +5,7 @@ description: Produce the before/after evidence a PR needs. For a visible change,
 
 # Before/after evidence
 
-A PR is ready for the owner only when its evidence is posted (see "Review exit rule" in `CLAUDE.md`). "It looks fine" is not evidence. This skill gives you two tools: `shots.js` for what a reader sees, and `data_counts.py` for what the data now holds. Pick the one that matches the change; use both when a change does both.
+A PR is ready for the owner only when its description carries the evidence (see "Review exit rule" in `CLAUDE.md`). "It looks fine" is not evidence. This skill gives you two tools: `shots.js` for what a reader sees, and `data_counts.py` for what the data now holds. Pick the one that matches the change; use both when a change does both.
 
 Do the `setup` skill first (it checks that Playwright can start Chromium). Keep every output file in your session scratchpad, never in the worktree.
 
@@ -34,7 +34,7 @@ What one run produces, per width (default 1280 and 390) and theme (light and dar
 
 - `LABEL-WIDTH-THEME.png`: a screenshot of the page after the cards have rendered.
 - `LABEL.json`: the measurements. Per view: card count, card height min and max, the largest height spread inside one row (`rowSpread`), horizontal scroll (page `scrollWidth` against the window), and contrast inside the cards (WCAG ratio of every element's text colour against the colour behind it). Text (a text node with a letter or digit) is judged at AA: 4.5, or 3 for large text, and reported as `min`, `belowAA` and `worst`. An icon glyph (a text node with no letter or digit, such as the card's star) is judged at 3:1 (WCAG 1.4.11) and reported on its own, under `contrast.icons` (`count`, `below3`, `min`, `worst`), so an icon never changes the text figures. `worst` lists the lowest ratios once per element, foreground and background, with a `count` of how often it occurs. Anything over a gradient or image is counted as `unmeasured`, never guessed.
-- `--compare` prints the two JSON files as a Markdown table with the changed rows marked. Paste it in the PR.
+- `--compare` prints the two JSON files as a Markdown table with the changed rows marked. Paste it in your report.
 
 Options (all in the header of `shots.js`):
 
@@ -54,7 +54,7 @@ Options (all in the header of `shots.js`):
 - **Card heights.** Cards in one grid row should stay equal; `rowSpread` above 0 is a layout change worth explaining. Compare min and max before and after.
 - **Horizontal scroll.** `hScroll` must be `no` at 390 px on both. A `YES` that appears only on the branch is a regression.
 - **Contrast.** Needed only where colours change, but it is cheap, so read the row anyway. Compare the text rows (`contrast min`, `text below AA`) and the icon rows (`icons below 3:1`, `icon min`) between main and the branch: a count that goes up is a regression; one that is the same is not yours, but name it. Text and icons are separate figures because WCAG asks 4.5:1 of text and only 3:1 of an icon. A count that is the same on both sides can still be a real failure that was there before: read `worst` in the JSON (one entry per element and colour pair, with how many times it occurs) to see which elements they are before calling a number good or bad. The card's star is the known case; it is tracked in #511.
-- **The Inter font cannot load in this sandbox.** The page falls back to another font, so text is wider than in production. That makes the widths worst-case, and it is the same on main and on the branch, so the comparison holds. Say so in the PR instead of presenting the screenshot as pixel-exact.
+- **The Inter font cannot load in this sandbox.** The page falls back to another font, so text is wider than in production. That makes the widths worst-case, and it is the same on main and on the branch, so the comparison holds. Say so in your report instead of presenting the screenshot as pixel-exact.
 - **A card or value that only appears under some data.** Use `--card SLUG` for a card that has it, and say which slug.
 - If a view fails (the cards never appear), the run writes `LABEL-WIDTH-THEME-FAILED.png`, records the error in the JSON and exits 1. Look at that screenshot before you do anything else; it is usually a server on the wrong port or a script error on the page.
 
@@ -73,7 +73,7 @@ python3 .claude/skills/evidence/data_counts.py --after <dir with the repo layout
 python3 .claude/skills/evidence/data_counts.py --count division --count roster --count commitments
 ```
 
-It prints Markdown for the PR:
+It prints Markdown for your report (and from there the PR description):
 
 1. files added, removed and changed per folder under `public/data` (`--path` narrows it; `--depth` sets the folder depth);
 2. for the program profiles that changed (`programs/index.json` is not one): how many changed in each top-level field. `_build` is left out of the field table, since it changes on every build, and the profiles that differ only there are counted on their own line (add `--ignore FIELD` for other fields);
@@ -85,6 +85,8 @@ Use `--before` and `--after` with a revision or a directory. When the change is 
 
 The counts describe one tree on one day. They belong in the PR description. A test must never pin them on live published data, because the next data refresh changes them (#508). Pin exact counts only on frozen fixtures in `tests/`.
 
-## What to post on the PR
+## What to put in your report
 
-For a visible change: the `--compare` table, the screenshots (attach the files, or link them), two or three sentences on what changed and what did not, and the Node and Playwright versions from `--check`. For a data change: the `data_counts.py` output and the command line that made it. Say which parts you could not measure (for example "contrast unmeasured on the gradient band").
+You do not open the PR; the coordinator does, after a Reviewer approves, and puts your evidence in the PR description. So the report carries everything the description needs.
+
+For a visible change: the `--compare` table, the screenshot file paths (the coordinator attaches them), two or three sentences on what changed and what did not, and the Node and Playwright versions from `--check`. For a data change: the `data_counts.py` output and the command line that made it. Say which parts you could not measure (for example "contrast unmeasured on the gradient band").

@@ -33,11 +33,11 @@ The script reads the Python version, Node version and pip install line from `tes
 
 1. `--install` fetches Node 24 from npm into `~/.cache/collegedash/node24` (no root, no nvm). `run-tests` finds it there on its own.
 2. Or put any other Node 24 first on `PATH`.
-3. If only an older Node is available, you can still run the tests, but **say which version ran** in the PR and in your report ("Node 22.22.0, CI uses 24"). A green run on an older Node does not prove CI is green, and a red one may not be real. Known Node 22 behaviour is in the `run-tests` skill.
+3. If only an older Node is available, you can still run the tests, but **say which version ran** in your report ("Node 22.22.0, CI uses 24"). A green run on an older Node does not prove CI is green, and a red one may not be real. Known Node 22 behaviour is in the `run-tests` skill.
 
 ## Browser (for the `evidence` skill)
 
-The last line of the report checks that Playwright can start Chromium. Playwright resolves from `PLAYWRIGHT_PATH`, then `require('playwright')`, then `/opt/node-tools/node_modules/playwright`; browsers come from `PLAYWRIGHT_BROWSERS_PATH`. If the line says MISSING, the evidence skill cannot take screenshots here: say so on the PR instead of skipping the evidence silently.
+The last line of the report checks that Playwright can start Chromium. Playwright resolves from `PLAYWRIGHT_PATH`, then `require('playwright')`, then `/opt/node-tools/node_modules/playwright`; browsers come from `PLAYWRIGHT_BROWSERS_PATH`. If the line says MISSING, the evidence skill cannot take screenshots here: say so in your report instead of skipping the evidence silently.
 
 ## Next
 

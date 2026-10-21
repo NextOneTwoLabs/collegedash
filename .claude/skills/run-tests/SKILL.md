@@ -41,7 +41,7 @@ step                                          result    checks  floor    time
 ran on: Python 3.12.3 (CI 3.12); Node v24.x (CI 24)
 ```
 
-- `checks` is the count the runner reported. `floor` is CI's `--min-checks` for that step. Paste the table and the `ran on` line into your report and the PR. A result that does not say which versions ran is not evidence.
+- `checks` is the count the runner reported. `floor` is CI's `--min-checks` for that step. Paste the table and the `ran on` line into your report; it goes into the PR description. A result that does not say which versions ran is not evidence.
 - If `ran on` says `DIFFERS`, the result is not CI's. Say so next to the numbers.
 - Exit code: `0` every step passed; `1` something failed; `2` only timing tests failed under load and then passed alone (see below). Anything but `0` needs an explanation in the report.
 - Each step is judged separately, as in CI: an early failure does not stop the later steps.
