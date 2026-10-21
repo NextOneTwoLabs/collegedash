@@ -26,7 +26,6 @@ sys.path.insert(0, ROOT)
 os.environ.setdefault("COLLEGEDASH_OFFLINE", "1")
 
 from collect import common  # noqa: E402
-from collect import robots as R  # noqa: E402
 
 HOST = "athletics.example.test"
 TIMEOUT = 10.0
@@ -113,13 +112,17 @@ def test_explicit_check_without_a_reset():
         return
     ok("... with the RFC verdict, and records nothing for it", got is False and not common._robots_counts,
        (got, dict(common._robots_counts)))
-    real = R.Robots.allowed
-    R.Robots.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
+    # Reached through common (which imports the resolver as rfc9309), not imported here: collect/robots.py is newer than
+    # the #419 fix, so a module-level import would stop ROBOTS_LOCK_TEST_ROOT from running this suite on the code
+    # before it (an ImportError, instead of the deadlock shown as failing checks).
+    resolver = common.rfc9309.Robots
+    real = resolver.allowed
+    resolver.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
     try:
         never_reset("off")
         done, got = within_timeout(lambda: common.robots_allowed(f"https://{HOST}/a.pdf"))
     finally:
-        R.Robots.allowed = real
+        resolver.allowed = real
     ok("robots_allowed() returns on a never-reset report when no verdict can be reached", done,
        f"still blocked after {TIMEOUT:.0f}s")
     if done:
