@@ -4,7 +4,7 @@
     python3 .claude/skills/evidence/data_counts.py                       # origin/main -> HEAD, under public/data
     python3 .claude/skills/evidence/data_counts.py --before a83a32086~5 --after a83a32086
     python3 .claude/skills/evidence/data_counts.py --after DIR          # DIR = a checkout or a build output laid out like the repo
-    python3 .claude/skills/evidence/data_counts.py --path programs --count division --count roster --count commitments
+    python3 .claude/skills/evidence/data_counts.py --count division --count roster --count commitments
 
 --before and --after each take a git revision, or a directory that has the repository's layout (a worktree, or the
 temporary tree a build wrote). --path (repeatable) is the part of the tree to compare. --count FIELD (repeatable)
