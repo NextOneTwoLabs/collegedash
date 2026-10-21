@@ -1,8 +1,15 @@
 // Issue #416: commitments are collected for COMMIT_DIVISIONS (D1) only (#315), and the Commits column says "Not
-// collected" outside it (#414). Fifteen D2/D3 programs still carry one or two commits SoccerWire happened to list, and
+// collected" outside it (#414). Some D2/D3 programs still carry one or two commits SoccerWire happened to list, and
 // their cards and profiles show that count - so the card and the column disagreed. Wherever a card or profile shows a
 // count for a program outside COMMIT_DIVISIONS it now says "partial: not systematically collected", decided by the
 // column's own commitsCollected. The sections themselves stay (per program, never by division: #94).
+//
+// How many programs those are is a fact about the live data, and a routine refresh moves it (it was fifteen, then
+// sixteen: #508). So nothing here pins that number, or names one of those programs: a commit leaves with its class
+// (build.py tracks a window of graduating classes), so any name goes stale. The setup test checks rules about the live
+// index (at least one such program, one of them with a commit listed on its profile, every one of them a D2 or D3
+// program), the card and column tests loop over whichever programs there are, and the profile and Compare tests render
+// the first one whose profile lists a commit.
 //
 // Also (Huatuo, non-blocking on #431): a raw conference key such as "D2|Independent" never reaches rendered HTML.
 //
@@ -13,6 +20,8 @@
 //
 // COMMITS_PARTIAL_TEST_HTML (optional) points at another copy of index.html, so the page from before this change can
 // be run through these same checks to show them failing.
+// COMMITS_PARTIAL_TEST_PUBLIC (optional) points at another copy of public/, so the checks can be run on an index with
+// one more or one fewer program outside D1 carrying commits (the proof for #508) without touching the real data.
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -21,7 +30,7 @@ import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
-const PUBLIC = path.join(HERE, '..', 'public');
+const PUBLIC = path.resolve(process.env.COMMITS_PARTIAL_TEST_PUBLIC || path.join(HERE, '..', 'public'));
 const HTML = process.env.COMMITS_PARTIAL_TEST_HTML || path.join(PUBLIC, 'index.html');
 const PAGE = fs.readFileSync(HTML, 'utf8');
 const INDEX = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8'));
@@ -30,6 +39,10 @@ const hasCommits = p => Object.keys(p.commitmentsByYear || {}).length > 0;
 const PARTIAL = INDEX.programs.filter(p => p.division !== 'D1' && hasCommits(p));
 const D1_WITH = INDEX.programs.filter(p => p.division === 'D1' && hasCommits(p));
 const hasProfile = p => fs.existsSync(path.join(PUBLIC, 'data', 'programs', `${p.slug}.json`));
+const profileOf = p => { try { return JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', `${p.slug}.json`), 'utf8')); } catch { return null; } };
+// The program the profile and Compare tests render: the first one outside D1 whose profile lists a commit (#508).
+const SAMPLE = PARTIAL.find(p => (profileOf(p)?.commitments || []).length > 0);
+const sample = () => { assert.ok(SAMPLE, 'fixture: no program outside D1 has a commit listed on its profile'); return SAMPLE.slug; };
 
 function loadPage() {
   const el = name => ({ _name: name, innerHTML: '', textContent: '', value: '', title: '', hidden: false, scrollTop: 0, dataset: {}, style: {},
@@ -75,10 +88,14 @@ const { sb, app, side, profile } = loadPage();
 const row = slug => sb.S.index.programs.find(p => p.slug === slug);
 const partialIn = html => html.includes('class="commits-partial');
 
-test('setup: fifteen programs outside D1 carry a count, carson-newman among them', async () => {
+// Rules about the live index, never its size (#508): the count of programs outside D1 that carry commits changes with
+// the data refresh, so the checks below hold for any number of them from one up.
+test('setup: some programs outside D1 carry a count (a rule, not a number), one with its commit listed on its profile, all of them D2 or D3', async () => {
   await sb.loadIndex();
-  assert.equal(PARTIAL.length, 15, `fixture: ${PARTIAL.length} programs outside D1 carry commits`);
-  assert.ok(PARTIAL.some(p => p.slug === 'carson-newman'));
+  assert.ok(PARTIAL.length >= 1, 'fixture: at least one program outside D1 should carry commits, or these tests check nothing');
+  sample();
+  const odd = PARTIAL.filter(p => p.division !== 'D2' && p.division !== 'D3').map(p => `${p.slug} (${p.division})`);
+  assert.deepEqual(odd, [], 'fixture: every program counted as outside D1 should be a D2 or D3 program, not one with no division');
   assert.ok(D1_WITH.length > 100);
 });
 
@@ -86,7 +103,7 @@ test('setup: fifteen programs outside D1 carry a count, carson-newman among them
 // "partial" note has no card to sit on. The cards are checked sorted by Commits with a class highlighted - the state
 // in which #465 E put the count on them - and carry neither a count nor the note.
 const sortedByCommits = fn => { const was = [sb.S.filters.sort, sb.S.filters.classYear]; sb.S.filters.sort = 'commits'; sb.S.filters.classYear = ['2027']; try { return fn(); } finally { [sb.S.filters.sort, sb.S.filters.classYear] = was; } };
-test('cards: none of the fifteen, and no D1 card with commits, shows a commit count or the "partial" note', () => sortedByCommits(() => {
+test('cards: none of the programs outside D1 that carry commits, and no D1 card with commits, shows a commit count or the "partial" note', () => sortedByCommits(() => {
   for (const p of [...PARTIAL, ...D1_WITH]) {
     const html = sb.cardHtml(row(p.slug));
     assert.ok(!partialIn(html), `${p.slug}: the card carries the partial note`);
@@ -95,27 +112,28 @@ test('cards: none of the fifteen, and no D1 card with commits, shows a commit co
 }));
 
 test('the Commits column keeps saying Not collected; the card shows no commits to disagree with it', () => {
-  const cn = row('carson-newman');
+  const cn = row(sample());
   assert.match(sb.tableHtml([cn]), /<span class="sr-only">Not collected<\/span>/, 'the column says Not collected');
   assert.ok(!sortedByCommits(() => partialIn(sb.cardHtml(cn))), 'the card shows commits');
   const fn = /const commitsPartial = \(p, short = false\) => ([^\n]*)/.exec(PAGE)?.[1] || '';
   assert.match(fn, /^commitsCollected\(p\)/, 'the note does not use the column\'s commitsCollected');
 });
 
-test('profile (carson-newman): the glance, the overview tile, the Commitments tab and Compare carry the note; the section stays', async () => {
-  sb.location.hash = '#/p/carson-newman';
-  await sb.renderProfile('carson-newman');
+test('profile (a program outside D1 with a listed commit): the glance, the overview tile, the Commitments tab and Compare carry the note; the section stays', async () => {
+  const slug = sample();
+  sb.location.hash = `#/p/${slug}`;
+  await sb.renderProfile(slug);
   const html = profile();
   assert.ok((html.match(/class="commits-partial/g) || []).length >= 2, 'the glance panel and the overview tile should both carry the note');
   assert.ok(html.includes(`(${NOTE})`));
-  assert.ok(html.includes('href="#/p/carson-newman/commitments"'), 'GUARD (#94): the Commitments tab is still offered');
-  await sb.renderProfile('carson-newman', 'commitments');
+  assert.ok(html.includes(`href="#/p/${slug}/commitments"`), 'GUARD (#94): the Commitments tab is still offered');
+  await sb.renderProfile(slug, 'commitments');
   assert.match(profile(), new RegExp(`\\(${NOTE}\\)</span> Commitments are collected for Division I programs only`), 'the Commitments tab\'s note');
   const d1 = D1_WITH.find(hasProfile);
-  sb.S.compare = ['carson-newman', d1.slug];
+  sb.S.compare = [slug, d1.slug];
   await sb.renderCompare();
   const cmp = app();
-  assert.equal((cmp.match(/class="commits-partial/g) || []).length, 1, 'Compare: exactly the carson-newman cell carries the note');
+  assert.equal((cmp.match(/class="commits-partial/g) || []).length, 1, `Compare: exactly the ${slug} cell carries the note`);
 });
 
 test('GUARD: a D1 program with commits carries no note on its profile', async () => {
