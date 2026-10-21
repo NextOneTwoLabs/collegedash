@@ -5,7 +5,7 @@ description: Run every check suite the way CI runs it, with the commands and --m
 
 # Run the tests like CI
 
-The commands and the `--min-checks` floors live in `.github/workflows/tests.yml`. This skill never copies them: `ci_tests.py` reads the workflow each time it runs, so when someone raises a floor or adds a step, you get it with no edit here. Do the `setup` skill first, so Python 3.12 and Node 24 are the ones that run.
+The commands and the `--min-checks` floors live in `.github/workflows/tests.yml`. This skill never copies them: `ci_tests.py` reads the workflow each time it runs, so when someone raises a floor or adds a step, you get it with no edit here. Do the `setup` skill first, so the Python and Node versions in `.github/workflows/tests.yml` are the ones that run.
 
 ```
 # CD_VENV=<the venv the setup skill reported> in front of each command; leave it out if you used the default location
@@ -52,7 +52,7 @@ ran on: Python 3.12.3 (CI 3.12); Node v24.x (CI 24)
 
 Each one is named in the output when it happens. None of them lowers a floor or edits `tests.yml`.
 
-1. **Node older than 24 says "no tests".** Node 22 and 23 write junit without file names, so `run_node_suites.py` reports `reported 0 passing` or `reported no tests`. `ci_tests.py` then runs the same glob and network-guard preload directly with `node --test` and judges that run by its own `# pass` and `# fail` lines and the floor. The note on the row says so. Prefer Node 24 (setup fetches it) and the quirk never appears. By hand: `node --import ./tests/netguard/netguard.mjs --test --test-reporter=tap "tests/**/*.test.mjs"`.
+1. **An older Node than CI's says "no tests".** Older Node releases (22 and 23 here) write junit without file names, so `run_node_suites.py` reports `reported 0 passing` or `reported no tests`. `ci_tests.py` then runs the same glob and network-guard preload directly with `node --test` and judges that run by its own `# pass` and `# fail` lines and the floor. The note on the row says so. Prefer the Node version CI uses (setup fetches it) and the quirk never appears. By hand: `node --import ./tests/netguard/netguard.mjs --test --test-reporter=tap "tests/**/*.test.mjs"`.
 2. **`tests/recs_perf.test.mjs` measures milliseconds and fails when the machine is busy.** It passes in CI. When it is the only thing that failed, `ci_tests.py` reruns it alone: pass alone marks the row `TIMING` (exit 2), not `FAIL`. If it fails alone too, give `--main DIR` a clean checkout of `origin/main` (`git worktree add <scratchpad>/main origin/main`) and the same command is run there; failing on main as well means the machine, not your change. Without `--main` it stays `FAIL`. Do not run other heavy work (a second suite, screenshots) at the same time.
 3. **More than 10 minutes.** See "Run it in the background".
 

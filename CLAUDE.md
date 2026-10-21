@@ -29,7 +29,7 @@ Three skills live in `.claude/skills/`; use them instead of improvising:
 
 | skill | use it to |
 | --- | --- |
-| `setup` | match CI's Python 3.12 and Node 24 in your worktree, once per session |
+| `setup` | match CI's Python and Node versions (from `.github/workflows/tests.yml`) in your worktree, once per session |
 | `run-tests` | run every suite exactly as `.github/workflows/tests.yml` does, with its commands and `--min-checks` floors read from the workflow, and report which Python and Node ran |
 | `evidence` | before/after screenshots and measurements for a visible change; before/after counts for a data change |
 

@@ -14,7 +14,7 @@ Models change only at task boundaries: a running agent keeps its model, so the c
 - Work only on the issue you were assigned, in your own git worktree and branch.
 - Risky work starts with a written plan on the issue. Write no code until a reviewer (Bianque or Huatuo) approves it.
 - Write the failing test first and show it failing on main, then make it pass.
-- Do the `setup` skill once per session, so Python 3.12 and Node 24 are the ones that run. Run targeted tests while working, and the full suites once before pushing and again after any merge of main, with the `run-tests` skill: it reads the commands and `--min-checks` floors from `.github/workflows/tests.yml`, so they cannot go stale here.
+- Do the `setup` skill once per session, so the Python and Node versions in `.github/workflows/tests.yml` are the ones that run. Run targeted tests while working, and the full suites once before pushing and again after any merge of main, with the `run-tests` skill: it reads the commands and `--min-checks` floors from `.github/workflows/tests.yml`, so they cannot go stale here.
 - For a change a reader would see, or a change to published data, put the before/after evidence (paths and measurements, from the `evidence` skill) in your report so it goes into the PR description. You do not open the PR: the coordinator does, after a Reviewer approves.
 - Report what you changed, the test that fails on main, the `run-tests` table with its `ran on` line, the evidence, and the branch and commit SHAs. Don't claim anything you haven't run.
 
