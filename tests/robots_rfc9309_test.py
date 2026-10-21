@@ -1,5 +1,5 @@
 """The RFC 9309 robots.txt resolver (issue #87): every row of the approved matrix, plus the camps keep rule and, since
-#501, the check that the urllib.robotparser comparison (the "shadow diff") is gone.
+#501, the Z rows: the urllib.robotparser comparison (the "shadow diff") is gone.
 
     python tests/robots_rfc9309_test.py            # offline: robots.txt is seeded, or served by a fake session
     python tests/robots_rfc9309_test.py --verbose  # print every check, not only the failures
@@ -7,7 +7,8 @@
 The spec is the plan on issue #87, revisions 2, 3 and 3.1 (approved by Huatuo), with the owner's decisions of
 2026-10-09 (all as recommended). Each check is named by its matrix row. F rows fail on the code before #87
 (urllib.robotparser); G rows are guards that passed before and must keep passing; N rows are new checks with no
-before (the step bounds, the camps keep rule, the removed comparison). ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
+before (the step bounds, the camps keep rule). The Z rows (#501, the removed comparison) are tagged against the code
+before #501 instead: F rows fail on it, G rows pass on it. ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
 at another checkout, so the code from before the change can be run through these same checks to show the F rows
 failing.
 
@@ -22,7 +23,9 @@ import contextlib
 import copy
 import json
 import os
+import shutil
 import sys
+import tempfile
 import time
 
 ROOT = os.environ.get("ROBOTS_RFC9309_TEST_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -412,10 +415,12 @@ def test_loader() -> None:
 
 
 # ---------- no urllib.robotparser comparison (issue #501) ----------
-# #87 compared the resolver with urllib.robotparser for 3 scheduled refreshes. It ran for 7 and found nothing newly
-# blocked and no errors; the owner approved removing it on 2026-10-16. R1-R3 pin what is left: the stdlib parser is
-# never touched, the report has no resolverDiff, and the counters #496 moved to the top level of
-# refresh-state.robots are still there.
+# #87 compared the resolver with urllib.robotparser on every scheduled refresh from 2026-10-10 until #501 removed it
+# (meant for 3; the first 7 are reported on #501, and the 11 committed through 2026-10-20 all found one newly allowed
+# path, nothing newly blocked, and no errors). The owner approved removing it on 2026-10-16. Z1-Z3 pin what is left:
+# the stdlib parser is never touched, the report has no resolverDiff (and a refresh drops one an earlier run left in
+# refresh-state.json), and the counters #496 moved to the top level of refresh-state.robots are still there.
+# Unlike the rows above, F and G here are against the code before #501: F fails on it, G passes on it.
 
 @contextlib.contextmanager
 def robotparser_spy():
@@ -439,22 +444,45 @@ def robotparser_spy():
             setattr(cls, n, real[n])
 
 
-def refresh_state_robots(rep: dict) -> dict:
-    """What a refresh writes to refresh-state.robots for this report (collegedash.report_robots), captured, not saved."""
+# What a refresh-state.json looked like while the diff ran: a robots entry with a resolverDiff, beside another entry.
+# Frozen test data (not read from the published file); the values only have to be there to be dropped.
+OLD_ROBOTS_ENTRY = {
+    "mode": "report", "at": "2026-10-20T16:08:16Z", "hostsChecked": 3, "requestsChecked": 9,
+    "resolverErrors": 0, "explicitResolverErrors": 0, "truncatedHosts": 0, "truncatedRules": 0,
+    "resolverDiff": {
+        "comparedWith": "urllib.robotparser (shadow diff for 3 scheduled runs, owner decision 2 on #87)",
+        "newlyAllowed": 1, "newlyBlocked": 0, "comparisonErrors": 0,
+        "topHosts": [{"host": "old.example", "newlyAllowed": 1, "newlyBlocked": 0}],
+        "samplePaths": [{"host": "old.example", "path": "/!/dn/login", "site": "camps.page", "check": "explicit",
+                         "change": "newlyAllowed"}],
+    },
+}
+OLD_OTHER_ENTRY = {"ok": True, "at": "2026-10-20T16:00:00Z", "count": 3}
+
+
+def refresh_state_after(rep: dict) -> tuple[dict, dict]:
+    """(before, after): a temp refresh-state.json that already holds OLD_ROBOTS_ENTRY and another entry, and the same
+    file once collegedash.report_robots(rep) has written this report to it, as a refresh does. Nothing real is touched."""
     import collegedash
-    written, real = {}, common.update_refresh_state
-    common.update_refresh_state = lambda key, info: written.__setitem__(key, copy.deepcopy(info))
+    tmp = tempfile.mkdtemp()
+    path = os.path.join(tmp, "refresh-state.json")
+    before = {"robots": copy.deepcopy(OLD_ROBOTS_ENTRY), "athletics.roster": dict(OLD_OTHER_ENTRY),
+              "updated": "2026-10-20T16:09:00Z"}
+    common.write_json(path, copy.deepcopy(before))
+    real_path = common.REFRESH_STATE_PATH
+    common.REFRESH_STATE_PATH = path
     try:
         with env(GITHUB_ACTIONS=None):  # no step summary written from a test run inside CI
             collegedash.report_robots(rep)
+        return before, common.read_json(path, {})
     finally:
-        common.update_refresh_state = real
-    return written["robots"]
+        common.REFRESH_STATE_PATH = real_path
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
-@guarded("R")
+@guarded("Z")
 def test_no_comparison() -> None:
-    print("R1-R3: no urllib.robotparser comparison (issue #501): never called, no resolverDiff, the counters stay")
+    print("Z1-Z3: no urllib.robotparser comparison (issue #501): never called, no resolverDiff, the counters stay")
     saved_cache, real_allowed = dict(common._robots), R.Robots.allowed
     common._robots.clear()
     try:
@@ -466,17 +494,17 @@ def test_no_comparison() -> None:
             with env(COLLEGEDASH_ROBOTS="report"):
                 hook = common._robots_check(url("/b.pdf"))
             # every state the loader can fetch a robots.txt in
-            with served("r1.example", _Resp(200, T1_BODY)):
-                loaded = common.robots_allowed(url("/z", "r1.example"))
-            with served("r1b.example", _Resp(404)):
-                missing = common.robots_allowed(url("/x", "r1b.example"))
-            with served("r1c.example", _Resp(503)):
-                failing = common.robots_allowed(url("/x", "r1c.example"))
-            with served("r1d.example", requests.ConnectionError("down")):
-                down = common.robots_allowed(url("/x", "r1d.example"))
+            with served("z1.example", _Resp(200, T1_BODY)):
+                loaded = common.robots_allowed(url("/z", "z1.example"))
+            with served("z1b.example", _Resp(404)):
+                missing = common.robots_allowed(url("/x", "z1b.example"))
+            with served("z1c.example", _Resp(503)):
+                failing = common.robots_allowed(url("/x", "z1c.example"))
+            with served("z1d.example", requests.ConnectionError("down")):
+                down = common.robots_allowed(url("/x", "z1d.example"))
             # one robots.txt over 500 KiB and one pattern over 4096 octets, for the truncation counters
-            seed(T1_BODY.decode(), "r1big.example")
-            seed(STAR + "Disallow: /" + "a" * 6000 + "\n", "r1long.example")
+            seed(T1_BODY.decode(), "z1big.example")
+            seed(STAR + "Disallow: /" + "a" * 6000 + "\n", "z1long.example")
             # one resolver error through the explicit check and one through the hook
             common.reset_robots_report()
             R.Robots.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
@@ -487,22 +515,26 @@ def test_no_comparison() -> None:
             finally:
                 R.Robots.allowed = real_allowed
             rep = common.robots_report(elapsed_seconds=1, workers=1)
-            entry = refresh_state_robots(rep)
-        ok("R1 the verdicts are still the resolver's", (explicit, hook, loaded, missing, failing, down, denied, hook_err)
+            before, after = refresh_state_after(rep)
+        entry = after.get("robots", {})
+        ok("Z1 (G) the verdicts are still the resolver's", (explicit, hook, loaded, missing, failing, down, denied, hook_err)
            == (False, HOST, True, True, False, False, False, HOST),
            (explicit, hook, loaded, missing, failing, down, denied, hook_err))
-        ok("R1 urllib.robotparser is never called (seeded, fetched, explicit, hook)", calls == [], calls)
-        ok("R1 collect.common no longer imports it", not hasattr(common, "robotparser"))
-        ok("R2 the report has no resolverDiff", "resolverDiff" not in rep, sorted(rep))
-        ok("R2 ... and neither has the refresh-state entry a refresh writes", "resolverDiff" not in entry, sorted(entry))
+        ok("Z1 (F) urllib.robotparser is never called (seeded, fetched, explicit, hook)", calls == [], calls)
+        ok("Z1 (F) collect.common no longer imports it", not hasattr(common, "robotparser"))
+        ok("Z2 (F) the report has no resolverDiff", "resolverDiff" not in rep, sorted(rep))
+        ok("Z2 (F) a refresh-state that held a resolverDiff has none once a refresh writes its robots entry",
+           "resolverDiff" in before["robots"] and "resolverDiff" not in entry, sorted(entry))
+        ok("Z2 (G) ... and the other entries in the file are untouched", after.get("athletics.roster") == OLD_OTHER_ENTRY,
+           after.get("athletics.roster"))
         text = json.dumps(entry)
-        ok("R2 ... and nothing in it names the comparison",
+        ok("Z2 (F) ... and nothing in the written entry names the comparison",
            not any(w in text for w in ("robotparser", "newlyAllowed", "newlyBlocked", "comparisonErrors", "comparedWith")))
-        ok("R3 truncatedHosts stays at the top level", entry.get("truncatedHosts") == 1, entry.get("truncatedHosts"))
-        ok("R3 truncatedRules stays at the top level", entry.get("truncatedRules") == 1, entry.get("truncatedRules"))
-        ok("R3 explicitResolverErrors stays at the top level", entry.get("explicitResolverErrors") == 1,
+        ok("Z3 (G) truncatedHosts stays at the top level", entry.get("truncatedHosts") == 1, entry.get("truncatedHosts"))
+        ok("Z3 (G) truncatedRules stays at the top level", entry.get("truncatedRules") == 1, entry.get("truncatedRules"))
+        ok("Z3 (G) explicitResolverErrors stays at the top level", entry.get("explicitResolverErrors") == 1,
            entry.get("explicitResolverErrors"))
-        ok("R3 resolverErrors stays at the top level", entry.get("resolverErrors") == 1, entry.get("resolverErrors"))
+        ok("Z3 (G) resolverErrors stays at the top level", entry.get("resolverErrors") == 1, entry.get("resolverErrors"))
     finally:
         R.Robots.allowed = real_allowed
         common._robots.clear()
