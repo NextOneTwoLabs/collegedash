@@ -1,0 +1,3541 @@
+{
+ "schema": "collegedash-judged-draft-1",
+ "about": "Draft judged query set for CollegeDash universal search (issue #507), the equivalent of ECNLDash #149 phase 1 PR 1 (#156). Judgements are facts from the published data and proposed owner decisions (C01-C19), never engine output. Draft: not yet frozen, not yet in the repo.",
+ "context": {
+  "dataAsOf": "2026-10-20T16:09:38Z",
+  "dataCommit": "a83a320860e78f3cc5bbcb9bca31b80de59d457b",
+  "codeCommit": "df9417725519a2f359c02e2636a5d00b6d7b62a7",
+  "now": "2026-10-20T16:09:38Z",
+  "timeZone": "America/Los_Angeles (proposed; see C15)",
+  "todayRun": "today.mjs ran the page's own matcher (public/index.html inline script) in a vm on 2026-10-21 machine time: the ID Camps list held 80 camps, not the 81 of 2026-10-20 (hope-college's 2026-10-20 camp had passed). A frozen clock is required before any camp count is pinned.",
+  "source": "/home/user/collegedash/public/data (programs/index.json, programs/<slug>.json, camps/index.json, commitments/index.json, fit/index.json)"
+ },
+ "groups": [
+  "school-names",
+  "typos",
+  "nicknames",
+  "conferences",
+  "collisions",
+  "division-place",
+  "places",
+  "people",
+  "camps",
+  "attributes",
+  "edge"
+ ],
+ "sections": {
+  "proposed": [
+   "programs",
+   "lists",
+   "conferences",
+   "camps",
+   "people"
+  ],
+  "meaning": {
+   "programs": "one program row, opens #/p/<slug>",
+   "lists": "a filtered Programs list row (division, region, state, conditions), opens #/programs?...",
+   "conferences": "a conference row, opens #/c/<name>",
+   "camps": "an upcoming ID camp row",
+   "people": "a coach or player row, opens their program"
+  }
+ },
+ "stability": {
+  "frozen": "registry facts: names, searchNames, nicknames, division, conference, city/state, colours. Change only by a reviewed registry edit. May carry top (exact first).",
+  "slow": "College Scorecard and NOAA figures (asOf 2026-09): enrollment, tuition, admission, climate. Judged on a frozen fixture; counts quoted are as of dataAsOf.",
+  "live": "coaches, rosters, commitments, camps, RPI: refreshed daily. mustShow/mustNever/first only, never top or counts, unless run on a frozen fixture (ECNL MF10)."
+ },
+ "refKinds": {
+  "program": "slug in programs/index.json",
+  "conference": "{division, name} as stored in programs/index.json",
+  "list": "filter state, in the page vocabulary where it exists (division, region, conf, cond as COND_FIELDS, sort: public/index.html:1261, :3581); state, city, color, snow, religiousAffiliation are new facets",
+  "camp": "{slug, name, startDate} in camps/index.json",
+  "coach": "{name, program} in programs/<slug>.json program.coaches",
+  "player": "{name, program, source: commitments|roster|rosterHistory}",
+  "empty": "an empty or help state with a reason",
+  "notice": "a word the box could not apply, named back to the reader (never silently dropped)"
+ },
+ "decisions": {
+  "C01": "Section order follows the strongest reading of the query (as ECNL D1/D2); default programs, lists, conferences, camps, people.",
+  "C02": "\"small\" = under 5,000 undergraduates (recs size band lt5k, public/recs.js:46; fit constants.sizeBands[0]).",
+  "C03": "\"under 30k\" = the page's Tuition condition (out-of-state, else in-state; public/index.html:1268): 79 small D3 programs. Alternatives: cost of attendance (36) or net price (305).",
+  "C04": "\"warm\" = fall average high above 80F (the Ask eval's climate-warm, tests/fixtures/ask/eval.json:983).",
+  "C05": "Conference abbreviations and brand names (B1G, Big 10, CCAA, NESCAC, UAA, GLIAC, Pac 12) come from a cited alias table built by the refresh, like registry searchAliases; a conference means its current members only.",
+  "C06": "\"blue\" = a school colour (first or second) whose hue is blue, derived from the hex in programs/index.json by the refresh. A program with blue only as its second colour (syracuse) is allowed, never required.",
+  "C07": "Words every program shares (\"soccer\", \"women's\", \"college\" when typed with a name) and \"the\" never empty a result; \"st\" and \"saint\" are the same word (as the camps search, public/index.html:4385).",
+  "C08": "One name shared by several programs: all show; proposed D1 before D2 before D3 within equal matches.",
+  "C09": "A word that is both a conference and a program name (MAC, American, Metro, New England): both rows show; the owner picks which section leads.",
+  "C10": "\"New England\" = the data's Northeast region (CT, MA, ME, NH, RI, VT; public/data/fit/index.json constants.regions).",
+  "C11": "A two-letter capitals code is a state (#404, public/index.html:1077); the owner decides whether LA also (or instead) means Los Angeles, as ECNL decided (D3), and whether an exact program alias (NE) leads.",
+  "C12": "Cities: programs named after the city, then programs in it; whether nearby cities (Cambridge for Boston, Evanston for Chicago) show, labelled nearby, is the owner's call (ECNL D2 used the county).",
+  "C13": "People: a current roster or enrolled record leads; a different person with the same name is a separate row; an earlier verbal or an earlier school is labelled, never hidden, never first.",
+  "C14": "\"near <city>\" = programs within a radius of the city by school lat/lon; the radius is the owner's (the judged refs hold for any radius from 60 to 300 miles).",
+  "C15": "Dates are read against a frozen clock and zone: \"december\" = the next December (2026-12), \"this weekend\" = the coming Saturday and Sunday.",
+  "C16": "\"snow\" = fit climate cold (coldest-month mean below 27F) or a NOAA annual snowfall figure; a program with neither is unknown and never listed as snowy or snow-free. The snowfall cut-off is the owner's.",
+  "C17": "A word with no data behind it (majors: \"psychology\") is named back (\"not in CollegeDash's data\") and the rest is labelled partial, never silently dropped (ECNL not-ignored, D4).",
+  "C18": "Religious affiliation needs a code-to-name table (the data holds Scorecard codes only; none is in the repo).",
+  "C19": "Very broad queries (university, college, a single letter) show a capped first slate fast; the draw cost is the phone budget, not the search."
+ },
+ "queries": [
+  {
+   "id": "S01",
+   "group": "school-names",
+   "q": "unc",
+   "intent": "school by initials",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "north-carolina"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "unc-wilmington"
+    },
+    {
+     "program": "unc-greensboro"
+    },
+    {
+     "program": "unc-asheville"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "north-carolina"
+     }
+    ]
+   },
+   "why": "UNC is a cited registry alias of north-carolina (registry searchAliases, #309); UNC Wilmington, Greensboro and Asheville follow as short-name prefixes.",
+   "cites": [
+    "public/data/programs/index.json:1852 (north-carolina searchNames holds \"UNC\")",
+    "tests/search_short_forms.test.mjs:73"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 4,
+    "top": [
+     "north-carolina:95(UNC)",
+     "unc-wilmington:90",
+     "unc-greensboro:90",
+     "unc-asheville:90"
+    ]
+   }
+  },
+  {
+   "id": "S02",
+   "group": "school-names",
+   "q": "cal",
+   "intent": "school by its common short name",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "california"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "cal-poly"
+    },
+    {
+     "program": "cal-state-fullerton"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "california"
+     }
+    ]
+   },
+   "why": "\"Cal\" is california's cited alias. 34 programs start with \"cal\" (Cal Poly, Cal State Fullerton, California Baptist...).",
+   "cites": [
+    "public/data/programs/index.json:6230",
+    "public/index.html:1141 (a short-name prefix returns 90 before the alias loop at :1145-1155, so today Cal ties Cal Poly and Cal State Fullerton at 90 and wins only on index order)"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 34,
+    "top": [
+     "california:90",
+     "cal-state-fullerton:90",
+     "cal-poly:90",
+     "csu-bakersfield:90",
+     "california-baptist:90",
+     "csun:90"
+    ],
+    "note": "california first, but only by index order (tie at 90 with Cal Poly, Cal State Fullerton...)"
+   }
+  },
+  {
+   "id": "S03",
+   "group": "school-names",
+   "q": "st johns",
+   "intent": "school by short name without punctuation",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "st-johns"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "st-johns"
+     }
+    ]
+   },
+   "why": "St. John's (NY) carries \"St Johns\" and \"Saint Johns\" as search names.",
+   "cites": [
+    "public/data/programs/index.json:35252"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 1,
+    "top": [
+     "st-johns:95(St Johns)"
+    ]
+   }
+  },
+  {
+   "id": "S04",
+   "group": "school-names",
+   "q": "uconn",
+   "intent": "school by nickname-style short name",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "connecticut"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "connecticut"
+     }
+    ]
+   },
+   "why": "UConn is the short name of connecticut.",
+   "cites": [
+    "public/data/programs/index.json:5947"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 1,
+    "top": [
+     "connecticut:100"
+    ]
+   }
+  },
+  {
+   "id": "S05",
+   "group": "school-names",
+   "q": "ole miss",
+   "intent": "school by its common name",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "mississippi"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "southern-mississippi"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "mississippi"
+     }
+    ]
+   },
+   "why": "Ole Miss is the short name of mississippi (University of Mississippi).",
+   "today": {
+    "box": "answers",
+    "n": 1,
+    "top": [
+     "mississippi:100"
+    ]
+   }
+  },
+  {
+   "id": "S06",
+   "group": "school-names",
+   "q": "university of michigan",
+   "intent": "school by full name",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "michigan"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "michigan"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "michigan"
+     }
+    ]
+   },
+   "why": "Full official name of michigan; Michigan State, Central/Eastern/Western Michigan are other schools.",
+   "today": {
+    "box": "answers",
+    "n": 1,
+    "top": [
+     "michigan:95(University of Michigan)"
+    ]
+   }
+  },
+  {
+   "id": "S07",
+   "group": "school-names",
+   "q": "penn state",
+   "intent": "school by short name with campuses",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "penn-state"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "penn-state-berks"
+    },
+    {
+     "program": "penn-state-behrend"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "penn"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "penn-state"
+     }
+    ]
+   },
+   "why": "penn-state (D1, Big Ten) first; the six D3 Penn State campuses (Abington, Altoona, Behrend, Berks, Brandywine, Harrisburg) follow.",
+   "today": {
+    "box": "answers",
+    "n": 7,
+    "top": [
+     "penn-state:100",
+     "penn-state-altoona:90",
+     "penn-state-harrisburg:90",
+     "penn-state-berks:90",
+     "penn-state-abington:90",
+     "penn-state-brandywine:90"
+    ]
+   }
+  },
+  {
+   "id": "S09",
+   "group": "school-names",
+   "q": "stanford soccer",
+   "intent": "school plus a word every program shares",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "stanford"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "stanford"
+     }
+    ]
+   },
+   "decision": [
+    "C07"
+   ],
+   "why": "Every CollegeDash program is women's soccer, so \"soccer\" (and \"women's\") must not empty the result: stanford first.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y01",
+   "group": "typos",
+   "q": "standford",
+   "intent": "misspelled school (one extra letter)",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "stanford"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "stanford"
+     }
+    ]
+   },
+   "why": "One inserted letter from \"stanford\"; no program is named \"standford\".",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y02",
+   "group": "typos",
+   "q": "georgtown",
+   "intent": "misspelled school (one missing letter)",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "georgetown"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "georgetown"
+     }
+    ]
+   },
+   "why": "One letter dropped from Georgetown (D1, Big East).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y03",
+   "group": "typos",
+   "q": "vilanova",
+   "intent": "misspelled school",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "villanova"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "villanova"
+     }
+    ]
+   },
+   "why": "One letter dropped from Villanova (D1, Big East).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y04",
+   "group": "typos",
+   "q": "mizou",
+   "intent": "misspelled alias",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "missouri"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "missouri"
+     }
+    ]
+   },
+   "why": "One letter from the cited alias \"Mizzou\" of missouri.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y06",
+   "group": "typos",
+   "q": "william and mary",
+   "intent": "\"and\" typed for \"&\"",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "william-mary"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "william-jewell-college"
+    },
+    {
+     "program": "mary-washington"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "william-mary"
+     }
+    ]
+   },
+   "why": "Official name College of William & Mary; normText drops \"&\", so \"and\" is the only unmatched word.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y07",
+   "group": "typos",
+   "q": "umass boston",
+   "intent": "common short form missing from the data",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "massachusetts-boston"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "massachusetts-boston"
+     }
+    ]
+   },
+   "why": "massachusetts-boston (D3) has searchNames \"Massachusetts Boston\" and its full name only; \"UMass\" is massachusetts's short name. Never UMass Amherst first.",
+   "cites": [
+    "public/data/programs/index.json:74354"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "Y08",
+   "group": "typos",
+   "q": "the ohio state university",
+   "intent": "full name with a leading \"the\"",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "ohio-state"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "ohio-university"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "ohio-state"
+     }
+    ]
+   },
+   "why": "ohio-state's searchNames are Ohio State, Ohio State University, Ohio St., OSU; the leading \"the\" must not empty the result.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "K01",
+   "group": "nicknames",
+   "q": "tar heels",
+   "intent": "nickname",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "north-carolina"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "north-carolina"
+     }
+    ]
+   },
+   "why": "Tar Heels is north-carolina's nickname, and only its.",
+   "today": {
+    "box": "answers",
+    "n": 1,
+    "top": [
+     "north-carolina:30(Tar Heels)"
+    ]
+   }
+  },
+  {
+   "id": "K02",
+   "group": "nicknames",
+   "q": "nittany lions",
+   "intent": "nickname shared by campuses",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "penn-state"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "penn-state"
+    },
+    {
+     "program": "penn-state-berks"
+    },
+    {
+     "program": "penn-state-abington"
+    }
+   ],
+   "decision": [
+    "C08"
+   ],
+   "why": "Three programs are the Nittany Lions: penn-state (D1), penn-state-berks and penn-state-abington (D3). Proposed: D1 flagship first.",
+   "today": {
+    "box": "answers",
+    "n": 3,
+    "top": [
+     "penn-state:30(Nittany Lions)",
+     "penn-state-berks:30(Nittany Lions)",
+     "penn-state-abington:30(Nittany Lions)"
+    ],
+    "note": "the three Nittany Lions, penn-state first"
+   }
+  },
+  {
+   "id": "K04",
+   "group": "nicknames",
+   "q": "cardinal",
+   "intent": "nickname, singular vs plural",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "stanford"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "louisville"
+    },
+    {
+     "program": "wesleyan-ct"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "stanford"
+     }
+    ]
+   },
+   "why": "Stanford is the Cardinal (exact); 15 more are Cardinals (Louisville, Ball State, Incarnate Word, Wesleyan...). Exact before plural.",
+   "today": {
+    "box": "answers",
+    "n": 16,
+    "top": [
+     "stanford:30(Cardinal)",
+     "louisville:30(Cardinals)",
+     "ball-state:30(Cardinals)",
+     "lamar:30(Lady Cardinals)",
+     "incarnate-word:30(Cardinals)",
+     "saginaw-valley-state:30(Cardinals)"
+    ],
+    "note": "stanford first, then the 15 Cardinals"
+   }
+  },
+  {
+   "id": "K05",
+   "group": "nicknames",
+   "q": "michigan wolverines",
+   "intent": "school plus nickname",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "michigan"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "michigan-state"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "michigan"
+     }
+    ]
+   },
+   "why": "Name and nickname of michigan together. Never Michigan State (Spartans) first.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "K06",
+   "group": "nicknames",
+   "q": "bulldogs",
+   "intent": "nickname shared by many",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "georgia"
+    },
+    {
+     "program": "gonzaga"
+    },
+    {
+     "program": "mississippi-state"
+    },
+    {
+     "program": "samford"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "georgia"
+    },
+    {
+     "program": "gonzaga"
+    },
+    {
+     "program": "mississippi-state"
+    }
+   ],
+   "why": "27 programs are Bulldogs (one of the help chips, public/index.html:2566). No single right first; any Bulldogs program is useful.",
+   "cites": [
+    "public/index.html:2566"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 27,
+    "top": [
+     "mississippi-state:30(Bulldogs)",
+     "georgia:30(Bulldogs)",
+     "samford:30(Bulldogs)",
+     "gonzaga:30(Bulldogs)",
+     "drake:30(Bulldogs)",
+     "butler:30(Bulldogs)"
+    ],
+    "note": "27 Bulldogs"
+   }
+  },
+  {
+   "id": "C01",
+   "group": "conferences",
+   "q": "big ten",
+   "intent": "conference by name",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Big Ten"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Big Ten"
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Big 12"
+     }
+    },
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Big East"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D1",
+       "name": "Big Ten"
+      }
+     }
+    ]
+   },
+   "why": "Big Ten (D1, 18 programs today incl. ucla, usc, oregon, washington). Never Big 12, Big East, Big Sky, Big South or Big West first.",
+   "elsewhere": "Sidebar conference pill, or #/c/Big%20Ten (public/index.html:5617).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C02",
+   "group": "conferences",
+   "q": "b1g",
+   "intent": "conference by brand alias",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Big Ten"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D1",
+       "name": "Big Ten"
+      }
+     }
+    ]
+   },
+   "decision": [
+    "C05"
+   ],
+   "why": "B1G is the Big Ten's brand mark; the Ask prompt already maps it (worker.js:356, eval case alias-big-10). Needs a cited conference alias table.",
+   "cites": [
+    "worker.js:356",
+    "tests/fixtures/ask/eval.json:36"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C03",
+   "group": "conferences",
+   "q": "wcc",
+   "intent": "conference by abbreviation",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "WCC"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "WCC"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D1",
+       "name": "WCC"
+      }
+     }
+    ]
+   },
+   "why": "WCC is stored as \"WCC\" (D1, 10 programs: denver, loyola-marymount, pacific, pepperdine, portland, saint-mary-s, san-diego, san-francisco, santa-clara, seattle). Gonzaga is Pac-12 in the data: never as a WCC member.",
+   "cites": [
+    "tests/fixtures/ask/eval.json:131"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C04",
+   "group": "conferences",
+   "q": "ccaa",
+   "intent": "D2 conference by abbreviation",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D2",
+      "name": "California Collegiate Athletic Association"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D2",
+       "name": "California Collegiate Athletic Association"
+      }
+     }
+    ]
+   },
+   "decision": [
+    "C05"
+   ],
+   "why": "Stored only by its full name (14 D2 programs, e.g. san-francisco-state, california-state-los-angeles). No abbreviation is in the data: not found; the alias must be added (cited).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C05",
+   "group": "conferences",
+   "q": "nescac",
+   "intent": "D3 conference by abbreviation",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D3",
+      "name": "New England Small College Athletic Conference"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D3",
+       "name": "New England Small College Athletic Conference"
+      }
+     }
+    ]
+   },
+   "decision": [
+    "C05"
+   ],
+   "why": "11 D3 programs (amherst-college, williams-college, tufts, middlebury-college...). Abbreviation not in the data.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C06",
+   "group": "conferences",
+   "q": "ivy league",
+   "intent": "conference by name",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Ivy League"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D1",
+       "name": "Ivy League"
+      }
+     }
+    ]
+   },
+   "why": "Ivy League, 8 D1 programs (brown, columbia, cornell, dartmouth, harvard, penn, princeton, yale).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C07",
+   "group": "conferences",
+   "q": "pac 12",
+   "intent": "conference, current members only",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Pac-12"
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "stanford",
+     "asMember": "Pac-12"
+    },
+    {
+     "program": "ucla",
+     "asMember": "Pac-12"
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D1",
+       "name": "Pac-12"
+      }
+     }
+    ]
+   },
+   "decision": [
+    "C05"
+   ],
+   "why": "Pac-12 in the data is the rebuilt conference (9: boise-state, colorado-state, fresno-state, gonzaga, oregon-state, san-diego-state, texas-state, utah-state, washington-state). Former members (stanford, california: ACC; ucla, usc, oregon, washington: Big Ten) are never Pac-12 rows.",
+   "cites": [
+    "tests/fixtures/ask/eval.json:101"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "C08",
+   "group": "conferences",
+   "q": "uaa",
+   "intent": "D3 conference by abbreviation",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D3",
+      "name": "University Athletic Association"
+     }
+    }
+   ],
+   "top": {
+    "conferences": [
+     {
+      "conference": {
+       "division": "D3",
+       "name": "University Athletic Association"
+      }
+     }
+    ]
+   },
+   "decision": [
+    "C05"
+   ],
+   "why": "University Athletic Association (D3, 8: brandeis, carnegie-mellon, case-western-reserve, chicago, emory, new-york, rochester, washington-st-louis). Abbreviation not in the data.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "X01",
+   "group": "collisions",
+   "q": "mac",
+   "intent": "conference vs a program alias vs a name prefix",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "MAC"
+     }
+    },
+    {
+     "program": "mount-aloysius-college"
+    }
+   ],
+   "mustShow": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "MAC"
+     }
+    },
+    {
+     "program": "mount-aloysius-college"
+    },
+    {
+     "program": "macalester-college"
+    }
+   ],
+   "decision": [
+    "C09"
+   ],
+   "why": "\"MAC\" is both the D1 conference (12: akron, ball-state, buffalo, miami-oh...) and an exact search name of mount-aloysius-college (D3). Macalester and Randolph-Macon are prefixes. Which comes first is an owner decision; both must show.",
+   "cites": [
+    "public/data/programs/index.json:75487"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 5,
+    "top": [
+     "mount-aloysius-college:95(MAC)",
+     "macalester-college:90",
+     "randolph-macon-college:80",
+     "immaculata:30(Mighty Macs)",
+     "yeshiva:30(Maccabees)"
+    ],
+    "note": "mount-aloysius-college first by its \"MAC\" alias; no conference row"
+   }
+  },
+  {
+   "id": "X02",
+   "group": "collisions",
+   "q": "american",
+   "intent": "program vs conference vs prefix",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "conferences"
+   ],
+   "first": [
+    {
+     "program": "american"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "american"
+    },
+    {
+     "conference": {
+      "division": "D1",
+      "name": "American"
+     }
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "american"
+     }
+    ]
+   },
+   "decision": [
+    "C09"
+   ],
+   "why": "American University (D1, Patriot) is an exact short name; \"American\" is also a D1 conference (11: charlotte, rice, temple...); America East is a different conference. Program first, the conference shown too.",
+   "today": {
+    "box": "partial",
+    "n": 2,
+    "top": [
+     "american:100",
+     "american-international-college:90"
+    ],
+    "note": "american first; no conference row"
+   }
+  },
+  {
+   "id": "X03",
+   "group": "collisions",
+   "q": "metro",
+   "intent": "conference vs a program prefix",
+   "stability": "frozen",
+   "sections": [
+    "conferences",
+    "programs"
+   ],
+   "first": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Metro"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "conference": {
+      "division": "D1",
+      "name": "Metro"
+     }
+    },
+    {
+     "program": "metropolitan-state-denver"
+    }
+   ],
+   "decision": [
+    "C09"
+   ],
+   "why": "Metro is a D1 conference stored as \"Metro\" (13: canisius, fairfield, iona-university, marist, quinnipiac...). metropolitan-state-denver (D2) only starts with \"metro\": shown, after.",
+   "today": {
+    "box": "partial",
+    "n": 1,
+    "top": [
+     "metropolitan-state-denver:90"
+    ],
+    "note": "metropolitan-state-denver only; no conference row"
+   }
+  },
+  {
+   "id": "X04",
+   "group": "collisions",
+   "q": "new england",
+   "intent": "region vs a program name",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "new-england"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "new-england"
+    },
+    {
+     "program": "new-england-college"
+    },
+    {
+     "program": "western-new-england"
+    },
+    {
+     "list": {
+      "region": [
+       "Northeast"
+      ]
+     }
+    }
+   ],
+   "decision": [
+    "C09",
+    "C10"
+   ],
+   "why": "University of New England (D3, Biddeford ME) is the exact search name; New England is also the region the data calls Northeast (CT, MA, ME, NH, RI, VT: 104 programs, 70 of them D3). Program first, then a list row for the region.",
+   "cites": [
+    "public/data/programs/index.json:76116",
+    "public/data/fit/index.json:1 (constants.regions.Northeast)"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 3,
+    "top": [
+     "new-england:90",
+     "new-england-college:90",
+     "western-new-england:80"
+    ],
+    "note": "shows the three New England-named programs; no region list"
+   }
+  },
+  {
+   "id": "X05",
+   "group": "collisions",
+   "q": "LA",
+   "intent": "state code vs city abbreviation",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "state": [
+       "LA"
+      ]
+     }
+    },
+    {
+     "list": {
+      "city": [
+       "Los Angeles, CA"
+      ]
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "la-salle"
+    },
+    {
+     "program": "lafayette"
+    }
+   ],
+   "decision": [
+    "C11"
+   ],
+   "why": "Typed in capitals, #404's rule makes LA Louisiana (public/index.html:1077-1079); families also mean Los Angeles (ucla, usc, loyola-marymount, occidental-college, california-state-los-angeles). Owner decides; La Salle, Lamar, Lafayette (name prefixes) must never come before both readings.",
+   "cites": [
+    "public/index.html:1077"
+   ],
+   "today": {
+    "box": "wrong",
+    "n": 54,
+    "top": [
+     "la-salle:90",
+     "lamar:90",
+     "lafayette:90",
+     "lake-erie-college:90",
+     "lander:90",
+     "la-roche:90"
+    ],
+    "note": "54 results: name and nickname prefixes first (La Salle, Lamar, Lafayette; \"Lady ...\" nicknames); Louisiana's 11 programs are scattered from row 17 to 54 (LSU at 50, as a place hit); never Los Angeles"
+   }
+  },
+  {
+   "id": "X06",
+   "group": "collisions",
+   "q": "NE",
+   "intent": "state code vs a program alias",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "new-england"
+    },
+    {
+     "list": {
+      "state": [
+       "NE"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "new-england"
+    },
+    {
+     "program": "nebraska"
+    },
+    {
+     "program": "creighton"
+    }
+   ],
+   "decision": [
+    "C11"
+   ],
+   "why": "\"NE\" is an exact search name of new-england and, in capitals, Nebraska's code (6: creighton, nebraska, nebraska-kearney, nebraska-wesleyan, omaha, wayne-state-college-ne). Both must show; today every program starting \"ne\" (Nebraska, New Mexico, New Hampshire...) scores 90 first.",
+   "cites": [
+    "public/data/programs/index.json:76116"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 52,
+    "top": [
+     "nebraska:90",
+     "new-mexico:90",
+     "new-hampshire:90",
+     "new-mexico-state:90",
+     "nevada:90",
+     "new-haven:90"
+    ],
+    "note": "52 results: every program starting \"ne\" scores 90 (Nebraska, New Mexico, New Hampshire...), so nebraska is first by prefix, not as the state; new-england (exact alias \"NE\") is not first"
+   }
+  },
+  {
+   "id": "X07",
+   "group": "collisions",
+   "q": "columbia",
+   "intent": "school vs city",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "columbia"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "south-carolina"
+    },
+    {
+     "program": "missouri"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "columbia"
+     }
+    ]
+   },
+   "why": "Columbia (D1, Ivy, New York NY) is the exact name; Columbia SC (south-carolina, allen) and Columbia MO (missouri) are cities with programs: after, labelled by place.",
+   "today": {
+    "box": "answers",
+    "n": 4,
+    "top": [
+     "columbia:100",
+     "south-carolina:20(Columbia, SC)",
+     "missouri:20(Columbia, MO)",
+     "allen:20(Columbia, SC)"
+    ]
+   }
+  },
+  {
+   "id": "X08",
+   "group": "collisions",
+   "q": "miami",
+   "intent": "two schools named Miami plus a city",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "miami-fl"
+    },
+    {
+     "program": "miami-oh"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "miami-fl"
+    },
+    {
+     "program": "miami-oh"
+    },
+    {
+     "program": "florida-international"
+    },
+    {
+     "program": "barry"
+    }
+   ],
+   "why": "Miami (FL) in Coral Gables and Miami (OH) in Oxford are both \"Miami\" (an ambiguous form with no alias, tests/search_short_forms.test.mjs:114). florida-international and barry are in Miami city: after, by place.",
+   "cites": [
+    "tests/search_short_forms.test.mjs:114"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 4,
+    "top": [
+     "miami-fl:90",
+     "miami-oh:90",
+     "florida-international:20(Miami, FL)",
+     "barry:20(Miami, FL)"
+    ],
+    "note": "both Miamis first, then Miami city by place"
+   }
+  },
+  {
+   "id": "D01",
+   "group": "division-place",
+   "q": "d3 ohio",
+   "intent": "division plus state",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D3"
+      ],
+      "state": [
+       "OH"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "kenyon-college"
+    },
+    {
+     "program": "ohio-wesleyan"
+    },
+    {
+     "program": "ohio-northern"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "ohio-state"
+    },
+    {
+     "program": "ohio-dominican"
+    },
+    {
+     "program": "ohio-university"
+    }
+   ],
+   "why": "21 D3 programs in Ohio (kenyon-college, denison, ohio-wesleyan, case-western-reserve...). D3 and Ohio are hard filters: never ohio-state (D1) or ohio-dominican (D2).",
+   "elsewhere": "D3 pill plus typing \"Ohio\" in the box gives the same 21 (place search, public/index.html:1069-1118).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "D02",
+   "group": "division-place",
+   "q": "d1 california",
+   "intent": "division plus state (name collision)",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "state": [
+       "CA"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "stanford"
+    },
+    {
+     "program": "ucla"
+    },
+    {
+     "program": "california"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "california-state-los-angeles"
+    },
+    {
+     "program": "california-state-chico"
+    },
+    {
+     "program": "occidental-college"
+    }
+   ],
+   "why": "26 D1 programs in California. \"California\" is also Cal's short name: california (D1) belongs to the list, but the list, not the one program, is the answer. Never D2 CCAA or D3 SCIAC programs.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "note": "0 results"
+   }
+  },
+  {
+   "id": "D03",
+   "group": "division-place",
+   "q": "d2 florida",
+   "intent": "division plus state (name collision)",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D2"
+      ],
+      "state": [
+       "FL"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "tampa"
+    },
+    {
+     "program": "rollins-college"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "florida"
+    },
+    {
+     "program": "florida-state"
+    },
+    {
+     "program": "florida-atlantic"
+    }
+   ],
+   "why": "13 D2 programs in Florida (tampa, barry, rollins-college, lynn...). Never florida or florida-state (D1) although their names match.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "D04",
+   "group": "division-place",
+   "q": "d3 new england",
+   "intent": "division plus region",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D3"
+      ],
+      "region": [
+       "Northeast"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "williams-college"
+    },
+    {
+     "program": "mit"
+    },
+    {
+     "program": "new-england"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "new-york"
+    },
+    {
+     "program": "new-hampshire"
+    }
+   ],
+   "decision": [
+    "C10"
+   ],
+   "why": "70 D3 programs in CT, MA, ME, NH, RI and VT (the data's Northeast region). University of New England is one of them, not the answer.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "D05",
+   "group": "division-place",
+   "q": "d1 texas",
+   "intent": "division plus state (name collision)",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "state": [
+       "TX"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "texas"
+    },
+    {
+     "program": "tcu"
+    },
+    {
+     "program": "smu"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "st-marys-tx"
+    },
+    {
+     "program": "trinity-tx"
+    },
+    {
+     "program": "concordia-texas"
+    }
+   ],
+   "why": "24 D1 programs in Texas (texas, tcu, baylor, smu, rice...). Never D2/D3 Texas programs (st-marys-tx, trinity-tx, concordia-texas).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "D06",
+   "group": "division-place",
+   "q": "division 1 west",
+   "intent": "division words plus region",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "region": [
+       "West"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "stanford"
+    },
+    {
+     "program": "byu"
+    },
+    {
+     "program": "denver"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "western-michigan"
+    },
+    {
+     "program": "west-virginia"
+    },
+    {
+     "program": "westmont-college"
+    }
+   ],
+   "why": "62 D1 programs in the West region. \"Division 1\" and \"D1\" are the same fact.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "L01",
+   "group": "places",
+   "q": "boston",
+   "intent": "city",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "boston-university"
+    },
+    {
+     "program": "boston-college"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "northeastern"
+    },
+    {
+     "program": "emerson-college"
+    }
+   ],
+   "decision": [
+    "C12"
+   ],
+   "why": "Name hits first (boston-university, boston-college in Chestnut Hill, massachusetts-boston), then the programs in Boston itself (northeastern, emerson-college, emmanuel-college-ma, simmons, suffolk, wentworth-institute-technology). Cambridge (harvard, mit) and Medford (tufts) only as nearby, if the owner wants nearby.",
+   "today": {
+    "box": "answers",
+    "n": 9,
+    "top": [
+     "boston-university:90",
+     "boston-college:90",
+     "massachusetts-boston:80",
+     "northeastern:20(Boston, MA)",
+     "emerson-college:20(Boston, MA)",
+     "emmanuel-college-ma:20(Boston, MA)"
+    ],
+    "note": "names, then the 6 programs in Boston by place (no nearby)"
+   }
+  },
+  {
+   "id": "L02",
+   "group": "places",
+   "q": "texas",
+   "intent": "state name that is also a school",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "texas"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "tcu"
+    },
+    {
+     "program": "baylor"
+    },
+    {
+     "list": {
+      "state": [
+       "TX"
+      ]
+     }
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "texas"
+     }
+    ]
+   },
+   "why": "texas (UT Austin) exact short name first; names starting Texas next; then every program in TX (51 today).",
+   "today": {
+    "box": "answers",
+    "n": 51,
+    "top": [
+     "texas:100",
+     "texas-tech:90",
+     "texas-state:90",
+     "texas-am:90",
+     "texas-am-corpus-christi:90",
+     "texas-southern:90"
+    ],
+    "note": "texas first, then names, then the TX place hits"
+   }
+  },
+  {
+   "id": "L03",
+   "group": "places",
+   "q": "TX",
+   "intent": "state code in capitals",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "state": [
+       "TX"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "tcu"
+    },
+    {
+     "program": "baylor"
+    }
+   ],
+   "why": "TX in capitals is a state code (#404): the 51 programs in Texas. Today 49 come as place hits under two name hits (st-thomas-tx, trinity-tx, which are in Texas too).",
+   "cites": [
+    "public/index.html:1077"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 51,
+    "top": [
+     "st-thomas-tx:80",
+     "trinity-tx:80",
+     "tcu:20(in Texas)",
+     "baylor:20(in Texas)",
+     "texas-tech:20(in Texas)",
+     "texas-state:20(in Texas)"
+    ],
+    "note": "the 49 Texas programs, but two name hits (st-thomas-tx, trinity-tx) are put above the place list"
+   }
+  },
+  {
+   "id": "L04",
+   "group": "places",
+   "q": "new york",
+   "intent": "state vs city vs school",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "new-york"
+    },
+    {
+     "list": {
+      "state": [
+       "NY"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "new-york"
+    },
+    {
+     "program": "columbia"
+    },
+    {
+     "program": "syracuse"
+    }
+   ],
+   "decision": [
+    "C12"
+   ],
+   "why": "NYU's short name is \"New York\" (D3, UAA); New York is also a state (89 programs today) and a city (columbia, pace, city-college-new-york, yeshiva...). Owner decides the order; all three must be reachable.",
+   "cites": [
+    "public/data/programs/index.json:76353"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 89,
+    "top": [
+     "new-york:100",
+     "suny-brockport:80",
+     "suny-canton:80",
+     "city-college-new-york:80",
+     "suny-cobleskill:80",
+     "suny-cortland:80"
+    ],
+    "note": "new-york (NYU) first and the NY state programs as place hits; the city reading is mixed in with the state"
+   }
+  },
+  {
+   "id": "L05",
+   "group": "places",
+   "q": "chicago",
+   "intent": "city that is also a school",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "chicago"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "depaul"
+    },
+    {
+     "program": "uic"
+    },
+    {
+     "program": "loyola-chicago"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "chicago"
+     }
+    ]
+   },
+   "why": "UChicago (D3, UAA) is \"Chicago\"; the city also has depaul, loyola-chicago, uic, chicago-state, north-park, roosevelt, illinois-institute-technology. Northwestern (Evanston) is nearby at most.",
+   "today": {
+    "box": "answers",
+    "n": 9,
+    "top": [
+     "chicago:100",
+     "chicago-state:90",
+     "loyola-chicago:80",
+     "concordia-chicago:80",
+     "uic:60(University of Illinois Chicago)",
+     "depaul:20(Chicago, IL)"
+    ]
+   }
+  },
+  {
+   "id": "L06",
+   "group": "places",
+   "q": "philadelphia",
+   "intent": "city with no school of that name",
+   "stability": "frozen",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "city": [
+       "Philadelphia, PA"
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "penn"
+    },
+    {
+     "program": "temple"
+    },
+    {
+     "program": "drexel"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "penn-state"
+    }
+   ],
+   "why": "8 programs in Philadelphia (penn, temple, drexel, la-salle, saint-josephs, chestnut-hill-college, holy-family, thomas-jefferson).",
+   "today": {
+    "box": "answers",
+    "n": 8,
+    "top": [
+     "la-salle:20(Philadelphia, PA)",
+     "penn:20(Philadelphia, PA)",
+     "saint-josephs:20(Philadelphia, PA)",
+     "drexel:20(Philadelphia, PA)",
+     "temple:20(Philadelphia, PA)",
+     "chestnut-hill-college:20(Philadelphia, PA)"
+    ],
+    "note": "the 8 Philadelphia programs as place hits"
+   }
+  },
+  {
+   "id": "H01",
+   "group": "people",
+   "q": "erica dambach",
+   "intent": "head coach by full name",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "coach": {
+      "name": "Erica Dambach",
+      "program": "penn-state"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "coach": {
+      "name": "Erica Dambach",
+      "program": "penn-state"
+     }
+    }
+   ],
+   "why": "Head coach of penn-state (since 2007 in the index). Her row leads to the Penn State profile.",
+   "elsewhere": "Only by opening the Penn State profile; no search covers coaches.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "H03",
+   "group": "people",
+   "q": "anson dorrance",
+   "intent": "former coach still on a staff page",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "coach": {
+      "name": "Anson Dorrance",
+      "program": "north-carolina"
+     },
+     "label": "former"
+    }
+   ],
+   "mustShow": [
+    {
+     "coach": {
+      "name": "Anson Dorrance",
+      "program": "north-carolina"
+     },
+     "label": "former"
+    }
+   ],
+   "mustNever": [
+    {
+     "coach": {
+      "name": "Anson Dorrance",
+      "program": "north-carolina"
+     },
+     "label": "head coach"
+    }
+   ],
+   "why": "Listed on UNC's staff as \"Former Head Coach (1979-2024)\"; the current head coach is Damon Nahas. The row must say former.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "H04",
+   "group": "people",
+   "q": "waldrum",
+   "intent": "surname shared by two staff at one program",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "coach": {
+      "name": "Ben Waldrum",
+      "program": "pittsburgh"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "coach": {
+      "name": "Ben Waldrum",
+      "program": "pittsburgh"
+     }
+    },
+    {
+     "coach": {
+      "name": "Randy Waldrum",
+      "program": "pittsburgh"
+     }
+    }
+   ],
+   "why": "pittsburgh lists Ben Waldrum (Head Coach) and Randy Waldrum (Technical Director). Both show; the head coach first.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "H05",
+   "group": "people",
+   "q": "chris ducar",
+   "intent": "assistant coach",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "coach": {
+      "name": "Chris Ducar",
+      "program": "north-carolina"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "coach": {
+      "name": "Chris Ducar",
+      "program": "north-carolina"
+     }
+    }
+   ],
+   "why": "Assistant Coach/General Manager at north-carolina; only staff row with this name.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "R01",
+   "group": "people",
+   "q": "brooke volpp",
+   "intent": "committed player",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "player": {
+      "name": "Brooke Volpp",
+      "program": "stanford",
+      "source": "commitments"
+     },
+     "gradYear": 2027,
+     "status": "verbal"
+    }
+   ],
+   "mustShow": [
+    {
+     "player": {
+      "name": "Brooke Volpp",
+      "program": "stanford",
+      "source": "commitments"
+     }
+    }
+   ],
+   "why": "2027 verbal commit to stanford (GK, San Diego Surf, confirmed by two sources).",
+   "elsewhere": "Only in Stanford's Commits tab; no search covers players.",
+   "cites": [
+    "public/data/commitments/index.json:539"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "R02",
+   "group": "people",
+   "q": "landry gannon",
+   "intent": "committed player",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "player": {
+      "name": "Landry Gannon",
+      "program": "texas",
+      "source": "commitments"
+     },
+     "gradYear": 2027,
+     "status": "verbal"
+    }
+   ],
+   "mustShow": [
+    {
+     "player": {
+      "name": "Landry Gannon",
+      "program": "texas",
+      "source": "commitments"
+     }
+    }
+   ],
+   "why": "2027 verbal commit to texas (M, Solar Soccer Club).",
+   "cites": [
+    "public/data/commitments/index.json:69883"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "R03",
+   "group": "people",
+   "q": "alessandra munneke",
+   "intent": "player by the alias of her listed name",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "player": {
+      "name": "Ale Munneke",
+      "program": "stanford",
+      "source": "commitments"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "player": {
+      "name": "Ale Munneke",
+      "program": "stanford",
+      "source": "commitments"
+     }
+    }
+   ],
+   "why": "Listed as \"Ale Munneke\" with alias \"Alessandra Munneke\" (stanford, 2026, enrolled; on the 2026 roster).",
+   "cites": [
+    "public/data/commitments/index.json:328"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "R04",
+   "group": "people",
+   "q": "hailey smith",
+   "intent": "one name, more than one player and record",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "player": {
+      "name": "Hailey Smith",
+      "program": "baylor",
+      "source": "roster"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "player": {
+      "name": "Hailey Smith",
+      "program": "baylor",
+      "source": "roster"
+     }
+    },
+    {
+     "player": {
+      "name": "Hailey Smith",
+      "program": "howard",
+      "source": "roster"
+     }
+    }
+   ],
+   "decision": [
+    "C13"
+   ],
+   "why": "Three records: baylor (2026 roster, Fr. GK, St. John's FL; and an enrolled 2026 commit, Sporting Jax), iowa (a 2026 single-source verbal for the same club and id: an earlier commitment), and howard (a different Hailey Smith, So. F from Hayward CA). Baylor first; Howard shown as a separate person; Iowa only labelled as an earlier verbal.",
+   "cites": [
+    "public/data/commitments/index.json:8194",
+    "public/data/commitments/index.json:13124"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "R05",
+   "group": "people",
+   "q": "liya brooks",
+   "intent": "rostered player who transferred",
+   "stability": "live",
+   "sections": [
+    "people",
+    "programs"
+   ],
+   "first": [
+    {
+     "player": {
+      "name": "Liya Brooks",
+      "program": "north-carolina",
+      "source": "roster"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "player": {
+      "name": "Liya Brooks",
+      "program": "north-carolina",
+      "source": "roster"
+     }
+    },
+    {
+     "player": {
+      "name": "Liya Brooks",
+      "program": "washington-state",
+      "source": "rosterHistory"
+     },
+     "label": "earlier"
+    }
+   ],
+   "decision": [
+    "C13"
+   ],
+   "why": "On north-carolina's 2026 roster (R-Jr. GK); in washington-state's 2023 and 2024 rosterHistory. Current team first, the earlier one labelled.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "M01",
+   "group": "camps",
+   "q": "camps near denver",
+   "intent": "camps by distance from a city",
+   "stability": "live",
+   "sections": [
+    "camps"
+   ],
+   "first": [
+    {
+     "camp": {
+      "slug": "colorado-colorado-springs",
+      "name": "Elite ID Camp",
+      "startDate": "2026-10-24"
+     }
+    },
+    {
+     "camp": {
+      "slug": "colorado-state",
+      "name": "December ID Camp",
+      "startDate": "2026-12-13"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "camp": {
+      "slug": "colorado-colorado-springs",
+      "name": "Elite ID Camp",
+      "startDate": "2026-10-24"
+     }
+    },
+    {
+     "camp": {
+      "slug": "colorado-state",
+      "name": "December ID Camp",
+      "startDate": "2026-12-13"
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "camp": {
+      "slug": "utah-valley",
+      "name": "The Den College Summer ID Camp | December",
+      "startDate": "2026-12-05"
+     }
+    }
+   ],
+   "decision": [
+    "C14"
+   ],
+   "why": "No Denver program lists an upcoming ID camp; the two in Colorado are UCCS (Colorado Springs, about 59 mi) and Colorado State (Fort Collins, about 58 mi), by program lat/lon. Date order: UCCS first.",
+   "elsewhere": "ID Camps page box: \"colorado\" gives these 2; \"camps near denver\" and \"denver\" give 0.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "campsPageBox": {
+     "n": 0,
+     "of": 80,
+     "top": []
+    }
+   }
+  },
+  {
+   "id": "M02",
+   "group": "camps",
+   "q": "id camp december",
+   "intent": "camps by month",
+   "stability": "live",
+   "sections": [
+    "camps"
+   ],
+   "first": [
+    {
+     "camp": {
+      "slug": "randolph-macon-college",
+      "name": "December ID Camp",
+      "startDate": "2026-12"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "camp": {
+      "slug": "concordia-texas",
+      "name": "Elite Camp | December 13th",
+      "startDate": "2026-12-13"
+     }
+    },
+    {
+     "camp": {
+      "slug": "mcdaniel-college",
+      "name": "ID Clinic | December 19th",
+      "startDate": "2026-12-19"
+     }
+    },
+    {
+     "camp": {
+      "slug": "tiffin",
+      "name": "December ID Clinic | December 12th, 2026",
+      "startDate": "2026-12-12"
+     }
+    }
+   ],
+   "decision": [
+    "C15"
+   ],
+   "why": "17 upcoming ID camps start in December 2026 (randolph-macon-college month-only first, then by day). The page lists only ID camps, so \"id\" and \"camp\" are satisfied by the camp type: \"Elite Camp\" (concordia-texas) and the \"ID Clinic\"s (tiffin, mcdaniel-college, misericordia) belong. tiffin's December 2027 clinic only after them.",
+   "elsewhere": "ID Camps page box: 13 of the 17 (requires the words \"id\" and \"camp\" in the title).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "campsPageBox": {
+     "n": 13,
+     "of": 80,
+     "top": [
+      "randolph-macon-college|December ID Camp|2026-12",
+      "st-marys-tx|College ID Camp | December 5th|2026-12-05",
+      "northwest-nazarene|ID Camp | December 5th|2026-12-05",
+      "harding|ID Camp | December 5th (Ages 14 and Up)|2026-12-05"
+     ]
+    }
+   }
+  },
+  {
+   "id": "M03",
+   "group": "camps",
+   "q": "ucla id camp",
+   "intent": "one program's camps",
+   "stability": "live",
+   "sections": [
+    "camps",
+    "programs"
+   ],
+   "first": [
+    {
+     "camp": {
+      "slug": "ucla",
+      "name": "College ID Camp",
+      "startDate": "2027-01-17"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "camp": {
+      "slug": "ucla",
+      "name": "College ID Camp",
+      "startDate": "2027-01-17"
+     }
+    },
+    {
+     "program": "ucla"
+    }
+   ],
+   "why": "ucla's one upcoming ID camp (2027-01-17, $235).",
+   "elsewhere": "ID Camps page box: works (1 result).",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "campsPageBox": {
+     "n": 1,
+     "of": 80,
+     "top": [
+      "ucla|College ID Camp|2027-01-17"
+     ]
+    }
+   }
+  },
+  {
+   "id": "M04",
+   "group": "camps",
+   "q": "stanford camps",
+   "intent": "camps of a program that lists none",
+   "stability": "live",
+   "sections": [
+    "programs",
+    "camps"
+   ],
+   "first": [
+    {
+     "program": "stanford"
+    },
+    {
+     "empty": {
+      "reason": "no-upcoming-camps",
+      "program": "stanford"
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "camp": {
+      "slug": "ucla",
+      "name": "College ID Camp",
+      "startDate": "2027-01-17"
+     }
+    }
+   ],
+   "why": "camps/index.json has no Stanford camp: the answer is the program plus \"no upcoming ID camps listed\", never another school's camp.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "note": "0 results (\"camps\" is no name word); only the Stanford profile's Camps tab shows it has none",
+    "campsPageBox": {
+     "n": 0,
+     "of": 80,
+     "top": []
+    }
+   }
+  },
+  {
+   "id": "M05",
+   "group": "camps",
+   "q": "camps in ohio in november",
+   "intent": "camps by state and month, with filler words",
+   "stability": "live",
+   "sections": [
+    "camps"
+   ],
+   "first": [
+    {
+     "camp": {
+      "slug": "ashland",
+      "name": "2026 Women's Soccer ID Camp #4",
+      "startDate": "2026-11-01"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "camp": {
+      "slug": "walsh",
+      "name": "Fall ID Camp",
+      "startDate": "2026-11-08"
+     }
+    },
+    {
+     "camp": {
+      "slug": "denison",
+      "name": "One-Day ID Camp",
+      "startDate": "2026-11-29"
+     }
+    }
+   ],
+   "why": "5 Ohio ID camps in November 2026: ashland 11-01, walsh 11-08, malone 11-18, heidelberg 11-21, denison 11-29. \"camps\" and \"in\" must not empty it.",
+   "elsewhere": "ID Camps page box: \"ohio november\" gives these 5; \"camps in ohio in november\" gives 0.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "campsPageBox": {
+     "n": 0,
+     "of": 80,
+     "top": []
+    }
+   }
+  },
+  {
+   "id": "M06",
+   "group": "camps",
+   "q": "id camps this weekend",
+   "intent": "camps by a date relative to now",
+   "stability": "live",
+   "sections": [
+    "camps"
+   ],
+   "first": [
+    {
+     "camp": {
+      "slug": "colorado-colorado-springs",
+      "name": "Elite ID Camp",
+      "startDate": "2026-10-24"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "camp": {
+      "slug": "brown",
+      "name": "Bears Elite ID Clinic | October 25th",
+      "startDate": "2026-10-25"
+     }
+    },
+    {
+     "camp": {
+      "slug": "wesleyan-ct",
+      "name": "Wesleyan Soccer ID Clinic",
+      "startDate": "2026-10-25"
+     }
+    }
+   ],
+   "decision": [
+    "C15"
+   ],
+   "why": "With the frozen clock (Tue 2026-10-20), this weekend is Sat 10-24 to Sun 10-25: colorado-colorado-springs (10-24), then brown, albany, hood-college, neumann, wesleyan-ct (10-25).",
+   "elsewhere": "ID Camps sidebar \"when\" filter; the box gives 0.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": [],
+    "campsPageBox": {
+     "n": 0,
+     "of": 80,
+     "top": []
+    }
+   }
+  },
+  {
+   "id": "A01",
+   "group": "attributes",
+   "q": "d1 blue snow psychology",
+   "intent": "owner's real query: division, colour, climate, major",
+   "stability": "slow",
+   "sections": [
+    "lists",
+    "programs"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "color": [
+       "blue"
+      ],
+      "snow": true,
+      "label": "partial"
+     }
+    },
+    {
+     "notice": {
+      "term": "psychology",
+      "reason": "not-in-data"
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "buffalo"
+    },
+    {
+     "program": "canisius"
+    },
+    {
+     "program": "notre-dame"
+    },
+    {
+     "program": "marquette"
+    },
+    {
+     "notice": {
+      "term": "psychology",
+      "reason": "not-in-data"
+     }
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "florida"
+    },
+    {
+     "program": "ucla"
+    },
+    {
+     "program": "vermont"
+    },
+    {
+     "program": "minnesota"
+    },
+    {
+     "program": "rochester"
+    }
+   ],
+   "decision": [
+    "C06",
+    "C16",
+    "C17",
+    "C07"
+   ],
+   "why": "D1, blue and snow are hard filters the data can answer (colours are hex in programs/index.json; snow from NOAA annualSnowIn, 464 programs, and fit climate \"cold\", coldest-month mean below 27F). Majors offered are not in the data: only players' own majors on rosters (4,144 of 26,715 current roster rows list one; 280 mention psychology, at 111 programs): \"psychology\" must be named as not applied, never silently dropped. Clear members: buffalo (#005BBB, 95.4 in), canisius (navy, 95.4 in), notre-dame (navy, 64.5 in), marquette (navy, 48.7 in).",
+   "elsewhere": "None: no colour filter, no snow filter (only \"Fall average high\"), no majors. Ask (owner only) would mark it unsupported.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "A02",
+   "group": "attributes",
+   "q": "small d3 under 30k",
+   "intent": "division, size and price",
+   "stability": "slow",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D3"
+      ],
+      "cond": [
+       {
+        "field": "undergradEnrollment",
+        "op": "<",
+        "value": 5000
+       },
+       {
+        "field": "tuition",
+        "op": "<",
+        "value": 30000
+       }
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "suny-geneseo"
+    },
+    {
+     "program": "maine-presque-isle"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "williams-college"
+    },
+    {
+     "program": "new-york"
+    },
+    {
+     "program": "bemidji-state"
+    }
+   ],
+   "decision": [
+    "C02",
+    "C03"
+   ],
+   "why": "Read with the page's own fields: Undergrads under 5,000 (recs size band lt5k) and Tuition (out-of-state) under $30,000: 79 programs. Under cost of attendance it is 36, under net price 305, so the reading is an owner decision. suny-geneseo and maine-presque-isle pass every reading; williams-college (D3, small, $68,560) and new-york (D3, 28,663 undergrads) never.",
+   "elsewhere": "D3 pill plus two condition chips (Undergrads < 5000, Tuition < 30000) by hand: public/index.html:1261-1288.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "A03",
+   "group": "attributes",
+   "q": "warm d1 under 20k",
+   "intent": "climate word plus price",
+   "stability": "slow",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "cond": [
+       {
+        "field": "fallAvgHighF",
+        "op": ">",
+        "value": 80
+       },
+       {
+        "field": "tuition",
+        "op": "<",
+        "value": 20000
+       }
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "florida-state"
+    },
+    {
+     "program": "south-florida"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "buffalo"
+    },
+    {
+     "program": "michigan"
+    }
+   ],
+   "decision": [
+    "C04"
+   ],
+   "why": "\"Warm\" read as fall highs above 80F, as the Ask eval does (climate-warm): 24 D1 programs with tuition under $20,000 (florida-state, south-florida, florida-international, grand-canyon...). Never michigan or buffalo.",
+   "cites": [
+    "tests/fixtures/ask/eval.json:983"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "A04",
+   "group": "attributes",
+   "q": "catholic d1",
+   "intent": "religious affiliation",
+   "stability": "slow",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "religiousAffiliation": [
+       30
+      ]
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "notre-dame"
+    },
+    {
+     "program": "georgetown"
+    },
+    {
+     "program": "villanova"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "byu"
+    },
+    {
+     "program": "baylor"
+    }
+   ],
+   "decision": [
+    "C18"
+   ],
+   "why": "Each program file has school.religiousAffiliation as a Scorecard code (code 30 is held by notre-dame, georgetown, villanova, santa-clara, boston-college, xavier). The repo has no code-to-name table: not found, so the vocabulary must be added. byu (94) and baylor (54) are other affiliations.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "A05",
+   "group": "attributes",
+   "q": "top 25 rpi",
+   "intent": "a ranking cut-off",
+   "stability": "live",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "cond": [
+       {
+        "field": "rpiRank",
+        "op": "<=",
+        "value": 25
+       }
+      ],
+      "sort": "rpi"
+     }
+    }
+   ],
+   "why": "The page's RPI condition (rank 25 or better), sorted by RPI, as the Ask eval expects (rank-rpi-top-25). Membership moves weekly, so only the filter state is judged.",
+   "elsewhere": "Condition chip RPI #25 or better plus the RPI sort, by hand.",
+   "cites": [
+    "tests/fixtures/ask/eval.json:523"
+   ],
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "A06",
+   "group": "attributes",
+   "q": "d1 schools with no snow",
+   "intent": "negated climate fact",
+   "stability": "slow",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ],
+      "snow": false
+     }
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "florida"
+    },
+    {
+     "program": "ucla"
+    }
+   ],
+   "mustNever": [
+    {
+     "program": "buffalo"
+    },
+    {
+     "program": "syracuse"
+    },
+    {
+     "program": "notre-dame"
+    }
+   ],
+   "decision": [
+    "C16"
+   ],
+   "why": "The negation is a fact too: D1 with NOAA annual snowfall 0 or fit climate \"mild\" (e.g. florida 0.0 in, ucla mild). Never buffalo or syracuse; a program with no snow figure and no fit climate is unknown, never listed as snow-free.",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "E01",
+   "group": "edge",
+   "q": "",
+   "intent": "empty box (focus only)",
+   "stability": "frozen",
+   "sections": [],
+   "first": [
+    {
+     "empty": {
+      "reason": "help"
+     }
+    }
+   ],
+   "why": "Focus on an empty box shows the help panel and example chips (public/index.html:2558-2575); no results, no request.",
+   "cites": [
+    "public/index.html:2566"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 0,
+    "top": [],
+    "note": "the help panel with 5 chips (public/index.html:2581)"
+   }
+  },
+  {
+   "id": "E02",
+   "group": "edge",
+   "q": "a",
+   "intent": "one letter",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "arkansas"
+    },
+    {
+     "program": "alabama"
+    },
+    {
+     "program": "army"
+    },
+    {
+     "program": "arizona-state"
+    }
+   ],
+   "mustNever": [
+    {
+     "list": {
+      "state": [
+       "AL"
+      ]
+     }
+    }
+   ],
+   "why": "One letter is a name prefix only; 139 programs start with \"a\". Any of them is useful; the box must stay fast and never treat \"a\" as a state, division or conference.",
+   "today": {
+    "box": "answers",
+    "n": 139,
+    "top": [
+     "arkansas:90",
+     "alabama:90",
+     "army:90",
+     "arizona-state:90",
+     "auburn:90",
+     "arizona:90"
+    ],
+    "note": "139 name prefixes, first six shown"
+   }
+  },
+  {
+   "id": "E03",
+   "group": "edge",
+   "q": "st",
+   "intent": "two-letter ambiguous prefix",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "stanford"
+    },
+    {
+     "program": "st-johns"
+    },
+    {
+     "program": "saint-louis"
+    }
+   ],
+   "decision": [
+    "C07"
+   ],
+   "why": "224 names start with \"st\" (Stanford, Stony Brook, St. John's...). \"st\" also stands for \"saint\" (the camps search already treats them alike, public/index.html:4385). Never a state code (no state is ST).",
+   "cites": [
+    "public/index.html:4385"
+   ],
+   "today": {
+    "box": "partial",
+    "n": 224,
+    "top": [
+     "stanford:90",
+     "stony-brook:90",
+     "stephen-f-austin:90",
+     "st-johns:90",
+     "stonehill:90",
+     "stetson:90"
+    ],
+    "note": "224 prefixes; \"saint\" names are not treated as \"st\""
+   }
+  },
+  {
+   "id": "E04",
+   "group": "edge",
+   "q": "uc",
+   "intent": "two letters that are a system prefix",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "ucla"
+    },
+    {
+     "program": "uc-santa-barbara"
+    },
+    {
+     "program": "uc-irvine"
+    },
+    {
+     "program": "uc-davis"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "uc-davis"
+    },
+    {
+     "program": "uc-san-diego"
+    }
+   ],
+   "why": "The University of California campuses (ucla, uc-davis, uc-irvine, uc-riverside, uc-san-diego, uc-santa-barbara, california-santa-cruz, california-merced; california is UC Berkeley). UCF and UConn only start with \"uc\".",
+   "today": {
+    "box": "partial",
+    "n": 11,
+    "top": [
+     "ucla:90",
+     "ucf:90",
+     "connecticut:90",
+     "uc-santa-barbara:90",
+     "uc-irvine:90",
+     "uc-san-diego:90"
+    ],
+    "note": "UCLA first, but UCF and UConn sit among the UC campuses"
+   }
+  },
+  {
+   "id": "E05",
+   "group": "edge",
+   "q": "zzzz",
+   "intent": "nothing matches",
+   "stability": "frozen",
+   "sections": [],
+   "first": [
+    {
+     "empty": {
+      "reason": "no-match"
+     }
+    }
+   ],
+   "why": "No name, place, conference, camp or person: a no-match panel, never a guess.",
+   "today": {
+    "box": "answers",
+    "n": 0,
+    "top": [],
+    "note": "no-match panel with 2 chips"
+   }
+  },
+  {
+   "id": "E06",
+   "group": "edge",
+   "q": "university",
+   "intent": "a word nearly every name has",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "empty": {
+      "reason": "too-broad"
+     }
+    }
+   ],
+   "decision": [
+    "C19"
+   ],
+   "why": "761 programs have \"University\" in a name today. Proposed: ask for more, or show a capped list; never a slow draw of 761 rows on a phone.",
+   "today": {
+    "box": "wrong",
+    "n": 761,
+    "top": [
+     "alabama-huntsville:90",
+     "california-merced:90",
+     "hawaii-hilo:90",
+     "minnesota-crookston:90",
+     "nebraska-kearney:90",
+     "north-carolina-pembroke:90"
+    ],
+    "note": "761 results"
+   }
+  },
+  {
+   "id": "E07",
+   "group": "edge",
+   "q": "smith",
+   "intent": "program vs coaches and players",
+   "stability": "live",
+   "sections": [
+    "programs",
+    "people"
+   ],
+   "first": [
+    {
+     "program": "smith-college"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "smith-college"
+    },
+    {
+     "program": "hobart-william-smith"
+    },
+    {
+     "coach": {
+      "name": "Shelley Smith",
+      "program": "south-carolina"
+     }
+    }
+   ],
+   "why": "Smith College (D3) is the exact short name; William Smith (hobart-william-smith) a name word; then 8 head coaches named Smith (south-carolina, santa-clara, kansas-city...) and players.",
+   "today": {
+    "box": "partial",
+    "n": 2,
+    "top": [
+     "smith-college:100",
+     "hobart-william-smith:80"
+    ],
+    "note": "smith-college and hobart-william-smith; no coaches or players"
+   }
+  },
+  {
+   "id": "E08",
+   "group": "edge",
+   "q": "st. mary's",
+   "intent": "one name, five schools, punctuation",
+   "stability": "frozen",
+   "sections": [
+    "programs"
+   ],
+   "first": [
+    {
+     "program": "saint-mary-s"
+    },
+    {
+     "program": "st-marys-tx"
+    },
+    {
+     "program": "saint-marys-college-in"
+    },
+    {
+     "program": "st-marys-college-maryland"
+    },
+    {
+     "program": "saint-marys-minnesota"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "saint-mary-s"
+    },
+    {
+     "program": "st-marys-tx"
+    },
+    {
+     "program": "saint-marys-college-in"
+    },
+    {
+     "program": "st-marys-college-maryland"
+    },
+    {
+     "program": "saint-marys-minnesota"
+    }
+   ],
+   "decision": [
+    "C08"
+   ],
+   "why": "Five programs are St./Saint Mary's (saint-mary-s D1 CA, st-marys-tx D2, saint-marys-college-in D3, st-marys-college-maryland D3, saint-marys-minnesota D3), plus Mount St. Mary's (D1). All must show, and the result must not depend on the apostrophe: today \"st marys\" puts saint-mary-s first and \"st mary's\" puts st-marys-tx first.",
+   "today": {
+    "box": "partial",
+    "n": 6,
+    "top": [
+     "st-marys-tx:100",
+     "saint-mary-s:95(St Mary's)",
+     "saint-marys-college-in:95(St Mary's)",
+     "st-marys-college-maryland:90",
+     "mount-st-marys:80",
+     "saint-marys-minnesota:70(St Mary's University of Minnesota)"
+    ],
+    "note": "all five plus Mount St. Mary's, but st-marys-tx (D2) first; typed \"st marys\" the first is saint-mary-s and Mount St. Mary's is missing"
+   }
+  },
+  {
+   "id": "E09",
+   "group": "edge",
+   "q": "d1",
+   "intent": "a bare division",
+   "stability": "frozen",
+   "sections": [
+    "lists"
+   ],
+   "first": [
+    {
+     "list": {
+      "division": [
+       "D1"
+      ]
+     }
+    }
+   ],
+   "why": "A division alone is a filter: the 349 D1 programs as a list row, never a program whose name starts \"d1\".",
+   "today": {
+    "box": "nothing",
+    "n": 0,
+    "top": []
+   }
+  },
+  {
+   "id": "E10",
+   "group": "edge",
+   "q": "washington",
+   "intent": "school vs state vs DC",
+   "stability": "frozen",
+   "sections": [
+    "programs",
+    "lists"
+   ],
+   "first": [
+    {
+     "program": "washington"
+    }
+   ],
+   "mustShow": [
+    {
+     "program": "washington-state"
+    },
+    {
+     "program": "georgetown"
+    }
+   ],
+   "top": {
+    "programs": [
+     {
+      "program": "washington"
+     }
+    ]
+   },
+   "why": "University of Washington is the exact short name; Washington State, Washington & Lee, Washington & Jefferson and others are names; the state (WA) and Washington, DC (georgetown, american, george-washington, howard, catholic-dc) are places.",
+   "cites": [
+    "tests/place_search.test.mjs:135"
+   ],
+   "today": {
+    "box": "answers",
+    "n": 23,
+    "top": [
+     "washington:100",
+     "washington-state:90",
+     "washington-and-lee:90",
+     "washington-jefferson:90",
+     "washington-college-md:90",
+     "washington-st-louis:90"
+    ],
+    "note": "washington first; the state and DC as place hits"
+   }
+  }
+ ]
+}
