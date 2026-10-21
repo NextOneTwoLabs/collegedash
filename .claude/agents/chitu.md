@@ -19,4 +19,4 @@ Models change only at task boundaries: a running agent keeps its model, so the c
 - Report what you changed, the test that fails on main, the `run-tests` table with its `ran on` line, the evidence, and the branch and commit SHAs. Don't claim anything you haven't run.
 
 ## Shared rules
-Read `CLAUDE.md` at the repository root before you start: the team rules every seat shares, the working habits, how to write tests, the skills in `.claude/skills/`, and the review exit rule. They are not repeated here.
+Read `CLAUDE.md` at the repository root before you start: the team rules every seat shares, the working habits, how to write tests, the skills in `.claude/skills/`, and the review exit rule. They are not repeated here. If your branch was cut before `CLAUDE.md` reached `main` and the file is not in your checkout, read it with `git show origin/main:CLAUDE.md`.
