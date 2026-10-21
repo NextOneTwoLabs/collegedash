@@ -38,6 +38,7 @@
   --accent: #1d4ed8; --accent-hover: #1e40af; --accent-text: #1d4ed8; --accent-contrast: #ffffff;
   --accent-surface: #eef4ff; --accent-glow: rgba(29, 78, 216, 0.12);
   --danger-text: #b91c1c; --gold: #d97706; --gold-glow: rgba(217, 119, 6, 0.14); --star-color: #d97706;
+  --star-off: #878b93;  /* the unsaved star (#511): 3.1:1 or better on every surface it sits on, WCAG 1.4.11 */
   --row-hover: #f3f5f8;
   --shadow-sm: 0 1px 2px rgba(17, 24, 39, 0.05); --shadow-md: 0 4px 12px rgba(17, 24, 39, 0.08); --shadow-lg: 0 8px 24px rgba(17, 24, 39, 0.14);
   --warn-bg: rgba(217, 119, 6, 0.10); --warn-text: #7a4d00;
@@ -52,6 +53,7 @@
   --accent: #60a5fa; --accent-hover: #93c5fd; --accent-text: #7cb3fb; --accent-contrast: #0b1220;
   --accent-surface: rgba(96, 165, 250, 0.12); --accent-glow: rgba(96, 165, 250, 0.16);
   --danger-text: #f87171; --gold: #fbbf24; --gold-glow: rgba(251, 191, 36, 0.14); --star-color: #fbbf24;
+  --star-off: #73767e;
   --row-hover: #1f242e;
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3); --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4); --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --s1: #7cb3fb; --s3: #34d399; --s4: #fbbf24; --good-text: #34d399; --critical: #f87171; --warn-bg: rgba(251, 191, 36, 0.12); --warn-text: #fbbf24;
@@ -436,8 +438,10 @@ tr:hover td { background: var(--row-hover); }
   .pcard .foot-actions .star-btn, .pcard .foot-actions .cmp-btn { min-height: 44px; min-width: 44px; }
   .cmp-tray-x, .cmp-tray .btn { min-height: 44px; min-width: 44px; }
 }
-.star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; opacity: 0.35; transition: all var(--transition-fast); line-height: 1; color: var(--text-primary); }
-.star-btn:hover { opacity: 0.8; transform: scale(1.15); }
+/* #511: the unsaved star is a colour, not text-primary at opacity .35 (2.22:1 light, 2.88:1 dark; 1.4.11 needs 3:1), and
+   opacity would also fade the focus ring, which is painted with the element. Hover is the old darker step. */
+.star-btn { background: none; border: none; cursor: pointer; font-size: 16px; padding: 2px 4px; transition: all var(--transition-fast); line-height: 1; color: var(--star-off); }
+.star-btn:hover { color: var(--text-primary); opacity: 0.8; transform: scale(1.15); }
 .star-btn.starred { opacity: 1; color: var(--star-color); }
 .cmp-btn { background: none; border: 1px solid transparent; border-radius: var(--radius-sm); cursor: pointer; font-size: 12px; font-weight: 600; padding: 3px 7px; color: var(--text-secondary); line-height: 1; transition: all var(--transition-fast); }
 .cmp-btn:hover { color: var(--accent-text); border-color: var(--accent); }
