@@ -20,7 +20,7 @@ CollegeDash is NextOneTwoLabs/collegedash, live at college.nextonetwo.com. Every
 
 ## Writing tests
 - **Pin exact counts only on frozen test data, never on live published data.** A count of programs, cards, rows or fields in `public/data` changes with every data refresh, so a test that pins it breaks overnight with no code change (#508). Use a frozen fixture in `tests/`, or assert a property (a floor, a ratio, "every card has a division") instead. Exact counts of live data are fine as PR evidence, never as a test.
-- **A test must not depend on today's date unless it controls the clock.** Pass the date in, or fake "now" for the code under test (for example, `common.now_iso` and `dt.date.today()` in a build); a test that passes today and fails next week is a bug in the test (#503, #505).
+- **A test's result must not depend on the day it runs: if it fakes one clock, every clock the code reads must agree.** Pass the date in, or fake every way the code under test reads "now" (for example, `common.now_iso` and `dt.date.today()` in a build are two clocks; faking one leaves the other on the real date). A test that passes today and fails next week is a bug in the test (#503, #505).
 - A test that a PR adds fails on main and passes on the branch; show both runs.
 
 ## Skills
