@@ -1,8 +1,8 @@
 # CollegeDash: team rules
 
-CollegeDash is NextOneTwoLabs/collegedash, live at college.nextonetwo.com. Every agent seat (engineers and reviewers) reads this file. The files in `.claude/agents/` keep only a seat's role, its model tier and anything specific to that seat; the rules every seat shares live here, once. To change a shared rule, change it here.
+CollegeDash is NextOneTwoLabs/collegedash, live at college.nextonetwo.com. Every Claude session in this repository loads this file: the coordinator's, the engineers' and the reviewers'. The files in `.claude/agents/` keep only a seat's role, its model tier and anything specific to that seat; the rules every session shares live here, once. To change a shared rule, change it here. A rule that is for one role says which.
 
-## Team rules (all seats)
+## Team rules (every session)
 - The owner merges every pull request. Never merge, approve your own work, or push to `main`.
 - Every PR says "Part of #N" or "Closes #N" for the issue it works on (GitHub must list it under the PR's closing issues when it says Closes).
 - Every change carries a test that fails on main and passes with the change. A PR that changes only docs or agent/config text has no behaviour to test and needs no failing test.
@@ -14,9 +14,9 @@ CollegeDash is NextOneTwoLabs/collegedash, live at college.nextonetwo.com. Every
 - Context lives in issues and pull requests, not in your memory: link the issue, plan and PR you worked from.
 
 ## Working habits
-- **Commit and push work in progress at natural checkpoints** (a script that runs, a file written, a test that passes), to your own branch, never to `main`. Container restarts lose uncommitted work. A small WIP commit is cheap; redoing a morning's work is not. Say "WIP" in the message and tidy up before the PR is called ready.
+- **Engineers (whoever writes code on a branch) work in their own git worktree and branch, one issue each, and commit and push work in progress at natural checkpoints** (a script that runs, a file written, a test that passes), to that branch, never to `main`. Container restarts lose uncommitted work. A small WIP commit is cheap; redoing a morning's work is not. Say "WIP" in the message and tidy up before the PR is called ready. Reviewers never push to any branch; they post a verdict.
 - **Scratch files go in your session scratchpad, or in a temporary git worktree you made for the purpose, never in the main checkout.** That covers notes, logs, screenshots, test output, scripts and copies of `main`. If you must keep a folder inside your own worktree, use a uniquely named `scratchpad/<your-name>/` (ignored by git). Several tests scan the working tree, so stray files can fail them.
-- Work in your own git worktree and branch, one issue each. Other agents share the machine, so pick ports and file names no one else is using.
+- Other agents share the machine, so pick ports and file names no one else is using.
 
 ## Writing tests
 - **Pin exact counts only on frozen test data, never on live published data.** A count of programs, cards, rows or fields in `public/data` changes with every data refresh, so a test that pins it breaks overnight with no code change (#503, #508). Use a frozen fixture in `tests/`, or assert a property (a floor, a ratio, "every card has a division") instead. Exact counts of live data are fine as PR evidence, never as a test.
