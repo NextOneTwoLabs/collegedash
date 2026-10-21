@@ -23,12 +23,10 @@ counts, hosts and paths only, never a query string or page content:
 - `projection`: this run's minutes and an estimate of an enforced run (every `Crawl-delay` applied, capped at 30 s);
 - `resolverErrors`: requests the hook could not get a verdict for (the step budget ran out): allowed in report mode,
   denied in enforce mode; `explicitResolverErrors`: the same in an explicit `robots_allowed()` check, always denied;
-- `truncatedHosts` (a robots.txt over 500 KiB) and `truncatedRules` (a pattern over 4096 octets);
-- `resolverDiff` (#87, for 3 scheduled runs, then removed): verdicts the RFC 9309 resolver gives differently from
-  `urllib.robotparser` on the same robots.txt, from the hook and from the explicit checks alike, each host and path
-  counted once per run. `newlyAllowed`, `newlyBlocked`, `comparisonErrors`, `topHosts` (at most 20) and `samplePaths` (at most 50,
-  each with its call site and whether the explicit check or the hook saw it). It is published at `/api/v1/status`
-  with the rest of `refresh-state.json` (owner decision 9).
+- `truncatedHosts` (a robots.txt over 500 KiB) and `truncatedRules` (a pattern over 4096 octets).
+
+All four counters (`resolverErrors`, `explicitResolverErrors`, `truncatedHosts`, `truncatedRules`) sit at the top level
+of the `robots` entry. The report is published at `/api/v1/status` with the rest of `refresh-state.json`.
 
 ## Owner decision 1 = B: a broken robots.txt is allowed by the hook, in report mode only
 
@@ -82,6 +80,22 @@ largest value across the merged groups wins.
   split `%xx`), an `Allow` is dropped. One verdict may take at most 2,000,000 matcher steps (decision 11); past that, an explicit check
   denies and the hook counts a `resolverErrors`, allowing in report mode and denying in enforce mode. The matcher is
   linear and builds no regular expression from a robots.txt.
+
+### The comparison with `urllib.robotparser` (removed, #501)
+
+When the resolver shipped (#87, owner decision 2), every verdict was also computed by `urllib.robotparser` on the same
+robots.txt, and each difference was counted in `refresh-state.robots.resolverDiff`. It was meant to run for 3 scheduled
+refreshes; nothing switched it off, so it ran on every daily refresh from 2026-10-10 until it was removed. The first 7
+runs (to 10-16) are reported on #501, and the 11 committed through 10-20 all gave the same result, each over about 1,900
+hosts and 16,300 to 17,800 requests: no path newly blocked, one newly allowed (`app.campdoc.com /!/dn/login`, in camps'
+own robots.txt check), no resolver, explicit-check or comparison errors, and no truncations. The owner approved
+removing it on 2026-10-16, with #501 opened to do it. The stdlib parser is no longer imported or called, and the report
+no longer has a `resolverDiff` key. The counters it shared the report with stayed where #496 put them, at the top
+level.
+
+A `refresh-state.json` written while the comparison ran still holds the old `resolverDiff`. A refresh replaces the whole
+`robots` entry, so the next one drops it, but only while `COLLEGEDASH_ROBOTS` is `report` or `enforce` (`refresh.yml`
+sets `report`): under `off` a refresh writes no `robots` entry and the old one stays as it was.
 
 ## A block never erases stored data
 
