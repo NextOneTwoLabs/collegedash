@@ -417,9 +417,10 @@ def test_loader() -> None:
 # ---------- no urllib.robotparser comparison (issue #501) ----------
 # #87 compared the resolver with urllib.robotparser on every scheduled refresh from 2026-10-10 until #501 removed it
 # (meant for 3; the first 7 are reported on #501, and the 11 committed through 2026-10-20 all found one newly allowed
-# path, nothing newly blocked, and no errors). The owner approved removing it on 2026-10-16. Z1-Z3 pin what is left:
-# the stdlib parser is never touched, the report has no resolverDiff (and a refresh drops one an earlier run left in
-# refresh-state.json), and the counters #496 moved to the top level of refresh-state.robots are still there.
+# path, nothing newly blocked, and no errors). The owner approved opening #501 to remove it on 2026-10-16.
+# Z1-Z3 pin what is left: the stdlib parser is never touched, the report has no resolverDiff (and a refresh drops one
+# an earlier run left in refresh-state.json), and the counters #496 moved to the top level of refresh-state.robots
+# are still there.
 # Unlike the rows above, F and G here are against the code before #501: F fails on it, G passes on it.
 
 @contextlib.contextmanager

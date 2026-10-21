@@ -563,9 +563,11 @@ def _key_lock(key: str) -> threading.Lock:
 # that matched instead of the most specific, ignored '*' and '$' in paths (fails open), and kept only
 # the first of several groups for the same agent.
 #
-# For 7 scheduled refreshes (2026-10-10 to 10-16) the resolver was also compared with urllib.robotparser on
-# the same text (the #87 "shadow diff"). It found nothing newly blocked and no errors, and was removed in
-# #501, with the `robotparser` import. refresh-state.robots still reports truncatedHosts, truncatedRules and
+# From 2026-10-10 until #501 removed it, every scheduled refresh also compared the resolver with
+# urllib.robotparser on the same text (the #87 "shadow diff"; meant for 3 runs, nothing switched it off).
+# The first 7 runs are reported on #501; the 11 committed through 2026-10-20 all found 1 newly allowed path
+# (app.campdoc.com /!/dn/login), none newly blocked, and no errors or truncations. #501 removed the comparison
+# and the `robotparser` import. refresh-state.robots still reports truncatedHosts, truncatedRules and
 # explicitResolverErrors.
 _robots: dict[str, "rfc9309.Robots"] = {}
 _host_delay: dict[str, float] = {}

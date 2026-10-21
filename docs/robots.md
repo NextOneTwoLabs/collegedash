@@ -85,11 +85,16 @@ largest value across the merged groups wins.
 
 When the resolver shipped (#87, owner decision 2), every verdict was also computed by `urllib.robotparser` on the same
 robots.txt, and each difference was counted in `refresh-state.robots.resolverDiff`. It was meant to run for 3 scheduled
-refreshes and ran for 7 (2026-10-10 to 10-16, about 1,900 hosts and 16,000 requests each): no path newly blocked, one
-newly allowed (`app.campdoc.com /!/dn/login`, in camps' own robots.txt check), and no resolver, explicit-check or
-comparison errors. The owner approved removing it on 2026-10-16. The stdlib parser is no longer imported or called, and
-the report no longer has a `resolverDiff` key (the next refresh drops it from `refresh-state.json`). The counters it
-shared the report with stayed where #496 put them, at the top level.
+refreshes; nothing switched it off, so it ran on every daily refresh from 2026-10-10 until it was removed. The first 7
+runs (to 10-16) are reported on #501, and the 11 committed through 10-20 all gave the same result, each over about 1,900
+hosts and 16,300 to 17,800 requests: no path newly blocked, one newly allowed (`app.campdoc.com /!/dn/login`, in camps'
+own robots.txt check), no resolver, explicit-check or comparison errors, and no truncations. The owner approved opening
+#501, to remove it, on 2026-10-16. The stdlib parser is no longer imported or called, and the report no longer has a
+`resolverDiff` key. The counters it shared the report with stayed where #496 put them, at the top level.
+
+A `refresh-state.json` written while the comparison ran still holds the old `resolverDiff`. A refresh replaces the whole
+`robots` entry, so the next one drops it, but only while `COLLEGEDASH_ROBOTS` is `report` or `enforce` (`refresh.yml`
+sets `report`): under `off` a refresh writes no `robots` entry and the old one stays as it was.
 
 ## A block never erases stored data
 
