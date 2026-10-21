@@ -149,19 +149,32 @@ function compare(beforeFile, afterFile) {
   const A = JSON.parse(fs.readFileSync(beforeFile, 'utf8')), B = JSON.parse(fs.readFileSync(afterFile, 'utf8'));
   const n = v => v == null ? '-' : (Number.isInteger(v) ? String(v) : v.toFixed(2));
   const rows = [['view', 'metric', 'before', 'after', '']];
-  for (const key of Object.keys(A.results)) {
-    const a = A.results[key], b = B.results[key];
-    if (!b) { rows.push([key, '(missing in after)', '', '', '']); continue; }
+  // A side has numbers only when the view is there and did not fail (a failed view is { error }). A field an older JSON file
+  // lacks reads as missing ('-'), never as a crash.
+  const measured = r => r && !r.error;
+  const state = r => !r ? 'not in this file' : r.error ? `FAILED: ${String(r.error).slice(0, 60).replace(/\|/g, '/')}` : 'measured';
+  const read = (r, get) => { if (!measured(r)) return undefined; try { return get(r); } catch { return undefined; } };
+  const shown = v => typeof v === 'string' ? v : n(v);
+  let notCompared = 0;
+  const keys = [...new Set([...Object.keys(A.results || {}), ...Object.keys(B.results || {})])];
+  for (const key of keys) {
+    const a = (A.results || {})[key], b = (B.results || {})[key];
+    // A view that failed or exists on one side only is shown, with the numbers of the side that has them, and not counted as a change.
+    const both = measured(a) && measured(b);
+    if (!both) { notCompared++; rows.push([key, 'view', state(a), state(b), 'not compared']); }
     for (const [name, get] of [['cards', r => r.cards], ['card height min', r => r.hMin], ['card height max', r => r.hMax], ['row spread', r => r.rowSpread],
       ['horizontal scroll', r => r.hScroll ? 'YES' : 'no'], ['contrast min', r => r.contrast.min], ['text below AA', r => r.contrast.belowAA], ['text unmeasured', r => r.contrast.unmeasured],
       ['icons below 3:1', r => r.contrast.icons?.below3], ['icon min', r => r.contrast.icons?.min]]) {
-      const x = get(a), y = get(b);
-      rows.push([key, name, typeof x === 'string' ? x : n(x), typeof y === 'string' ? y : n(y), String(x) === String(y) ? '' : 'changed']);
+      const x = read(a, get), y = read(b, get);
+      if (!both && x === undefined && y === undefined) continue;
+      rows.push([key, name, shown(x), shown(y), both ? (String(x) === String(y) ? '' : 'changed') : 'not compared']);
     }
   }
   console.log(`| ${rows[0].join(' | ')} |\n| --- | --- | ---: | ---: | --- |`);
   rows.slice(1).forEach(r => console.log(`| ${r.join(' | ')} |`));
-  console.log(`\n${rows.filter(r => r[4] === 'changed').length} of ${rows.length - 1} measurements changed.`);
+  const compared = rows.slice(1).filter(r => r[4] !== 'not compared');
+  console.log(`\n${compared.filter(r => r[4] === 'changed').length} of ${compared.length} measurements changed.` +
+    (notCompared ? ` ${notCompared} view(s) not compared: one failed, or is on one side only (rows marked "not compared").` : ''));
 }
 
 // ---- main ------------------------------------------------------------------------------------------------
