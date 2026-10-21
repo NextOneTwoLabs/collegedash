@@ -38,7 +38,7 @@ Three skills live in `.claude/skills/`; use them instead of improvising:
 A PR is ready for the owner when all three are true:
 
 1. a **Reviewer** (Bianque or Huatuo) has posted **APPROVE**;
-2. there are **no open review threads**: each is answered or resolved, and a thread the reviewer raised is resolved by the engineer's change, not by marking it resolved;
+2. there are **no open review threads**. A thread with a required change is closed by the engineer's change, never by marking it resolved. A thread that is an optional note can be answered instead of changed (done, or declined with the reason), and then it is closed;
 3. the **evidence is in the PR description**: the `evidence` skill's output for a visible or data change, and the `run-tests` table (with its `ran on` line) for any change. A PR that changes nothing a reader sees and no data states that in one line instead.
 
 The engineer puts the evidence (paths and measurements) in the report that asks for review, so the reviewer judges it instead of producing it. The coordinator opens the PR after a Reviewer approves, and puts that evidence in the PR description. The reviewer checks all three before the coordinator calls the PR ready. The owner still merges; nobody else does.
