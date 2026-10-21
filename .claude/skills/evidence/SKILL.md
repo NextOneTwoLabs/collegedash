@@ -83,7 +83,7 @@ Use `--before` and `--after` with a revision or a directory. When the change is 
 
 ### Counts are evidence, not tests
 
-The counts describe one tree on one day. They belong in the PR description. A test must never pin them on live published data, because the next data refresh changes them (#503, #508). Pin exact counts only on frozen fixtures in `tests/`.
+The counts describe one tree on one day. They belong in the PR description. A test must never pin them on live published data, because the next data refresh changes them (#508). Pin exact counts only on frozen fixtures in `tests/`.
 
 ## What to post on the PR
 
