@@ -1,5 +1,5 @@
-"""The RFC 9309 robots.txt resolver (issue #87): every row of the approved matrix, plus the shadow diff and the camps
-keep rule.
+"""The RFC 9309 robots.txt resolver (issue #87): every row of the approved matrix, plus the camps keep rule and, since
+#501, the Z rows: the urllib.robotparser comparison (the "shadow diff") is gone.
 
     python tests/robots_rfc9309_test.py            # offline: robots.txt is seeded, or served by a fake session
     python tests/robots_rfc9309_test.py --verbose  # print every check, not only the failures
@@ -7,7 +7,8 @@ keep rule.
 The spec is the plan on issue #87, revisions 2, 3 and 3.1 (approved by Huatuo), with the owner's decisions of
 2026-10-09 (all as recommended). Each check is named by its matrix row. F rows fail on the code before #87
 (urllib.robotparser); G rows are guards that passed before and must keep passing; N rows are new checks with no
-before (the step bounds, the shadow diff, the camps keep rule). ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
+before (the step bounds, the camps keep rule). The Z rows (#501, the removed comparison) are tagged against the code
+before #501 instead: F rows fail on it, G rows pass on it. ROBOTS_RFC9309_TEST_ROOT (optional) points the suite
 at another checkout, so the code from before the change can be run through these same checks to show the F rows
 failing.
 
@@ -20,8 +21,11 @@ from __future__ import annotations
 import argparse
 import contextlib
 import copy
+import json
 import os
+import shutil
 import sys
+import tempfile
 import time
 
 ROOT = os.environ.get("ROBOTS_RFC9309_TEST_ROOT") or os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -383,9 +387,8 @@ def test_loader() -> None:
     with served(host, _Resp(200, T1_BODY)):
         ok("T1-loaded (F) fetched: a rule past 500 KiB is not read", common.robots_allowed(url("/z", host)) is True)
         rep = common.robots_report(elapsed_seconds=1, workers=1)
-        ok("T1-count (N) truncated hosts are counted, at the top level (kept when resolverDiff goes)",
-           rep.get("truncatedHosts", 0) >= 1 and "truncatedHosts" not in rep.get("resolverDiff", {}),
-           {k: rep.get(k) for k in ("truncatedHosts", "truncatedRules")})
+        ok("T1-count (N) truncated hosts are counted, at the top level of the report",
+           rep.get("truncatedHosts", 0) >= 1, {k: rep.get(k) for k in ("truncatedHosts", "truncatedRules")})
     # 1800 comment lines of 100 'ツ' each: about 185,000 characters but 545,000 octets
     t2 = (STAR + ("# " + "ツ" * 100 + "\n") * 1800 + "Disallow: /z\n").encode()
     assert len(t2.decode()) < 500 * 1024 < len(t2)
@@ -411,77 +414,133 @@ def test_loader() -> None:
     common.reset_robots_report()
 
 
-# ---------- the shadow diff ----------
+# ---------- no urllib.robotparser comparison (issue #501) ----------
+# #87 compared the resolver with urllib.robotparser on every scheduled refresh from 2026-10-10 until #501 removed it
+# (meant for 3; the first 7 are reported on #501, and the 11 committed through 2026-10-20 all found one newly allowed
+# path, nothing newly blocked, and no errors). The owner approved removing it on 2026-10-16, with #501 opened to do it.
+# Z1-Z3 pin what is left: the stdlib parser is never touched, the report has no resolverDiff (and a refresh drops one
+# an earlier run left in refresh-state.json), and the counters #496 moved to the top level of refresh-state.robots
+# are still there.
+# Unlike the rows above, F and G here are against the code before #501: F fails on it, G passes on it.
 
-def diff() -> dict:
-    return common.robots_report(elapsed_seconds=1, workers=1)["resolverDiff"]
+@contextlib.contextmanager
+def robotparser_spy():
+    """The list of every call made on urllib.robotparser.RobotFileParser while the block runs. The class still works."""
+    import urllib.robotparser as stdlib
+    cls, calls = stdlib.RobotFileParser, []
+    names = ("__init__", "parse", "read", "can_fetch", "crawl_delay")
+    real = {n: getattr(cls, n) for n in names}
 
-
-@guarded("D1")
-def test_d1() -> None:
-    print("D1-D4: the shadow diff (decision 2): capped, no query strings, errors isolated, counted once")
-    common.reset_robots_report()
-    hosts = [f"d{i:02d}.example" for i in range(30)]
-    for h in hosts:
-        seed(STAR + "Disallow: /*/private/\n", h)
-    for i in range(80):
-        common.robots_allowed(url(f"/a{i}/private/x?token=secret{i}", hosts[i % 30]))
-    d = diff()
-    ok("D1 (N) 80 newly blocked paths on 30 hosts are all counted", d["newlyBlocked"] == 80 and d["newlyAllowed"] == 0,
-       {k: d[k] for k in ("newlyBlocked", "newlyAllowed")})
-    ok("D1 (N) topHosts is capped at 20", len(d["topHosts"]) == 20, len(d["topHosts"]))
-    ok("D1 (N) samplePaths is capped at 50", len(d["samplePaths"]) == 50, len(d["samplePaths"]))
-    ok("D1 (N) no query string reaches the report", "?" not in repr(d) and "secret" not in repr(d))
-    ok("D1 (N) each sample is labelled with its check and change", all(
-        p["check"] == "explicit" and p["change"] == "newlyBlocked" and set(p) == {"host", "path", "site", "check", "change"}
-        for p in d["samplePaths"]), d["samplePaths"][:2])
-
-
-@guarded("D2")
-def test_d2() -> None:
-    common.reset_robots_report()
-    seed(STAR + "Disallow: /*.pdf$\n")
-
-    class Boom:
-        def can_fetch(self, *a):
-            raise RuntimeError("comparison parser exploded")
-    common._robots_cmp[HOST] = Boom()
-    got = common.robots_allowed(url("/a.pdf"))
-    ok("D2 (N) a comparison error leaves the explicit verdict unchanged", got is False, got)
-    with env(COLLEGEDASH_ROBOTS="report"):
-        got = common._robots_check(url("/b.pdf"))
-    d = diff()
-    ok("D2 (N) ... and the hook's", got == HOST)
-    ok("D2 (N) comparisonErrors counts both", d["comparisonErrors"] == 2 and d["newlyBlocked"] == 0, d)
-    common.reset_robots_report()
+    def spy(name):
+        def wrapper(self, *a, **kw):
+            calls.append(name)
+            return real[name](self, *a, **kw)
+        return wrapper
+    for n in names:
+        setattr(cls, n, spy(n))
+    try:
+        yield calls
+    finally:
+        for n in names:
+            setattr(cls, n, real[n])
 
 
-@guarded("D3")
-def test_d3() -> None:
-    common.reset_robots_report()
-    seed(STAR + "Disallow: /*/private/\n")
-    u = url("/a/private/x?q=1")
-    with env(COLLEGEDASH_ROBOTS="report"), common.fetch_site("camps.page"):
-        common.robots_allowed(u)
-        common._robots_check(u)
-        common._robots_check(url("/a/private/x?q=2"))
-    d = diff()
-    ok("D3 (N) the same (host, path) through the explicit check and the hook is counted once",
-       d["newlyBlocked"] == 1 and len(d["samplePaths"]) == 1, d)
-    ok("D3 (N) the first sighting labels it", d["samplePaths"][0] == {
-        "host": HOST, "path": "/a/private/x", "site": "camps.page", "check": "explicit", "change": "newlyBlocked"},
-       d["samplePaths"])
-    with env(COLLEGEDASH_ROBOTS="report"):
-        common._robots_check(url("/b/private/y"))
-    d = diff()
-    ok("D4 (N) a difference only the hook sees is recorded, labelled hook",
-       d["newlyBlocked"] == 2 and d["samplePaths"][1]["check"] == "hook", d)
-    seed(OURS + "Disallow: /\nAllow: /camps/\n")
-    common.robots_allowed(url("/camps/x"))
-    d = diff()
-    ok("D4 (N) a widening is counted as newlyAllowed", d["newlyAllowed"] == 1 and d["topHosts"][0] == {
-        "host": HOST, "newlyAllowed": 1, "newlyBlocked": 2}, d)
-    common.reset_robots_report()
+# What a refresh-state.json looked like while the diff ran: a robots entry with a resolverDiff, beside another entry.
+# Frozen test data (not read from the published file); the values only have to be there to be dropped.
+OLD_ROBOTS_ENTRY = {
+    "mode": "report", "at": "2026-10-20T16:08:16Z", "hostsChecked": 3, "requestsChecked": 9,
+    "resolverErrors": 0, "explicitResolverErrors": 0, "truncatedHosts": 0, "truncatedRules": 0,
+    "resolverDiff": {
+        "comparedWith": "urllib.robotparser (shadow diff for 3 scheduled runs, owner decision 2 on #87)",
+        "newlyAllowed": 1, "newlyBlocked": 0, "comparisonErrors": 0,
+        "topHosts": [{"host": "old.example", "newlyAllowed": 1, "newlyBlocked": 0}],
+        "samplePaths": [{"host": "old.example", "path": "/!/dn/login", "site": "camps.page", "check": "explicit",
+                         "change": "newlyAllowed"}],
+    },
+}
+OLD_OTHER_ENTRY = {"ok": True, "at": "2026-10-20T16:00:00Z", "count": 3}
+
+
+def refresh_state_after(rep: dict) -> tuple[dict, dict]:
+    """(before, after): a temp refresh-state.json that already holds OLD_ROBOTS_ENTRY and another entry, and the same
+    file once collegedash.report_robots(rep) has written this report to it, as a refresh does. Nothing real is touched."""
+    import collegedash
+    tmp = tempfile.mkdtemp()
+    path = os.path.join(tmp, "refresh-state.json")
+    before = {"robots": copy.deepcopy(OLD_ROBOTS_ENTRY), "athletics.roster": dict(OLD_OTHER_ENTRY),
+              "updated": "2026-10-20T16:09:00Z"}
+    common.write_json(path, copy.deepcopy(before))
+    real_path = common.REFRESH_STATE_PATH
+    common.REFRESH_STATE_PATH = path
+    try:
+        with env(GITHUB_ACTIONS=None):  # no step summary written from a test run inside CI
+            collegedash.report_robots(rep)
+        return before, common.read_json(path, {})
+    finally:
+        common.REFRESH_STATE_PATH = real_path
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+@guarded("Z")
+def test_no_comparison() -> None:
+    print("Z1-Z3: no urllib.robotparser comparison (issue #501): never called, no resolverDiff, the counters stay")
+    saved_cache, real_allowed = dict(common._robots), R.Robots.allowed
+    common._robots.clear()
+    try:
+        with robotparser_spy() as calls:
+            common.reset_robots_report()
+            # a rule the stdlib parser ignores ('*' and '$' in a path): the kind of difference the diff used to count
+            seed(STAR + "Disallow: /*.pdf$\n")
+            explicit = common.robots_allowed(url("/a.pdf"))
+            with env(COLLEGEDASH_ROBOTS="report"):
+                hook = common._robots_check(url("/b.pdf"))
+            # every state the loader can fetch a robots.txt in
+            with served("z1.example", _Resp(200, T1_BODY)):
+                loaded = common.robots_allowed(url("/z", "z1.example"))
+            with served("z1b.example", _Resp(404)):
+                missing = common.robots_allowed(url("/x", "z1b.example"))
+            with served("z1c.example", _Resp(503)):
+                failing = common.robots_allowed(url("/x", "z1c.example"))
+            with served("z1d.example", requests.ConnectionError("down")):
+                down = common.robots_allowed(url("/x", "z1d.example"))
+            # one robots.txt over 500 KiB and one pattern over 4096 octets, for the truncation counters
+            seed(T1_BODY.decode(), "z1big.example")
+            seed(STAR + "Disallow: /" + "a" * 6000 + "\n", "z1long.example")
+            # one resolver error through the explicit check and one through the hook
+            common.reset_robots_report()
+            R.Robots.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
+            try:
+                denied = common.robots_allowed(url("/x"))
+                with env(COLLEGEDASH_ROBOTS="report"):
+                    hook_err = common._robots_check(url("/x"))
+            finally:
+                R.Robots.allowed = real_allowed
+            rep = common.robots_report(elapsed_seconds=1, workers=1)
+            before, after = refresh_state_after(rep)
+        entry = after.get("robots", {})
+        ok("Z1 (G) the verdicts are still the resolver's", (explicit, hook, loaded, missing, failing, down, denied, hook_err)
+           == (False, HOST, True, True, False, False, False, HOST),
+           (explicit, hook, loaded, missing, failing, down, denied, hook_err))
+        ok("Z1 (F) urllib.robotparser is never called (seeded, fetched, explicit, hook)", calls == [], calls)
+        ok("Z1 (F) collect.common no longer imports it", not hasattr(common, "robotparser"))
+        ok("Z2 (F) the report has no resolverDiff", "resolverDiff" not in rep, sorted(rep))
+        ok("Z2 (F) a refresh-state that held a resolverDiff has none once a refresh writes its robots entry",
+           "resolverDiff" in before["robots"] and "resolverDiff" not in entry, sorted(entry))
+        ok("Z2 (G) ... and the other entries in the file are untouched", after.get("athletics.roster") == OLD_OTHER_ENTRY,
+           after.get("athletics.roster"))
+        text = json.dumps(entry)
+        ok("Z2 (F) ... and nothing in the written entry names the comparison",
+           not any(w in text for w in ("robotparser", "newlyAllowed", "newlyBlocked", "comparisonErrors", "comparedWith")))
+        ok("Z3 (G) truncatedHosts stays at the top level", entry.get("truncatedHosts") == 1, entry.get("truncatedHosts"))
+        ok("Z3 (G) truncatedRules stays at the top level", entry.get("truncatedRules") == 1, entry.get("truncatedRules"))
+        ok("Z3 (G) explicitResolverErrors stays at the top level", entry.get("explicitResolverErrors") == 1,
+           entry.get("explicitResolverErrors"))
+        ok("Z3 (G) resolverErrors stays at the top level", entry.get("resolverErrors") == 1, entry.get("resolverErrors"))
+    finally:
+        R.Robots.allowed = real_allowed
+        common._robots.clear()
+        common._robots.update(saved_cache)
+        common.reset_robots_report()
 
 
 # ---------- camps: an explicit block keeps the stored camps (decision 8) ----------
@@ -554,8 +613,8 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     saved_mode = os.environ.get("COLLEGEDASH_ROBOTS")
     try:
-        for case in (test_matrix, test_glob_reference, test_w9, test_w13a, test_w13_lines, test_crawl_delay, test_loader, test_d1, test_d2,
-                     test_d3, test_camps_keep):
+        for case in (test_matrix, test_glob_reference, test_w9, test_w13a, test_w13_lines, test_crawl_delay, test_loader, test_no_comparison,
+                     test_camps_keep):
             case()
     finally:
         if saved_mode is None:
