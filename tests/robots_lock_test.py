@@ -99,17 +99,36 @@ def test_note_answer_without_a_reset():
            dict(common._robots_counts["loaded"]))
 
 
-def test_diff_without_a_reset():
-    """Issue #87: robots_allowed() records the shadow diff, setting the counters up under _robots_lock through
-    _reset_counts_locked(), never through reset_robots_report()."""
+def test_explicit_check_without_a_reset():
+    """robots_allowed() records nothing for a verdict it reaches. When it cannot reach one it counts an
+    explicitResolverErrors, setting the counters up under _robots_lock through _reset_counts_locked(), never through
+    reset_robots_report() (which takes the same non-reentrant lock). Until #501 it also recorded the #87 shadow diff on
+    every call; that path is gone and this is the one place robots_allowed() still initialises the counters."""
     never_reset("off")
-    common.set_robots_txt(HOST, "User-agent: *\nDisallow: /*.pdf$\n")  # the stdlib comparison allows /a.pdf
+    common.set_robots_txt(HOST, "User-agent: *\nDisallow: /*.pdf$\n")
     done, got = within_timeout(lambda: common.robots_allowed(f"https://{HOST}/a.pdf"))
-    ok("robots_allowed() returns on a never-reset report while recording the shadow diff", done,
+    ok("robots_allowed() returns on a never-reset report", done, f"still blocked after {TIMEOUT:.0f}s")
+    if not done:
+        return
+    ok("... with the RFC verdict, and records nothing for it", got is False and not common._robots_counts,
+       (got, dict(common._robots_counts)))
+    # Reached through common (which imports the resolver as rfc9309), not imported here: collect/robots.py is newer than
+    # the #419 fix, so a module-level import would stop ROBOTS_LOCK_TEST_ROOT from running this suite on the code
+    # before it (an ImportError, instead of the deadlock shown as failing checks).
+    resolver = common.rfc9309.Robots
+    real = resolver.allowed
+    resolver.allowed = lambda self, *a, **kw: (_ for _ in ()).throw(RuntimeError("no verdict"))
+    try:
+        never_reset("off")
+        done, got = within_timeout(lambda: common.robots_allowed(f"https://{HOST}/a.pdf"))
+    finally:
+        resolver.allowed = real
+    ok("robots_allowed() returns on a never-reset report when no verdict can be reached", done,
        f"still blocked after {TIMEOUT:.0f}s")
     if done:
-        ok("... with the RFC verdict, and the difference counted", got is False
-           and common._robots_counts.get("diff_blocked", {}).get(HOST) == 1, (got, common._robots_counts.get("diff_blocked")))
+        ok("... denies, and counts it as an explicit resolver error", got is False
+           and common._robots_counts.get("explicit_resolver_errors", {}).get(HOST) == 1,
+           (got, common._robots_counts.get("explicit_resolver_errors")))
 
 
 def test_reset_still_resets():
@@ -121,9 +140,7 @@ def test_reset_still_resets():
     ok("reset_robots_report() returns and empties the counters",
        done and common._robots_counts["requests"] == {} and set(common._robots_counts) ==
        {"requests", "blocked", "by_site", "by_collector", "paths", "loaded", "failed", "resolver_errors",
-        "explicit_resolver_errors",
-        # the #87 shadow diff's counters, set up by the same _reset_counts_locked()
-        "diff_allowed", "diff_blocked", "diff_seen", "diff_paths", "comparison_errors"}, dict(common._robots_counts))
+        "explicit_resolver_errors"}, dict(common._robots_counts))
     done, rep = within_timeout(lambda: common.robots_report(elapsed_seconds=1.0, workers=1))
     ok("robots_report() still builds", done and isinstance(rep, dict) and rep.get("mode") == "report", rep)
 
@@ -137,7 +154,7 @@ def main(argv=None) -> int:
     VERBOSE = args.verbose
     saved = os.environ.get("COLLEGEDASH_ROBOTS")
     try:
-        cases = (test_check_without_a_reset, test_note_answer_without_a_reset, test_diff_without_a_reset,
+        cases = (test_check_without_a_reset, test_note_answer_without_a_reset, test_explicit_check_without_a_reset,
                  test_reset_still_resets)
         for case in [c for c in cases if not args.case or c.__name__ == args.case]:
             if BLOCKED:
