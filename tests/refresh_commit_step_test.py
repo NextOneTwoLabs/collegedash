@@ -61,8 +61,8 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   push-always-rejected    origin rejects every push to main. After the retries the collection is saved on
                           a refresh-sources/* branch instead of being dropped.
   build-gate              (#82) build fails after the rebase: collection on a branch, data as main has it.
-  fifth-output            (#82) build writes a fifth output and validate fails: the fifth-output assertion
-                          stops the step, nothing is pushed anywhere.
+  fifth-output            (#82, changed by #90) build writes an output no list names and validate fails: the gate's
+                          restore resets it to main's state (absent) and the collection is saved on the gate's branch.
   renamed-output          (#90) main renames camps/index.json mid-run and validate fails: the collection is on the
                           gate's branch with public/data exactly main's, under the new name.
   removed-output          (#90, a guard) main deletes camps/index.json mid-run: a modify/delete conflict, so the
@@ -99,13 +99,17 @@ Issue #132, the registry merge after the rebase (the four conditions are Huatuo'
   rebased-label           every attempt's fetch fails, so nothing was ever rebased: the final save says unrebased.
 
 Issue #395:
-  list-restore            the slim list (public/data/list/index.json) is a build output, restored tolerantly by
-                          publish_sources_only: a gated run leaves it exactly as main has it, or absent when main has
-                          none. A control without the restore line shows the fifth-output assertion stopping the step.
+  list-restore            the slim list (public/data/list/index.json) is a build output, restored by publish_sources_only
+                          (by its restore of public/data since #90): a gated run leaves it exactly as main has it, or
+                          absent when main has none.
 
 Issue #400:
-  fit-restore             the recommender's fit facts (public/data/fit/index.json), the same: restored tolerantly, main's
-                          copy or none on a gated run, the rebuilt one published otherwise, and the same control.
+  fit-restore             the recommender's fit facts (public/data/fit/index.json), the same: main's copy or none on a
+                          gated run, the rebuilt one published otherwise.
+
+Issue #90:
+  restore-control         the gate's checkout of public/data replaced by `true` (a restore that did nothing): the
+                          assertion after it stops the step on "does not match", nothing pushed anywhere.
 """
 
 from __future__ import annotations
@@ -741,6 +745,9 @@ def test_build_gate(tmp):
         ok("with public/data (except rpi, registry) exactly main's", data_view(files) == data_view(tree_files(origin, c1)))
         ok("and the collected source", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
     ok("an ::error says build failed", "::error" in out and "build failed" in out)
+    # fails on main 60bc94e17: only the workflow's header comment said so, and nobody reads that at 03:00 (#90)
+    ok("FIX the ::error says to delete the branch once triaged", "Delete refresh-sources/123-1-1 once the failure is triaged" in out,
+       out[-600:])
 
 
 REFUSED = "data/camps-refused-hosts.json"
@@ -925,15 +932,24 @@ def test_review_reports_previous(tmp):
 
 
 def test_fifth_output(tmp):
-    print("fifth-output (#82): build writes an output the gate does not restore, and validate fails")
+    print("fifth-output (#82, changed by #90): build writes an output no list names, and validate fails")
+    # Until #90 this was a hard stop that lost the collection. The gate's restore now resets everything under
+    # public/data except rpi/ and registry.json, so an unlisted output is put back to main's state (here: absent)
+    # and the collection is saved; nothing carrying it is pushed anywhere.
     def readme(files):
         files["README.md"] = b"moved\n"
         return files
     code, out, origin, c1, _ = run_case(tmp, "fifth-output", upstream=readme, run_markers=("FIFTH_OUTPUT", "VALIDATE_FAILS"))
     ok("the step fails", code != 0)
     ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
-    ok("nothing carrying the unrestored output is pushed anywhere", branches(origin) == [], branches(origin))
-    ok("the fifth-output assertion is what stopped it", "does not match" in out, out[-1200:])
+    bs = branches(origin)
+    ok("FIX the collection is on the gate's per-attempt branch", bs == ["refs/heads/refresh-sources/123-1-1"], (bs, out[-1200:]))
+    if len(bs) == 1:
+        files = tree_files(origin, bs[0])
+        ok("FIX without the fifth output, public/data (except rpi, registry) exactly main's",
+           not any(k.startswith("public/data/extra/") for k in files) and data_view(files) == data_view(tree_files(origin, c1)),
+           sorted(k for k in files if "extra" in k))
+    ok("FIX the ordinary gate error, not the restore assertion", "does not match" not in out and "validate failed" in out, out[-1200:])
 
 
 # ---------- issue #90: a build output renamed or removed on main mid-run ----------
@@ -1236,30 +1252,46 @@ def test_rebased_label(tmp):
        and "everything except the push to main succeeded" not in out, out[-1500:])
 
 
+# ---------- issue #90: the gate's restore of public/data, and the assertion that checks it ----------
+
+# The restore in publish_sources_only: remove every top-level entry of public/data except the collected ones, then check
+# the same set out of FETCH_HEAD. #395's list and #400's fit file had a restore line each until #90; they are covered
+# by these two lines now, with no list of build outputs that a rename merged mid-run could make stale.
+C_FIND = 'find public/data -mindepth 1 -maxdepth 1 ! -name rpi ! -name registry.json -exec rm -rf {} +\n'
+C_CHECKOUT = "if ! git checkout FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then\n"
+
+
+def without_public_data_restore(yml: str) -> tuple[str, int]:
+    """The workflow with the gate's checkout of public/data replaced by `true`: the files are removed and nothing is put
+    back - a restore that silently did nothing. The control that the assertion after it is what stops the step."""
+    return re.subn(re.escape(C_CHECKOUT), "if ! true; then\n", yml)
+
+
+def test_restore_control(tmp):
+    print("restore-control (#82, #90): a gate whose restore of public/data does nothing is stopped by the assertion")
+    yml = open(YML, encoding="utf-8").read()
+    ok("the restore removes everything under public/data but rpi/ and registry.json", yml.count(C_FIND) == 1, yml.count(C_FIND))
+    def readme(files):
+        files["README.md"] = b"moved\n"
+        return files
+    text, n = without_public_data_restore(yml)
+    ok("control: the restore's checkout is found exactly once", n == 1, n)
+    code, out, origin, c1, _ = run_case(tmp, "restore-control", upstream=readme, run_markers=("VALIDATE_FAILS",), yml_text=text)
+    ok("control: the step fails", code != 0, out[-800:])
+    ok("control: nothing is pushed anywhere", branches(origin) == [] and git(origin, "rev-parse", "refs/heads/main") == c1, branches(origin))
+    ok("control: it is the assertion after the restore that stopped it", "does not match" in out, out[-1200:])
+
+
 # ---------- issue #395: the slim list, a build output publish_sources_only must restore ----------
 
 LIST = "public/data/list/index.json"
-LIST_RESTORE = "git checkout FETCH_HEAD -- public/data/list/index.json 2>/dev/null || rm -f public/data/list/index.json\n"
-
-
-def without_list_restore(yml: str) -> tuple[str, int]:
-    """The workflow minus publish_sources_only's tolerant restore of the slim list: #395's control."""
-    return re.subn(r"[ ]*" + re.escape(LIST_RESTORE), "", yml)
-
-
 def test_list_restore(tmp):
     print("list-restore (#395): publish_sources_only restores the slim list like every other build output")
     def readme(files):
         files["README.md"] = b"moved\n"
         return files
-    # control: without the restore line, the run's own list survives the restore and the fifth-output assertion stops
-    # the step before anything is pushed - the assertion is what catches a build output nobody restores
-    text, n = without_list_restore(open(YML, encoding="utf-8").read())
-    ok("control: the list's restore line is found exactly once", n == 1, n)
-    code, out, origin, c1, _ = run_case(tmp, "list-restore-control", upstream=readme, run_markers=("VALIDATE_FAILS",), yml_text=text)
-    ok("control: the step fails", code != 0, out[-800:])
-    ok("control: nothing is pushed anywhere", branches(origin) == [] and git(origin, "rev-parse", "refs/heads/main") == c1, branches(origin))
-    ok("control: it is the fifth-output assertion that stopped it", "does not match" in out, out[-1200:])
+    # the list has no restore line of its own since #90: the gate's restore of public/data covers it (restore-control)
+    ok("the list is under public/data, which the gate's restore covers", LIST.startswith("public/data/") and C_CHECKOUT in open(YML, encoding="utf-8").read())
 
     # main has no list yet (before the first refresh with #395's build): the branch has none either
     code, out, origin, c1, _ = run_case(tmp, "list-restore-absent", upstream=readme, run_markers=("VALIDATE_FAILS",))
@@ -1295,27 +1327,13 @@ def test_list_restore(tmp):
 # ---------- issue #400: the recommender's fit facts, a build output publish_sources_only must restore ----------
 
 FIT = "public/data/fit/index.json"
-FIT_RESTORE = "git checkout FETCH_HEAD -- public/data/fit/index.json 2>/dev/null || rm -f public/data/fit/index.json\n"
-
-
-def without_fit_restore(yml: str) -> tuple[str, int]:
-    """The workflow minus publish_sources_only's tolerant restore of the fit file: #400's control."""
-    return re.subn(r"[ ]*" + re.escape(FIT_RESTORE), "", yml)
-
-
 def test_fit_restore(tmp):
     print("fit-restore (#400): publish_sources_only restores the fit file like every other build output")
     def readme(files):
         files["README.md"] = b"moved\n"
         return files
-    # control: without the restore line, the run's own fit file survives the restore and the fifth-output assertion
-    # stops the step before anything is pushed
-    text, n = without_fit_restore(open(YML, encoding="utf-8").read())
-    ok("control: the fit file's restore line is found exactly once", n == 1, n)
-    code, out, origin, c1, _ = run_case(tmp, "fit-restore-control", upstream=readme, run_markers=("VALIDATE_FAILS",), yml_text=text)
-    ok("control: the step fails", code != 0, out[-800:])
-    ok("control: nothing is pushed anywhere", branches(origin) == [] and git(origin, "rev-parse", "refs/heads/main") == c1, branches(origin))
-    ok("control: it is the fifth-output assertion that stopped it", "does not match" in out, out[-1200:])
+    # the fit file has no restore line of its own since #90: the gate's restore of public/data covers it (restore-control)
+    ok("the fit file is under public/data, which the gate's restore covers", FIT.startswith("public/data/") and C_CHECKOUT in open(YML, encoding="utf-8").read())
 
     # main has no fit file yet (before the first refresh with #400's build): the branch has none either
     code, out, origin, c1, _ = run_case(tmp, "fit-restore-absent", upstream=readme, run_markers=("VALIDATE_FAILS",))
@@ -1364,7 +1382,7 @@ def main(argv=None) -> int:
              test_refused_hosts_file, test_stray_locks, test_review_reports_previous,
              test_registry_only_revert, test_registry_same_field, test_registry_identical, test_registry_untouched,
              test_registry_unexpected, test_registry_held, test_registry_script_fails, test_registry_retry,
-             test_registry_gates, test_rebased_label, test_list_restore, test_fit_restore]
+             test_registry_gates, test_rebased_label, test_restore_control, test_list_restore, test_fit_restore]
     try:
         for c in cases:
             if args.case and not any(c.__name__.endswith(x.replace("-", "_")) for x in args.case):
