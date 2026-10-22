@@ -55,7 +55,7 @@ function loadPage() {
     matchMedia: q => ({ matches: false, addEventListener(t, fn) { (WIN_ON[`${q} ${t}`] ||= []).push(fn); } }), innerWidth: 1400, addEventListener(t, fn) { (WIN_ON[t] ||= []).push(fn); },
     localStorage: { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) },
     fetch: async url => {
-      const rel = url === '/api/v1/programs' ? 'data/programs/index.json' : null;
+      const rel = url === '/api/v1/list' ? 'data/list/index.json' : url === '/api/v1/programs' ? 'data/programs/index.json' : null;
       if (!rel) return { ok: false, status: 404, async json() { throw new Error('404'); } };
       const body = fs.readFileSync(path.join(PUBLIC, rel), 'utf8');
       return { ok: true, status: 200, async json() { return JSON.parse(body); } };

@@ -110,7 +110,7 @@ function loadPage() {
     location: { hash: '', replace(h) { this.hash = h; } }, history: { replaceState() { } }, matchMedia: () => ({ matches: false }),
     localStorage: { getItem: (k) => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: (k) => store.delete(k) },
     innerWidth: 1400, addEventListener() { }, alert() { },
-    fetch: async (url) => (String(url) === '/api/v1/programs' ? ok(INDEX) : ok({}, 404)),
+    fetch: async (url) => (['/api/v1/programs', '/api/v1/list'].includes(String(url)) ? ok(INDEX) : ok({}, 404)),
   };
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = fs.readFileSync(PAGE, 'utf8').split(/\r?\n/);

@@ -38,7 +38,7 @@ function loadPage(answer) {
   const requests = [];
   const real = url => {
     const u = String(url);
-    const file = u === '/api/v1/programs' ? 'data/programs/index.json' : u.startsWith('/api/v1/programs/') ? `data/programs/${u.split('/').pop()}.json`
+    const file = u === '/api/v1/list' ? 'data/list/index.json' : u === '/api/v1/programs' ? 'data/programs/index.json' : u.startsWith('/api/v1/programs/') ? `data/programs/${u.split('/').pop()}.json`
       : u === '/api/v1/camps' ? 'data/camps/index.json' : u === '/api/v1/trends' ? 'data/trends/index.json' : null;
     return file && fs.existsSync(path.join(PUBLIC, file)) ? { status: 200, body: JSON.parse(fs.readFileSync(path.join(PUBLIC, file), 'utf8')) } : { status: 404, body: {} };
   };
@@ -81,7 +81,7 @@ const real200 = () => ({ status: 200, body: INDEX });
 
 test('data requests send no client header (the cookie is the signal); "none" renews the cookie once, "ok" never', async () => {
   const page = loadPage(u => (u === '/api/v1/status' ? { status: 200, body: {}, headers: { 'x-collegedash-session': 'none' } }
-    : u === '/api/v1/programs' ? { ...real200(), headers: { 'x-collegedash-session': 'ok' } } : null));
+    : u === '/api/v1/list' ? { ...real200(), headers: { 'x-collegedash-session': 'ok' } } : null));
   await settle();
   const data = page.requests.filter(r => r.url.startsWith('/api/v1/'));
   assert.ok(data.length >= 2, 'the page made its data requests');
@@ -92,7 +92,7 @@ test('data requests send no client header (the cookie is the signal); "none" ren
 
 test('first load: a 429 shows the card with the wait, "allow cookies" only when the answer had no session, and Try again loads the page', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '30', 'x-collegedash-session': 'none' } } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 429, body: {}, headers: { 'retry-after': '30', 'x-collegedash-session': 'none' } } : null));
   await settle();
   assert.ok(page.app().includes(CARD) && page.app().includes('Try again in 30 seconds, or allow cookies for this site') && page.app().includes('id="loadRetry"'), page.app().slice(0, 400));
   assert.ok(!/HTTP 429|github\.com/.test(page.app()), 'neither the raw status nor the help link is shown');
@@ -101,7 +101,7 @@ test('first load: a 429 shows the card with the wait, "allow cookies" only when 
   page.el('#loadRetry').onclick();
   await settle();
   assert.ok(!page.app().includes(CARD) && page.sb.S.index?.programs?.length > 0, 'Try again loaded the index');
-  const session = loadPage(u => (u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '60', 'x-collegedash-session': 'ok' } } : null));
+  const session = loadPage(u => (u === '/api/v1/list' ? { status: 429, body: {}, headers: { 'retry-after': '60', 'x-collegedash-session': 'ok' } } : null));
   await settle();
   assert.ok(session.app().includes('Try again in 60 seconds.') && !session.app().includes('allow cookies'), 'a session-tier 429 does not mention cookies');
   assert.equal(session.requests.filter(r => r.url === '/' && r.method === 'HEAD').length, 0, 'and sends no renewal');
@@ -110,7 +110,7 @@ test('first load: a 429 shows the card with the wait, "allow cookies" only when 
 test('first load: 503, a dropped connection and anything else each get the card, in words; a 401 is not special', async () => {
   for (const [ans, words] of [[{ status: 503, body: {} }, 'briefly unavailable'], ['network', 'Check your connection'],
     [{ status: 500, body: {} }, 'The data did not load. Try again.'], [{ status: 401, body: {} }, 'The data did not load. Try again.']]) {
-    const page = loadPage(u => (u === '/api/v1/programs' ? ans : null));
+    const page = loadPage(u => (u === '/api/v1/list' ? ans : null));
     await settle();
     assert.ok(page.app().includes(CARD) && page.app().includes(words), `${JSON.stringify(ans)}: ${page.app().slice(0, 300)}`);
     assert.ok(!page.app().includes('refused'), 'no "refused this request" wording any more');
@@ -121,7 +121,7 @@ test('first load: 503, a dropped connection and anything else each get the card,
 // or no hash), Home still draws its heading and the three destinations, with the try-again card inside it.
 test('#465: Home still draws its heading and destinations when the program index fails; the card is inside it', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 503, body: {} } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 503, body: {} } : null));
   await settle();
   const html = page.app();
   assert.match(html, /<h1 class="content-title">Find your college soccer path\.<\/h1>/, 'Home did not draw');
@@ -178,20 +178,20 @@ const go = async (page, hash) => { page.sb.location.hash = hash; page.sb.route()
 
 test('phase 3: a retry waits at least Retry-After; Try again before then sends nothing and says how long is left', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '30' } } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 429, body: {}, headers: { 'retry-after': '30' } } : null));
   await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1);
+  assert.equal(count(page, u => u === '/api/v1/list'), 1);
   fail = false; // the server would answer now, but the page must not ask before the wait is over
   page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'Try again at once sent a request');
+  assert.equal(count(page, u => u === '/api/v1/list'), 1, 'Try again at once sent a request');
   assert.ok(page.app().includes(CARD) && page.app().includes('Try again in 30 seconds'), page.app().slice(0, 300));
   page.advance(29_000);
   page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'Try again 29 s in sent a request');
+  assert.equal(count(page, u => u === '/api/v1/list'), 1, 'Try again 29 s in sent a request');
   assert.ok(page.app().includes('Try again in 1 second.'), 'the card counts down, in words');
   page.advance(1_000);
   page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 2, 'Try again after the wait sends exactly one request');
+  assert.equal(count(page, u => u === '/api/v1/list'), 2, 'Try again after the wait sends exactly one request');
   assert.ok(!page.app().includes(CARD) && page.sb.S.index?.programs?.length > 0, 'and loads the page');
 });
 
@@ -223,7 +223,7 @@ test('phase 3: Compare asks for one refused profile, not all of them, and shows 
 });
 
 test('phase 3: no silent empty state - every view a visitor waits on shows the card on 429, 401 or 503', async () => {
-  const views = [['#/programs', '/api/v1/programs'], ['#/programs', '/api/v1/programs', 'table'], ['#/camps', '/api/v1/camps'], ['#/trends', '/api/v1/trends'],
+  const views = [['#/programs', '/api/v1/list'], ['#/programs', '/api/v1/list', 'table'], ['#/camps', '/api/v1/camps'], ['#/trends', '/api/v1/trends'],
     [`#/p/${SLUGS[0]}`, profileUrl(SLUGS[0])], [`#/compare/${SLUGS[0]},${SLUGS[1]}`, profileUrl(SLUGS[0])]];
   for (const status of [429, 401, 503]) {
     for (const [hash, url, listView] of views) {
@@ -259,45 +259,45 @@ test('phase 3: Pipelines - a refused roster says so, waits for a click, and one 
 /* ---------- phase 3, Bianque's review of #377 ---------- */
 test('phase 3 review: the wait is capped at 120 s, whatever Retry-After says (a proxy or firewall page)', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {}, headers: { 'retry-after': '86400' } } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 429, body: {}, headers: { 'retry-after': '86400' } } : null));
   await settle();
   assert.ok(page.app().includes('Try again in 120 seconds'), `the card names the capped wait: ${page.app().slice(0, 300)}`);
   fail = false;
   page.advance(119_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again before the cap');
+  assert.equal(count(page, u => u === '/api/v1/list'), 1, 'asked again before the cap');
   page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 2, 'the cap, not the day, ends the hold');
+  assert.equal(count(page, u => u === '/api/v1/list'), 2, 'the cap, not the day, ends the hold');
   assert.ok(!page.app().includes(CARD));
 });
 
 test('phase 3 review: a 429 without Retry-After holds for 60 s', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 429, body: {} } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 429, body: {} } : null));
   await settle();
   assert.ok(page.app().includes('Try again in a minute'), page.app().slice(0, 300));
   fail = false;
   page.advance(59_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again within the 60 s default');
+  assert.equal(count(page, u => u === '/api/v1/list'), 1, 'asked again within the 60 s default');
   page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 2);
+  assert.equal(count(page, u => u === '/api/v1/list'), 2);
 });
 
 test('phase 3 review: a 503 that names a wait holds for it; a 503 without one does not hold', async () => {
   let fail = true;
-  const page = loadPage(u => (fail && u === '/api/v1/programs' ? { status: 503, body: {}, headers: { 'retry-after': '20' } } : null));
+  const page = loadPage(u => (fail && u === '/api/v1/list' ? { status: 503, body: {}, headers: { 'retry-after': '20' } } : null));
   await settle();
   assert.ok(page.app().includes('briefly unavailable'), page.app().slice(0, 300));
   fail = false;
   page.advance(19_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 1, 'asked again within the 503 Retry-After');
+  assert.equal(count(page, u => u === '/api/v1/list'), 1, 'asked again within the 503 Retry-After');
   page.advance(1_000); page.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(page, u => u === '/api/v1/programs'), 2);
+  assert.equal(count(page, u => u === '/api/v1/list'), 2);
   let bare = true;
-  const plain503 = loadPage(u => (bare && u === '/api/v1/programs' ? { status: 503, body: {} } : null));
+  const plain503 = loadPage(u => (bare && u === '/api/v1/list' ? { status: 503, body: {} } : null));
   await settle();
   bare = false;
   plain503.el('#loadRetry').onclick(); await settle();
-  assert.equal(count(plain503, u => u === '/api/v1/programs'), 2, 'a 503 with no wait lets Try again ask at once');
+  assert.equal(count(plain503, u => u === '/api/v1/list'), 2, 'a 503 with no wait lets Try again ask at once');
 });
 
 test('phase 3 review: a success from a request sent before the hold does not clear it (two requests in flight)', async () => {

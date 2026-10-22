@@ -36,7 +36,7 @@ function loadPage(saved) {
   const store = new Map(Object.entries(saved).map(([k, v]) => [k, JSON.stringify(v)]));
   const read = url => {
     let rel = url.replace(/^\//, '');
-    if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
   };

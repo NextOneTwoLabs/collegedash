@@ -72,7 +72,7 @@ function makeEnv(fetchLog, overrides = {}, seed = {}) {
   const store = new Map(Object.entries(seed));
   const readPublic = url => {
     let rel = url;
-    if (rel === '/api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === '/api/v1/programs') rel = 'data/programs/index.json'; else if (rel === '/api/v1/list') rel = 'data/list/index.json';
     else if (rel === '/api/v1/status') rel = 'archive/refresh-state.json';
     else if (rel.startsWith('/api/v1/programs/')) rel = `data/programs/${rel.slice('/api/v1/programs/'.length)}.json`;
     else if (rel === '/api/v1/camps') rel = 'data/camps/index.json';
@@ -103,7 +103,7 @@ function makeEnv(fetchLog, overrides = {}, seed = {}) {
         const doc = overrides[url];
         return { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(doc)); } };
       }
-      if (url === '/api/v1/programs' && Object.prototype.hasOwnProperty.call(overrides, 'data/programs/index.json')) {
+      if ((url === '/api/v1/programs' || url === '/api/v1/list') && Object.prototype.hasOwnProperty.call(overrides, 'data/programs/index.json')) {
         const doc = overrides['data/programs/index.json'];
         return { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(doc)); } };
       }

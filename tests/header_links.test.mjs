@@ -70,6 +70,7 @@ function loadPage(html = PAGE, files = {}) {
       if (u.startsWith('/api/v1/')) {
         const sub = u.slice('/api/v1/'.length);
         if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub === 'list') u = 'data/programs/index.json';  // #395: this harness edits the full index, which the page reads the old way
         else if (sub.startsWith('programs/')) u = `data/programs/${sub.slice('programs/'.length)}.json`;
         else if (sub === 'camps') u = 'data/camps/index.json';
         else if (sub === 'trends') u = 'data/trends/index.json';

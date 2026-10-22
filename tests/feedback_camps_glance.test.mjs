@@ -53,7 +53,7 @@ function loadPage(fetchAnswer) {
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } }, innerWidth: 1400, addEventListener() { },
     fetch: async url => {
       if (String(url) === '/api/feedback') return fetchAnswer();
-      let rel = String(url).replace(/^\//, ''); if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+      let rel = String(url).replace(/^\//, ''); if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
       const p = path.join(PUBLIC, rel.replace(/\?.*$/, ''));
       if (!p.startsWith(PUBLIC) || !fs.existsSync(p)) return { ok: false, status: 404, async json() { throw new Error('404'); } };
       const body = fs.readFileSync(p, 'utf8'); return { ok: true, status: 200, async json() { return JSON.parse(body); } };

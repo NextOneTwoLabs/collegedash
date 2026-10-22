@@ -52,6 +52,7 @@ function makeEnv(fetchLog) {
     if (rel.startsWith('api/v1/')) {
       const sub = rel.slice('api/v1/'.length);
       if (sub === 'programs') rel = 'data/programs/index.json';
+        else if (sub === 'list') rel = 'data/list/index.json';
       else if (sub.startsWith('programs/')) rel = `data/programs/${sub.slice('programs/'.length)}.json`;
       else if (sub === 'camps') rel = 'data/camps/index.json';
       else if (sub === 'trends') rel = 'data/trends/index.json';
