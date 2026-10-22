@@ -490,6 +490,16 @@ def _stop_verdict(hosts, ok: bool | None, probe: bool) -> None:
                         f"stopped, one probe after {STOP_COOLDOWN_SECONDS:.0f}s")
 
 
+def _stop_refuse_hop(hop: str, url: str) -> None:
+    """Raise HostStopped if `hop` is stopped, unless this thread is that host's probe. Checked before a hop's gate and
+    again inside it, after the wait, so a worker that was queued on the gate when the host tripped sends nothing."""
+    with _stops_lock:
+        st = _stops.get(hop)
+        if st is not None and st.until is not None and getattr(_stop_probe, "host", None) != hop:
+            st.refused += 1
+            raise HostStopped(hop, url)
+
+
 def stopped_hosts() -> dict[str, dict]:
     """Every host stopped at least once this run: {host: {"stops": n, "refused": n}}."""
     with _stops_lock:
@@ -517,6 +527,9 @@ def _polite(url: str):
     host = _host(url)
     g = _gate(host)
     with g.lock:
+        # issue #108 A: the host may have been stopped while this thread waited for the lock, or (below) during its
+        # own wait. Refused here, before anything is sent and before the try, so the gate's last stamp does not move.
+        _stop_refuse_hop(host, url)
         wait_until = g.not_before
         if g.last is not None:
             gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, JITTER_SECONDS)
@@ -524,6 +537,7 @@ def _polite(url: str):
         delay = wait_until - time.monotonic()
         if delay > 0:
             time.sleep(delay)
+            _stop_refuse_hop(host, url)
         _sending.gate, _sending.sent_at = g, None
         try:
             yield g
@@ -583,12 +597,10 @@ class _PoliteAdapter(HTTPAdapter):
         self.poolmanager.pool_classes_by_scheme = {"http": _StampingHTTPPool, "https": _StampingHTTPSPool}
 
     def send(self, request, **kwargs):
-        hop = _host(request.url)
-        with _stops_lock:  # issue #108 A: a hop onto a stopped host is refused before its gate, unsent
-            st = _stops.get(hop)
-            if st is not None and st.until is not None and getattr(_stop_probe, "host", None) != hop:
-                st.refused += 1
-                raise HostStopped(hop, request.url)
+        # issue #108 A: a hop onto a stopped host is refused before its gate, unsent (and again inside it, in _polite).
+        # Only fetch() probes a stopped host: fetch_no_redirect and robots.txt loads are refused until a fetch() probe
+        # reopens it. They never count failures, so they cannot stop a host themselves.
+        _stop_refuse_hop(_host(request.url), request.url)
         guard = getattr(_host_guard, "guard", None)
         robots_host = _robots_check(request.url)  # issue #101: before the gate, on every hop; None = not checked
         with _polite(request.url) as g:
