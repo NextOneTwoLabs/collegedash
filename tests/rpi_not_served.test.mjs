@@ -222,6 +222,7 @@ function loadPage() {
       if (rel.startsWith('api/v1/')) {
         const sub = rel.slice('api/v1/'.length);
         if (sub === 'programs') rel = 'data/programs/index.json';
+        else if (sub === 'list') rel = 'data/list/index.json';
         else if (sub.startsWith('programs/')) rel = `data/programs/${sub.slice('programs/'.length)}.json`;
         else if (sub === 'camps') rel = 'data/camps/index.json';
         else if (sub === 'trends') rel = 'data/trends/index.json';
@@ -244,7 +245,7 @@ test('loading the page requests no RPI table', async () => {
   const { sandbox, fetchLog } = loadPage();
   await sandbox.loadIndex();
   for (let i = 0; i < 10; i++) await new Promise(r => setTimeout(r, 0));
-  assert.ok(fetchLog.includes('/api/v1/programs') || fetchLog.includes('data/programs/index.json'), 'the page did not load its index, so the log proves nothing');
+  assert.ok(['/api/v1/list', '/api/v1/programs', 'data/programs/index.json'].some(u => fetchLog.includes(u)), 'the page did not load its index, so the log proves nothing');
   assert.deepEqual(fetchLog.filter(u => u.includes('rpi')), []);
 });
 
@@ -276,10 +277,14 @@ test('every program shows the RPI it showed when the page read the table, in the
   const byName = new Map(registry.programs.map(p => [p.slug, (p.ids || {}).ncaaName]));
   const unjoined = programs.filter(p => p.division === 'D1' && bySchool.has(byName.get(p.slug)) && sandbox.rpiOf(p) == null).map(p => p.slug);
   assert.deepEqual(unjoined, [], 'D1 programs the RPI table ranks under their registry ncaaName but the index does not join');
+  // #395: the page now reads the slim list, whose rows carry `rpi` and no rpiHistory; what the page used to show is
+  // worked out from the full index's row for the same program, as it always was.
+  const fullRows = new Map(JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8')).programs.map(r => [r.slug, r]));
   for (const p of programs) {
+    const full = fullRows.get(p.slug) || p;
     const before = bySchool.get(p.shortName || p.name)
-      ?? (p.lastSeason?.year === sandbox.rpiSeason() ? p.lastSeason.rpiRank : null)
-      ?? (p.rpiHistory || []).find(r => r.year === sandbox.rpiSeason())?.rank ?? null;
+      ?? (full.lastSeason?.year === sandbox.rpiSeason() ? full.lastSeason.rpiRank : null)
+      ?? (full.rpiHistory || []).find(r => r.year === sandbox.rpiSeason())?.rank ?? null;
     const shown = before == null ? '—' : '#' + before;
     const card = sandbox.cardHtml(p);
     const tableRow = sandbox.tableHtml([p]);

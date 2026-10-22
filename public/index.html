@@ -1310,7 +1310,7 @@ const COND_FIELDS = [
   { key: 'rosterSize', label: 'Roster size', chip: 'Roster', missing: 'no roster size', unit: 'count', ops: COND_OPS,
     get: p => p.rosterSize },
   { key: 'fallAvgHighF', label: 'Fall average high', chip: 'Fall high', missing: 'no climate data', unit: 'fahrenheit', ops: ORDER_OPS,
-    get: p => p.fallClimate?.avgHighF },
+    get: p => ('fallAvgHighF' in p ? p.fallAvgHighF : (full => full.fallClimate?.avgHighF)(p)) ?? null },  // #395: slim row, else full
 ];
 const COND_BY_KEY = new Map(COND_FIELDS.map(d => [d.key, d])); // a Map, so "constructor" or "__proto__" is never a field
 // A condition exactly as stored, or null. Used on every way in: a saved cd.filters, and the add form.
@@ -1592,7 +1592,7 @@ function apiHeld(url) {
    was last hidden, so a view whose frames were held by a hide is not reported with the hidden time as drawing time. Nothing from the URL, the hash, the search box or the program
    opened is sent, and a profile's size is sent as 0 (the Worker writes 0 whatever arrives). Every failure in here is
    swallowed: rendering never waits on it, and a report that cannot be measured is not sent. */
-const PERF_VIEWS = { list: 'programs', profile: 'program', trends: 'trends', camps: 'camps' };
+const PERF_VIEWS = { list: 'list', profile: 'program', trends: 'trends', camps: 'camps' };  // #395: the list view loads /api/v1/list
 const PERF_MAX = 3;
 const PERF = { rate: null, sampled: false, sent: new Set(), routes: 0, loads: {}, hiddenAt: -1 };
 // Record-only (#399 review): when the page was last hidden. It never sends; ECNL #35's trap was sending on this event.
@@ -1616,7 +1616,7 @@ function perfLatch(resp) {
 }
 // The data file a view loads, or null: only these four are measured.
 function perfRes(url) {
-  return url === '/api/v1/programs' ? 'programs' : /^\/api\/v1\/programs\/[a-z0-9-]+$/.test(url) ? 'program'
+  return url === '/api/v1/list' ? 'list' : url === '/api/v1/programs' ? 'programs' : /^\/api\/v1\/programs\/[a-z0-9-]+$/.test(url) ? 'program'
     : url === '/api/v1/trends' ? 'trends' : url === '/api/v1/camps' ? 'camps' : null;
 }
 // Called once r.json() has resolved: when the data was ready.
@@ -1652,7 +1652,7 @@ function perfSend(body) {
 // After the view has rendered and the next frame has run (two animation frames, a paint approximation): one report
 // per view kind, at most PERF_MAX per page load. An in-app view reports only data loaded while it was being drawn. The
 // landing view reports its data whenever it loaded: boot() awaits loadIndex() before route() runs, so the landing
-// list's /api/v1/programs has always finished before perfView() starts (#397 review).
+// list's /api/v1/list has always finished before perfView() starts (#397 review).
 function perfRendered(view, start, nav) {
   if (!PERF.sampled || PERF.sent.has(view) || PERF.sent.size >= PERF_MAX) return;
   // A page drawn while hidden (a background tab) gets no animation frames until it is shown, so its render time would
@@ -1740,7 +1740,7 @@ function loadFailedHtml(err, id = 'loadRetry') {
 }
 async function loadIndex() {
   if (S.index) return S.index;
-  S.index = await getJSON('/api/v1/programs');
+  S.index = await getJSON('/api/v1/list');  // #395: the slim list; /api/v1/programs stays the full index for the API
   S.index.programs.forEach(prepareSearch);
   /* Conference and division tallies, both derived from the rows that actually loaded and never from a
      list of divisions written down here. `divisions` is every distinct value of p.division, sorted, so
@@ -1883,7 +1883,11 @@ function rpiSeasons() {
   const idx = S.index;
   if (rpiMemo.index === idx) return rpiMemo;
   const current = idx?.season?.current ?? null;
-  const years = [...new Set((idx?.programs || []).flatMap(p => (p.rpiHistory || []).map(h => h.year)))].sort((a, b) => b - a);
+  // #395: the slim list names the ranking season once (season.rpiSeason, build.py's rpi_ranking_season); a full index
+  // has no such field, and its rows' rpiHistory years are read the old way (the plan keeps that as the fallback).
+  const named = idx?.season && 'rpiSeason' in idx.season;
+  const years = named ? (idx.season.rpiSeason == null ? [] : [idx.season.rpiSeason])
+    : [...new Set((idx?.programs || []).flatMap(full => (full.rpiHistory || []).map(h => h.year)))].sort((a, b) => b - a);
   const season = years[0] ?? null;
   // issue #249: the build says when the season being played is over (its final RPI is out) and which
   // season is finished; the calculation below is only the fallback for an index without those fields
@@ -1901,7 +1905,9 @@ const rpiLabel = () => rpiSeason() == null ? 'RPI' : `RPI ${rpiSeason()}${rpiInP
 // tables to each program by its curated ids and writes the result into rpiHistory (every ranked season,
 // the one in progress included). The page no longer reads the tables themselves, and the site no longer
 // serves them (issue #100).
-const rpiOf = p => (p.rpiHistory || []).find(r => r.year === rpiSeason())?.rank ?? null;
+// #395: a slim-list row carries `rpi`, that season's rank already picked (build.py list_row); a full-index row is read
+// the old way.
+const rpiOf = p => ('rpi' in p ? p.rpi : (full => (full.rpiHistory || []).find(r => r.year === rpiSeason())?.rank)(p)) ?? null;
 // Titles sort within division (#198): one division's counts are never interleaved with another's.
 const divisionOrder = p => { const i = (S.index?.divisions || []).indexOf(p.division); return i < 0 ? 1e6 : i; };
 const rpiCell = p => { const r = rpiOf(p); return r == null ? '—' : '#' + r; };

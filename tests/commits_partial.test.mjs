@@ -54,7 +54,7 @@ function loadPage() {
     let rel = url.replace(/^\//, '').replace(/\?.*$/, '');
     if (rel.startsWith('api/v1/')) {
       const sub = rel.slice('api/v1/'.length);
-      rel = sub === 'programs' ? 'data/programs/index.json' : sub.startsWith('programs/') ? `data/programs/${sub.slice(9)}.json`
+      rel = sub === 'list' ? 'data/list/index.json' : sub === 'programs' ? 'data/programs/index.json' : sub.startsWith('programs/') ? `data/programs/${sub.slice(9)}.json`
         : sub === 'camps' ? 'data/camps/index.json' : rel;
     }
     const p = path.join(PUBLIC, rel);

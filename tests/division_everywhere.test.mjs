@@ -77,7 +77,7 @@ function loadPage(transform = s => s) {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map();
-  const serve = { '/api/v1/programs': INDEX, '/api/v1/camps': CAMPS, '/api/v1/trends': TRENDS,
+  const serve = { '/api/v1/programs': INDEX, '/api/v1/list': INDEX, '/api/v1/camps': CAMPS, '/api/v1/trends': TRENDS,
     ...Object.fromEntries(SLUGS.map(s => [`/api/v1/programs/${s}`, PROFILES[s]])) };
   const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return clone(body); } });
   const sandbox = {

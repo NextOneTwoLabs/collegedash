@@ -43,7 +43,7 @@ function loadPage() {
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const readPublic = url => {
     let rel = url.replace(/^\//, '');
-    if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
     else if (rel.startsWith('api/v1/programs/')) rel = `data/programs/${rel.slice('api/v1/programs/'.length)}.json`;
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) ? fs.readFileSync(p, 'utf8') : null;
