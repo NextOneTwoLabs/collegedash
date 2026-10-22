@@ -1272,6 +1272,17 @@ def test_host_stop_counts_the_failing_hop(tmp: str) -> None:
             origin.reset()
             ok("FIX the origin is still open: its own page is fetched", try_fetch(origin.url("/page")) is None and origin.hits == {"/page": 1},
                str(origin.hits))
+        # a stopped origin's probe that fails after a redirect still waits a full cooldown before the next probe
+        clock = FakeClock()
+        with fresh_state(tmp), stop_rules(clock):
+            st = common._StopState()
+            st.until, st.stops = clock.t - 1, 1  # stopped, cooldown just over: the next fetch probes
+            common._stops[origin.host] = st
+            first = try_fetch(origin.url("/go/probe"))
+            origin.reset()
+            second = try_fetch(origin.url("/page"))
+            ok("a failed probe through a redirect keeps the origin stopped for another cooldown: the next fetch is refused",
+               first == "FetchError" and second == "HostStopped" and not origin.hits, f"{first} {second} {origin.hits}")
     finally:
         sick.close()
         origin.close()

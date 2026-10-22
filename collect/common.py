@@ -469,13 +469,19 @@ def _stop_admit(host: str, url: str) -> bool:
 
 def _stop_verdict(hosts, ok: bool | None, probe: bool) -> None:
     """After a live fetch: True = it succeeded, False = it gave up on a retry status or a network error, None = no
-    verdict. Always called (try/finally), so a probe slot is freed whatever the probe ended in."""
+    verdict. hosts[0] is the host asked first (its probe slot is freed here: this is always called, in a finally,
+    whatever the probe ended in); the last is the hop that answered or failed. A success clears every one of them (the
+    origin answered too, with a redirect); a failure counts only against the last, the host that actually failed."""
     now = _stop_clock()
+    hosts = list(dict.fromkeys(h for h in hosts if h))
     with _stops_lock:
-        for i, host in enumerate(dict.fromkeys(h for h in hosts if h)):
+        if probe and hosts and hosts[0] in _stops:
+            st = _stops[hosts[0]]
+            st.probing = False
+            if ok is False and hosts[-1] != hosts[0] and st.until is not None:
+                st.until = now + STOP_COOLDOWN_SECONDS  # a failed probe waits a full cooldown: one probe per cooldown
+        for host in (hosts[-1:] if ok is False else hosts if ok is True else []):
             st = _stops.setdefault(host, _StopState())
-            if probe and i == 0:
-                st.probing = False
             if ok is True:
                 if st.until is not None:
                     log(f"host stop: {host} answered again; reopened")
