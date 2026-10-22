@@ -14,7 +14,12 @@
 //   2. then the page's own follow-up work: every fetch it started has answered and every short timer it set (at most
 //      SHORT_MS: hash changes, which the stub fires on a 0 ms timer, the 80 ms typing debounce, requestAnimationFrame)
 //      has run, with nothing new for QUIET_MS. Long timers (session renewal, polling) are not waited for.
-// A page that never goes quiet fails after MAX_MS with what was still pending, rather than hanging.
+// A page whose boot() never settles, or that never goes quiet, fails after MAX_MS with what was still pending, rather
+// than hanging the run (Bianque on this fix). Once that has happened in a file (one process under node --test), every
+// later ready() in it fails at once with the first failure's message, so a stuck page costs one wait, not one per test.
+//
+// requestAnimationFrame: track() routes it through the tracked setTimeout only when the sandbox already defines one, so
+// a harness that adds requestAnimationFrame must define it before calling track().
 import assert from 'node:assert/strict';
 
 export const SHORT_MS = 300, QUIET_MS = 30, MAX_MS = 15000;
@@ -51,8 +56,16 @@ export function track(sandbox) {
 
 const tick = ms => new Promise(r => setTimeout(r, ms));
 
+// The first failure to settle in this file, if any (see the header).
+let stuck = null;
+const fail = msg => { stuck ||= msg; assert.fail(msg); };
+const pendingText = pending => `${pending.timers.size} short timers, ${pending.fetches} fetches pending`;
+// For tests/page_ready.test.mjs only: forget an earlier failure.
+export const _resetForTest = () => { stuck = null; };
+
 // Resolves once the page has nothing short pending and has been quiet for QUIET_MS.
-export async function idle(pending) {
+export async function idle(pending, { max = MAX_MS } = {}) {
+  if (stuck) assert.fail(`an earlier page in this file never settled; not waiting again (${stuck})`);
   const start = Date.now();
   // Quiet is counted from now, never from before: boot() can settle long after the page's last tracked call (parsing
   // the index is synchronous work), and a 0 ms timer the stub DOM set during the first route (a hash change) must
@@ -60,14 +73,20 @@ export async function idle(pending) {
   pending.last = Math.max(pending.last, start);
   for (;;) {
     if (!pending.timers.size && !pending.fetches && Date.now() - pending.last >= QUIET_MS) return;
-    assert.ok(Date.now() - start < MAX_MS, `the page did not go quiet in ${MAX_MS} ms (${pending.timers.size} short timers, ${pending.fetches} fetches pending)`);
+    if (Date.now() - start >= max) fail(`the page did not go quiet in ${max} ms (${pendingText(pending)})`);
     await tick(5);
   }
 }
 
 // The first view: boot()'s promise, then quiet.
-export async function ready(sb, pending) {
+export async function ready(sb, pending, { max = MAX_MS } = {}) {
+  if (stuck) assert.fail(`an earlier page in this file never settled; not waiting again (${stuck})`);
   assert.ok(sb.__booted && typeof sb.__booted.then === 'function', 'boot() was not captured (use bootable() on the script)');
-  await sb.__booted;
-  await idle(pending);
+  let timer = null;
+  const LATE = Symbol('late');
+  const late = new Promise(r => { timer = setTimeout(() => r(LATE), max); });
+  const won = await Promise.race([Promise.resolve(sb.__booted).then(() => null, () => null), late]);
+  clearTimeout(timer);
+  if (won === LATE) fail(`boot() did not settle in ${max} ms (${pendingText(pending)})`);
+  await idle(pending, { max });
 }
