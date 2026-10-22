@@ -496,9 +496,16 @@ const disp = p => p.shortName || p.name || '';
 // more, matching the shipped comparator; the count is 50 under every other reasonable definition too
 // (plain localeCompare, lowercased <, and raw code points all agree), so it is not an artefact of it.
 // Issue #60's reported bug, in the old comparator's order: Air Force (stored as "United States Air Force Academy")
-// buried far down the list. (#126 F-c: this helper is the check test 27 makes; the test after it runs it on an index
-// with 40 fewer programs.)
-const buriedInOldOrder = (before, name) => before.findIndex(p => disp(p) === name) > 200;
+// buried far down the list. Measured without a position (#126 F-c: a fixed "> 200" broke when 40 programs left the
+// list): the program sits below more than half of the programs whose shown name sorts AFTER it, which is wrong in
+// any list of any size, and false for every program in a correctly sorted list.
+function buriedInOldOrder(before, name) {
+  const at = before.findIndex(p => disp(p) === name);
+  if (at < 0) return false;
+  const later = p => disp(p).localeCompare(name, undefined, { sensitivity: 'accent' }) > 0;
+  const shouldFollow = before.filter(later).length;
+  return shouldFollow > 0 && before.slice(0, at).filter(later).length * 2 > shouldFollow;
+}
 function adjacentInversions(rows) {
   let n = 0;
   for (let i = 0; i + 1 < rows.length; i++)
