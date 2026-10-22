@@ -35,7 +35,8 @@ function load(index) {
   return sb.__api;
 }
 const MARKS = ['ʻ', 'ʼ', "'", '’', '‘', '`', '´', '′', 'ʹ'];  // ʻ ʼ ' ’ ‘ ` ´ ′ ʹ
-const APOS = new RegExp(`[${MARKS.join('')}‛ʽˈ]`, 'g');
+const APOS = new RegExp(`[${MARKS.join('')}‛ʽˈ]`, 'g');  // for replace()
+const HAS_APOS = new RegExp(APOS.source);  // for test(): a /g regex keeps lastIndex between calls (Bianque on #479)
 
 test('normText drops the ʻokina and apostrophe-like marks: Hawaiʻi is "hawaii", St. Mary\'s is "st marys"', () => {
   const A = load({ programs: [] });
@@ -84,9 +85,8 @@ test('on the committed index: every search name carrying such a mark is found by
   const labels = [];
   // the labels search reads (prepareSearch: searchNames, else shortName and name); a full name such as "St. John's University
   // (New York City)" is not one of them, with or without its apostrophe
-  for (const p of index.programs) for (const l of (p.searchNames || [p.shortName, p.name])) if (l && APOS.test(l)) labels.push([p.slug, l]);
-  APOS.lastIndex = 0;
-  assert.ok(labels.length >= 20, `fixture: only ${labels.length} labels with an apostrophe-like mark`);
+  for (const p of index.programs) for (const l of (p.searchNames || [p.shortName, p.name])) if (l && HAS_APOS.test(l)) labels.push([p.slug, l]);
+  assert.ok(labels.length >= 40, `fixture: only ${labels.length} labels with an apostrophe-like mark`);
   const missed = [];
   for (const [slug, l] of labels) {
     const typed = l.replace(APOS, '');
@@ -94,4 +94,30 @@ test('on the committed index: every search name carrying such a mark is found by
     if (!hit || hit.m.score < 60) missed.push(`${slug}: "${typed}" -> ${hit ? hit.m.score : 'no match'}`);
   }
   assert.deepEqual(missed, [], 'typed without the mark, these labels are not matched by their words');
+});
+
+// Bianque on #479: a visitor may type the mark as a space ("st mary s"), as the old normaliser read it. A text with a mark
+// is also indexed in that spaced form, at the same score, so those queries lose nothing either.
+test('the mark typed as a space finds the named program first at the same score as the mark itself', () => {
+  const index = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8'));
+  const A = load(index);
+  const run = q => A.searchMatches(A.normText(q), Infinity, q).map(h => `${h.p.slug}:${h.m.score}`);
+  for (const [spaced, marked] of [['st mary s', "st. mary's"], ['st john s', "st. john's"], ['king s', "king's"], ['nor easters', "nor'easters"],
+    ['d youville', "d'youville"], ['texas woman s', "texas woman's"], ['university of hawai i at manoa', 'university of hawaiʻi at manoa']]) {
+    const a = run(spaced), b = run(marked);
+    assert.ok(b.length > 0, `fixture: "${marked}" finds nothing`);
+    // the program the words name comes first, at the same score; the spaced form finds nothing the mark does not. (The
+    // mark can find more: "king's" is also a prefix of the nickname Kingsmen, which "king s" is not.)
+    assert.equal(a[0], b[0], `"${spaced}" does not lead with what "${marked}" leads with`);
+    assert.deepEqual(a.filter(x => !b.includes(x)), [], `"${spaced}" finds what "${marked}" does not, or at another score`);
+  }
+  assert.equal(run('st mary s')[0], 'st-marys-tx:100');
+  assert.equal(run('king s')[0], 'kings-college-pa:100');
+  assert.ok(run('nor easters').includes('new-england:30'), 'the nickname typed with a space');
+  // made-up rows: the spaced short name is an exact match, the spaced nickname a nickname match
+  const B = load({ programs: [{ slug: 'k', name: 'Kapiʻolani CC', shortName: 'Kapiʻolani', nickname: 'Nor’easters', searchNames: ['Kapiʻolani'], city: 'Honolulu', state: 'HI' }] });
+  const top = q => B.searchMatches(B.normText(q), Infinity, q)[0]?.m.score;
+  assert.equal(top('kapi olani'), 100);
+  assert.equal(top('kapiolani'), 100);
+  assert.equal(top('nor easters'), 30);
 });

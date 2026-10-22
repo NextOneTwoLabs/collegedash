@@ -1128,30 +1128,38 @@ function placeMatch(p, q, raw) {
 // then shows the list rather than opening one program. "Stanford" is also a city, but the one program there is
 // Stanford itself, a name hit, so Enter still opens it. `hits` defaults to the ones the filters let through (#23).
 const placeQueryHits = (hits = visibleMatches()) => hits.some(h => h.m.place);
+// #479: normText drops an apostrophe-like mark ("St. Mary's" -> "st marys"). A visitor may also type it as a space
+// ("st mary s"), as the old normaliser read it, so a text carrying such a mark is ALSO indexed in that spaced form,
+// at the same score. Texts without one have no spaced form (null).
+const spacedForm = (text, plain) => { const t = normText(String(text || '').replace(NORM_APOS, ' ')); return t && t !== plain ? t : null; };
 function prepareSearch(p) { // once per program, when the program list is loaded
-  const short = normText(p.shortName || p.name);
+  const short = normText(p.shortName || p.name), shortAlt = spacedForm(p.shortName || p.name, short);
   const seen = new Set(), names = [];
   for (const label of (p.searchNames || [p.shortName, p.name])) {
-    const text = normText(label);
-    if (!text || seen.has(text)) continue;
-    seen.add(text);
-    names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
+    const plain = normText(label);
+    for (const text of [plain, spacedForm(label, plain)]) {
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
+      names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
+    }
   }
-  p._search = { short, shortWords: wordsOf(short), initials: wordsOf(short).map(w => w[0]).join(''), names,
-    nick: normText(p.nickname), nickWords: wordsOf(normText(p.nickname)), city: normText(p.city) };
+  const nick = normText(p.nickname), nickAlt = spacedForm(p.nickname, nick);
+  p._search = { short, shortWords: wordsOf(short), shortAlt, shortAltWords: shortAlt ? wordsOf(shortAlt) : null,
+    initials: wordsOf(short).map(w => w[0]).join(''), names,
+    nick, nickWords: wordsOf(nick), nickAltWords: nickAlt ? wordsOf(nickAlt) : null, nickAlt, city: normText(p.city) };
 }
 // returns {score, why} or null. Higher score = better match; `why` names the matched text when it is not the short name.
 // `raw` is the query as typed (for the place match's capitals rule); a place hit comes last, below every name hit.
 function matchScore(p, q, raw) {
   const s = p._search, toks = wordsOf(q), joined = q.replace(/ /g, '');
   if (!s || !toks.length) return null;
-  if (s.short === q) return { score: 100 };
-  if (s.short.startsWith(q)) return { score: 90 };
-  if (tokensPrefixWords(toks, s.shortWords)) return { score: 80 };
+  if (s.short === q || s.shortAlt === q) return { score: 100 };
+  if (s.short.startsWith(q) || s.shortAlt?.startsWith(q)) return { score: 90 };
+  if (tokensPrefixWords(toks, s.shortWords) || (s.shortAltWords && tokensPrefixWords(toks, s.shortAltWords))) return { score: 80 };
   if (s.initials === joined && joined.length >= 3) return { score: 55 };
   let best = null;
   for (const n of s.names) {
-    if (n.text === s.short) continue;
+    if (n.text === s.short || n.text === s.shortAlt) continue;
     let sc = 0;
     // #309: an exact search name ('UNC', 'Pitt') outranks another program's short-name prefix (90: 'UNC Wilmington'),
     // so North Carolina comes first and the other UNC schools still follow; only the short name itself (100) beats it
@@ -1162,7 +1170,8 @@ function matchScore(p, q, raw) {
     if (sc > (best?.score || 0)) best = { score: sc, why: n.label };
   }
   if (best) return best;
-  if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords))) return { score: 30, why: p.nickname };
+  if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords) || s.nickAlt?.startsWith(q)
+    || (s.nickAltWords && tokensPrefixWords(toks, s.nickAltWords)))) return { score: 30, why: p.nickname };
   if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
   return placeMatch(p, q, raw);
 }
