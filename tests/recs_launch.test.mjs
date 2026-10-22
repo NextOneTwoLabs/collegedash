@@ -8,8 +8,9 @@
 //
 // What this proves:
 //   - wrangler.toml sets RECS_ENABLED = "true", and still says how to roll back;
-//   - the About page has a "Find programs for me" card, drawn only while the switch is on (S.recs.on), so a rollback
-//     never leaves the page describing a feature it doesn't show;
+//   - the About page has a "Find programs for me" card, hidden unless the switch is on (S.recs.on), and switching on
+//     unhides it (the About page can be drawn before api/status answers), so a rollback never leaves the page
+//     describing a feature it doesn't show;
 //   - the card states the approved method (four optional categories, Must have and Prefer, equal weights over a fixed
 //     count, Need verification for unknowns, no match percentage, no admission, recruiting or cost prediction, and
 //     no RPI, rankings, rosters or commitments in the ranking) and the approved privacy terms (D6: this browser only,
@@ -31,10 +32,12 @@ test('production switches recommendations on, and wrangler.toml still says how t
   assert.match(toml, /Rolling back is setting it back to "false"/, 'the rollback stays written beside the switch');
 });
 
-const card = () => /\$\{S\.recs\.on \? `\s*<div class="card" id="faqRecs"><h3>How does “Find programs for me” work\?<\/h3>([\s\S]*?)<\/div>` : ''\}/.exec(fn('renderFaq'));
+const card = () => /<div class="card" id="faqRecs"\$\{S\.recs\.on \? '' : ' hidden'\}><h3>How does “Find programs for me” work\?<\/h3>([\s\S]*?)<\/div>/.exec(fn('renderFaq'));
 
-test('the About page has a "Find programs for me" card, drawn only while the switch is on', () => {
-  assert.ok(card(), 'renderFaq draws the card behind S.recs.on');
+test('the About page has a "Find programs for me" card, hidden unless the switch is on', () => {
+  assert.ok(card(), 'renderFaq draws the card, hidden while S.recs.on is false');
+  // the About page can be drawn before api/status answers: switching on shows the card already on screen
+  assert.match(fn('recsSwitchedOn'), /\$\('#faqRecs'\)\?\.removeAttribute\('hidden'\)/, 'switching on unhides the card');
 });
 
 test('the card states the approved method', () => {

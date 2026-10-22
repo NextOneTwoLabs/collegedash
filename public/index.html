@@ -2834,6 +2834,7 @@ function recsSwitchedOn() {
   if (S.recs.on) return;
   S.recs.on = true;
   renderHeaderRecs(); // #434: the header's entry, drawn before the index is needed (the #433 pilot switches recs on at start)
+  $('#faqRecs')?.removeAttribute('hidden'); // #400 release: the About page may be drawn before api/status answers
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
@@ -6040,6 +6041,12 @@ async function renderFaq() {
 
     <div class="card"><h3>What about players’ privacy?</h3>
       <p>This site shows only what official rosters and public recruiting sites already publish: name, position, club, home state and class year. No contact details are collected. If you would like a record removed, email ${feedbackLink()}.</p></div>
+
+    <div class="card" id="faqRecs"${S.recs.on ? '' : ' hidden'}><h3>How does “Find programs for me” work?</h3>
+      <p>You choose any of four optional categories: region, division, school size and climate. For each one you say <b>Must have</b> or <b>Prefer</b>. A must have leaves out every program known not to match; a program whose data can’t tell is listed under <b>Need verification</b>, never as a match. Among the rest, every preference you answered counts the same, and programs are ordered by how many they match, then by name. There is no match percentage.</p>
+      <p>School size is undergraduates from College Scorecard (under 5,000, 5,000–14,999, 15,000+). Climate comes from NOAA’s 1991–2020 normals at the nearest weather station: the coldest month averages 45°F or more (mild winters), 27–45°F (four seasons) or under 27°F (cold winters). It’s an estimate, so climate is Prefer only, and a station more than 50 km from campus reads “climate unknown”. The source and fetch date of each reason on a card are in its tooltip, and screen readers read them out.</p>
+      <p>The site never predicts admission, recruiting or what you will pay. RPI, rankings, rosters and commitments are not used to rank programs.</p>
+      <p>Your preferences and the programs you hide are saved only in this browser, separate from your Shortlist. Clear personalization removes them. Anyone using this device can see them. Nothing about your choices is sent to our server; the data file the recommendations read is counted with every other data file, as described under Speed measurements and in the data API notes.</p></div>
 
     <div class="card"><h3>Speed measurements</h3>
       <p>To find out how fast the site loads, every page load sends a short timing report after a view appears. It says which kind of view it was (the list, a program, trends or camps), whether the device is a phone, tablet or desktop, and how many milliseconds loading, reading and drawing the data took, plus the size of the shared list, trends and camps data. Our server also records how long it took to answer most data requests. We don't record your IP address, a session or visitor id, your browser's user agent, the page address, the program you opened, or anything you searched for. Reports are kept as timestamped rows in Cloudflare Analytics Engine, for up to three months, and are used only to make the site faster.</p></div>
