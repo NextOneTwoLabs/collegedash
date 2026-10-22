@@ -56,7 +56,7 @@ async function loadPage(index = INDEX) {
     matchMedia: () => ({ matches: false }),
     localStorage: { getItem: k => (store.has(k) ? store.get(k) : null), setItem: (k, v) => store.set(k, String(v)), removeItem: k => store.delete(k) },
     innerWidth: 1400, addEventListener() { },
-    fetch: async url => (url === INDEX_URL || url === '/api/v1/programs')
+    fetch: async url => (url === INDEX_URL || url === '/api/v1/programs' || url === '/api/v1/list')
       ? { ok: true, status: 200, async json() { return JSON.parse(doc); } }
       : { ok: false, status: 404, async json() { throw new Error('404'); } },
   };

@@ -58,6 +58,7 @@ function loadPage(files = {}, stored = {}) {
       if (u.startsWith('/api/v1/')) {
         const sub = u.slice('/api/v1/'.length);
         if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub === 'list') u = 'data/list/index.json';
         else if (sub.startsWith('programs/')) u = `data/programs/${sub.slice('programs/'.length)}.json`;
         else if (sub === 'status') u = 'archive/refresh-state.json';
         else u = `data/${sub}/index.json`;

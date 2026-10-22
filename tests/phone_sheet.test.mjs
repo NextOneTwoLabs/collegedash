@@ -88,7 +88,7 @@ function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   };
   const readPublic = url => {
     let rel = String(url).replace(/^\//, '').replace(/\?.*$/, '');
-    if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) && fs.statSync(p).isFile() ? fs.readFileSync(p, 'utf8') : null;
   };

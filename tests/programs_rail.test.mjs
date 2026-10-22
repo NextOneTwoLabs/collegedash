@@ -93,7 +93,7 @@ function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   };
   const readPublic = url => {
     let rel = String(url).replace(/^\//, '').replace(/\?.*$/, '');
-    if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
     const p = path.join(PUBLIC, rel);
     return p.startsWith(PUBLIC) && fs.existsSync(p) && fs.statSync(p).isFile() ? fs.readFileSync(p, 'utf8') : null;
   };
@@ -439,7 +439,8 @@ test('GUARD (passes on main by design): the exact set of live regions - the rail
   const pg = await open({ width: 375, store: { 'cd.filters': { conf: ['D1|ACC'] } } });
   pg.$('#sidebarToggle').onclick();
   const ids = [...HTML.matchAll(/<[^<>]*aria-live="(polite|assertive)"[^<>]*>/g)].map(m => (/id="([\w-]+)"/.exec(m[0]) || [])[1]).sort();
-  // campsStatus is the ID Camps page's own count line (#471), pinned the same way in route_focus
-  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive']);
+  // campsStatus is the ID Camps page's own count line (#471), homeStatus Home's search box's (#507); pinned the same way
+  // in route_focus
+  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'homeStatus', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive']);
   assert.ok(!/aria-live/.test(pg.$('#sidebar').innerHTML + pg.$('#app').innerHTML), 'a live region drawn by the rail, the sheet or the chips');
 });

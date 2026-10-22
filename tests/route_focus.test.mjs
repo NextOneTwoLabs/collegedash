@@ -55,7 +55,7 @@ function loadPage({ hash = '#/' } = {}) {
   const bySelector = sel => { if (drawn[sel]) return drawn[sel](); if (!els.has(sel)) els.set(sel, makeEl(sel)); return els.get(sel); };
   const readPublic = url => {
     let rel = String(url).replace(/^\//, '').replace(/\?.*$/, '');
-    if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+    if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
     else if (rel === 'api/v1/camps') rel = 'data/camps/index.json';
     else if (rel === 'api/v1/trends') rel = 'data/trends/index.json';
     else if (rel.startsWith('api/v1/programs/')) rel = `data/programs/${rel.slice('api/v1/programs/'.length)}.json`;
@@ -195,9 +195,10 @@ test('the same page drawn again (a retry, an address rewritten in place) takes n
   assert.deepEqual(pg.focus, [], 'redrawing the same page took focus');
 });
 
-test('no new live region: exactly the six polite regions main has (#qStatus covers search), none assertive', () => {
+// #507: Home's search box has its own status, homeStatus (the header box, and so #qStatus, is hidden on Home).
+test('no new live region: exactly the eight polite regions (#qStatus for the header box, #homeStatus for Home\'s), none assertive', () => {
   const ids = [...HTML.matchAll(/<[^<>]*aria-live="(polite|assertive)"[^<>]*>/g)].map(m => (/id="([\w-]+)"/.exec(m[0]) || [])[1]).sort();
   // #465: campsStatus is the ID Camps filter bar's result count, like Pipelines' trLive; it is never used on a route change
-  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive'], 'a live region was added or removed');
+  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'homeStatus', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive'], 'a live region was added or removed');
   assert.ok(!/aria-live="assertive"/.test(HTML), 'an assertive live region');
 });

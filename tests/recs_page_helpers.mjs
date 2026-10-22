@@ -29,7 +29,7 @@ export const RECS_JS = fs.readFileSync(path.join(PUBLIC, 'recs.js'), 'utf8');
 export const CATALOG = JSON.parse(fs.readFileSync(path.join(HERE, 'fixtures', 'recs', 'catalog.json'), 'utf8'));
 const INDEX_UPDATED = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8')).updated;
 export const FIT = { updated: INDEX_UPDATED, fitTaxonomy: CATALOG.fitTaxonomy, constants: CATALOG.constants, sources: CATALOG.sources, fit: CATALOG.fit };
-export const LOAD_REQUESTS = ['/api/v1/programs', '/api/v1/status', 'api/status', 'api/ask/status'];
+export const LOAD_REQUESTS = ['/api/v1/list', '/api/v1/status', 'api/status', 'api/ask/status'];  // #395: the slim list
 export const ON = { local: false, recs: true };
 
 // The element the page last focused (the stub DOM has no focus of its own). Its _name is the selector it was found by.
@@ -54,7 +54,7 @@ const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 're
 // `status`: the api/status body, or null for a 404. `storage`: initial localStorage entries, or 'throws'.
 // `width`: window.innerWidth. `recsJs`: false makes the recs.js script fail to load.
 // `fit`: 'ok', 'missing' (404), 'network' (fetch rejects), 'updating' (always another build) or 'updating-once'.
-// `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/programs answer 404.
+// `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/list (the page's index) answer 404.
 // `hash`: location.hash when the page loads. `session`: initial sessionStorage entries. `transform`: applied to the script.
 export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok',
   hash = '', session = {}, transform = (x) => x } = {}) {
@@ -81,7 +81,7 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
     innerWidth: width, addEventListener(type, fn) { (windowListeners[type] = windowListeners[type] || []).push(fn); },
     fetch: async (url) => {
       requests.push(String(url));
-      if (programs === 'missing' && url === '/api/v1/programs') return { ok: false, status: 404, async json() { return { error: 'not found' }; } };
+      if (programs === 'missing' && url === '/api/v1/list') return { ok: false, status: 404, async json() { return { error: 'not found' }; } };
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return JSON.parse(JSON.stringify(body)); } });
       if (url === 'api/status' || url === '/api/status') return status ? ok(status) : ok({}, 404);
       if (url === 'api/ask/status' || url === '/api/ask/status') return { ok: false, status: 0, type: 'opaqueredirect', async json() { throw new SyntaxError('opaque'); } };
@@ -96,6 +96,7 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
       if (u.startsWith('api/v1/')) {
         const sub = u.slice('api/v1/'.length);
         if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub === 'list') u = 'data/list/index.json';
         else if (sub === 'status') u = 'archive/refresh-state.json';
         else u = `missing/${sub}`;
       }

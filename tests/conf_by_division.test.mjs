@@ -62,7 +62,7 @@ function loadPage() {
     innerWidth: 1400, addEventListener() { },
     fetch: async url => {
       let rel = url.replace(/^\//, '');
-      if (rel === 'api/v1/programs') rel = 'data/programs/index.json';
+      if (rel === 'api/v1/programs') rel = 'data/programs/index.json'; else if (rel === 'api/v1/list') rel = 'data/list/index.json';
       else if (rel === 'api/v1/camps') rel = 'data/camps/index.json';
       const p = path.join(PUBLIC, rel.replace(/\?.*$/, ''));
       if (!p.startsWith(PUBLIC) || !fs.existsSync(p)) return { ok: false, status: 404, async json() { throw new Error('404'); } };
