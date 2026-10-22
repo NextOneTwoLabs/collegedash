@@ -185,6 +185,8 @@ What changes
   focus scrolls the box to the top of the viewport so rows show above the keyboard. Page colour tokens only (both
   themes).
 - The header box `#q` stays hidden on Home (`SEARCH_VIEWS` unchanged).
+- When the program index failed to load, Home draws the try-again card and no box (`boot()` 6160-6170 renders Home
+  without data); a test pins it.
 
 Tests changed on purpose (decision 1)
 - `tests/shell_nav.test.mjs` 60-70: still exactly one `id="q"` in the header and Home never reaches for `#q`, but
