@@ -225,6 +225,7 @@ def test_no_request():
 # ---------- the trigger, through athletics_site.collect ----------
 
 SAVED: list = []
+ANNOTATIONS: list = []  # common.annotate lines (GitHub Actions workflow commands)
 
 
 def roster_page() -> str:
@@ -247,8 +248,10 @@ def run_collect(schedule_html: str, *, seasons_back: int = 0, history: dict | No
         return pages[url], {"url": url, "status": 200, "finalUrl": url, "fromCache": False}
 
     program = {"slug": "fixture", "athletics": {"platform": "sidearm", "baseUrl": BASE, "sportPath": SPORT}}
-    real = (common.fetch_text, common.save_source, common.log, common.load_source)
+    real = (common.fetch_text, common.save_source, common.log, common.load_source, common.annotate)
     SAVED.clear()
+    ANNOTATIONS.clear()
+    common.annotate = ANNOTATIONS.append
     common.fetch_text, common.log = fetch_text, logs.append
     common.save_source = lambda *a, **k: SAVED.append(True)
     common.load_source = lambda slug, name: None
@@ -258,7 +261,7 @@ def run_collect(schedule_html: str, *, seasons_back: int = 0, history: dict | No
     except Exception as e:
         err = e
     finally:
-        common.fetch_text, common.save_source, common.log, common.load_source = real
+        common.fetch_text, common.save_source, common.log, common.load_source, common.annotate = real
     return [l for l in logs if "no games found" in l or "zero-games diagnostic failed" in l], err
 
 
@@ -270,6 +273,25 @@ def test_trigger():
     ok("... describing the page", "vue=schedule" in (lines or [""])[0], lines)
     lines, err = run_collect(page(legacy_rows(3)), seasons_back=1, history={SCHEDULE + "/2025": page()})
     ok("silent: a history season with no game (only the current page is described)", lines == [] and err is None, (lines, err))
+
+
+def test_zero_games_is_a_workflow_warning():
+    """A schedule page that loaded and gave no game is a ::warning in the Actions run, not only a log line (#393):
+    an empty schedule must not be stored silently. The warning names the slug and the season and nothing from the page."""
+    lines, err = run_collect(vue_page())
+    warns = [a for a in ANNOTATIONS if a.startswith("::warning")]
+    ok("one ::warning when the current schedule page loaded and gave no game", len(warns) == 1 and err is None,
+       (ANNOTATIONS, err))
+    w = (warns or [""])[0]
+    ok("... titled for the athletics schedule", w.startswith("::warning title=athletics schedule::"), w)
+    ok("... naming the slug, the season and the issue", all(p in w for p in ("fixture", "2026", "0 games", "#393")), w)
+    ok("... with no value from the page", not leaks(w), leaks(w))
+    ok("... and the schedule is still stored (a warning, not a failure)", SAVED == [True], SAVED)
+    run_collect(page(legacy_rows(3)))
+    ok("no ::warning when the schedule page has games", ANNOTATIONS == [], ANNOTATIONS)
+    run_collect(page(legacy_rows(3)), seasons_back=1, history={SCHEDULE + "/2025": page()})
+    ok("no ::warning for an empty history season (only the current page)", ANNOTATIONS == [], ANNOTATIONS)
+    ok("annotate restored after each run", common.annotate is not ANNOTATIONS.append)
 
 
 def test_a_failing_diagnostic_never_fails_the_collection():
@@ -294,7 +316,7 @@ def main(argv=None) -> int:
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_vue_schedule_page, test_keys_are_default_deny, test_mutation_shape_pattern_instead_of_allowlist,
-                 test_other_shapes, test_caps_are_400_characters_and_8_keys, test_no_request, test_trigger,
+                 test_other_shapes, test_caps_are_400_characters_and_8_keys, test_no_request, test_trigger, test_zero_games_is_a_workflow_warning,
                  test_a_failing_diagnostic_never_fails_the_collection):
         try:
             case()
