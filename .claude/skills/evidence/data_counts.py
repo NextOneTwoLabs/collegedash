@@ -16,8 +16,9 @@ It prints Markdown, ready to paste into a report or PR description:
   2. for the program profiles that changed (programs/index.json is not one): how many changed in each top-level field
      (--ignore skips fields, `_build` by default, that change on every build; a profile that differs only there is
      counted on its own line, not hidden). A last column says in how many of those profiles the field differs only in
-     strings that are ISO dates or timestamps (an `asOf` or `updated` moved, nothing else), so a refresh's
-     timestamp churn is not read as changed data;
+     the bookkeeping timestamps named in STAMP_KEYS (when a page was fetched, a record last seen, a build run), so a
+     refresh's timestamp churn is not read as changed data. Event dates (a game's `date`, a news item's `date`, a
+     season's `through`) are data: a rescheduled game counts as a real change;
   3. one table per --count: profiles where the field is present and non-empty, items in it (lists and objects),
      and its values when there are at most 12 distinct scalars (so `division` shows D1/D2/D3).
 Exact counts here describe one tree on one day. They go in a PR as evidence; a test never pins them on live data.
@@ -93,15 +94,27 @@ def dig(obj, dotted: str):
 
 DATE = re.compile(r"\d{4}-\d{2}-\d{2}([T ][\d:.]+(Z|[+-]\d{2}:?\d{2})?)?")
 
+# Keys whose ISO-date value says only when something was fetched, checked or built, never what happened. Found by
+# listing every key with an ISO-date value in public/data/programs (2026-10-22) and keeping the bookkeeping ones:
+#   asOf      when a source page was fetched (program, roster, schedule, news, camps `_meta`)
+#   updated   when a commitment or roster club was last confirmed
+#   lastSeen  the last day a commitment record was seen in its source listing
+#   builtAt, at   build times under `_build` (left out by --ignore by default; listed in case it is not)
+# Left out on purpose, so a change in them counts: date, through, startDate, endDate, newsDate, datetime, announced,
+# postedAt (when an event or item happened), firstSeen, missingSince, profileCreated (a record appearing,
+# disappearing or being created is a real change).
+STAMP_KEYS = frozenset({"asOf", "updated", "lastSeen", "builtAt", "at"})
 
-def undated(v):
-    """v with every string that is only an ISO date or timestamp replaced by one marker, so two values that differ
-    only in when something was fetched or checked compare equal. A list keeps its length: an added row still counts."""
+
+def undated(v, key: str | None = None):
+    """v with every STAMP_KEYS value that is an ISO date or timestamp replaced by one marker, so two values that differ
+    only in when something was fetched or seen compare equal. Any other date (a game's date) is kept. A list keeps
+    its length: an added row still counts."""
     if isinstance(v, dict):
-        return {k: undated(x) for k, x in v.items()}
+        return {k: undated(x, k) for k, x in v.items()}
     if isinstance(v, list):
-        return [undated(x) for x in v]
-    if isinstance(v, str) and DATE.fullmatch(v):
+        return [undated(x, key) for x in v]
+    if key in STAMP_KEYS and isinstance(v, str) and DATE.fullmatch(v):
         return "<date>"
     return v
 
@@ -146,7 +159,7 @@ def field_table(a: Tree, b: Tree, ignore: set) -> list[str]:
         else:
             ignored_only += 1
     out = [f"{real} program profiles changed in a field that counts; {ignored_only} more differ only in {', '.join(sorted(ignore))}.", "",
-           "| field | profiles where it changed | of those, only dates differ |", "| --- | ---: | ---: |"]
+           "| field | profiles where it changed | of those, only fetch/seen timestamps differ |", "| --- | ---: | ---: |"]
     out += [f"| {k} | {n} | {dates[k]} |" for k, n in per.most_common()] or ["| (none) | 0 | 0 |"]
     return out
 

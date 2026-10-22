@@ -64,7 +64,7 @@ Options (all in the header of `shots.js`):
 
 ## B. Data change: `data_counts.py`
 
-Offline: it reads git objects or directories, never the network.
+Offline: it reads git objects or directories, never the network. On a full data refresh (about 1000 changed profiles) it took 14 seconds here, and 46 with two `--count` tables on a busy machine (each `--count` reads every profile on both sides). Most of that is reading git blobs, and nothing prints until the end, so a quiet minute does not mean it has hung.
 
 ```
 python3 .claude/skills/evidence/data_counts.py                              # origin/main -> HEAD
@@ -76,7 +76,7 @@ python3 .claude/skills/evidence/data_counts.py --count division --count roster -
 It prints Markdown for your report (and from there the PR description):
 
 1. files added, removed and changed per folder under `public/data` (`--path` narrows it; `--depth` sets the folder depth);
-2. for the program profiles that changed (`programs/index.json` is not one): how many changed in each top-level field. `_build` is left out of the field table, since it changes on every build, and the profiles that differ only there are counted on their own line (add `--ignore FIELD` for other fields). The last column, `only dates differ`, counts the profiles where that field changed only in strings that are ISO dates or timestamps (an `asOf` or `updated` moved, nothing else). A data refresh touches nearly every profile that way, so read the gap between the two columns as the profiles whose data really changed;
+2. for the program profiles that changed (`programs/index.json` is not one): how many changed in each top-level field. `_build` is left out of the field table, since it changes on every build, and the profiles that differ only there are counted on their own line (add `--ignore FIELD` for other fields). The last column, `only fetch/seen timestamps differ`, counts the profiles where that field changed only in bookkeeping timestamps: an ISO date or timestamp under one of the keys `asOf`, `updated`, `lastSeen`, `builtAt` or `at` (`STAMP_KEYS` in the script, which says why each is there). A data refresh touches nearly every profile that way, so read the gap between the two columns as the profiles whose data really changed. Event dates are data, not churn: a game's `date`, a news item's `date`, a season's `through`, a camp's `startDate`, and `firstSeen` or `missingSince` all count as real changes, so a rescheduled game shows up in the gap. Only full `YYYY-MM-DD` dates and timestamps under those keys are masked; a stamp written another way (epoch seconds, a `YYYY-MM` month) counts as a real change. If a new bookkeeping key appears and inflates the gap, add it to `STAMP_KEYS` with its reason;
 3. for each `--count FIELD` (a dotted path into a profile, e.g. `division` or `tuition.in_state`): the profiles where it is present and non-empty, the items in it, and its values when there are at most 12 distinct ones (so `division` shows D1, D2 and D3 side by side).
 
 Use `--before` and `--after` with a revision or a directory. When the change is a script that writes data, build once on main and once on the branch into two directories and compare those; the script never has to fetch anything.
