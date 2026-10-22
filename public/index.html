@@ -3852,7 +3852,7 @@ function homeReset() {
 function homeSearchHtml() {
   return `<div class="home-search" role="search" aria-label="Programs and ID camps">
         <label class="home-q-label" for="homeQ">Search programs and ID camps</label>
-        <input type="search" id="homeQ" class="home-q" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="homeList" aria-describedby="homeHint" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="School, mascot, state, city or camp…">
+        <input type="search" id="homeQ" class="home-q" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="homeList" aria-describedby="homeHint" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="School, mascot or camp…">
         <span class="sr-only" id="homeHint">Programs and upcoming ID camps show below as you type. Up and down arrows move through them, Enter opens one.</span>
         <div class="home-results" id="homeResults">${homeResultsHtml([], '')}</div>
         <div class="sr-only" id="homeStatus" aria-live="polite"></div>
