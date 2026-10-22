@@ -7,7 +7,7 @@ description: Prepare your worktree so local test runs match CI (a venv with CI's
 
 CI runs the Python and Node versions in `.github/workflows/tests.yml`. This container usually has older ones. A result from different versions is not CI's result: #491 went red because the full Node suite was never run the way CI runs it. Do this once per session, before you run any tests.
 
-The harness's worktree isolation creates your worktree; you do not run `git worktree add` for it. Run this skill from inside it.
+The harness's worktree isolation creates your worktree; you do not run `git worktree add` for it. Run this skill from inside it: it sets up the git root of the current directory, and its first line says `checkout: <path>`.
 
 ```
 python3 .claude/skills/setup/setup_env.py             # report what differs from CI (exit 1 if anything does)
