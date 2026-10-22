@@ -7,6 +7,8 @@ description: Run every check suite the way CI runs it, with the commands and --m
 
 The commands and the `--min-checks` floors live in `.github/workflows/tests.yml`. This skill never copies them: `ci_tests.py` reads the workflow each time it runs, so when someone raises a floor or adds a step, you get it with no edit here. Do the `setup` skill first, so the Python and Node versions in `.github/workflows/tests.yml` are the ones that run.
 
+**Which checkout it tests.** It tests the git root of the directory you run it from (`git rev-parse --show-toplevel`), not the checkout the script sits in. Only outside any git repository does it fall back to its own checkout. So on a branch cut before these skills reached `main`, `cd` into your worktree and run another worktree's copy by its full path. The first line of every run says `checkout: <path>`; check it before you trust the result.
+
 ```
 # CD_VENV=<the venv the setup skill reported> in front of each command; leave it out if you used the default location
 python3 .claude/skills/run-tests/ci_tests.py --list      # the steps and floors, read from tests.yml; runs nothing

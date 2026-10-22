@@ -188,6 +188,7 @@ def main() -> int:
     node_ok = env.node_major(nv) == wf.node
     e = run_env(py, node)
 
+    print(f"checkout: {ROOT}")
     print(f"CI ({env.WORKFLOW.relative_to(ROOT)}): Python {wf.python}, Node {wf.node}")
     print(f"here: Python {pv or 'none'} ({'venv ' + str(venv) if py else 'NO VENV at ' + str(venv)}), Node {nv or 'none'}")
     if not py_ok:

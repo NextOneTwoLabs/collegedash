@@ -24,12 +24,23 @@ import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[3]
+SKILLS_HOME = Path(__file__).resolve().parents[3]  # the checkout these scripts live in
+
+
+def checkout_root() -> Path:
+    """The checkout to set up and test: the git root of the current directory, so a copy of these scripts run from
+    another worktree (one cut before they reached main) tests the tree you are in, not its own. Outside any git
+    repository, the checkout the scripts live in."""
+    r = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True, text=True)
+    return Path(r.stdout.strip()).resolve() if r.returncode == 0 and r.stdout.strip() else SKILLS_HOME
+
+
+ROOT = checkout_root()
 WORKFLOW = ROOT / ".github" / "workflows" / "tests.yml"
 JOB = "suites"  # the job in tests.yml that installs and runs the check suites
 # Where the venv and the fetched Node live: shared by every worktree, outside any repository. $CD_CACHE moves it.
 CACHE = Path(os.environ.get("CD_CACHE") or Path.home() / ".cache" / "collegedash")
-SHOTS = ROOT / ".claude" / "skills" / "evidence" / "shots.js"
+SHOTS = SKILLS_HOME / ".claude" / "skills" / "evidence" / "shots.js"
 
 # Prints the names (one per line) that are not installed in the interpreter it runs under.
 MISSING_SNIPPET = (
@@ -199,6 +210,7 @@ def install_node(wf: Workflow) -> None:
 
 def report(wf: Workflow, venv: Path) -> bool:
     ok = True
+    print(f"checkout: {ROOT}")
     print(f"CI ({WORKFLOW.relative_to(ROOT)}): Python {wf.python}, Node {wf.node}")
     py = venv_python(venv)
     pv = python_version(py)
