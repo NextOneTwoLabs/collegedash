@@ -118,6 +118,8 @@ has no filters, so `visibleMatches`/`matchesFilters` are not applied (filters be
 - Closing option "All N matching programs →", shown when N exceeds the rows drawn or any hit is a place hit. It
   links to `listHashOf({ defaults, q: pq })` = `#/programs?q=…`. The Programs page runs the same matcher with every
   other filter at its default (`listArrive` 3665-3680, which keeps the case of `q`, 3674), so it lists exactly N.
+  This is an addition, on purpose: the header box shows its closing option only for place hits, so for "bulldogs"
+  it shows 6 rows and nothing more, while v1 adds "All 27 matching programs →".
 - The "why" text ("Bulldogs", "UNC") is shown as the header box shows it.
 
 **ID Camps section.** An upcoming ID camp is shown when either
@@ -183,8 +185,10 @@ What changes
 - `tools/search_fixture.py` (copies `tools/recs_catalog.py`'s pattern: rebuild, `--check`, `--out`): writes
   `tests/fixtures/search/programs.json` (slug, name, shortName, nickname, searchNames, city, state, region, division,
   conference: about 280 KB raw, 41 KB gz) and `tests/fixtures/search/camps.json` (slug, name, startDate, endDate,
-  precision, campType, program block: under 55 KB), plus `clock` = the camps index's `updated` date. Its cut is a pure
-  function `cut(programs_doc, camps_doc)`. Regenerated only by a reviewed PR. `--check` against `public/data` is run by
+  precision, campType, program block: under 55 KB). Each file keeps the published doc's shape that `cut()` reads:
+  `programs.json` = `{ updated, programs }`, `camps.json` = `{ updated, camps }`; nothing else from either doc. The
+  test clock is the date part of `camps.json`'s `updated`. Its cut is a pure function `cut(programs_doc, camps_doc)`,
+  so `cut()` of the fixture's own docs gives them back unchanged. Regenerated only by a reviewed PR. `--check` against `public/data` is run by
   hand when regenerating, never by CI (as `tests/recs_catalog_test.py:7-9`), because CI also runs after every daily
   refresh. No person field (no `headCoach`); the Python test fails if a person-shaped key appears.
 - `tests/fixtures/search/judged-v1.json`: the judged set of section 6, with expected first rows, must-show,
@@ -227,9 +231,16 @@ What changes
   pseudo selectors):
   - `.home-search` (wrapper): `width: 100%; max-width: 720px`;
   - `.home-q` (the input): `width: 100%; min-width: 0`;
-  - `.home-list`, `.home-msg`: block, in flow, no `position`;
+  - `.home-list`, `.home-msg`: no layout property at all (block, in flow). They are not keys of `expected`, because
+    a key no rule sets fails (`css_cascade.mjs:44`); the `watched` predicate catches any rule that names them, so a
+    `position` (or any layout property) added later fails loudly;
   - `.home-opt` (every option): `display: flex; flex-direction: column; min-height: 44px`;
   - `.home-opt-name`, `.home-opt-sub` (option text): `min-width: 0; overflow-wrap: anywhere`.
+  - `watched` matches every selector that names a `.home-search`, `.home-q`, `.home-list`, `.home-msg` or
+    `.home-opt*` class, compound or descendant included (`.home-opt.active`), and never `.home-entries` or
+    `.home-entry`, which `shell_nav.test.mjs:299` already pins.
+- `#homeMsg` sits next to the section it describes: before the listbox when Camps leads ("stanford camps"), after it
+  otherwise. The mockup confirms it.
 - The header box `#q` stays hidden on Home (`SEARCH_VIEWS` unchanged).
 - When the program index failed to load, Home draws the try-again card and no box (`boot()` 6160-6170 renders Home
   without data); a test pins it.
@@ -277,7 +288,8 @@ Opus work; the coordinator decides the model.
   `searchMatches` for the same text"), never a number.
 - **No test depends on today's date.** "Upcoming" is computed with the injected clock (`campsData`'s third argument,
   and `homeSearch` receives rows already cut). Page-level tests give the sandbox a `Date` subclass whose no-argument
-  constructor and `now()` return the fixture clock, because `todayLocal` (1009) cannot be reassigned.
+  constructor and `now()` return the fixture clock built at local noon (`clock + 'T12:00:00'`, as `campDayText` does),
+  so no runner time zone shifts the date; `new Date(arg)` stays real. `todayLocal` (1009) cannot be reassigned.
 - **No network.** `getJSON` is stubbed; tests count the requests it receives. CI's network guard stays on.
 - Tests read `index.html` text and slice functions by their banner comments, as today's search tests do.
 
@@ -358,8 +370,13 @@ Huatuo's round-1 review (CHANGES REQUESTED). Every item is applied.
 | O1 Enter on an empty leading Camps section | Section 3 Enter rules: the first row in the panel ("stanford camps" opens Stanford); pinned in M04. |
 | O2 page-test clock | Sections 4 and 5: a `Date` subclass whose no-argument constructor returns the fixture clock. |
 | O3 the `idx` argument | Dropped: `homeSearch(campRows, raw)` reads `S.index`, as `searchMatches` does; callers and tests set it. |
-| O4 place rows among the first six | Changed rather than only explained: Programs rows are non-place hits, and place hits are counted in one "All N matching programs →" option, exactly as the header box does (2587-2592). This reuses today's behaviour; L01, L03 and N05 show it. |
+| O4 place rows among the first six | Changed rather than only explained: Programs rows are non-place hits, and place hits are counted in one "All N matching programs →" option, as the header box does for place hits (2587-2592); v1 also shows it for name-only overflow, which the header box does not. L01, L03 and N05 show it. |
 | O5 hyphens | Camp words are found among `normText` words; "ucla id-camp" is in M03 and the PR 1 test. |
 | O6 Python report format | PR 1: `search_fixture_test.py` copies `recs_catalog_test.py`'s `ok()` and `main()`. |
 | O7 no saved state | PR 2: the `localStorage` assertion in `shell_nav.test.mjs` is kept and extended to typing and choosing in the box. |
 | O8 the `campsData` fail-on-main case | Replaced by two fixed clocks; the file fails on main through the missing `homeSearch`. |
+
+Round 2 (Huatuo, APPROVE) left five optional notes, all folded in: the closing "All N" option for name-only overflow
+is called an addition (section 3 and the table above); `exactLayout` details for `.home-list`/`.home-msg` and the
+`watched` predicate (PR 2); `#homeMsg` placed next to the section it describes (PR 2); the fake clock built at local
+noon (section 5); the fixture keeps `{ updated, programs }` and `{ updated, camps }` (PR 1).
