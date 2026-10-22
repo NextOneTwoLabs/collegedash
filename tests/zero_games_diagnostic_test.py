@@ -24,10 +24,13 @@ logs one short line and never fails the collection.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import copy
+import io
 import json
 import os
 import sys
+import tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, ROOT)
@@ -226,6 +229,7 @@ def test_no_request():
 
 SAVED: list = []
 ANNOTATIONS: list = []  # common.annotate lines (GitHub Actions workflow commands)
+REAL_ANNOTATE = common.annotate  # the original, to check each run puts it back (Huatuo O1)
 
 
 def roster_page() -> str:
@@ -238,7 +242,7 @@ def roster_page() -> str:
             "</tbody></table>" + staff + "</body></html>")
 
 
-def run_collect(schedule_html: str, *, seasons_back: int = 0, history: dict | None = None):
+def run_collect(schedule_html: str, *, seasons_back: int = 0, history: dict | None = None, slug: str = "fixture"):
     logs = []
     pages = {ROSTER: roster_page(), SCHEDULE: schedule_html, **(history or {})}
 
@@ -247,7 +251,7 @@ def run_collect(schedule_html: str, *, seasons_back: int = 0, history: dict | No
             raise common.FetchError(f"HTTP 404 for {url}")
         return pages[url], {"url": url, "status": 200, "finalUrl": url, "fromCache": False}
 
-    program = {"slug": "fixture", "athletics": {"platform": "sidearm", "baseUrl": BASE, "sportPath": SPORT}}
+    program = {"slug": slug, "athletics": {"platform": "sidearm", "baseUrl": BASE, "sportPath": SPORT}}
     real = (common.fetch_text, common.save_source, common.log, common.load_source, common.annotate)
     SAVED.clear()
     ANNOTATIONS.clear()
@@ -275,23 +279,66 @@ def test_trigger():
     ok("silent: a history season with no game (only the current page is described)", lines == [] and err is None, (lines, err))
 
 
-def test_zero_games_is_a_workflow_warning():
-    """A schedule page that loaded and gave no game is a ::warning in the Actions run, not only a log line (#393):
-    an empty schedule must not be stored silently. The warning names the slug and the season and nothing from the page."""
-    lines, err = run_collect(vue_page())
-    warns = [a for a in ANNOTATIONS if a.startswith("::warning")]
-    ok("one ::warning when the current schedule page loaded and gave no game", len(warns) == 1 and err is None,
-       (ANNOTATIONS, err))
-    w = (warns or [""])[0]
-    ok("... titled for the athletics schedule", w.startswith("::warning title=athletics schedule::"), w)
-    ok("... naming the slug, the season and the issue", all(p in w for p in ("fixture", "2026", "0 games", "#393")), w)
+def report(results, summary_path):
+    """collegedash.report_refresh as the refresh workflow runs it (GITHUB_ACTIONS, a step summary file), with the
+    refresh-state writes stubbed. Returns the printed lines and the summary text."""
+    import collegedash
+    real = (common.update_refresh_state, collegedash.not_recorded)
+    common.update_refresh_state = lambda *a, **k: None
+    collegedash.not_recorded = lambda: []
+    os.environ["GITHUB_ACTIONS"], os.environ["GITHUB_STEP_SUMMARY"] = "true", summary_path
+    out = io.StringIO()
+    try:
+        with contextlib.redirect_stdout(out):
+            collegedash.report_refresh(results, threshold=0.6, mode="daily")
+    finally:
+        common.update_refresh_state, collegedash.not_recorded = real
+        os.environ.pop("GITHUB_ACTIONS", None)
+        os.environ.pop("GITHUB_STEP_SUMMARY", None)
+    with open(summary_path, encoding="utf-8") as fh:
+        return out.getvalue().splitlines(), fh.read()
+
+
+def test_zero_games_is_one_warning_at_the_end_of_the_run():
+    """A schedule page that loaded and gave no game is flagged in the run's annotations, not only logged (#393). GitHub
+    shows at most 10 warning annotations per step, so it is ONE warning for the whole run, printed after the collector
+    failure warnings (Huatuo R1 on 5ce321138, option a), naming each slug and season and nothing from the page, with a
+    line in the step summary. Collection itself annotates nothing."""
+    with tempfile.TemporaryDirectory() as tmp:
+        _zero_games_run(tmp)
+
+
+def _zero_games_run(tmp: str):
+    getattr(athletics_site, "take_zero_games", list)()  # start empty (getattr: so this test's checks also run on main)
+    for slug in ("fixture-b", "fixture-a"):
+        lines, err = run_collect(vue_page(), slug=slug)
+        ok(f"{slug}: collection succeeds and stores the empty schedule", err is None and SAVED == [True], (err, SAVED))
+        ok(f"{slug}: collection prints no annotation of its own", ANNOTATIONS == [], ANNOTATIONS)
+    run_collect(page(legacy_rows(3)), slug="fixture-games")
+    run_collect(page(legacy_rows(3)), seasons_back=1, history={SCHEDULE + "/2025": page()}, slug="fixture-history")
+    ok("annotate restored after each run", common.annotate is REAL_ANNOTATE, common.annotate)
+
+    results = [{"program": "fixture-a", "collector": "athletics", "outcome": "ok"},
+               {"program": "p-news", "collector": "news", "outcome": "failed", "error": "HTTP 500"},
+               {"program": "p-camps", "collector": "camps", "outcome": "failed", "error": "HTTP 503"}]
+    printed, summary = report(results, os.path.join(tmp, "summary.md"))
+    warns = [l for l in printed if l.startswith("::warning")]
+    sched = [l for l in warns if l.startswith("::warning title=athletics schedule::")]
+    ok("exactly one athletics schedule warning for the run", len(sched) == 1, warns)
+    w = (sched or [""])[0]
+    ok("... the last warning, after every collector failure warning", warns[-1:] == [w] and
+       sum(1 for l in warns if l.startswith("::warning title=refresh: ")) == 2, warns)
+    ok("... naming both programs, sorted, each with its season, and the count",
+       "2 program(s)" in w and "fixture-a 2026, fixture-b 2026" in w, w)
+    ok("... and not the ones whose page had games, or only an empty past season",
+       "fixture-games" not in w and "fixture-history" not in w, w)
     ok("... with no value from the page", not leaks(w), leaks(w))
-    ok("... and the schedule is still stored (a warning, not a failure)", SAVED == [True], SAVED)
-    run_collect(page(legacy_rows(3)))
-    ok("no ::warning when the schedule page has games", ANNOTATIONS == [], ANNOTATIONS)
-    run_collect(page(legacy_rows(3)), seasons_back=1, history={SCHEDULE + "/2025": page()})
-    ok("no ::warning for an empty history season (only the current page)", ANNOTATIONS == [], ANNOTATIONS)
-    ok("annotate restored after each run", common.annotate is not ANNOTATIONS.append)
+    ok("the step summary has one line naming them",
+       sum(1 for l in summary.splitlines() if "empty schedule" in l and "fixture-a 2026, fixture-b 2026" in l) == 1, summary)
+    printed, summary = report(results, os.path.join(tmp, "summary2.md"))
+    ok("the recorder is drained: the next report has no schedule warning",
+       not any(l.startswith("::warning title=athletics schedule::") for l in printed) and "empty schedule" not in summary,
+       printed)
 
 
 def test_a_failing_diagnostic_never_fails_the_collection():
@@ -316,7 +363,7 @@ def main(argv=None) -> int:
     ap.add_argument("--verbose", action="store_true")
     VERBOSE = ap.parse_args(argv).verbose
     for case in (test_vue_schedule_page, test_keys_are_default_deny, test_mutation_shape_pattern_instead_of_allowlist,
-                 test_other_shapes, test_caps_are_400_characters_and_8_keys, test_no_request, test_trigger, test_zero_games_is_a_workflow_warning,
+                 test_other_shapes, test_caps_are_400_characters_and_8_keys, test_no_request, test_trigger, test_zero_games_is_one_warning_at_the_end_of_the_run,
                  test_a_failing_diagnostic_never_fails_the_collection):
         try:
             case()
