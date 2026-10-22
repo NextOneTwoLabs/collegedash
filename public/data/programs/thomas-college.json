@@ -295,7 +295,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.thomasathletics.com/sports/womens-soccer/roster",
-        "asOf": "2026-10-20T16:05:51Z"
+        "asOf": "2026-10-21T16:19:06Z"
       }
     }
   },
@@ -303,11 +303,11 @@
     {
       "year": 2026,
       "label": "2026",
-      "record": "5-6-2",
+      "record": "5-7-2",
       "wins": 5,
-      "losses": 6,
+      "losses": 7,
       "ties": 2,
-      "gamesPlayed": 13,
+      "gamesPlayed": 14,
       "recordSource": "schedule",
       "confRecord": "3-2-0",
       "inProgress": true,
@@ -589,8 +589,8 @@
         "posLabel": "Forward/Midfield",
         "height": "",
         "heightIn": null,
-        "classLabel": "Jr.",
-        "classCode": "JR",
+        "classLabel": "Sr.",
+        "classCode": "SR",
         "hometown": "Andover, Massachusetts",
         "highSchool": "",
         "previousSchool": "",
@@ -832,28 +832,29 @@
         "R-FR": 0,
         "SO": 2,
         "R-SO": 0,
-        "JR": 1,
+        "JR": 0,
         "R-JR": 0,
-        "SR": 0,
+        "SR": 1,
         "R-SR": 0,
         "GR": 0
       }
     },
     "byClass": {
-      "SR": 4,
+      "SR": 5,
       "FR": 10,
       "SO": 5,
-      "JR": 2
+      "JR": 1
     },
     "graduatingByPos": {
       "GK": 1,
       "D": 2,
+      "F": 1,
       "M": 1
     },
     "_meta": {
       "source": "athletics",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/roster",
-      "asOf": "2026-10-20T16:05:51Z"
+      "asOf": "2026-10-21T16:19:06Z"
     }
   },
   "rosterHistory": {
@@ -1469,10 +1470,10 @@
     "season": 2026,
     "record": {
       "wins": 5,
-      "losses": 6,
+      "losses": 7,
       "ties": 2,
-      "text": "5-6-2",
-      "played": 13,
+      "text": "5-7-2",
+      "played": 14,
       "scheduled": 19,
       "notPlayed": 0,
       "confText": "3-2-0",
@@ -1755,11 +1756,11 @@
         "opponentRank": null,
         "opponentSeed": null,
         "location": "Waterville, ME, Smith Field",
-        "result": null,
-        "score": null,
+        "result": "L",
+        "score": "0-3",
         "links": {
-          "watch": "https://www.whou.live/thomas-college",
-          "live stats": "https://athletics.thomas.edu/sidearmstats/wsoc/summary",
+          "box score": "https://www.thomasathletics.com/sports/womens-soccer/stats/2026/university-of-maine-at-fort-kent/boxscore/9035",
+          "recap": "https://www.thomasathletics.com/news/2026/10/20/womens-soccer-falls-in-home-contest-against-university-of-maine-fort-kent.aspx",
           "history": "https://www.thomasathletics.com/sports/womens-soccer/opponent-history/university-of-maine-at-fort-kent/180"
         }
       },
@@ -2910,13 +2911,19 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/schedule",
-      "asOf": "2026-10-20T16:05:51Z"
+      "asOf": "2026-10-21T16:19:06Z"
     }
   },
   "commitments": [],
   "news": {
     "recruiting": [],
     "latest": [
+      {
+        "title": "Women's Soccer Falls in Home Contest Against University of Maine Fort Kent",
+        "url": "https://athletics.thomas.edu/news/2026/10/20/womens-soccer-falls-in-home-contest-against-university-of-maine-fort-kent.aspx",
+        "date": "2026-10-20",
+        "recruiting": false
+      },
       {
         "title": "Women's Soccer Blanked by Maine Maritime Academy",
         "url": "https://athletics.thomas.edu/news/2026/10/17/womens-soccer-blanked-by-maine-maritime-academy.aspx",
@@ -2982,18 +2989,12 @@
         "url": "https://athletics.thomas.edu/news/2026/9/19/womens-soccer-dominates-earns-8-0-win-against-vtsu-lyndon.aspx",
         "date": "2026-09-19",
         "recruiting": false
-      },
-      {
-        "title": "Women's Soccer Falls to Talented Suffolk University Squad",
-        "url": "https://athletics.thomas.edu/news/2026/9/12/womens-soccer-falls-to-suffolk-university.aspx",
-        "date": "2026-09-12",
-        "recruiting": false
       }
     ],
     "_meta": {
       "source": "news",
       "url": "https://www.thomasathletics.com/sports/womens-soccer/archives",
-      "asOf": "2026-10-20T16:05:56Z"
+      "asOf": "2026-10-21T16:19:12Z"
     }
   },
   "camps": {
@@ -3007,20 +3008,20 @@
     "robotsBlocked": false,
     "fetchError": null,
     "parsed": true,
-    "newsScanned": 18,
+    "newsScanned": 19,
     "items": [],
     "_meta": [
       {
         "source": "camps",
         "url": "https://www.thomasathletics.com/sports/2020/5/21/camps-camps-clinics",
-        "asOf": "2026-10-20T16:05:59Z"
+        "asOf": "2026-10-21T16:19:15Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-10-20T16:09:37Z",
+    "builtAt": "2026-10-21T16:22:17Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3039,7 +3040,7 @@
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-10-20T16:05:51Z"
+        "at": "2026-10-21T16:19:06Z"
       },
       {
         "collector": "wikipedia",
