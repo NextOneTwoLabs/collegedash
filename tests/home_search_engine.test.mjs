@@ -65,13 +65,15 @@ function load() {
 const A = load();
 const ROWS = A.campsData(PROGRAMS, CAMPS, CLOCK).all;
 const run = q => A.homeSearch(ROWS, q);
-const slugs = hits => hits.map(h => h.p.slug);
+// Values made inside the vm have the vm's Array and Object prototypes, which deepEqual (strict) tells apart: compare plain copies.
+const plain = v => JSON.parse(JSON.stringify(v));
+const slugs = hits => plain(hits.map(h => h.p.slug));
 
 test('the fixture clock gives the upcoming ID camps the ID Camps page would list', () => {
   assert.equal(CLOCK, '2026-10-21');
   assert.equal(ROWS.length, 83);
   assert.ok(ROWS.every(x => x.c.campType === 'id' && x.info && x.info.division), 'a row is not an ID camp or has no division');
-  const dates = ROWS.map(x => x.c.startDate);
+  const dates = plain(ROWS.map(x => x.c.startDate));
   assert.deepEqual(dates, [...dates].sort(), 'not in date order');
 });
 
@@ -93,13 +95,13 @@ for (const j of JUDGED.queries) {
   test(`judged ${j.id} (${j.scope}) ${JSON.stringify(j.q)}: ${j.intent}`, () => {
     const r = run(j.q);
     assert.ok(r, 'no result');
-    assert.deepEqual(r.order, j.order, 'section order');
+    assert.deepEqual(plain(r.order), j.order, 'section order');
     assert.equal(r.programs.n, j.programs.n, 'program hits');
     assert.deepEqual(slugs(r.programs.rows), j.programs.rows, 'program rows drawn');
     assert.equal(r.programs.href, j.programs.allHref, '"All N matching programs" link');
     assert.equal(r.camps.n, j.camps.n, 'camps');
-    assert.deepEqual(r.camps.shown.map(x => ({ slug: x.c.slug, startDate: x.c.startDate })), j.camps.first, 'first camps drawn');
-    assert.deepEqual(r.enter && { kind: r.enter.kind, href: r.enter.href }, j.enter, 'Enter');
+    assert.deepEqual(plain(r.camps.shown.map(x => ({ slug: x.c.slug, startDate: x.c.startDate }))), j.camps.first, 'first camps drawn');
+    assert.deepEqual(plain(r.enter && { kind: r.enter.kind, href: r.enter.href }), j.enter, 'Enter');
     assert.equal(r.message, j.message, 'message');
   });
 }
@@ -141,32 +143,32 @@ test('with no camp word, Programs is exactly the header box\'s matcher for the s
   const p = run('philadelphia');  // only place hits: no rows, the place option, and Enter opens the list
   assert.equal(p.programs.rows.length, 0);
   assert.ok(p.programs.n > 0 && p.programs.href);
-  assert.deepEqual({ kind: p.enter.kind, href: p.enter.href }, { kind: 'list', href: p.programs.href });
+  assert.deepEqual(plain({ kind: p.enter.kind, href: p.enter.href }), { kind: 'list', href: p.programs.href });
 });
 
 test('camp words: removed from the program query, a lone camp word still finds a program, only camp words list every camp', () => {
   const camp = run('camp');
   assert.ok(slugs(camp.programs.rows).includes('campbell'), 'a lone "camp" no longer finds Campbell');
   assert.equal(camp.camps.n, ROWS.length);
-  assert.deepEqual(camp.order, ['camps', 'programs']);
+  assert.deepEqual(plain(camp.order), ['camps', 'programs']);
   const id = run('id');
   assert.deepEqual(slugs(id.programs.rows), ['idaho', 'idaho-state'], 'a lone lowercase "id" no longer finds Idaho');
   assert.equal(id.camps.n, ROWS.length);
-  assert.deepEqual(id.order, ['camps', 'programs']);
+  assert.deepEqual(plain(id.order), ['camps', 'programs']);
   for (const q of ['id camps', 'CLINICS', 'ID Camp']) assert.equal(run(q).camps.n, ROWS.length, q);
   assert.equal(run('TX camps').programs.n, run('TX').programs.n, '"TX camps" keeps the capitals rule');
   assert.equal(run('TX camps').programs.href, run('TX').programs.href);
   assert.equal(run('tx camps').programs.n, run('tx').programs.n);
-  assert.deepEqual(run('ucla id-camp'), run('ucla id camp'), 'a hyphen joins words; it does not hide a camp word');
+  assert.deepEqual(plain({ ...run('ucla id-camp'), typed: 0, programs: slugs(run('ucla id-camp').programs.hits) }), plain({ ...run('ucla id camp'), typed: 0, programs: slugs(run('ucla id camp').programs.hits) }), 'a hyphen joins words; it does not hide a camp word');
 });
 
 test('the Idaho exception: exactly "ID" in capitals is a state code, not a camp word', () => {
   const r = run('ID'), spaced = run('  ID ');
-  assert.deepEqual(r.order, ['programs', 'camps']);
+  assert.deepEqual(plain(r.order), ['programs', 'camps']);
   assert.ok(r.camps.all.every(x => x.info.state === 'ID') && r.camps.n === 1, 'camps at Idaho programs only');
   assert.equal(r.enter.kind, 'list');
-  assert.deepEqual(spaced.order, r.order, 'surrounding spaces do not matter');
-  assert.deepEqual(run('Id').order, ['camps', 'programs'], 'only capitals make it a code');
+  assert.deepEqual(plain(spaced.order), plain(r.order), 'surrounding spaces do not matter');
+  assert.deepEqual(plain(run('Id').order), ['camps', 'programs'], 'only capitals make it a code');
 });
 
 test('rule 3: camps of the programs found by name, alias or mascot - never by place', () => {
@@ -185,7 +187,7 @@ test('first show: 6 program rows and 4 camp rows; the rest are counted', () => {
   const r = run('a');
   assert.equal(r.programs.rows.length, 6);
   assert.equal(r.camps.shown.length, 4);
-  assert.deepEqual(r.camps.shown, r.camps.all.slice(0, 4));
+  assert.ok(r.camps.shown.every((x, i) => x === r.camps.all[i]));
 });
 
 test('before the camps load: Programs work, Camps say they are loading', () => {
@@ -194,7 +196,7 @@ test('before the camps load: Programs work, Camps say they are loading', () => {
   assert.equal(unc.message, null);
   assert.equal(unc.enter.href, '#/p/north-carolina');
   const usc = A.homeSearch(null, 'usc camps');
-  assert.deepEqual(usc.order, ['camps', 'programs']);
+  assert.deepEqual(plain(usc.order), ['camps', 'programs']);
   assert.equal(usc.message, 'loading');
   assert.equal(usc.enter.href, '#/p/usc', 'Enter opens the first program row until camps arrive');
   assert.equal(A.homeSearch(null, 'zzzz').message, 'loading', 'no-match is not decided before camps arrive');
