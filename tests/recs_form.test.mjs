@@ -27,7 +27,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import worker from '../worker.js';
-import { PUBLIC, HTML, CATALOG, LOAD_REQUESTS, ON, ready, open, settle, plain } from './recs_page_helpers.mjs';
+import { PUBLIC, HTML, CATALOG, LOAD_REQUESTS, ON, ready, open, settle, plain, FOCUS } from './recs_page_helpers.mjs';
 
 const HERE = path.join(PUBLIC, '..', 'tests');
 const saved = (pg) => JSON.parse(pg.store.get('cd.recs'));
@@ -145,6 +145,50 @@ test('the sheet is modal and the page behind it inert only at phone width, re-ch
   assert.ok(behind.every((e) => e.inert === true));
   pg.sb.recsClose();
   assert.ok(behind.every((e) => e.inert === false), 'the page stayed inert after the sheet closed');
+});
+
+// #477: the phone bottom bar (#465 B) came after the sheet's inert list, so Tab and a screen reader's virtual cursor
+// still reached its four links behind the open sheet. Everything outside the sheet - the header, the overlay, the
+// bottom bar, the rail and #main - is inert while it is open on a phone, and released when it closes or widens.
+test('#477: on a phone, everything outside the open sheet is inert - the bottom bar too - and released on close and on widening', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  const outside = ['.header', '#sidebarOverlay', '.bottom-nav', '#sidebar', '#main'];
+  const inertOf = () => Object.fromEntries(outside.map((sel) => [sel, pg.$(sel).inert === true]));
+  const all = (v) => Object.fromEntries(outside.map((sel) => [sel, v]));
+  await open(pg);
+  assert.deepEqual(inertOf(), all(true), 'something outside the open sheet is reachable');
+  assert.notEqual(pg.panel().inert, true, 'the sheet itself is inert');
+  pg.sb.innerWidth = 1200; pg.sb.recsSheetState();
+  assert.deepEqual(inertOf(), all(false), 'widened: the page is still inert');
+  pg.sb.innerWidth = 375; pg.sb.recsSheetState();
+  assert.deepEqual(inertOf(), all(true), 'narrowed again: the bottom bar or the page is reachable');
+  pg.sb.recsClose();
+  assert.deepEqual(inertOf(), all(false), 'closed: something stayed inert');
+});
+
+// #477, the shared phone-sheet book-keeping (phoneSheet, #465): closing releases only what this sheet made inert, so an
+// element inert for another reason (another sheet, its own state) stays inert.
+test('#477: closing the sheet releases only what it made inert', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  pg.$('.header').inert = true;  // inert before the sheet opened, for its own reason (another sheet, say)
+  await open(pg);
+  assert.equal(pg.$('#main').inert, true, 'fixture: the sheet is not modal');
+  pg.sb.recsClose();
+  assert.equal(pg.$('.header').inert, true, 'closing released an element the sheet never made inert');
+  assert.equal(pg.$('#main').inert, false);
+});
+
+// GUARD (passes on main by design): Escape closes the sheet and focus goes back to the one entry, the header button (#434).
+test('GUARD #477: Escape closes the phone sheet, releases the page and returns focus to the opener', async () => {
+  const pg = await ready({ status: ON, width: 375 });
+  await open(pg);
+  let prevented = false;
+  pg.panel().onkeydown({ key: 'Escape', preventDefault() { prevented = true; } });
+  assert.ok(prevented);
+  assert.equal(pg.panel().hidden, true, 'Escape did not close the sheet');
+  assert.notEqual(pg.$('.bottom-nav').inert, true, 'the bottom bar stayed inert');
+  assert.notEqual(pg.$('#main').inert, true, 'the page stayed inert');
+  assert.equal(FOCUS.el, pg.$('#recsOpen'), 'focus did not return to the opener');
 });
 
 test('the panel: a dialog that is modal only at phone width, four labelled fieldsets, climate prefer-only', async () => {
