@@ -3,8 +3,9 @@
 //     node --test tests/home_search.test.mjs
 //
 // The page's inline <script> runs in a `vm` against a stub DOM, as tests/shell_nav.test.mjs does. Data: the frozen
-// fixture tests/fixtures/search/{programs,camps}.json only, served for /api/v1/programs and /api/v1/camps; every other
-// request is a 404. The clock is the fixture's date at local noon (a Date whose no-argument constructor and now() give
+// fixture tests/fixtures/search/{programs,camps}.json only, served for /api/v1/list (the slim list the page loads, #395;
+// the fixture's rows carry only the search's 10 fields, all of which the slim list keeps) and /api/v1/camps; every
+// other request, /api/v1/programs included, is a 404. The clock is the fixture's date at local noon (a Date whose no-argument constructor and now() give
 // it; new Date(arg) stays real), so "upcoming" never depends on the day the test runs. No network.
 //
 // What is checked:
@@ -83,7 +84,7 @@ function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } =
     fetch: url => {
       const u = String(url).replace(/\?.*$/, '');
       requests.push(u);
-      if (u === '/api/v1/programs') return Promise.resolve(answer(programs === 'ok', PROGRAMS_TEXT));
+      if (u === '/api/v1/list') return Promise.resolve(answer(programs === 'ok', PROGRAMS_TEXT));
       if (u === '/api/v1/camps') {
         if (camps === 'hang') return new Promise(() => { });
         if (camps === 'manual') return new Promise(r => { release.camps = () => r(answer(true, CAMPS_TEXT)); });
