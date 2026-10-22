@@ -1999,9 +1999,13 @@ def search_names(p: dict, aliases=()) -> list[str]:
             full_words = words + extra
             if len(full_words) >= 3:
                 add("".join((w if w.isupper() and len(w) <= 4 else w[0]) for w in full_words if w[0].isalpha()))
+    # 'St.' is ambiguous in NCAA names: Saint ('Mount St. Mary's') or State ('Cal St. Fullerton').
+    # When the program's own name says State and never Saint/St, it means State (issue #513).
+    own = f"{name} {short}"
+    st_word = "State " if re.search(r"\bState\b", own) and not re.search(r"\bSaint\b|\bSt\b", own) else "Saint "
     for s in list(out):
         if re.search(r"\bSt\.?\s", s):
-            add(re.sub(r"\bSt\.?\s", "Saint ", s))
+            add(re.sub(r"\bSt\.?\s", st_word, s))
         elif re.search(r"\bSaint\s", s):
             add(re.sub(r"\bSaint\s", "St ", s))
     return out
