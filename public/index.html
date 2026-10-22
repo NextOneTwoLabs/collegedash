@@ -1766,6 +1766,7 @@ async function loadCamps() {
   if (!S.camps) {
     const doc = await getJSON('/api/v1/camps');
     S.camps = { updated: doc?.updated || null, window: doc?.window || null, counts: doc?.counts || null,
+                coverage: doc?.coverage || null,  // #79: counts only; absent from an older index (the view hides its line)
                 camps: Array.isArray(doc?.camps) ? doc.camps : [] };
   }
   return S.camps;

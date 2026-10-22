@@ -38,6 +38,7 @@ function makeElement(name) {
     matches: () => false, focus() { }, contains: () => false,
   };
 }
+let SERVED_CAMPS = null;  // what /api/v1/camps answers, so a test can go through the page's own loadCamps
 function loadPage() {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
@@ -51,6 +52,7 @@ function loadPage() {
     matchMedia: () => ({ matches: false, addEventListener() { } }), innerWidth: 1400, addEventListener() { },
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
     fetch: async url => {
+      if (url === '/api/v1/camps' && SERVED_CAMPS) { const body = JSON.stringify(SERVED_CAMPS); return { ok: true, status: 200, async json() { return JSON.parse(body); } }; }
       if (url !== '/api/v1/programs') return { ok: false, status: 404, async json() { throw new Error('404'); } };
       const body = fs.readFileSync(path.join(PUBLIC, 'data/programs/index.json'), 'utf8');
       return { ok: true, status: 200, async json() { return JSON.parse(body); } };
@@ -59,7 +61,7 @@ function loadPage() {
   sandbox.window = sandbox; sandbox.globalThis = sandbox;
   const lines = SOURCE.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
-  const handles = ['S', 'tabCamps', 'renderCamps', 'loadIndex', 'todayLocal'];
+  const handles = ['S', 'tabCamps', 'renderCamps', 'loadIndex', 'loadCamps', 'todayLocal'];
   const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(handles)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
@@ -173,4 +175,16 @@ test('#79 ID Camps: hidden for an older index with no coverage block, or a malfo
     assert.doesNotMatch(html, /Camp pages for \d+ programs? could not be read/, `shown for ${JSON.stringify(cov)}`);
     assert.match(html, /Soon ID Camp/, 'the camps still render');
   }
+});
+
+test('#79 ID Camps: the line survives the page loading the camps index itself (loadCamps keeps `coverage`)', async () => {
+  SERVED_CAMPS = { updated: '2026-10-21T16:21:00Z', window: { from: today, to: null }, counts: { total: 1, id: 1, youth: 0, unknown: 0 },
+    coverage: COVERAGE, camps: [camp('Soon ID Camp', day(5))] };
+  try {
+    sb.S.camps = null;
+    sb.location.hash = '#/camps';
+    await sb.renderCamps();
+    assert.deepEqual(JSON.parse(JSON.stringify(sb.S.camps.coverage ?? null)), COVERAGE, 'loadCamps dropped `coverage`');
+    assert.ok(el('#app').innerHTML.includes(line(196)), 'no coverage line after a real load');
+  } finally { SERVED_CAMPS = null; }
 });
