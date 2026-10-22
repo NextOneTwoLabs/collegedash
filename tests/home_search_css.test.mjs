@@ -36,7 +36,7 @@ const EXPECTED = {
   '|.home-q': { width: '100%', 'min-width': '0', height: '52px', padding: '0 14px 0 44px', 'font-size': '16px' },
   '|.home-results': { 'margin-top': '8px' },
   '|.home-group': { padding: '4px' },
-  '|.home-group-label': { padding: '8px 10px 2px', 'font-size': '11px', 'letter-spacing': '0.04em' },
+  '|.home-group-label': { padding: '8px 10px 2px', 'font-size': '12px', 'letter-spacing': '0.02em' },
   '|.home-opt': { display: 'flex', 'flex-direction': 'column', 'justify-content': 'center', gap: '2px', 'min-height': '44px', padding: '6px 10px' },
   '|.home-opt-name': { 'min-width': '0', 'font-size': '15px' },
   '|.home-opt-sub': { 'min-width': '0', 'font-size': '13px' },
@@ -53,6 +53,23 @@ test('the self-check: a layout property added to a compound selector, or a new m
   for (const extra of ['.home-opt.active { position: relative; }', '.home-list { max-height: 300px; }', '@media (max-width: 768px) { .home-q { height: 48px; } }',
     '.home-search .home-q { width: 90%; }', '.home-msg { order: -1; }'])
     assert.throws(() => exactLayout(add(extra), { watched, expected: EXPECTED, cannot: CANNOT }), new RegExp(CANNOT), extra);
+});
+
+// Huatuo on PR 2 (R1): on a phone, focusing the box scrolls it to the top of the page, which runs under the fixed header
+// (.header, height var(--header-height)). The scroll stops that far down, plus a gap, so the input is never covered.
+// scroll-margin-top is not a layout property to exactLayout, so it is pinned here.
+test('a phone\'s focus scroll stops below the fixed header: .home-search\'s scroll-margin-top is the header\'s height plus a gap', () => {
+  const vals = RULES.filter(r => r.selectors.some(s => watched(s))).flatMap(r => decls(r.body).filter(d => /^scroll-(margin|padding)/.test(d.prop))
+    .map(d => [r.at.join(' '), r.selectors.join(', '), d.prop, d.value]));
+  assert.deepEqual(vals, [['', '.home-search', 'scroll-margin-top', 'calc(var(--header-height) + 8px)']]);
+  assert.match(CSS_TEXT, /\.header \{[^}]*position: fixed;[^}]*height: var\(--header-height\)|\.header \{[^}]*height: var\(--header-height\)[^}]*position: fixed/, 'the header is no longer fixed at --header-height; recheck the offset');
+});
+
+// Huatuo on PR 2 (O4): a group's name is its heading (aria-labelledby), and Chromium names it with the text as drawn, so an
+// all-caps transform reaches screen readers, some of which spell it out letter by letter. The heading keeps its case.
+test('section headings keep their case: no text-transform on anything that names a group', () => {
+  const tt = RULES.filter(r => r.selectors.some(s => /\.home-group-label(?![\w-])/.test(s))).flatMap(r => decls(r.body)).filter(d => d.prop === 'text-transform');
+  assert.deepEqual(tt, [], 'a heading that names a group is transformed');
 });
 
 test('option text and the message wrap instead of pushing the page sideways', () => {

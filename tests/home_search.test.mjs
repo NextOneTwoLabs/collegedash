@@ -55,7 +55,7 @@ const NAV = [...BODY.matchAll(/<a [^>]*data-nav="(\w+)"[^>]*>/g)].map((m, i) => 
 
 // camps: 'ok' (the fixture), 'fail' (a 404), 'hang' (never answers); programs: 'ok' or 'fail'
 function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } = {}) {
-  const els = new Map(), docListeners = {}, requests = [], writes = [];
+  const els = new Map(), docListeners = {}, requests = [], writes = [], release = {};
   const $ = sel => { if (!els.has(sel)) els.set(sel, makeEl(sel)); return els.get(sel); };
   const noon = new Date(`${CLOCK}T12:00:00`).getTime();
   class FixedDate extends Date {
@@ -84,7 +84,11 @@ function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } =
       const u = String(url).replace(/\?.*$/, '');
       requests.push(u);
       if (u === '/api/v1/programs') return Promise.resolve(answer(programs === 'ok', PROGRAMS_TEXT));
-      if (u === '/api/v1/camps') return camps === 'hang' ? new Promise(() => { }) : Promise.resolve(answer(camps === 'ok', CAMPS_TEXT));
+      if (u === '/api/v1/camps') {
+        if (camps === 'hang') return new Promise(() => { });
+        if (camps === 'manual') return new Promise(r => { release.camps = () => r(answer(true, CAMPS_TEXT)); });
+        return Promise.resolve(answer(camps === 'ok', CAMPS_TEXT));
+      }
       return Promise.resolve(answer(false));
     },
   };
@@ -100,7 +104,7 @@ function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } =
   const key = (k, extra = {}) => { const e = { key: k, target: box, prevented: false, preventDefault() { e.prevented = true; }, ...extra }; fire('keydown', e); return e; };
   const type = async v => { box.value = v; fire('input', { target: box }); await settle(120); };
   const focus = async () => { FOCUS.el = '#homeQ'; sandbox.document.activeElement = box; fire('focusin', { target: box }); await settle(60); };
-  return { sb: sandbox, $, box, fire, key, type, focus, requests, writes };
+  return { sb: sandbox, $, box, fire, key, type, focus, requests, writes, release };
 }
 const settle = (ms = 250) => new Promise(r => setTimeout(r, ms));
 
@@ -323,6 +327,27 @@ test('camps still loading: Programs work, the message says so; camps that fail t
   assert.deepEqual(options(pg2).filter(o => o.attrs['data-kind'] === 'program').map(o => o.attrs['data-slug']), ['north-carolina', 'unc-wilmington', 'unc-greensboro', 'unc-asheville']);
   assert.equal(unesc(msgOf(pg2).text), 'ID camps couldn’t load.');
   assert.match(statusOf(pg2), /ID camps couldn’t load\./);
+});
+
+// Huatuo on PR 2 (O1): camps can arrive while the visitor is arrowing through the programs. A camp word puts ID Camps
+// first, so every program moves down; the option the visitor was on stays the active one, by identity, not position.
+test('camps arriving mid-navigation keep the same option active', async () => {
+  const pg = await home({ camps: 'manual' });
+  await pg.focus(); await pg.type('usc camps');
+  pg.key('ArrowDown'); pg.key('ArrowDown');
+  const was = options(pg).find(o => o.attrs['aria-selected'] === 'true');
+  assert.equal(was.attrs['data-slug'], 'usc-upstate');
+  pg.release.camps(); await settle(150);
+  const now = options(pg).find(o => o.attrs['aria-selected'] === 'true');
+  assert.ok(options(pg).some(o => o.attrs['data-kind'] === 'camp'), 'the camps did not arrive');
+  assert.equal(now?.attrs['data-slug'], 'usc-upstate', 'another option became active');
+  assert.equal(pg.box.getAttribute('aria-activedescendant'), now.attrs.id);
+  // with nothing active before, nothing is active after
+  const pg2 = await home({ camps: 'manual' });
+  await pg2.focus(); await pg2.type('usc camps');
+  pg2.release.camps(); await settle(150);
+  assert.equal(pg2.box.getAttribute('aria-activedescendant'), null);
+  assert.ok(!options(pg2).some(o => o.attrs['aria-selected'] === 'true'));
 });
 
 test('the box remembers nothing: no saved state written while typing, moving or choosing', async () => {
