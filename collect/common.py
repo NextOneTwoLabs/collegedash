@@ -518,13 +518,13 @@ def stopped_hosts() -> dict[str, dict]:
 
 def _gate_key(host: str) -> str:
     """One key per server for the politeness gate, its backoff hold and its Crawl-delay (issue #108 B): lower-cased,
-    a leading `www.` and a default port (:443, :80) dropped, IDNA-encoded. `www.x`, `x` and `x:443` are one server, so
+    every leading `www.` and a default port (:443, :80) dropped, IDNA-encoded. `www.x`, `x` and `x:443` are one server, so
     alternating names can no longer skip the gap or a backoff. The robots.txt verdicts are NOT keyed by this: RFC 9309
     scopes robots.txt to the exact authority, so _robots and friends stay per exact host."""
     h = host.lower()
     if h.endswith(":443") or h.endswith(":80"):
         h = h.rsplit(":", 1)[0]
-    if h.startswith("www."):
+    while h.startswith("www."):  # every leading www., so the key is idempotent (it is applied twice on the gate path)
         h = h[4:]
     try:
         h = h.encode("idna").decode("ascii")
