@@ -3,7 +3,7 @@
 
     python3 .claude/skills/run-tests/ci_tests.py --list        # show the steps and floors read from tests.yml; run nothing
     python3 .claude/skills/run-tests/ci_tests.py               # run every step (more than 10 minutes here: run it in the background)
-    python3 .claude/skills/run-tests/ci_tests.py --only node   # only steps whose name or command contains "node" (repeatable)
+    python3 .claude/skills/run-tests/ci_tests.py --only node   # only the step whose key is, or starts with, "node" (repeatable)
     python3 .claude/skills/run-tests/ci_tests.py --logs DIR    # keep one full log per step in DIR (default: a new temp directory)
     python3 .claude/skills/run-tests/ci_tests.py --main DIR    # DIR = clean checkout of origin/main, for the timing comparison below
 
@@ -52,6 +52,30 @@ GOOD = re.compile(r"passed in [\d.]+s|^# (?:tests|pass|fail|skipped) ")  # the t
 
 def slug(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")[:40]
+
+
+def step_key(name: str) -> str:
+    """A step's --only key: its tests.yml name before any "(...)", slugged ("python suites (every ...)" -> "python-suites").
+    Matched against the NAME only: every command starts with `python`, so matching commands selected every step."""
+    return slug(name.split("(", 1)[0])
+
+
+def select_steps(steps: list, words: list[str]) -> tuple[list, str | None]:
+    """(the steps the --only words pick, in tests.yml order; an error message or None). A word picks the step whose
+    key is the word or starts with "<word>-". A word that picks no step, or more than one, is an error."""
+    if not words:
+        return list(steps), None
+    keys = [step_key(n) for n, _ in steps]
+    picked = set()
+    for w in words:
+        w = slug(w)
+        hits = [i for i, k in enumerate(keys) if k == w or k.startswith(w + "-")]
+        if not hits:
+            return [], f"--only {w!r} names no step; the step keys are: {', '.join(keys)}"
+        if len(hits) > 1:
+            return [], f"--only {w!r} names more than one step ({', '.join(keys[i] for i in hits)}); use a full key"
+        picked.add(hits[0])
+    return [s for i, s in enumerate(steps) if i in picked], None
 
 
 def floor_of(cmd: str) -> str:
@@ -168,7 +192,7 @@ def run_node_direct(cmd: str, e: dict, logdir: Path, stem: str, verbose: bool) -
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--list", action="store_true", help="show the steps and floors read from tests.yml, then stop")
-    ap.add_argument("--only", action="append", default=[], metavar="WORD", help="run only steps containing WORD")
+    ap.add_argument("--only", action="append", default=[], metavar="WORD", help="run only the step with this key, or whose key starts with it (see --list)")
     ap.add_argument("--logs", help="directory for one full log per step (default: a new temp directory)")
     ap.add_argument("--venv", help="venv to use (default: $CD_VENV, else ~/.cache/collegedash/venv<ver>)")
     ap.add_argument("--main", help="a clean checkout of origin/main, to compare a timing test that still fails when rerun alone")
@@ -196,13 +220,13 @@ def main() -> int:
     if not node_ok:
         print(f"  WARNING Node is not CI's {wf.node}: run setup first, and say in your report which Node ran")
 
-    steps = [s for s in wf.steps if not args.only or any(w.lower() in (s[0] + " " + s[1]).lower() for w in args.only)]
-    if not steps:
-        print(f"no step in tests.yml matches {args.only}; the steps are: {[s[0] for s in wf.steps]}", file=sys.stderr)
-        return 1
+    steps, err = select_steps(wf.steps, args.only)
+    if err:
+        print(err, file=sys.stderr)
+        return 3  # not 1 (a step failed) or 2 (timing only): nothing ran
     print()
     for i, (name, cmd) in enumerate(steps, 1):
-        print(f"{i}. {name}\n     {cmd}\n     floor {floor_of(cmd)}")
+        print(f"{i}. {name}   [--only {step_key(name)}]\n     {cmd}\n     floor {floor_of(cmd)}")
     if wf.skipped:
         print(f"\nNOT RUN here: {len(wf.skipped)} multi-line `run: |` step(s) in tests.yml, which this script does not read: "
               f"{'; '.join(wf.skipped)}.\n     If one of them runs tests, run its commands by hand and report them.")

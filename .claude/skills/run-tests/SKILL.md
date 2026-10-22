@@ -13,7 +13,7 @@ The commands and the `--min-checks` floors live in `.github/workflows/tests.yml`
 # CD_VENV=<the venv the setup skill reported> in front of each command; leave it out if you used the default location
 python3 .claude/skills/run-tests/ci_tests.py --list      # the steps and floors, read from tests.yml; runs nothing
 python3 .claude/skills/run-tests/ci_tests.py --logs DIR  # run every step, keep one full log per step in DIR
-python3 .claude/skills/run-tests/ci_tests.py --only node # only steps whose name or command contains "node" (repeatable)
+python3 .claude/skills/run-tests/ci_tests.py --only node # one step, by the key --list shows (python, camps, node); repeatable
 ```
 
 ## Run it in the background
@@ -45,7 +45,7 @@ ran on: Python 3.12.3 (CI 3.12); Node v24.x (CI 24)
 
 - `checks` is the count the runner reported. `floor` is CI's `--min-checks` for that step. Paste the table and the `ran on` line into your report; it goes into the PR description. A result that does not say which versions ran is not evidence.
 - If `ran on` says `DIFFERS`, the result is not CI's. Say so next to the numbers.
-- Exit code: `0` every step passed; `1` something failed; `2` only timing tests failed, and each then passed when rerun alone or failed alone in the `--main` checkout too (see below; the row says which). The step's own line shows the suite runner's exit code (`TIMING (exit 1)`); the run's exit code is the `2`. Anything but `0` needs an explanation in the report.
+- Exit code: `0` every step passed; `1` something failed; `3` an `--only` word named no step or more than one (nothing ran); `2` only timing tests failed, and each then passed when rerun alone or failed alone in the `--main` checkout too (see below; the row says which). The step's own line shows the suite runner's exit code (`TIMING (exit 1)`); the run's exit code is the `2`. Anything but `0` needs an explanation in the report.
 - Each step is judged separately, as in CI: an early failure does not stop the later steps.
 - **What it does not run.** `ci_tests.py` reads only the `suites` job of `tests.yml`, and only its single-line `run:` steps. Any multi-line `run: |` step in that job (today only the Summary table) is named under `NOT RUN here` in `--list` and at the top of every run; if a future one runs tests, run its commands by hand and report them.
 - **The `generated-reports` job** (pull requests only) is a separate job in `tests.yml`, so `ci_tests.py` does not run it. It fails a PR that changes `data/clubs-review.json` or `data/schools-review.json`, which only the data refresh may commit. Check it before you push with `python .github/scripts/check_generated_reports.py --base origin/main --head HEAD` (offline; exit 0 means neither file changed), and take those files out of the branch if it fails.
