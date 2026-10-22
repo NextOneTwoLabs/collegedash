@@ -4,7 +4,7 @@
   "title": "CollegeDash camps index (public/data/camps/index.json, /api/v1/camps; issues #65, #78, #465)",
   "description": "Every upcoming camp across the published programs, one row per camp. build.check_camps_index also checks it against the profiles and the programs index of the same build (each row equal to the profile item it came from, each `program` block equal to that program's index row); this schema pins the shape. A row carries exactly `slug`, build.CAMP_INDEX_FIELDS and `program` (build.CAMP_PROGRAM_FIELDS), in that order.",
   "type": "object",
-  "required": ["updated", "window", "counts", "camps"],
+  "required": ["updated", "window", "counts", "coverage", "camps"],
   "additionalProperties": false,
   "properties": {
     "updated": {"type": "string", "minLength": 1, "description": "When the build wrote the file: the page's 'List refreshed' date. Not a per-camp check date."},
@@ -26,6 +26,32 @@
         "id": {"type": "integer", "minimum": 0},
         "youth": {"type": "integer", "minimum": 0},
         "unknown": {"type": "integer", "minimum": 0}
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "description": "Issue #79: what the camp pages of the published programs yielded, counts only (build.camp_coverage). Every program is in exactly one bucket, so the buckets add up to `programs`; check_camps_index recomputes it from the profiles. The ID Camps page reports unreadable + fetchFailed + refusedHost as the programs whose camps may be missing.",
+      "required": ["programs", "withRows", "readNothingDated", "unreadable", "fetchFailed", "refusedHost", "robots", "noLink", "skipped"],
+      "additionalProperties": false,
+      "properties": {
+        "programs": {"type": "integer", "minimum": 0},
+        "withRows": {"type": "integer", "minimum": 0, "description": "the camp page gave at least one dated row"},
+        "readNothingDated": {"type": "integer", "minimum": 0, "description": "the camp page was read and nothing on it was dated"},
+        "unreadable": {
+          "type": "object",
+          "required": ["app-shell", "not-a-listing", "not-html"],
+          "additionalProperties": false,
+          "properties": {
+            "app-shell": {"type": "integer", "minimum": 0, "description": "a TotalCamps page: a JavaScript app with nothing in its HTML"},
+            "not-a-listing": {"type": "integer", "minimum": 0, "description": "a registration form, store, ticketing or fundraising page, a waiver or form document, or an image"},
+            "not-html": {"type": "integer", "minimum": 0, "description": "a PDF or other page that is not HTML"}
+          }
+        },
+        "fetchFailed": {"type": "integer", "minimum": 0},
+        "refusedHost": {"type": "integer", "minimum": 0},
+        "robots": {"type": "integer", "minimum": 0},
+        "noLink": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0, "description": "no camps record: the athletics site was not collected"}
       }
     },
     "camps": {"type": "array", "items": {"$ref": "#/$defs/row"}}

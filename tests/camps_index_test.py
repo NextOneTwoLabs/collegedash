@@ -585,6 +585,8 @@ def scratch_tree(tmp: str, *, index_doc, items: dict[str, list[dict]], programs_
         with open(path, "w", encoding="utf-8") as f:
             f.write(index_doc)
     else:
+        if index_doc.get("coverage") is COVERAGE_AUTO:  # #79: the tally of exactly the profiles written above
+            index_doc = {**index_doc, "coverage": build.camp_coverage([{"camps": {"items": its}} for its in items.values()])}
         common.write_json(path, index_doc)
     return {"programs": [{"slug": s, "onboarded": True} for s in items]}
 
@@ -595,9 +597,14 @@ def check(tmp: str, *, index_doc, items: dict[str, list[dict]], programs_updated
         return captured(build.check_camps_index, reg)
 
 
+# Issue #79: check_camps_index recomputes `coverage` from the profiles; doc() asks scratch_tree to fill in the tally of
+# the profiles it writes, so these fixtures exercise everything else. tests/camps_readable_test.py tests coverage itself.
+COVERAGE_AUTO = object()
+
+
 def doc(rows, window=WINDOW, counts=None) -> dict:
     return {"updated": FIXTURE_UPDATED, "window": window,
-            "counts": build.camp_counts(rows) if counts is None else counts, "camps": rows}
+            "counts": build.camp_counts(rows) if counts is None else counts, "coverage": COVERAGE_AUTO, "camps": rows}
 
 
 def item(**kw) -> dict:

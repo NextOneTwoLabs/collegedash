@@ -158,7 +158,7 @@ def test_readability() -> None:
         ("a path with `uniforms`", rec("https://athletics.example.edu/sports/womens-soccer/uniforms-camp")),
         ("a path with `platform`", rec("https://camps.example.org/platform/womens-soccer")),
         ("a host that only CONTAINS a listed name: docs.google.com.example",
-         rec("https://docs.google.com.example/forms/x")),
+         rec("https://docs.google.com.example/camps/womens-soccer")),
         ("a host that ends in a listed name without a dot: notformstack.com", rec("https://notformstack.com/camps")),
         ("an image extension in the query only", rec("https://camps.example.org/register?banner=camp.jpg")),
         ("an athletics camp page with nothing dated", rec("https://athletics.example.edu/sports/womens-soccer/camps")),
