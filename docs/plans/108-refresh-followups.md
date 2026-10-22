@@ -73,5 +73,6 @@ Issue #108 (from the PR #105 review). Checked against origin/main `60bc94e17` (t
 - the annotation already says so.
 
 The README side is #89.
+
 **Order.** A, B, C: one PR each, "Part of #108". Each runs `tests/refresh_politeness_test.py` and the full suites
 (`run-tests`). The issue closes after C and the owner's ruling on D.
