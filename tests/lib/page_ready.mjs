@@ -34,9 +34,13 @@ export function bootable(src) {
 // Wraps the sandbox's setTimeout, clearTimeout and fetch so the page's pending work can be counted. Call it after the
 // sandbox object is built and before the script runs. Returns the counter idle() reads.
 export function track(sandbox) {
-  const pending = { timers: new Set(), fetches: 0, last: Date.now() };
+  const pending = { timers: new Set(), fetches: 0, last: Date.now(), dead: false };
   const st = sandbox.setTimeout, ct = sandbox.clearTimeout, f = sandbox.fetch;
+  // A page marked stuck (see fail()) is stopped: its pending short timers are cleared and it can set no new ones, so
+  // a page that keeps re-arming a timer does not keep the test process alive.
+  pending.stop = () => { pending.dead = true; for (const h of pending.timers) ct(h); pending.timers.clear(); };
   sandbox.setTimeout = (fn, ms = 0, ...args) => {
+    if (pending.dead && ms <= SHORT_MS) return 0;
     let h = null;
     h = st(() => { pending.timers.delete(h); pending.last = Date.now(); if (typeof fn === 'function') fn(...args); }, ms);
     if (ms <= SHORT_MS) pending.timers.add(h);
@@ -58,7 +62,7 @@ const tick = ms => new Promise(r => setTimeout(r, ms));
 
 // The first failure to settle in this file, if any (see the header).
 let stuck = null;
-const fail = msg => { stuck ||= msg; assert.fail(msg); };
+const fail = (msg, pending) => { stuck ||= msg; pending?.stop?.(); assert.fail(msg); };
 const pendingText = pending => `${pending.timers.size} short timers, ${pending.fetches} fetches pending`;
 // For tests/page_ready.test.mjs only: forget an earlier failure.
 export const _resetForTest = () => { stuck = null; };
@@ -73,7 +77,7 @@ export async function idle(pending, { max = MAX_MS } = {}) {
   pending.last = Math.max(pending.last, start);
   for (;;) {
     if (!pending.timers.size && !pending.fetches && Date.now() - pending.last >= QUIET_MS) return;
-    if (Date.now() - start >= max) fail(`the page did not go quiet in ${max} ms (${pendingText(pending)})`);
+    if (Date.now() - start >= max) fail(`the page did not go quiet in ${max} ms (${pendingText(pending)})`, pending);
     await tick(5);
   }
 }
@@ -85,8 +89,11 @@ export async function ready(sb, pending, { max = MAX_MS } = {}) {
   let timer = null;
   const LATE = Symbol('late');
   const late = new Promise(r => { timer = setTimeout(() => r(LATE), max); });
-  const won = await Promise.race([Promise.resolve(sb.__booted).then(() => null, () => null), late]);
+  // A boot() that rejects is a real error (the page's boot() catches its own load failures and draws a card, so it
+  // never should): rethrown, not taken as the page being ready (Bianque).
+  const won = await Promise.race([Promise.resolve(sb.__booted).then(() => null, err => ({ err })), late]);
   clearTimeout(timer);
-  if (won === LATE) fail(`boot() did not settle in ${max} ms (${pendingText(pending)})`);
+  if (won === LATE) fail(`boot() did not settle in ${max} ms (${pendingText(pending)})`, pending);
+  if (won?.err !== undefined) throw won.err;
   await idle(pending, { max });
 }

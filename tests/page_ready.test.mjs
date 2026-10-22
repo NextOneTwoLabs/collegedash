@@ -49,16 +49,27 @@ test('after one page never settled, later waits in the same file fail at once wi
 test('idle(): a page that never goes quiet fails within the cap and counts its pending timers', async () => {
   _resetForTest();
   const { sb, pending } = sandbox(Promise.resolve());
-  let on = true;
-  const again = () => { if (on) sb.setTimeout(again, 10); };  // a page that keeps re-arming a short timer
+  let runs = 0;
+  const again = () => { runs++; sb.setTimeout(again, 10); };  // a page that keeps re-arming a short timer, forever
   again();
   try {
     await assert.rejects(idle(pending, { max: 200 }), /the page did not go quiet in 200 ms \(1 short timers, 0 fetches pending\)/);
-  } finally { on = false; _resetForTest(); }  // stop it, or the process never exits
+    // marked stuck, the page is stopped: no short timer is pending and none can be set, so this file can exit
+    assert.equal(pending.timers.size, 0, 'a stuck page still has short timers pending');
+    const at = runs;
+    await new Promise(r => setTimeout(r, 60));
+    assert.equal(runs, at, 'the stuck page kept re-arming its timer');
+  } finally { _resetForTest(); }
 });
 
 test('bootable(): keeps boot()\'s promise, and fails loudly when the script no longer ends with one `boot();` line', () => {
   assert.equal(bootable('a();\nboot();\n'), 'a();\nglobalThis.__booted = boot();\n');
   assert.throws(() => bootable('a();\nboot().then(x);\n'), /no longer ends with one `boot\(\);` line/);
   assert.throws(() => bootable('boot();\nboot();\n'), /no longer ends with one `boot\(\);` line/);
+});
+
+test('ready(): a boot() that rejects is rethrown, not taken as the page being ready', async () => {
+  _resetForTest();
+  const { sb, pending } = sandbox(Promise.reject(new Error('index.json: HTTP 500 (made up)')));
+  await assert.rejects(ready(sb, pending, { max: 2000 }), /index\.json: HTTP 500 \(made up\)/);
 });
