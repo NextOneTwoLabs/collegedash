@@ -219,8 +219,11 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     if status_line:
         common.log(status_line)
     if not sched["games"]:
-        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Say, name-free,
-        # what the page holds instead, so the parser fix can be planned from evidence. Log-only; no request.
+        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Flag it in the
+        # run's annotations (a warning, never a failure: the empty schedule is still stored), then say, name-free,
+        # what the page holds instead, so the parser fix can be planned from evidence. No request.
+        common.annotate(f"::warning title=athletics schedule::{slug}: the {sched['season'] or season} schedule page "
+                        "loaded but gave 0 games; an empty schedule is stored (issue #393)")
         try:
             common.log(zero_games_diagnostic(shtml))
         except Exception as e:
