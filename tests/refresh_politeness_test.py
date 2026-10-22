@@ -1362,6 +1362,24 @@ def test_host_stop_one_server(tmp: str) -> None:
            str(sorted(common._robots)))
 
 
+def test_gate_key_idempotent(tmp: str) -> None:
+    """Issue #108 (Huatuo's note on 1568e8a872): _gate_key is applied twice on the gate path (_polite keys the host, and
+    the in-gate stop check keys it again), so it must be idempotent, or a www.www. name is looked up under another key."""
+    print("host key (#108 A+B): _gate_key is idempotent, and the in-gate stop check finds a stopped www.www.x")
+    for h in ("www.www.idem.test", "www.idem.test", "idem.test:443", "WWW.Idem.test:80", "www.bücher.test", "xn--bcher-kva.test"):
+        once = common._gate_key(h)
+        ok(f"FIX _gate_key(_gate_key({h!r})) == _gate_key({h!r})", common._gate_key(once) == once, f"{once!r} -> {common._gate_key(once)!r}")
+    clock = FakeClock()
+    with fresh_state(tmp), stop_rules(clock, fails=1, min_seconds=0.0):
+        common._stop_verdict(["www.www.idem.test"], False, False)
+        try:
+            with common._polite("https://www.www.idem.test/x"):
+                got = "entered the gate"
+        except common.HostStopped:
+            got = "HostStopped"
+        ok("FIX the in-gate stop check refuses a stopped www.www.x", got == "HostStopped", got)
+
+
 def try_fetch_admit(host: str):
     try:
         return common._stop_admit(host, f"https://{host}/")
@@ -1383,7 +1401,7 @@ def main() -> int:
              test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
              test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip,
              test_host_stop_counts_the_failing_hop, test_one_gate_per_server,
-             test_host_stop_one_server]
+             test_host_stop_one_server, test_gate_key_idempotent]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
