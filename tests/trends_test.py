@@ -526,7 +526,11 @@ def test_build_hook_is_wired() -> None:
     ok("build.py passes its own candidate and same-person rules in, so trends.py never imports build",
        "candidates=club_candidates, same_person=same_person" in src and "import build" not in open(os.path.join(ROOT, "trends.py"), encoding="utf-8").read())
     yml = open(os.path.join(ROOT, ".github", "workflows", "refresh.yml"), encoding="utf-8").read()
-    ok("refresh.yml restores the index on its failure path, tolerantly", "public/data/trends/index.json 2>/dev/null || rm -f public/data/trends/index.json" in yml)
+    # since #90 the failure path restores everything under public/data except rpi/ and registry.json, not a list of files
+    ok("refresh.yml restores the index on its failure path, with the rest of public/data",
+       "find public/data -mindepth 1 -maxdepth 1 ! -name rpi ! -name registry.json -exec rm -rf {} +" in yml
+       and "git checkout FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'" in yml
+       and "! -name trends" not in yml)
 
 
 def test_answer_shapes() -> None:
