@@ -39,7 +39,7 @@ async function loadPage() {
     return els.get(selector);
   };
   const documents = new Map([
-    ['data/programs/index.json', INDEX], ['/api/v1/programs', INDEX],
+    ['data/programs/index.json', INDEX], ['/api/v1/programs', INDEX], ['/api/v1/list', INDEX],
     ['/api/v1/programs/sewanee', PROFILE],
   ]);
   const sb = {
