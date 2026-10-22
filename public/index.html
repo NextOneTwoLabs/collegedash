@@ -3608,13 +3608,15 @@ function homeSearch(campRows, raw) {
   const idaho = typed === 'ID';
   const rest = idaho ? toks : toks.filter(t => !HOME_CAMP_WORDS.has(t));
   const camp = rest.length < toks.length;
-  // The program query. With camp words dropped it is the remaining words; the capitals rule (placeQuery) reads the
-  // typed text only for a lone two-letter code, so "TX camps" keeps "TX" and "tx camps" stays lowercase.
+  // The program query, which the "All N" link also carries to the Programs page's box. With camp words dropped it is
+  // the typed text without them, its own case and punctuation kept ("St. Mary's camps" -> "St. Mary's", "TX camps" ->
+  // "TX", so the capitals rule still reads a code). When cutting the text that way does not leave exactly the remaining
+  // words (an accent or apostrophe joined to a camp word), it is the remaining words themselves.
   let pq = typed;
   if (camp && rest.length) {
-    pq = rest.join(' ');
-    const up = pq.toUpperCase();
-    if (rest.length === 1 && pq.length === 2 && new RegExp(`(^|[^A-Za-z0-9])${up}($|[^A-Za-z0-9])`).test(typed)) pq = up;
+    const cut = typed.replace(/(^|[^\p{L}\p{N}\p{M}])(?:camps?|clinics?|id)(?=$|[^\p{L}\p{N}\p{M}])/giu, '$1')
+      .replace(/\s+/g, ' ').replace(/^[\s\-\u2010-\u2015_/,;:]+|[\s\-\u2010-\u2015_/,;:]+$/g, '');
+    pq = normText(cut) === rest.join(' ') ? cut : rest.join(' ');
   }
   const hits = searchMatches(normText(pq), Infinity, pq);
   const names = hits.filter(h => !h.m.place);
