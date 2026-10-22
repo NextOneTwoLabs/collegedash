@@ -99,13 +99,62 @@ the rate-limited `DEMO_KEY`.
 
 ## Refresh runs and failures
 
-A refresh touches up to ~1,400 program/collector pairs, and a few always fail (a site is down, a page was
-redesigned). `collegedash.py refresh` therefore treats individual failures as warnings and exits **0** as long as
-no more than `--fail-threshold` of the runs failed (default 5%, env `COLLEGEDASH_FAIL_THRESHOLD`); it exits **1**
-above the threshold, meaning the flow itself needs attention, and **2** if the command crashed. The summary and
-the failed collectors are printed at the end, recorded as `lastRun` in `public/archive/refresh-state.json`, and on
-GitHub Actions shown as annotations and in the run's Summary tab. The workflow's `fail_threshold` input changes
-the limit for a manual run.
+`.github/workflows/refresh.yml` runs daily at 11:00 UTC (and by hand) in three steps:
+**Refresh data** collects, **Commit changed data** publishes, and **Fail if too many collectors failed** turns the
+run red if the first step reported a problem. The commit step also goes red on its own when a gate or a failed publish stops it.
+A red run can therefore mean the data did publish but too many collectors failed, or that nothing was published.
+The annotations say which.
+
+**Collecting.** A run is thousands of program/collector pairs (5,056 on 2026-10-21), and a few always fail (a site
+is down, a page was redesigned). `collegedash.py refresh` treats each failure as a warning and carries on. It exits **0** while
+no more than `--fail-threshold` of the runs failed (default 5%, env `COLLEGEDASH_FAIL_THRESHOLD`, the
+`fail_threshold` input for a manual run), **1** above it, and **2** if it crashed.
+The summary is printed, saved as `lastRun` in `public/archive/refresh-state.json`, and shown as annotations and in
+the Summary tab.
+
+**Time limits.** The collector starts no new program after 4.5 h (`COLLEGEDASH_TIME_BUDGET_MINUTES: "270"`). The
+rest are skipped as "time budget" and keep their stored sources. The step is killed at 5 h and the job at 350 min.
+The commit step runs `if: always()`, so whatever was collected is still published or, usually, saved (below).
+
+**Publishing: rebase, rebuild, gate.** The commit step commits the run, rebases it onto the current `main` (on a
+data conflict, the freshly collected file wins), merges the registry's platform detections onto main's
+registry, then runs `collegedash.py build` and `collegedash.py validate` on the result. Only if both pass is it
+pushed to `main`, as `data: refresh <time>` (or `data: rebuild` for `build_only`). It tries up to 3 times if the
+push is rejected.
+
+**When a run doesn't publish, `main` is not touched.** The run's collection usually goes to a branch instead, in one
+of two shapes. The `::error` annotation names the branch, says which shape it is, and explains how to recover:
+- `refresh-sources/<run>-<attempt>-<push attempt>`: build or validate failed. One commit on top of main with the
+  collected sources, `public/data/rpi/**` and the merged `registry.json`; everything `build()` writes is restored to
+  main's copy. It reproduces with `git fetch origin <branch> && git checkout FETCH_HEAD && python collegedash.py
+  build && python collegedash.py validate`.
+- `refresh-sources/<run>-<attempt>-unpublished`: nothing could be published at all, because of a rebase conflict
+  the step doesn't resolve, a registry merge that failed, or 3 failed attempts. Whether that commit was rebased or
+  checked differs by cause, and the annotation says which.
+
+The collection is **not** saved in two cases, and the annotation says so:
+- a `build_only` run that fails its gate collected nothing, so no branch is made;
+- the restore, the sources-only commit, or the push to the branch itself failed.
+
+Today the restore names `build()`'s outputs one by one. A renamed output can make it fail and lose the collection
+(#90); PR #518 changes this to restore all of `public/data` except `rpi/` and `registry.json` once it merges.
+
+**What a visitor sees.** When a run publishes nothing, the site keeps serving the last published data. "Data checked
+<date>" and each profile section's "Source … checked <date>" line keep their older dates. `freshness.yml`
+(below) checks once a day, at 23:47 UTC. After one missed refresh the data is about 27-32 hours old, which only warns;
+it goes red once the data is over 36 hours old, which takes two missed runs (about 51-56 hours). Runs start 4-8.5 h late
+and take 35-50 min (`tools/freshness_check.py`).
+
+**Triage.**
+1. Open the run. The `::error` annotation names the cause and, if there is one, the branch.
+2. A build/validate branch (`-<push attempt>`) whose failure came from code merged mid-run: fix `main`, merge the
+   branch, then dispatch the workflow with `build_only=true`.
+3. A build/validate branch whose failure came from a source that came back malformed: don't merge it, because it
+   carries the bad source. Re-dispatch the workflow (`only=<collector>` is enough) so the source is collected again.
+4. An `-unpublished` branch: never merge it as it stands. Depending on the cause it may be unrebased and
+   unchecked, and its `registry.json` may predate main's, so merging could undo registry changes. Follow its annotation's recovery. For
+   the rebased case, that means rebasing it onto `main` and pushing; nothing needs collecting again.
+5. Nothing deletes `refresh-sources/*` branches. Delete the branch by hand once the failure is triaged.
 
 ### Data freshness (`freshness.yml`)
 
