@@ -1061,8 +1061,12 @@ function tuitionHtml(inS, outS, state) { // one figure when equal or one side mi
 }
 
 /* ---------- search: word-prefix matching over school names (+ nickname), ranked ---------- */
-// "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st mary s", "Hawaiʻi" -> "hawaii"
-const normText = s => String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+// "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st marys", "Hawaiʻi" -> "hawaii".
+// #479: the ʻokina and apostrophe-like marks are DROPPED, not turned into spaces (they join a word, they never split
+// one): ʻ ʼ ʹ ʽ ˈ ' ‘ ’ ‛ ` ´ ′. Dropped before NFKD, which would split ´ into a space and a combining accent. Every
+// search reads text through this one function, so the header box, ID Camps (campsNorm) and Home's search agree.
+const NORM_APOS = /[\u02BB\u02BC\u02B9\u02BD\u02C8'\u2018\u2019\u201B`\u00B4\u2032]/g;
+const normText = s => String(s || '').replace(NORM_APOS, '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
   .replace(/&/g, '').replace(/[‐-―\-]/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); // 'Texas A&M' -> 'texas am'
 const wordsOf = s => s ? s.split(' ') : [];
 // every query token must be a prefix of some word (any order); tokens may not reuse the same word
@@ -4376,9 +4380,10 @@ const campsFiltered = st => campsFilterOn(st) || !!st.q;  // narrowed at all: th
    the camp's title, and every month the camp's dates touch (a month-only date, that month) - "jun" starts "june".
    A state code (TX) and a division (D1) match only as WHOLE words, so "in" is not Indiana's code and "d" is not a
    division. The event venue is not searched: the sidebar says Program location is where the school is.
-   Both sides go through campsNorm - normText (case, accents, punctuation) after dropping apostrophes and the ʻokina, so
-   "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys" - and "st" and "saint" stand for each other. */
-const campsNorm = s => normText(String(s ?? '').replace(/[ʻʼ'’`]/g, ''));
+   Both sides go through campsNorm - normText (case, accents, punctuation; since #479 it drops apostrophes and the
+   ʻokina itself, so "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys", as in the header box) - and "st" and "saint"
+   stand for each other. */
+const campsNorm = s => normText(s ?? '');
 const CAMPS_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 const CAMPS_SEARCH = new WeakMap();
 function campsSearchOf(c, info) {
