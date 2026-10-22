@@ -16,8 +16,8 @@
 //   4. A returning visitor with saved preferences gets the "Personalization paused · Show recommended" line even when
 //      api/status answers after the page has drawn the list (a browser's usual order). The test holds the answer back
 //      and never redraws the list itself, so it fails exactly when switching on doesn't redraw it.
-//   5. The NOAA source reads "NOAA climate normals" on the card, with the full name as its title and accessible name,
-//      so it doesn't wrap to three lines at 320 px.
+//   5. The NOAA source reads "NOAA climate normals" on the card, and those words are its accessible name (WCAG 2.5.3);
+//      the full name is its title. It doesn't wrap to three lines at 320 px.
 //
 // What it CANNOT prove: layout at 320-1280 px (see the PR's Playwright check).
 import { test } from 'node:test';
@@ -115,13 +115,13 @@ test('4: a returning visitor\'s list offers their saved preferences even when ap
     'the list was redrawn with the saved preferences on offer');
 });
 
-test('5: the NOAA source reads "NOAA climate normals", with its full name kept for hover and screen readers', async () => {
+test('5: the NOAA source reads "NOAA climate normals", which is also its accessible name; the full name is its title', async () => {
   const pg = await showSaved();
   const html = pg.app();
-  const m = /<a href="https:\/\/www\.ncei\.noaa\.gov\/products\/land-based-station\/us-climate-normals" target="_blank" rel="noopener"( title="[^"]*")?( aria-label="[^"]*")?>([^<]*)<\/a>/.exec(html);
+  const m = /<a href="https:\/\/www\.ncei\.noaa\.gov\/products\/land-based-station\/us-climate-normals" target="_blank" rel="noopener"([^>]*)>([^<]*)<\/a>/.exec(html);
   assert.ok(m, 'a NOAA link');
-  assert.equal(m[3], 'NOAA climate normals');
-  const full = FIT.sources.climate.name;
-  assert.equal(m[1], ` title="${full}"`);
-  assert.equal(m[2], ` aria-label="${full}"`);
+  assert.equal(m[2], 'NOAA climate normals');
+  assert.equal(m[1], ` title="${FIT.sources.climate.name}"`, 'the full name is the title, and nothing else is set');
+  // WCAG 2.5.3 Label in Name: no aria-label, so the accessible name is the visible text itself
+  assert.ok(!/aria-label/.test(m[1]), 'an aria-label would replace the visible words as the accessible name');
 });
