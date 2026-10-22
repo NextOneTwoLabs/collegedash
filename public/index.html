@@ -1061,8 +1061,12 @@ function tuitionHtml(inS, outS, state) { // one figure when equal or one side mi
 }
 
 /* ---------- search: word-prefix matching over school names (+ nickname), ranked ---------- */
-// "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st mary s", "Hawaiʻi" -> "hawaii"
-const normText = s => String(s || '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
+// "Louisiana–Monroe" -> "louisiana monroe", "St. Mary's" -> "st marys", "Hawaiʻi" -> "hawaii".
+// #479: the ʻokina and apostrophe-like marks are DROPPED, not turned into spaces (they join a word, they never split
+// one): ʻ ʼ ʹ ʽ ˈ ' ‘ ’ ‛ ` ´ ′. Dropped before NFKD, which would split ´ into a space and a combining accent. Every
+// search reads text through this one function, so the header box, ID Camps (campsNorm) and Home's search agree.
+const NORM_APOS = /[\u02BB\u02BC\u02B9\u02BD\u02C8'\u2018\u2019\u201B`\u00B4\u2032]/g;
+const normText = s => String(s || '').replace(NORM_APOS, '').normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase()
   .replace(/&/g, '').replace(/[‐-―\-]/g, ' ').replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim(); // 'Texas A&M' -> 'texas am'
 const wordsOf = s => s ? s.split(' ') : [];
 // every query token must be a prefix of some word (any order); tokens may not reuse the same word
@@ -1124,30 +1128,38 @@ function placeMatch(p, q, raw) {
 // then shows the list rather than opening one program. "Stanford" is also a city, but the one program there is
 // Stanford itself, a name hit, so Enter still opens it. `hits` defaults to the ones the filters let through (#23).
 const placeQueryHits = (hits = visibleMatches()) => hits.some(h => h.m.place);
+// #479: normText drops an apostrophe-like mark ("St. Mary's" -> "st marys"). A visitor may also type it as a space
+// ("st mary s"), as the old normaliser read it, so a text carrying such a mark is ALSO indexed in that spaced form,
+// at the same score. Texts without one have no spaced form (null).
+const spacedForm = (text, plain) => { const t = normText(String(text || '').replace(NORM_APOS, ' ')); return t && t !== plain ? t : null; };
 function prepareSearch(p) { // once per program, when the program list is loaded
-  const short = normText(p.shortName || p.name);
+  const short = normText(p.shortName || p.name), shortAlt = spacedForm(p.shortName || p.name, short);
   const seen = new Set(), names = [];
   for (const label of (p.searchNames || [p.shortName, p.name])) {
-    const text = normText(label);
-    if (!text || seen.has(text)) continue;
-    seen.add(text);
-    names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
+    const plain = normText(label);
+    for (const text of [plain, spacedForm(label, plain)]) {
+      if (!text || seen.has(text)) continue;
+      seen.add(text);
+      names.push({ label, text, words: wordsOf(text), joined: text.replace(/ /g, '') });
+    }
   }
-  p._search = { short, shortWords: wordsOf(short), initials: wordsOf(short).map(w => w[0]).join(''), names,
-    nick: normText(p.nickname), nickWords: wordsOf(normText(p.nickname)), city: normText(p.city) };
+  const nick = normText(p.nickname), nickAlt = spacedForm(p.nickname, nick);
+  p._search = { short, shortWords: wordsOf(short), shortAlt, shortAltWords: shortAlt ? wordsOf(shortAlt) : null,
+    initials: wordsOf(short).map(w => w[0]).join(''), names,
+    nick, nickWords: wordsOf(nick), nickAltWords: nickAlt ? wordsOf(nickAlt) : null, nickAlt, city: normText(p.city) };
 }
 // returns {score, why} or null. Higher score = better match; `why` names the matched text when it is not the short name.
 // `raw` is the query as typed (for the place match's capitals rule); a place hit comes last, below every name hit.
 function matchScore(p, q, raw) {
   const s = p._search, toks = wordsOf(q), joined = q.replace(/ /g, '');
   if (!s || !toks.length) return null;
-  if (s.short === q) return { score: 100 };
-  if (s.short.startsWith(q)) return { score: 90 };
-  if (tokensPrefixWords(toks, s.shortWords)) return { score: 80 };
+  if (s.short === q || s.shortAlt === q) return { score: 100 };
+  if (s.short.startsWith(q) || s.shortAlt?.startsWith(q)) return { score: 90 };
+  if (tokensPrefixWords(toks, s.shortWords) || (s.shortAltWords && tokensPrefixWords(toks, s.shortAltWords))) return { score: 80 };
   if (s.initials === joined && joined.length >= 3) return { score: 55 };
   let best = null;
   for (const n of s.names) {
-    if (n.text === s.short) continue;
+    if (n.text === s.short || n.text === s.shortAlt) continue;
     let sc = 0;
     // #309: an exact search name ('UNC', 'Pitt') outranks another program's short-name prefix (90: 'UNC Wilmington'),
     // so North Carolina comes first and the other UNC schools still follow; only the short name itself (100) beats it
@@ -1158,7 +1170,8 @@ function matchScore(p, q, raw) {
     if (sc > (best?.score || 0)) best = { score: sc, why: n.label };
   }
   if (best) return best;
-  if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords))) return { score: 30, why: p.nickname };
+  if (s.nick && (s.nick.startsWith(q) || tokensPrefixWords(toks, s.nickWords) || s.nickAlt?.startsWith(q)
+    || (s.nickAltWords && tokensPrefixWords(toks, s.nickAltWords)))) return { score: 30, why: p.nickname };
   if (joined.length >= 4 && s.short.replace(/ /g, '').startsWith(joined)) return { score: 45 };
   return placeMatch(p, q, raw);
 }
@@ -4382,9 +4395,10 @@ const campsFiltered = st => campsFilterOn(st) || !!st.q;  // narrowed at all: th
    the camp's title, and every month the camp's dates touch (a month-only date, that month) - "jun" starts "june".
    A state code (TX) and a division (D1) match only as WHOLE words, so "in" is not Indiana's code and "d" is not a
    division. The event venue is not searched: the sidebar says Program location is where the school is.
-   Both sides go through campsNorm - normText (case, accents, punctuation) after dropping apostrophes and the ʻokina, so
-   "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys" - and "st" and "saint" stand for each other. */
-const campsNorm = s => normText(String(s ?? '').replace(/[ʻʼ'’`]/g, ''));
+   Both sides go through campsNorm - normText (case, accents, punctuation; since #479 it drops apostrophes and the
+   ʻokina itself, so "Hawaiʻi" is "hawaii" and "St. Mary's" is "st marys", as in the header box) - and "st" and "saint"
+   stand for each other. */
+const campsNorm = s => normText(s ?? '');
 const CAMPS_MONTHS = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 const CAMPS_SEARCH = new WeakMap();
 function campsSearchOf(c, info) {
