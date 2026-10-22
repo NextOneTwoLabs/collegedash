@@ -171,11 +171,13 @@ test('camp words dropped: the program query (and the "All N" link) keeps the typ
     assert.equal(r.pq, pq, q);
     assert.deepEqual(slugs(r.programs.hits), slugs(plainRun.programs.hits), `${q}: not the same programs as "${pq}"`);
   }
-  const r = run("St. Mary's camps");
-  assert.ok(r.programs.n > 6 || r.programs.href === null);
-  const bull = run('bulldogs, clinics');
-  assert.equal(bull.programs.href, "#/programs?q=bulldogs&sort=name");
-  assert.equal(A.listStateOf(run("St. Mary's camps").programs.href?.split('?')[1] ?? "q=St.+Mary's").q, "St. Mary's");
+  assert.equal(run('bulldogs, clinics').programs.href, '#/programs?q=bulldogs&sort=name');
+  // a link that carries punctuation: the Programs page reads back exactly what was typed, and lists the same N
+  const st = run('St. camps');
+  assert.equal(st.programs.href, '#/programs?q=St.&sort=name');
+  const back = A.listStateOf(st.programs.href.split('?')[1]).q;
+  assert.equal(back, 'St.');
+  assert.equal(A.searchMatches(A.normText(back), Infinity, back).length, st.programs.n);
 });
 
 test('the Idaho exception: exactly "ID" in capitals is a state code, not a camp word', () => {
