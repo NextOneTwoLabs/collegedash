@@ -63,6 +63,10 @@ Cases (issue #117 first, then the #82 gate behaviour that must not change):
   build-gate              (#82) build fails after the rebase: collection on a branch, data as main has it.
   fifth-output            (#82) build writes a fifth output and validate fails: the fifth-output assertion
                           stops the step, nothing is pushed anywhere.
+  renamed-output          (#90) main renames camps/index.json mid-run and validate fails: the collection is on the
+                          gate's branch with public/data exactly main's, under the new name.
+  removed-output          (#90, a guard) main deletes camps/index.json mid-run: a modify/delete conflict, so the
+                          collection is saved on the unpublished branch before the gate's restore is reached.
   stray-locks             (#321) a killed run left <file>.lock files beside sources, profiles and data/. With
                           the repository's real .gitignore seeded on main, none reaches main or a sources
                           branch; a control run without it shows `git add -A` would have published them.
@@ -932,6 +936,65 @@ def test_fifth_output(tmp):
     ok("the fifth-output assertion is what stopped it", "does not match" in out, out[-1200:])
 
 
+# ---------- issue #90: a build output renamed or removed on main mid-run ----------
+
+CAMPS = "public/data/camps/index.json"
+CAMPS_LINE = b'    printf \'{"builtAt": "%s"}\\n\' "$stamp" > public/data/camps/index.json\n'
+
+
+def camps_renamed(files):
+    """main renames camps/index.json to camps-index.json, in its build and in its published copy (#90's measured rename).
+    The running step is still the workflow the run started with, so its restore list names the old path."""
+    assert CAMPS_LINE in files["collegedash.py"]
+    files["public/data/camps-index.json"] = files.pop(CAMPS)
+    files["collegedash.py"] = files["collegedash.py"].replace(CAMPS_LINE, CAMPS_LINE.replace(b"camps/index.json", b"camps-index.json"))
+    return files
+
+
+def camps_removed(files):
+    """main stops writing camps/index.json and deletes its published copy."""
+    assert CAMPS_LINE in files["collegedash.py"]
+    files.pop(CAMPS)
+    files["collegedash.py"] = files["collegedash.py"].replace(CAMPS_LINE, b"")
+    return files
+
+
+def test_renamed_output(tmp):
+    print("renamed-output (#90): main renames a build output mid-run, and validate fails on the rebuilt data")
+    code, out, origin, c1, _ = run_case(tmp, "renamed-output", upstream=camps_renamed, run_markers=("VALIDATE_FAILS",))
+    ok("the step fails", code != 0, out[-800:])
+    ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    ok("the rebase followed the rename (this case reaches the gate's restore, not a conflict)", "CONFLICT" not in out, out[-800:])
+    bs = branches(origin)
+    # fails on main 60bc94e17: the strict checkout names camps/index.json, which main no longer has, so the step exits
+    # with "could not then be restored" and the collection exists only on the runner
+    ok("FIX the collection is on the gate's per-attempt branch", bs == ["refs/heads/refresh-sources/123-1-1"], (bs, out[-1500:]))
+    if len(bs) == 1:
+        files, main_files = tree_files(origin, bs[0]), tree_files(origin, c1)
+        ok("FIX with public/data (except rpi, registry) exactly main's, under the new name and without the old one",
+           data_view(files) == data_view(main_files) and CAMPS not in files and "public/data/camps-index.json" in files,
+           sorted(set(data_view(files)) ^ set(data_view(main_files))))
+        ok("FIX and the run's collected source and RPI table", files.get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n'
+           and files.get("public/data/rpi/current.json") == b'{"season": 2026}\n')
+        ok("FIX and the review reports exactly main's", all(files.get(p) == main_files.get(p)
+                                                          for p in ("data/clubs-review.json", "data/schools-review.json")))
+    ok("FIX no 'could not then be restored' error", "could not then be restored" not in out, out[-800:])
+
+
+def test_removed_output(tmp):
+    print("removed-output (#90, a guard): main deletes a build output mid-run; the rebase conflict saves the collection")
+    # Not a test that fails on main: every build rewrites camps/index.json, so main's deletion is a modify/delete
+    # conflict, and the step saves the run through save_collection before publish_sources_only is reached.
+    code, out, origin, c1, _ = run_case(tmp, "removed-output", upstream=camps_removed, run_markers=("VALIDATE_FAILS",))
+    ok("the step fails", code != 0, out[-800:])
+    ok("main is exactly the upstream commit", git(origin, "rev-parse", "refs/heads/main") == c1)
+    ok("the rebase stopped on the deleted output", "CONFLICT" in out and CAMPS in out, out[-800:])
+    bs = branches(origin)
+    ok("the collection is on the unpublished branch", bs == [UNPUBLISHED], (bs, out[-1200:]))
+    if bs == [UNPUBLISHED]:
+        ok("with the run's collected source", tree_files(origin, bs[0]).get("programs/alpha/sources/athletics.json") == b'"alpha-v2-collected"\n')
+
+
 # ---------- issue #132: the registry merge ----------
 
 UNPUBLISHED = "refs/heads/refresh-sources/123-1-unpublished"
@@ -1297,7 +1360,7 @@ def main(argv=None) -> int:
     cases = [test_deleted_upstream, test_deleted_and_gated, test_deleted_registry_kept, test_deletion_direction,
              test_registry_both_sides, test_content_conflict, test_upstream_code_change, test_unrelated_upstream,
              test_unhandled_conflict, test_pruned_by_run, test_mixed_conflict, test_push_always_rejected,
-             test_build_gate, test_fifth_output, test_review_reports,
+             test_build_gate, test_fifth_output, test_renamed_output, test_removed_output, test_review_reports,
              test_refused_hosts_file, test_stray_locks, test_review_reports_previous,
              test_registry_only_revert, test_registry_same_field, test_registry_identical, test_registry_untouched,
              test_registry_unexpected, test_registry_held, test_registry_script_fails, test_registry_retry,
