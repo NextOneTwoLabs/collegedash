@@ -141,8 +141,9 @@ Today the restore names `build()`'s outputs one by one. A renamed output can mak
 
 **What a visitor sees.** When a run publishes nothing, the site keeps serving the last published data. "Data checked
 <date>" and each profile section's "Source … checked <date>" line keep their older dates. `freshness.yml`
-(below) checks once a day, at 23:47 UTC. After one missed refresh the data is usually 32-35 hours old, which only
-warns; it goes red once the data is over 36 hours old, which usually takes two missed runs.
+(below) checks once a day, at 23:47 UTC. After one missed refresh the data is about 27-32 hours old, which only warns;
+it goes red once the data is over 36 hours old, which takes two missed runs (about 51-56 hours). Runs start 4-8.5 h late
+and take 35-50 min (`tools/freshness_check.py`).
 
 **Triage.**
 1. Open the run. The `::error` annotation names the cause and, if there is one, the branch.
