@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import json
 import re
+import threading
 from urllib.parse import urljoin, urlparse
 
 from . import adapters, coach_bio, coach_bio_diag, common, staff_dir_probe
@@ -219,11 +220,10 @@ def collect(program: dict, registry: dict, *, seasons_back: int = 3, bios: bool 
     if status_line:
         common.log(status_line)
     if not sched["games"]:
-        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Flag it in the
-        # run's annotations (a warning, never a failure: the empty schedule is still stored), then say, name-free,
-        # what the page holds instead, so the parser fix can be planned from evidence. No request.
-        common.annotate(f"::warning title=athletics schedule::{slug}: the {sched['season'] or season} schedule page "
-                        "loaded but gave 0 games; an empty schedule is stored (issue #393)")
+        # Issue #393: a schedule page that loaded but gave no game is stored as an empty schedule. Note it for the run's
+        # one combined warning (collegedash.report_refresh; a warning, never a failure: the empty schedule is still
+        # stored), then say, name-free, what the page holds instead, so the parser fix can be planned from evidence.
+        _note_zero_games(slug, sched["season"] or season)
         try:
             common.log(zero_games_diagnostic(shtml))
         except Exception as e:
@@ -424,6 +424,27 @@ def zero_staff_diagnostic(html: str, base: str, sport_path: str) -> str:
         shown = shown[:-1]
         out = line(shown, len(links) - len(shown))
     return out[:DIAG_MAX_LEN]
+
+
+# ---------- issue #393: schedule pages that loaded but gave no game, for the run's one warning ----------
+# Collection runs on worker threads, so the notes are kept under a lock. collegedash.report_refresh takes them once, at
+# the end of the run, and prints ONE ::warning after the collector failure warnings: GitHub shows at most 10 warning
+# annotations per step, and a warning per program would push the failures out of view (Huatuo's review of 5ce321138).
+_ZERO_GAMES: list[tuple[str, int | None]] = []
+_ZERO_GAMES_LOCK = threading.Lock()
+
+
+def _note_zero_games(slug: str, season) -> None:
+    with _ZERO_GAMES_LOCK:
+        _ZERO_GAMES.append((slug, season))
+
+
+def take_zero_games() -> list[tuple[str, int | None]]:
+    """The (slug, season) of every current schedule page noted since the last call, sorted; clears the notes."""
+    with _ZERO_GAMES_LOCK:
+        out = sorted(set(_ZERO_GAMES), key=lambda x: (x[0], x[1] or 0))
+        _ZERO_GAMES.clear()
+    return out
 
 
 # ---------- issue #393: a name-free line for a schedule page that yields no game ----------
