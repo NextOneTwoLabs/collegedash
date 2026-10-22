@@ -16,6 +16,7 @@ Curated fields override machine fields; machines never write curated.json.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import os
 import re
 import urllib.parse
@@ -198,6 +199,11 @@ LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", 
 REVIEWED_UNPUBLISHED = {
     "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
 }
+# The fixture is the anchor, so it is pinned too (issue #126, F-a): a fixture cut short with the same programs
+# unpublished would otherwise pass. Its program count and the SHA-256 of its sorted slugs, one per line. The fixture
+# records the registry before #100 and never changes; if it ever must, these two lines change in the same reviewed PR.
+LONG_STANDING_COUNT = 350
+LONG_STANDING_SHA256 = "dc97d1cf4eb3773e46c7a01aaa94b9644b1b478639874fe06382e40b2365a194"
 
 
 def check_membership_anchor(registry: dict) -> bool:
@@ -207,6 +213,12 @@ def check_membership_anchor(registry: dict) -> bool:
         print(f"MEMBERSHIP: cannot read the long-standing program list {LONG_STANDING_PATH}")
         return False
     long_standing = {p["slug"] for p in doc["programs"]}
+    digest = hashlib.sha256("\n".join(sorted(long_standing)).encode("utf-8")).hexdigest()
+    if len(doc["programs"]) != LONG_STANDING_COUNT or len(long_standing) != LONG_STANDING_COUNT or digest != LONG_STANDING_SHA256:
+        print(f"MEMBERSHIP: the long-standing program fixture {LONG_STANDING_PATH} changed: {len(doc['programs'])} programs "
+              f"({len(long_standing)} distinct), expected {LONG_STANDING_COUNT} with build.LONG_STANDING_SHA256 - the anchor "
+              f"cannot be trusted; restore the fixture, or change it and both pins in one reviewed PR")
+        return False
     unpublished = long_standing - {p["slug"] for p in published_programs(registry)}
     ok = True
     for slug in sorted(unpublished - set(REVIEWED_UNPUBLISHED)):
