@@ -495,6 +495,10 @@ const disp = p => p.shortName || p.name || '';
 // this is the thing actually visible when you scan a list from the top. Case-insensitive and nothing
 // more, matching the shipped comparator; the count is 50 under every other reasonable definition too
 // (plain localeCompare, lowercased <, and raw code points all agree), so it is not an artefact of it.
+// Issue #60's reported bug, in the old comparator's order: Air Force (stored as "United States Air Force Academy")
+// buried far down the list. (#126 F-c: this helper is the check test 27 makes; the test after it runs it on an index
+// with 40 fewer programs.)
+const buriedInOldOrder = (before, name) => before.findIndex(p => disp(p) === name) > 200;
 function adjacentInversions(rows) {
   let n = 0;
   for (let i = 0; i + 1 < rows.length; i++)
@@ -528,10 +532,26 @@ test('the Name sort orders by the name the page renders, not the stored one', ()
   const at = n => after.findIndex(p => disp(p) === n);
   assert.ok(at('Air Force') < 5 && at('Akron') < 5,
     `Air Force and Akron are still buried at ${at('Air Force')} and ${at('Akron')}`);
-  assert.ok(before.findIndex(p => disp(p) === 'Air Force') > 200, 'the old order no longer reproduces the reported bug');
+  assert.ok(buriedInOldOrder(before, 'Air Force'), 'the old order no longer reproduces the reported bug');
   // and the pairs the brief quoted
   for (const [x, y] of [['Fresno State', 'Cal State Fullerton'], ['BYU', 'Brown'], ['William & Mary', 'Holy Cross']])
     assert.ok(at(x) > at(y), `"${x}" still sorts ahead of "${y}"`);
+});
+
+// #126 F-c: the check above must not depend on how many programs there are. Forty programs leaving the list (a
+// reclassification out of the largest division) must not make the old order stop reproducing issue #60's bug.
+test('the old-order check holds with 40 fewer programs', () => {
+  const before = S.index.programs.slice().sort(nameSortBefore);
+  const af = before.findIndex(p => disp(p) === 'Air Force');
+  assert.ok(af > 40, `Air Force is only at ${af} in the old order, too early to remove 40 programs ahead of it`);
+  // drop 40 programs that sit ahead of Air Force in the old order, as a reclassification could
+  const gone = new Set(before.slice(0, af).filter(p => disp(p) !== 'Air Force').slice(0, 40).map(p => p.slug));
+  const fewer = before.filter(p => !gone.has(p.slug));
+  assert.equal(fewer.length, before.length - 40);
+  assert.ok(buriedInOldOrder(fewer, 'Air Force'), 'the check trips on a smaller index: it is positional, not the bug');
+  // control: an order with Air Force at the top does not reproduce the bug
+  const fixed = fewer.slice().sort((x, y) => disp(x).localeCompare(disp(y)));
+  assert.ok(!buriedInOldOrder(fixed, 'Air Force'), 'the check passes on an order without the bug');
 });
 
 test('the rendered list is in the order the comparator produced', async () => {
