@@ -125,3 +125,69 @@ test('5: the NOAA source reads "NOAA climate normals", which is also its accessi
   // WCAG 2.5.3 Label in Name: no aria-label, so the accessible name is the visible text itself
   assert.ok(!/aria-label/.test(m[1]), 'an aria-label would replace the visible words as the accessible name');
 });
+
+// A browser's focus, modelled on the stub DOM (Huatuo's round-2 repro, scratchpad huatuo400/focus-table.cjs): setting
+// #app's innerHTML replaces every element in it, and focus on a replaced element falls to <body>. getElementById
+// finds the element the current #app markup draws, a new one after each redraw.
+function focusModel(pg) {
+  const doc = pg.sb.document, app = pg.$('#app');
+  let html = app.innerHTML, gen = 0, draws = 0;
+  const live = new Map();
+  const el = (id) => {
+    const key = `${gen}:${id}`;
+    if (!live.has(key)) {
+      const e = { id, gen, closest: (s) => (s === '#app' ? app : null), focus() { doc.activeElement = this; } };
+      Object.defineProperty(e, 'isConnected', { get: () => e.gen === gen });
+      live.set(key, e);
+    }
+    return live.get(key);
+  };
+  Object.defineProperty(app, 'innerHTML', { get: () => html, set: (v) => {
+    html = v; gen += 1; draws += 1;
+    if (doc.activeElement && doc.activeElement.isConnected === false) doc.activeElement = doc.body;
+  } });
+  doc.getElementById = (id) => (html.includes(`id="${id}"`) ? el(id) : null);
+  doc.contains = (e) => e === doc.body || !!(e && e.isConnected);
+  return { draws: () => draws, el };
+}
+async function heldSwitch({ prefs }) {
+  let answer;
+  const gate = new Promise((r) => { answer = r; });
+  const storage = { 'cd.filters': JSON.stringify({ view: 'table' }), ...(prefs ? stored(prefs) : {}) };
+  const pg = loadPage({ hash: '#/programs', status: ON, storage, statusGate: gate });
+  await settle();
+  if (!pg.sb.S.index) await pg.sb.loadIndex();
+  await settle();
+  assert.match(pg.app(), /id="moreStats"/, 'the table is drawn before the switch arrives');
+  return { pg, answer };
+}
+
+test('6: a focused control in the list keeps focus when the switch arrives and the list is redrawn (table view)', async () => {
+  const { pg, answer } = await heldSwitch({ prefs: PREFS });
+  const fm = focusModel(pg);
+  const old = pg.sb.document.getElementById('moreStats');
+  old.focus();
+  const before = fm.draws();
+  answer();
+  await settle();
+  assert.equal(pg.sb.S.recs.on, true, 'the switch arrived');
+  assert.ok(fm.draws() > before, 'the list was redrawn for the saved preferences');
+  const now = pg.sb.document.activeElement;
+  assert.notEqual(now, pg.sb.document.body, 'focus did not fall to <body>');
+  assert.equal(now.id, 'moreStats', 'focus is on #moreStats');
+  assert.notEqual(now, old, 'on the new #moreStats, the one the redraw drew');
+  assert.equal(now.isConnected, true);
+});
+
+test('6b: with no saved preferences the switch does not redraw the list, and focus stays where it was', async () => {
+  const { pg, answer } = await heldSwitch({ prefs: null });
+  const fm = focusModel(pg);
+  const old = pg.sb.document.getElementById('moreStats');
+  old.focus();
+  const before = fm.draws();
+  answer();
+  await settle();
+  assert.equal(pg.sb.S.recs.on, true, 'the switch arrived');
+  assert.equal(fm.draws(), before, 'nothing to offer, so no redraw');
+  assert.equal(pg.sb.document.activeElement, old, 'focus is untouched');
+});
