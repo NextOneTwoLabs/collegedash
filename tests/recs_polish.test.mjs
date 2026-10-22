@@ -13,12 +13,17 @@
 //   2. A tradeoff chip is announced "Tradeoff: ..." once, not "Tradeoff: Tradeoff: ...".
 //   3. The "Choose at least one preference" message (A4) goes away as soon as a preference is picked, instead of
 //      staying on screen until the next save.
+//   4. A returning visitor with saved preferences gets the "Personalization paused · Show recommended" line even when
+//      api/status answers after the page has drawn the list (a browser's usual order). The test holds the answer back
+//      and never redraws the list itself, so it fails exactly when switching on doesn't redraw it.
+//   5. The NOAA source reads "NOAA climate normals" on the card, with the full name as its title and accessible name,
+//      so it doesn't wrap to three lines at 320 px.
 //
 // What it CANNOT prove: layout at 320-1280 px (see the PR's Playwright check).
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { createRequire } from 'node:module';
-import { FIT, ON, ready, open, settle } from './recs_page_helpers.mjs';
+import { FIT, ON, loadPage, ready, open, settle } from './recs_page_helpers.mjs';
 
 const R = createRequire(import.meta.url)('../public/recs.js');
 const PREFS = { v: 1, region: { mode: 'prefer', values: ['West', 'Midwest'] }, division: { mode: 'must', values: ['D3'] },
@@ -90,4 +95,32 @@ test('3: the A4 message goes away as soon as a preference is picked', async () =
   pg.sb.S.recs.status = 'Preferences saved.';
   pg.sb.recsToggleValue('region', 'West');
   assert.equal(pg.sb.S.recs.status, 'Preferences saved.');
+});
+
+test('4: a returning visitor\'s list offers their saved preferences even when api/status answers after the list is drawn', async () => {
+  // No renderList after load: the page draws the list itself, then the switch arrives, as in a browser.
+  let answer;
+  const gate = new Promise((r) => { answer = r; });
+  const pg = loadPage({ hash: '#/programs', status: ON, storage: stored(PREFS), statusGate: gate });
+  await settle();
+  if (!pg.sb.S.index) await pg.sb.loadIndex();
+  await settle();
+  assert.match(pg.app(), /class="card pcard/, 'the list is drawn before the switch arrives');
+  assert.ok(!/recsResume/.test(pg.app()), 'nothing about recommendations before the switch');
+  answer();
+  await settle();
+  assert.equal(pg.sb.S.recs.on, true, 'the switch arrived');
+  assert.match(pg.app(), /Personalization paused \(sorted by Name\) · <button type="button" class="btn" id="recsResume">Show recommended<\/button>/,
+    'the list was redrawn with the saved preferences on offer');
+});
+
+test('5: the NOAA source reads "NOAA climate normals", with its full name kept for hover and screen readers', async () => {
+  const pg = await showSaved();
+  const html = pg.app();
+  const m = /<a href="https:\/\/www\.ncei\.noaa\.gov\/products\/land-based-station\/us-climate-normals" target="_blank" rel="noopener"( title="[^"]*")?( aria-label="[^"]*")?>([^<]*)<\/a>/.exec(html);
+  assert.ok(m, 'a NOAA link');
+  assert.equal(m[3], 'NOAA climate normals');
+  const full = FIT.sources.climate.name;
+  assert.equal(m[1], ` title="${full}"`);
+  assert.equal(m[2], ` aria-label="${full}"`);
 });
