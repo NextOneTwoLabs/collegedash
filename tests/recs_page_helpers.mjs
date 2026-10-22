@@ -57,7 +57,7 @@ const HANDLES = ['S', 'renderSidebar', 'renderList', 'loadIndex', 'REGIONS', 're
 // `search`: location.search when the page loads. `programs`: 'missing' makes /api/v1/list (the page's index) answer 404.
 // `hash`: location.hash when the page loads. `session`: initial sessionStorage entries. `transform`: applied to the script.
 export function loadPage({ html = HTML, status = { local: false }, storage = {}, width = 1400, recsJs = true, fit = 'ok', search = '', programs = 'ok',
-  hash = '', session = {}, transform = (x) => x } = {}) {
+  hash = '', session = {}, transform = (x) => x, statusGate = null } = {}) {
   const els = new Map();
   const bySelector = (sel) => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const store = new Map(Object.entries(storage === 'throws' ? {} : storage));
@@ -83,7 +83,8 @@ export function loadPage({ html = HTML, status = { local: false }, storage = {},
       requests.push(String(url));
       if (programs === 'missing' && url === '/api/v1/list') return { ok: false, status: 404, async json() { return { error: 'not found' }; } };
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return JSON.parse(JSON.stringify(body)); } });
-      if (url === 'api/status' || url === '/api/status') return status ? ok(status) : ok({}, 404);
+      // statusGate: a promise api/status waits on, so a test can let the page draw before the answer arrives (a browser's order)
+      if (url === 'api/status' || url === '/api/status') { if (statusGate) await statusGate; return status ? ok(status) : ok({}, 404); }
       if (url === 'api/ask/status' || url === '/api/ask/status') return { ok: false, status: 0, type: 'opaqueredirect', async json() { throw new SyntaxError('opaque'); } };
       if (url === '/api/v1/fit') {
         fitServed += 1;

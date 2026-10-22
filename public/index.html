@@ -194,6 +194,8 @@ tr:hover td { background: var(--row-hover); }
 .recs-bar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
 .recs-bar-actions .btn, .recs-more, .recs-paused .btn { min-height: 44px; }
 .recs-paused { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 13px; color: var(--text-secondary); }
+.recs-src { margin: 6px 0 0; font-size: 11px; line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.recs-src a { color: inherit; text-decoration: underline; }
 .recs-why { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
 .recs-chip { line-height: 1.35; }
 .recs-chip.ok > span:first-child { color: var(--accent-text); font-weight: 700; }
@@ -2872,8 +2874,19 @@ function recsSwitchedOn() {
   renderHeaderRecs(); // #434: the header's entry, drawn before the index is needed (the #433 pilot switches recs on at start)
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
+  // a control inside the list keeps focus across the redraw below, when it has an id to find it again by
+  const ae = document.activeElement, inList = ae && ae.id && ae.closest?.('#app') ? ae.id : '';
   renderSidebar();
   if (typing) $('#q')?.focus();
+  // The list is usually drawn before api/status answers: redraw it so a returning visitor's saved preferences are
+  // offered ("Personalization paused · Show recommended") without waiting for the next redraw (#400 polish). Only
+  // when there are saved preferences to offer: otherwise the redraw would change nothing. renderList is async (it
+  // waits for the index), so focus is put back once it has drawn, and only if the redraw took it (Huatuo r2).
+  if (!isProgramsView() || !recsHasSaved()) return;
+  renderList().then(() => {
+    const now = document.activeElement;
+    if (inList && (!now || now === document.body || now.isConnected === false)) document.getElementById(inList)?.focus();
+  });
 }
 // public/recs.js, once, the first time the panel opens. Rejects if it can't be loaded.
 let recsLibLoading = null;
@@ -2972,7 +2985,10 @@ function recsSheetState() {
 }
 window.addEventListener('resize', () => { if (S.recs.open) recsSheetState(); });
 function syncRecsEntry() { const b = $('#recsOpen'); if (b) b.setAttribute('aria-expanded', String(S.recs.open)); }
-function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; }
+// The all-Skip refusal (A4) is about the form as it was; once something is picked it no longer applies (#400 polish).
+const RECS_NEED_ONE = 'Choose at least one preference to get recommendations.';
+function recsPicked() { if (S.recs.status === RECS_NEED_ONE) S.recs.status = ''; }
+function recsSetUse(cat, use) { const d = S.recs.draft?.[cat]; if (!d || !['skip', 'choose'].includes(use)) return; d.use = use; S.recs.error = ''; if (use === 'choose') recsPicked(); }
 function recsSetImportance(cat, imp) {
   const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
   if (!d || !['prefer', 'must'].includes(imp) || (imp === 'must' && c.preferOnly)) return;
@@ -2983,7 +2999,7 @@ function recsToggleValue(cat, value) {
   const d = S.recs.draft?.[cat], c = RECS_CATS.find(x => x.key === cat);
   if (!d || !c.values().some(([v]) => v === value)) return;
   d.values = d.values.includes(value) ? d.values.filter(v => v !== value) : [...d.values, value];
-  if (d.values.length) d.use = 'choose';
+  if (d.values.length) { d.use = 'choose'; recsPicked(); }
   S.recs.error = '';
 }
 function recsReset() { S.recs.draft = recsDraftFrom(S.recs.lib.defaultPrefs()); S.recs.status = 'Form cleared. Nothing is saved until you press Save preferences.'; S.recs.error = ''; }
@@ -3000,7 +3016,7 @@ function recsApply() {
   }
   if (missing.length) { R.error = `Choose at least one option for ${recsList(missing)}, or set ${missing.length > 1 ? 'them' : 'it'} to Skip.`; R.status = ''; return false; }
   const { prefs } = R.lib.validatePrefs(raw, recsConstants());
-  if (!R.lib.isActive(prefs)) { R.error = ''; R.status = 'Choose at least one preference to get recommendations.'; return false; }
+  if (!R.lib.isActive(prefs)) { R.error = ''; R.status = RECS_NEED_ONE; return false; }
   R.saved = prefs;
   R.issues = [];
   R.error = '';
@@ -3199,17 +3215,36 @@ function recsResult() {
 }
 const recsCount = (n, one, many = `${one}s`) => `${n.toLocaleString('en-US')} ${n === 1 ? one : many}`;
 const recsSource = s => (s ? `${s.name}${s.asOf ? `, fetched ${s.asOf}` : ''}` : '');
+// A label is read only by screen readers (the icon is hidden from them); pass none when the text already starts with it.
 function recsChip(cls, icon, label, text, source) {
-  return `<li class="recs-chip ${cls}"${source ? ` title="${esc(`Source: ${source}`)}"` : ''}><span aria-hidden="true">${icon}</span> <span class="sr-only">${label}: </span>${esc(text)}${source ? `<span class="sr-only"> (source: ${esc(source)})</span>` : ''}</li>`;
+  return `<li class="recs-chip ${cls}"${source ? ` title="${esc(`Source: ${source}`)}"` : ''}><span aria-hidden="true">${icon}</span> ${label ? `<span class="sr-only">${label}: </span>` : ''}${esc(text)}</li>`;
+}
+// The source pages the About page already links (#400 polish). Matched on the start of the name, so the fit file's
+// longer climate name ("NOAA NCEI U.S. Climate Normals, 1991-2020 (monthly), nearest station") still links.
+// A short label keeps the line to a line or two at 320 px. The visible words are the link's accessible name (WCAG
+// 2.5.3 Label in Name); the full name is its title, shown on hover and read as its description.
+const RECS_SOURCE_LINKS = [['College Scorecard', 'https://collegescorecard.ed.gov/', ''],
+  ['NOAA', 'https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA climate normals']];
+// Every source the card's reasons and tradeoff use, once each, as visible text under the chips: a phone has no hover,
+// so the chip titles alone showed nothing there (#400 polish). Screen readers read this line, once.
+function recsSourcesHtml(srcs) {
+  const seen = new Map();
+  for (const s of srcs) if (s && s.name && !seen.has(s.name)) seen.set(s.name, s);
+  if (!seen.size) return '';
+  const one = s => { const link = RECS_SOURCE_LINKS.find(([k]) => s.name.startsWith(k));
+    const label = link && link[2] && link[2] !== s.name ? link[2] : '';
+    return `${link ? `<a href="${esc(link[1])}" target="_blank" rel="noopener"${label ? ` title="${esc(s.name)}"` : ''}>${esc(label || s.name)}</a>` : esc(s.name)}${s.asOf ? `, fetched ${esc(s.asOf)}` : ''}`; };
+  return `<p class="recs-src">Sources: ${[...seen.values()].map(one).join(' · ')}</p>`;
 }
 // At most three reasons, one tradeoff and every unknown, each built only from its own contribution (recs.js).
 function recsWhyHtml(it) {
   const L = S.recs.lib;
   const chips = it.reasons.map(r => recsChip('ok', '✓', 'Matches', L.reasonText(r), recsSource(r.source)))
-    .concat(it.tradeoff ? [recsChip('trade', '↔', 'Tradeoff', `Tradeoff: ${L.tradeoffText(it.tradeoff)}`, recsSource(it.tradeoff.source))] : [])
+    .concat(it.tradeoff ? [recsChip('trade', '↔', '', `Tradeoff: ${L.tradeoffText(it.tradeoff)}`, recsSource(it.tradeoff.source))] : [])
     .concat(it.unknowns.map(u => recsChip('unknown', '?', 'Unknown', L.unknownText(u), '')));
   const low = it.coverage.known <= 1 ? `<li class="recs-chip unknown"><span aria-hidden="true">?</span> Limited data: ${it.coverage.known} of ${it.coverage.of} facts known</li>` : '';
-  return chips.length || low ? `<ul class="recs-why" aria-label="Why ${esc(it.displayName)} is listed">${chips.join('')}${low}</ul>` : '';
+  return chips.length || low ? `<ul class="recs-why" aria-label="Why ${esc(it.displayName)} is listed">${chips.join('')}${low}</ul>`
+    + recsSourcesHtml([...it.reasons, ...(it.tradeoff ? [it.tradeoff] : [])].map(c => c.source)) : '';
 }
 const recsMustWords = (cat, q) => `${(RECS_CATS.find(c => c.key === cat) || {}).legend || cat}: ${recsList(q.values.map(v => RECS_WORDS[v] || v))}`;
 // No confirmed programs: say exactly why, with a control for each cause; never relax anything (A1, A7).
