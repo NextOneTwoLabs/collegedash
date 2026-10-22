@@ -1332,6 +1332,43 @@ def test_one_gate_per_server(tmp: str) -> None:
            "www.exact.test" in common._robots and "exact.test" not in common._robots, str(sorted(common._robots)))
 
 
+def test_host_stop_one_server(tmp: str) -> None:
+    """Issue #108 A on B's key: www.x, x and x:443 are one server, so stopping one name stops them all, with one set of
+    counters and one probe slot. Nothing reaches the network: a stopped name is refused before its gate."""
+    print("host stop (#108 A+B): stopping www.x also stops x and x:443")
+    clock = FakeClock()
+    with fresh_state(tmp), stop_rules(clock, fails=1, min_seconds=0.0):
+        common._stop_verdict(["www.stopkey.test"], False, False)  # one give-up on www.x trips it (fails=1)
+        got = [try_fetch(u) for u in ("https://www.stopkey.test/a", "https://stopkey.test/b", "https://stopkey.test:443/c",
+                                      "https://WWW.StopKey.test/d")]
+        ok("FIX www.x stopped: x, x:443 and WWW.X are refused unsent too (before: only www.x)", got == ["HostStopped"] * 4, str(got))
+        rep = common.stopped_hosts()
+        ok("FIX one server, one entry in the report, counting every refusal", len(rep) == 1 and sum(v["refused"] for v in rep.values()) == 4,
+           str(rep))
+        ok("another server is not stopped", common._stop_admit("other-stopkey.test", "https://other-stopkey.test/") is False)
+        clock.t += 301
+        first = common._stop_admit("www.stopkey.test", "https://www.stopkey.test/p")
+        try:
+            common._stop_admit("stopkey.test:443", "https://stopkey.test:443/p")
+            second = "admitted"
+        except common.HostStopped:
+            second = "HostStopped"
+        ok("FIX one probe slot per server: www.x probing, x:443 is refused", first is True and second == "HostStopped", f"{first} {second}")
+        common._stop_verdict(["stopkey.test"], True, False)  # a success on x
+        ok("FIX a success on x reopens www.x", try_fetch_admit("www.stopkey.test") is False)
+    with fresh_state(tmp):
+        common.set_robots_txt("www.robokey.test", "User-agent: *\nDisallow: /\n")
+        ok("robots.txt verdicts stay per exact host", "www.robokey.test" in common._robots and "robokey.test" not in common._robots,
+           str(sorted(common._robots)))
+
+
+def try_fetch_admit(host: str):
+    try:
+        return common._stop_admit(host, f"https://{host}/")
+    except common.HostStopped:
+        return "HostStopped"
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -1345,7 +1382,8 @@ def main() -> int:
              test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
              test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
              test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip,
-             test_host_stop_counts_the_failing_hop, test_one_gate_per_server]
+             test_host_stop_counts_the_failing_hop, test_one_gate_per_server,
+             test_host_stop_one_server]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
