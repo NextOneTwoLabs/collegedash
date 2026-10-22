@@ -18,6 +18,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { parseCss, decls } from './lib/css_cascade.mjs';
+import { bootable, track, ready } from './lib/page_ready.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -128,13 +129,14 @@ function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   const lines = HTML.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   const names = ['S', 'route', 'openDrawer', 'closeDrawer', 'campsSheet'];
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = bootable(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const pending = track(sandbox);  // tests/lib/page_ready.mjs: the page's fetches and short timers, for ready()
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sb: sandbox, $: bySelector, body, header, bar, hist, FOCUS, docListeners, winListeners, mqListeners };
+  return { sb: sandbox, pending, $: bySelector, body, header, bar, hist, FOCUS, docListeners, winListeners, mqListeners };
 }
 const settle = (ms = 80) => new Promise(r => setTimeout(r, ms));
-async function open(opts) { const pg = loadPage(opts); await settle(300); return pg; }
+async function open(opts) { const pg = loadPage(opts); await ready(pg.sb, pg.pending); return pg; }  // the first view, not a fixed delay (tests/lib/page_ready.mjs)
 
 // index.html's body for the camps walk: body > [header, bottom bar, layout > [rail, #main > #app > content > [camps
 // layout > [#campsBar, #campsMain], backdrop]]], as camps_page builds it.

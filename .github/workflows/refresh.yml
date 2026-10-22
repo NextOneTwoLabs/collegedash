@@ -265,21 +265,32 @@ jobs:
           # the ref name is always valid, and the two shapes can never collide with each other.
           #
           # public/data is still restored before the commit, so that what lands on the branch is a
-          # clean "sources ahead of data" snapshot rather than a half-written build. Only what
-          # build() writes is restored: public/data/programs/**, commitments/index.json,
-          # camps/index.json, trends/index.json, list/index.json (#395) and fit/index.json (#400). public/data/rpi/** and registry.json look derived but are *collected* -
-          # collect/rpi.py writes current.json and the weekly snapshots, and the site fetches
-          # rpi/current.json directly - so restoring all of public/data would discard part of the
+          # clean "sources ahead of data" snapshot rather than a half-written build. Everything under
+          # public/data is put back to what $onto holds except the two collected parts, rpi/** and
+          # registry.json, which look derived but are *collected* - collect/rpi.py writes current.json
+          # and the weekly snapshots, collect/common.py writes the registry's platform detections, and
+          # the site fetches rpi/current.json directly - so restoring them would discard part of the
           # very collection this exists to save, and would leave a later build_only joining fresh
           # program sources onto a stale RPI table: issue 75's own shape, one level down.
-          # rm -rf first because `git checkout <rev> -- <path>` restores what <rev> has and never
-          # deletes the extras, and a crashed build can leave a profile upstream has no file for.
+          # tests/public_data_writers_test.py holds collect/ to writing nothing else under public/data.
+          #
+          # There is deliberately no list of build() outputs here (issue 90). This script is the
+          # workflow as it was when the run STARTED, hours before the rebase; a build output renamed
+          # on main mid-run is written under its new name by main's build, which a list in this
+          # script cannot know, and a checkout naming the old one fails outright - which used to lose
+          # the whole collection. So every top-level entry of public/data except the two collected
+          # ones is removed (that drops anything $onto lacks: an old name, a new name, a profile a
+          # crashed build left behind, an output nobody listed) and then the same set is checked out
+          # of $onto, which always has public/data. A build output added later is therefore reset to
+          # $onto's state rather than being a hard stop (it was one from issue 82 until issue 90):
+          # nothing outside rpi/ and registry.json can differ from $onto on the branch, and main is
+          # pushed only after build and validate pass. The two review reports live outside
+          # public/data and stay per-file, tolerant of $onto not having one yet; a future rename of
+          # one would reach the sources branch as the run's copy - the branch only, never main.
           #
           # The assertion after the restore is the load-bearing guard, not the `if ! git checkout`
           # above it: it is what catches a restore that failed *and* a restore that silently did
-          # nothing, and it is stated as "public/data, except the collected parts" rather than as the
-          # list just restored, so a fifth build() output added later is a hard stop here instead of
-          # a silent publish. The exclusions are the machine-checked version of the paragraph above.
+          # nothing, stated as "public/data, except the collected parts".
           #
           # `bash -e` is suspended for the whole dynamic extent of a function invoked as an `if`
           # condition, so nothing in here fails the step by itself and every command that must not be
@@ -297,31 +308,22 @@ jobs:
           # operator who is owed a diagnosis instead.
           publish_sources_only() {
             branch="refresh-sources/${GITHUB_RUN_ID:-local}-${GITHUB_RUN_ATTEMPT:-1}-$2"
-            rm -rf public/data/programs
-            # data/clubs-review.json and data/schools-review.json are restored separately and
-            # tolerantly, one at a time: they are the two build() outputs outside public/data
-            # (issues #228, #229), and a `git checkout` naming a path the upstream commit does not
-            # carry fails outright, taking the whole restore with it. Upstream may legitimately not
-            # have one - before the first build that writes it - and then the right restore is to
-            # delete the copy this run produced.
+            # data/clubs-review.json and data/schools-review.json are the two build() outputs outside
+            # public/data (issues #228, #229), restored one at a time and tolerantly: upstream may
+            # legitimately not have one - before the first build that writes it - and then the right
+            # restore is to delete the copy this run produced.
             for report in data/clubs-review.json data/schools-review.json; do
               git checkout FETCH_HEAD -- "$report" 2>/dev/null || rm -f "$report"
             done
-            # The clubs & schools index (issue #230) is restored the same tolerant way, for the same
-            # reason: upstream has none until the first refresh after that build lands.
-            git checkout FETCH_HEAD -- public/data/trends/index.json 2>/dev/null || rm -f public/data/trends/index.json
-            # So is the slim program list (issue #395), which upstream has none of until the first refresh after its
-            # build lands. The fifth-output assertion below is what catches a build output missing from these lines.
-            git checkout FETCH_HEAD -- public/data/list/index.json 2>/dev/null || rm -f public/data/list/index.json
-            # And the recommender's fit facts (issue #400), the same way and for the same reason.
-            git checkout FETCH_HEAD -- public/data/fit/index.json 2>/dev/null || rm -f public/data/fit/index.json
-            if ! git checkout FETCH_HEAD -- public/data/programs public/data/commitments/index.json public/data/camps/index.json; then
+            # Everything else build() writes is under public/data: see "There is deliberately no list" above.
+            find public/data -mindepth 1 -maxdepth 1 ! -name rpi ! -name registry.json -exec rm -rf {} +
+            if ! git checkout FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
               echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data could not then be restored to what $onto holds. Nothing was pushed anywhere: main is still $onto and the live site is unchanged - but this run's collection was NOT saved either, it exists only on this runner. Re-dispatch this workflow to collect again."
               exit 1
             fi
             git add -A
             if ! git diff --quiet FETCH_HEAD -- public/data data/clubs-review.json data/schools-review.json ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
-              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - either the restore did nothing, or build() now writes something outside public/data/programs, commitments/index.json, camps/index.json, trends/index.json, list/index.json, fit/index.json, data/clubs-review.json and data/schools-review.json and that path was never restored. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
+              echo "::error title=refresh::$1 on the rebuild onto $onto, and public/data does not match $onto after the restore - the restore of everything under public/data except rpi/ and registry.json (and of data/clubs-review.json and data/schools-review.json) did not take. Nothing was pushed anywhere: main is still $onto and the live site is unchanged, and this run's collection was NOT saved."
               exit 1
             fi
             if git diff --quiet FETCH_HEAD --; then
@@ -337,7 +339,7 @@ jobs:
               echo "::warning title=refresh::$1 on the rebuild onto $onto, and pushing the collection to $branch was rejected. Retrying."
               return 1
             fi
-            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json (main's registry with this run's athletics.platform detections merged in, never the run's raw copy: issue 132), with everything build() writes (public/data/programs, commitments/index.json, camps/index.json, trends/index.json, list/index.json, fit/index.json) left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it."
+            echo "::error title=refresh::$1 on the data rebuilt onto $onto. NOTHING WAS PUBLISHED: main is still $onto and the live site is unchanged - not the rebuilt profiles, and not this run's freshly collected RPI tables or registry.json. The run's entire collection is on branch $branch instead: one commit on top of $onto holding programs/*/sources, public/data/rpi and registry.json (main's registry with this run's athletics.platform detections merged in, never the run's raw copy: issue 132), with everything else under public/data, and the two data/*-review.json reports, left exactly as $onto has it. Nothing is lost, and the failure reproduces with: git fetch origin $branch && git checkout FETCH_HEAD && python collegedash.py build && python collegedash.py validate. RECOVERY DEPENDS ON THE CAUSE, so find it first. Code merged into main mid-run: fix main, merge $branch, then dispatch this workflow with build_only=true to publish from the saved sources in about a minute. A source that came back malformed: re-dispatch this workflow instead - only=<collector> is enough - so the source is collected again, and fix the collector first if the site changed for good; build_only cannot recover that case, it would rebuild from the same bad file. Do not merge $branch before you know which it was: it carries the bad source too, and on main that bad source fails every later run until a human removes it. Delete $branch once the failure is triaged; nothing else deletes it."
             return 0
           }
           # Issue #117: -X theirs settles content conflicts but not modify/delete. Every rebuild rewrites

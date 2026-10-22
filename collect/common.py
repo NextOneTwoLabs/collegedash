@@ -512,6 +512,23 @@ def stopped_hosts() -> dict[str, dict]:
         return {h: {"stops": st.stops, "refused": st.refused} for h, st in sorted(_stops.items()) if st.stops}
 
 
+def _gate_key(host: str) -> str:
+    """One key per server for the politeness gate, its backoff hold and its Crawl-delay (issue #108 B): lower-cased,
+    a leading `www.` and a default port (:443, :80) dropped, IDNA-encoded. `www.x`, `x` and `x:443` are one server, so
+    alternating names can no longer skip the gap or a backoff. The robots.txt verdicts are NOT keyed by this: RFC 9309
+    scopes robots.txt to the exact authority, so _robots and friends stay per exact host."""
+    h = host.lower()
+    if h.endswith(":443") or h.endswith(":80"):
+        h = h.rsplit(":", 1)[0]
+    if h.startswith("www."):
+        h = h[4:]
+    try:
+        h = h.encode("idna").decode("ascii")
+    except UnicodeError:
+        pass
+    return h
+
+
 def _gate(host: str) -> _HostGate:
     with _gates_lock:
         g = _gates.get(host)
@@ -530,12 +547,12 @@ def _mark_sent() -> None:
 def _polite(url: str):
     """Hold `url`'s host for one request: wait for its turn, then keep every other thread off the host
     until the block exits. Yields the gate so the caller can record a backoff while still holding it."""
-    host = _host(url)
+    host = _gate_key(_host(url))  # issue #108 B: one gate per server, whatever name it was reached under
     g = _gate(host)
     with g.lock:
         # issue #108 A: the host may have been stopped while this thread waited for the lock, or (below) during its
         # own wait. Refused here, before anything is sent and before the try, so the gate's last stamp does not move.
-        _stop_refuse_hop(host, url)
+        _stop_refuse_hop(_host(url), url)
         wait_until = g.not_before
         if g.last is not None:
             gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, JITTER_SECONDS)
@@ -543,7 +560,7 @@ def _polite(url: str):
         delay = wait_until - time.monotonic()
         if delay > 0:
             time.sleep(delay)
-            _stop_refuse_hop(host, url)
+            _stop_refuse_hop(_host(url), url)
         _sending.gate, _sending.sent_at = g, None
         try:
             yield g
@@ -700,8 +717,9 @@ def _use_crawl_delay(host: str) -> None:
     """Apply the host's recorded Crawl-delay to its politeness gate (above MIN_GAP_SECONDS, capped at 30 s)."""
     delay = _robots_delay.get(host)
     if delay and delay > MIN_GAP_SECONDS:
-        _host_delay[host] = min(delay, 30.0)
-        log(f"robots: {host} asks Crawl-delay {delay:g}s; using {_host_delay[host]:.0f}s between requests")
+        key = _gate_key(host)  # issue #108 B: the server's gate; the larger delay any of its names asks for wins
+        _host_delay[key] = max(_host_delay.get(key, 0.0), min(delay, 30.0))
+        log(f"robots: {host} asks Crawl-delay {delay:g}s; using {_host_delay[key]:.0f}s between requests")
 
 
 def _apply_crawl_delay(host: str, rb: "rfc9309.Robots") -> None:
@@ -935,7 +953,7 @@ def robots_report(*, elapsed_seconds: float, workers: int) -> dict:
     # Projected enforced run time (an estimate): every host's Crawl-delay applied. Extra time per host is its
     # requests times the delay above today's gap, spread over the workers; never less than the slowest host alone.
     gap_now = MIN_GAP_SECONDS + JITTER_SECONDS / 2
-    extra = sum(requests_[h] * max(0.0, min(d, 30.0) - max(gap_now, _host_delay.get(h, 0.0))) for h, d in with_delay.items())
+    extra = sum(requests_[h] * max(0.0, min(d, 30.0) - max(gap_now, _host_delay.get(_gate_key(h), 0.0))) for h, d in with_delay.items())
     slowest = max(checked, key=lambda h: requests_[h] * max(gap_now, min(with_delay.get(h) or 0.0, 30.0)), default=None)
     slowest_s = requests_[slowest] * max(gap_now, min(with_delay.get(slowest) or 0.0, 30.0)) if slowest else 0.0
     projected = max(elapsed_seconds + extra / max(1, workers), slowest_s)
