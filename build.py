@@ -2290,7 +2290,37 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     return rows
 
 
+# Issue #462: the one guarded reader for every profile validate's checks open (#459 did this for camps alone). A
+# half-written build can leave any bytes at all, and one bare json.load ended the whole validate run with a traceback.
+# A malformed profile is named by path instead, and the caller skips it. Within one validate() run the file is named
+# once, by the first check that opens it; a check called on its own always names it.
+_unreadable_reported: set | None = None
+
+
+def read_profile_checked(path: str, label: str, consequence: str) -> tuple[dict | None, bool]:
+    """(the profile, or None when the file is missing; readable). An unreadable file prints
+    "<label>: <path> is not readable JSON: <error>; <consequence>" and returns (None, False)."""
+    try:
+        return common.read_json(path), True
+    except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
+        seen = _unreadable_reported
+        if seen is None or path not in seen:
+            print(f"{label}: {path} is not readable JSON: {type(e).__name__}: {e}; {consequence}")
+            if seen is not None:
+                seen.add(path)
+        return None, False
+
+
 def validate(registry: dict, verbose: bool = False) -> bool:
+    global _unreadable_reported
+    _unreadable_reported = set()
+    try:
+        return _validate(registry, verbose)
+    finally:
+        _unreadable_reported = None
+
+
+def _validate(registry: dict, verbose: bool = False) -> bool:
     ok = True
     schema = common.read_json(common.SCHEMA_PATH)
     try:
@@ -2300,7 +2330,10 @@ def validate(registry: dict, verbose: bool = False) -> bool:
         common.log("!! jsonschema not installed; skipping schema validation (pip install jsonschema)")
     for program in published_programs(registry):
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json")
-        p = common.read_json(path)
+        p, readable = read_profile_checked(path, "PROFILE", "it cannot be validated")
+        if not readable:
+            ok = False
+            continue
         if not p:
             print(f"MISSING {path}")
             ok = False
@@ -2444,7 +2477,15 @@ def check_fit_index() -> bool:
     except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
         print(f"FIT: {path} or {index_path} is not readable JSON: {type(e).__name__}: {e}")
         return False
-    lines = fit_complaints(doc, index_doc, lambda slug: common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")))
+    unreadable: list[str] = []
+
+    def load(slug):  # issue #462: a malformed profile is named once and its entry is not compared
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "FIT",
+                                           "its fit entry cannot be checked")
+        if not readable:
+            unreadable.append(slug)
+        return p
+    lines = [line for line in fit_complaints(doc, index_doc, load) if not any(line.startswith(f"{u}: ") for u in unreadable)]
     schema = common.read_json(FIT_SCHEMA_PATH)
     try:
         import jsonschema
@@ -2455,7 +2496,7 @@ def check_fit_index() -> bool:
         lines += [f"schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}" for e in errs[:10]]
     for line in lines:
         print(f"FIT: {line}")
-    return not lines
+    return not lines and not unreadable
 
 
 def check_camps_index(registry: dict) -> bool:
@@ -2607,13 +2648,12 @@ def check_camps_index(registry: dict) -> bool:
     for program in published_programs(registry):
         slug = program.get("slug")
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")
-        try:
-            p = common.read_json(path) or {}
-        except Exception as e:  # noqa: BLE001 - issue #70: one bad profile is named, and the rest still checked
-            print(f"CAMPS: {path} is not readable JSON: {type(e).__name__}: {e}; its camps cannot be checked")
+        p, readable = read_profile_checked(path, "CAMPS", "its camps cannot be checked")  # issue #70, #462
+        if not readable:
             ok = False
             unreadable.add(slug)
             continue
+        p = p or {}
         camps = p.get("camps") if isinstance(p, dict) else None
         items = (camps or {}).get("items") if isinstance(camps, dict) else None
         for it in items if isinstance(items, list) else []:
@@ -2727,7 +2767,11 @@ def check_seasons(registry: dict) -> bool:
             hist_claims.setdefault(hist_name, []).append(slug)
         if ncaa_name:
             ncaa_claims.setdefault(ncaa_name, []).append(slug)
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "SEASONS", "its seasons cannot be checked")  # #462
+        if not readable:
+            ok = False
+            continue
+        p = p or {}
         if not isinstance(p, dict):
             print(f"SEASONS {slug}: the profile is a {type(p).__name__}, not an object")
             ok = False
@@ -2792,7 +2836,11 @@ def check_academic_ranks(registry: dict) -> bool:
     ok, claims = True, {}
     for program in published_programs(registry):
         slug = program["slug"]
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "RANKS", "its academic rank cannot be checked")  # #462
+        if not readable:
+            ok = False
+            continue
+        p = p or {}
         ar = p.get("academicRank")
         if not isinstance(ar, dict):
             print(f"RANK {slug}: profile carries no academicRank block")
@@ -2837,7 +2885,11 @@ def check_titles(registry: dict) -> bool:
     ok = True
     for program in programs:
         slug, division = program["slug"], program.get("division")
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "TITLES", "its titles cannot be checked")  # #462
+        if not readable:
+            ok = False
+            continue
+        p = p or {}
         pr = p.get("program") or {}
         for y in pr.get("nationalTitles") or []:
             published.add((division, y, slug))
