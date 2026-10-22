@@ -188,6 +188,32 @@ test('GUARD #477: the bottom bar is inert while either sheet is open, and releas
   }
 });
 
+// #477: inert keeps Tab off the page behind a sheet, but past the sheet's last control a browser moves focus out of the
+// document (to <body>, or its own toolbar), and the sheet's Escape (a listener on the sheet) no longer hears the key. Each
+// phone sheet keeps Tab inside: when a Tab or Shift+Tab leaves focus outside the open sheet, focus comes back to its
+// first or last control. Closed, or on a wide screen, Tab is left alone.
+test('#477: Tab and Shift+Tab that leave an open phone sheet bring focus back to its first or last control', async () => {
+  for (const [what, openIt, closeIt, inside] of [
+    ['Programs', pg => pg.sb.openDrawer(), pg => pg.sb.closeDrawer(), '#sidebar >'],
+    ['ID Camps', pg => pg.sb.campsSheet(true), pg => pg.sb.campsSheet(false), '#campsBar >']]) {
+    const pg = await open({ width: 390 });
+    tree(pg);
+    openIt(pg);
+    const press = async shiftKey => {
+      pg.sb.document.activeElement = pg.body; pg.FOCUS.el = null;  // where a Tab past the end leaves focus
+      (pg.docListeners.keydown || []).forEach(fn => fn({ key: 'Tab', shiftKey, target: pg.body, defaultPrevented: false, preventDefault() { } }));
+      await new Promise(r => setTimeout(r, 30));
+      return pg.FOCUS.el;
+    };
+    const fwd = await press(false), back = await press(true);
+    assert.ok(fwd && fwd.startsWith(inside), `${what}: Tab out of the sheet left focus on ${fwd}`);
+    assert.ok(back && back.startsWith(inside), `${what}: Shift+Tab out of the sheet left focus on ${back}`);
+    assert.notEqual(fwd, back, `${what}: Tab and Shift+Tab both went to ${fwd} (first and last control expected)`);
+    closeIt(pg);
+    assert.equal(await press(false), null, `${what}: Tab moved focus with the sheet closed`);
+  }
+});
+
 test('GUARD: opening twice and closing once leaves nothing inert, for both sheets', async () => {
   for (const [what, openIt, closeIt] of [
     ['Programs', pg => pg.sb.openDrawer(), pg => pg.sb.closeDrawer()],
