@@ -1,6 +1,6 @@
 # #507 universal search, lean v1: one Home box over Programs and ID Camps
 
-Author: Chitu (Opus). Plan only; no product code is written until a reviewer (Bianque or Huatuo) approves it and the
+Author: Chitu (Opus). Revision 2, answering Huatuo's round-1 review (last section). Plan only; no product code is written until a reviewer (Bianque or Huatuo) approves it and the
 owner has answered the decisions in section 7. Part of #507.
 
 Sources. Read-only. CollegeDash `origin/main` at `60bc94e17` (data refresh 2026-10-21T16:21Z). Line numbers are
@@ -62,13 +62,14 @@ NCAA women's soccer programs, ID camps, and where club and high school players g
    One Day ID Camp | January - GIRLS Only              D1  USC · Sun, Jan 31
    …(2 more rows)
    Show all 5 camps
+   Browse all ID camps →
  PROGRAMS · 2
    USC                                                 D1 · Big Ten · Los Angeles, CA
    USC Upstate                                         D1 · Big South · Spartanburg, SC
  [Programs] [ID Camps] [Pipelines]      <- the three options, pushed down while results show
 ```
 
-With no camp word ("ohio"): Programs first (first 6 rows, then "Show all 44 programs →"), then ID Camps. Nothing
+With no camp word ("ohio"): Programs first (its 5 name rows, then "All 44 matching programs →", which counts the 39 programs in Ohio), then ID Camps. Nothing
 matches: one line, "No program or upcoming ID camp matches “zzzz”. Try a school's short name, a mascot, a state or a
 city." Empty box: no panel (no chips; #465 removed them).
 
@@ -93,18 +94,31 @@ city." Empty box: no panel (no chips; #465 removed them).
 
 Let `raw` be the box text, `q = normText(raw)` (1065).
 
-**Camp words.** `camp`, `camps`, `clinic`, `clinics`, `id` (whole words, any case) are camp words.
-- `rest` = the typed words without camp words. `camp = (rest has fewer words than raw)`.
-- Program query: `rest` when `camp` and `rest` is not empty, else `raw`. So "ucla id camp" looks for "ucla", while a
-  lone "camp" still finds Campbell and a lone "id" still finds Idaho on the way to typing them.
-- Camp query: `rest` (empty when only camp words were typed).
+**Camp words.** `camp`, `camps`, `clinic`, `clinics`, `id` are camp words. They are looked for among the words of
+`normText(raw)`, so "ucla id-camp" is read like "ucla id camp".
+- **The Idaho exception.** When the whole query, trimmed, is exactly `ID` in capitals, it is Idaho's state code
+  (the site tells visitors to type codes in capitals, 2628) and not a camp word: `camp` is false, Programs runs on
+  "ID" as today (Idaho, Idaho State, then the place option for Idaho), and the Camps section shows only camps at
+  programs whose `state` is `ID` (one today, Northwest Nazarene). Lowercase "id", on the way to "idaho", stays a camp
+  word as below.
+- `rest` = the `normText` words without camp words. `camp = (rest has fewer words than normText(raw))`.
+- Program query `pq`: when `camp` and `rest` is not empty, `raw` with each whole camp word deleted (case-insensitive,
+  a word boundary being any character that is not a letter or digit), so "TX camps" keeps "TX" in capitals for the
+  capitals rule; otherwise `raw`. So "ucla id camp" looks for "ucla", while a lone "camp" still finds Campbell and a
+  lone "id" still finds Idaho on the way to typing them.
+- Camp query: `rest` joined (empty when only camp words were typed).
 
-**Programs section.** `searchMatches(normText(pq), Infinity, pq)` (1173), over all programs. Home has no filters, so
-`visibleMatches`/`matchesFilters` are not applied (filters belong to their destination, owner D4). Order is today's:
-score descending (100 short-name exact ... 30 nickname, 20 place), ties in index order. First show 6 (`SUGGEST_MAX`,
-2581). Then one option "Show all N programs →" linking to `listHashOf({ defaults, q: pq })` = `#/programs?q=…`;
-the Programs page runs the same matcher with every other filter at its default (`listArrive` 3665-3680), so it lists
-exactly N. The "why" text ("Bulldogs", "in Ohio", "UNC") is shown as the header box shows it.
+**Programs section.** `searchMatches(normText(pq), Infinity, pq)` (1173) over all programs. It reads the global
+`S.index` (1174-1175) and the place memo (`placeQuery`), so the engine takes no index argument (section 4, PR 1). Home
+has no filters, so `visibleMatches`/`matchesFilters` are not applied (filters belong to their destination, owner D4).
+- Order is today's: score descending (100 short-name exact ... 30 nickname, 20 place), ties in index order.
+- Rows: up to 6 hits that are not place hits (`SUGGEST_MAX`, 2581), as the header box shows them (2587). Place hits are
+  deliberately not drawn as rows; like the header box's "All N matching programs →" (2589-2592), they are counted in
+  one closing option.
+- Closing option "All N matching programs →", shown when N exceeds the rows drawn or any hit is a place hit. It
+  links to `listHashOf({ defaults, q: pq })` = `#/programs?q=…`. The Programs page runs the same matcher with every
+  other filter at its default (`listArrive` 3665-3680, which keeps the case of `q`, 3674), so it lists exactly N.
+- The "why" text ("Bulldogs", "UNC") is shown as the header box shows it.
 
 **ID Camps section.** An upcoming ID camp is shown when either
 1. the camp query is empty (only camp words were typed), or
@@ -119,11 +133,24 @@ own program's camps through the camps page's matcher, among them "MSU", "GVSU", 
 (probe `alias_miss.mjs`). With rule 3, "msu" shows Mississippi State's 3 camps and "trojans" 7 camps (USC, Troy,
 Trevecca Nazarene). Place hits are left out of rule 3 because rule 2 already reads state and city words.
 
-Order: date, soonest first (`campCmp`), as the ID Camps page orders them. First show 4, then "Show all N camps",
-which expands the section in place (at most 83 rows today). It is not a link: because of rule 3, `#/camps?q=…` can
-list fewer camps than the section counts. A plain "Browse all ID camps →" link (no count) sits at the section's end.
+Order: date, soonest first (`campCmp`), as the ID Camps page orders them. First show 4, then a "Show all N camps"
+option, which expands the section in place (at most 83 rows today). It is not a link: because of rule 3,
+`#/camps?q=…` can list fewer camps than the section counts. A last option, "Browse all ID camps →" (`#/camps`, no
+count), ends the section whenever it is drawn.
 
-**Section order.** ID Camps first when a camp word was typed or Programs is empty; otherwise Programs first.
+**Section order.** ID Camps first when a camp word was typed or Programs is empty; otherwise Programs first. A
+section with no rows is not drawn, except a Camps section that leads (a camp word was typed): it then holds only
+"Browse all ID camps →", and its message goes outside the listbox (below).
+
+**What sits inside `#homeList`, and what does not.** As the #465 ARIA rule (`tests/programs_rail.test.mjs:3-4`) and the
+header box (2626-2628) require:
+- The listbox holds only `role=group` elements and `role=option` elements; nothing else.
+- One group per drawn section, named by `aria-labelledby` pointing at its heading. The heading ("ID Camps · 5
+  upcoming", "Programs · 9") is a `div` inside the group with `aria-hidden="true"`, as `qgroup-label` is (2615).
+- Options: program rows, camp rows, "All N matching programs →", "Show all N camps", "Browse all ID camps →".
+- Messages are never inside the listbox: the no-match line, "No upcoming ID camps match “…”" (a camp word typed, no
+  camp), "Loading camps…" and "ID camps couldn't load." sit in `#homeMsg`, a plain `div` after the listbox, and the
+  same text is written to `#homeStatus`.
 
 **Rows and links.**
 - Program row: `shortName || name`, then `programLine(p)` (2018), which starts with the division tag; opens
@@ -132,9 +159,13 @@ list fewer camps than the section counts. A plain "Browse all ID camps →" link
   `#/p/<slug>/camps`, the program's camps tab.
 - Every option's accessible name includes the division: "UCLA, D1, College ID Camp, Sun, Jan 17".
 
-**Enter with no active option.** Opens the first row of the first section, except: when Programs leads and its hits
-include a place hit, Enter opens the "Show all N programs" link (today's `placeQueryHits` rule, 1126, and `showPlaceList`, 2648). Nothing
-happens on an empty slate.
+**Enter with no active option.**
+- When Programs leads and its hits include a place hit: the "All N matching programs" link (today's `placeQueryHits`
+  rule, 1126 and 2541, and `showPlaceList`, 2648). "ID", "TX" and "boston" land here.
+- Otherwise the first program or camp row in the panel, in section order. When the leading Camps section is empty,
+  that is the first program row ("stanford camps" opens Stanford). When there is no row but a place option
+  ("philadelphia"), the place option.
+- Nothing on an empty slate.
 
 ## 4. Pull requests (two)
 
@@ -145,25 +176,32 @@ measurements.
 ### PR 1: the engine, the frozen fixture and the judged set (not visible)
 
 What changes
-- `public/index.html`: a pure `homeSearch(idx, campRows, raw)` returning `{ programs, camps, order, programsHref,
-  enterTarget }`, in its own banner block so tests can slice it; `campsData(idx, doc, today = todayLocal())`.
-  No caller on the page yet; no visible change.
+- `public/index.html`: `homeSearch(campRows, raw)` returning `{ sections, programsHref, enterTarget, message }`, in
+  its own banner block so tests can slice it. It reads the global `S.index`, as `searchMatches` and the place memo do
+  (1173-1175); the caller (and every test) sets `S.index` first. `campRows` are `campsData(...).all`, already cut to
+  upcoming. Plus `campsData(idx, doc, today = todayLocal())`. No caller on the page yet; no visible change.
 - `tools/search_fixture.py` (copies `tools/recs_catalog.py`'s pattern: rebuild, `--check`, `--out`): writes
   `tests/fixtures/search/programs.json` (slug, name, shortName, nickname, searchNames, city, state, region, division,
   conference: about 280 KB raw, 41 KB gz) and `tests/fixtures/search/camps.json` (slug, name, startDate, endDate,
-  precision, campType, program block: under 55 KB), plus `clock` = the camps index's `updated` date. Regenerated only by
-  a reviewed PR. No person field (no `headCoach`); the Python test fails if a person-shaped key appears.
+  precision, campType, program block: under 55 KB), plus `clock` = the camps index's `updated` date. Its cut is a pure
+  function `cut(programs_doc, camps_doc)`. Regenerated only by a reviewed PR. `--check` against `public/data` is run by
+  hand when regenerating, never by CI (as `tests/recs_catalog_test.py:7-9`), because CI also runs after every daily
+  refresh. No person field (no `headCoach`); the Python test fails if a person-shaped key appears.
 - `tests/fixtures/search/judged-v1.json`: the judged set of section 6, with expected first rows, must-show,
   must-not-show and section order per query.
 
 Tests that fail on main first
 - `tests/home_search_engine.test.mjs`: slices `homeSearch` (absent on main, so it fails) and runs the judged set on
-  the fixture at the fixture's clock; checks the camp-word rule, rule 3, section order, Enter target, and that
-  `programsHref` read back through `listStateOf` gives the same program set (the "Show all" destination check).
-- The same file: `campsData(fixtureIdx, fixtureCamps, '2027-03-01')` drops every camp ending before March 2027. On
-  main the third argument is ignored and the real date is used, so the count differs and the test fails.
-- `tests/search_fixture_test.py`: fixture shape, key allow-list, `--out` rebuilds byte-identical files from the
-  fixture's own inputs.
+  the fixture at the fixture's clock; checks the camp-word rule (including "ucla id-camp" and the "ID" exception),
+  rule 3, section order, Enter target, and that `programsHref` read back through `listStateOf` gives the same program
+  set (the "Show all" destination check).
+- The same file pins `campsData(fixtureIdx, fixtureCamps, clock)` against two fixed clocks (the fixture's, and one a
+  month later that drops the camps ending before it). It does not rely on today's real date to fail on main; the
+  file already fails on main because `homeSearch` is absent.
+- `tests/search_fixture_test.py`, never reading `public/data`: fixture shape and key allow-list; `cut()` run on
+  made-up rows gives exactly the expected keys and drops person-shaped keys; `cut()` run on the committed fixture's own
+  rows gives them back unchanged (the cut is idempotent). It reports its check count with `recs_catalog_test.py`'s
+  `ok()` and `main()`, the format `run_python_suites.py` reads.
 
 Cost: about $6-12. Risk: low. The only shared-code change is `campsData`'s optional argument; the existing
 `tests/camps_page.test.mjs` must pass unchanged.
@@ -174,16 +212,24 @@ What changes
 - `renderHome` (3733) draws the box after `pageHeader`, before `.home-entries`: `<label>` "Search programs and ID
   camps" (visible or screen-reader only per the mockup), `input#homeQ` with `role=combobox`,
   `aria-autocomplete=list`, `aria-expanded`, `aria-controls=homeList`, `aria-activedescendant`, `aria-describedby`
-  a hint; `ul#homeList role=listbox` with one `role=group` per section labelled by its heading; options with ids and
-  `aria-selected`; one new polite region `#homeStatus`, written only when its text changes ("2 programs and 5 upcoming
-  ID camps. Enter opens One Day ID Camp, USC.").
+  a hint; `div#homeList role=listbox` holding only groups and options (section 3); `div#homeMsg` after it for messages;
+  one new polite region `#homeStatus`, written only when its text changes ("2 programs and 5 upcoming ID camps. Enter
+  opens One Day ID Camp, USC."; or the message text).
 - Wiring: input (80 ms debounce, as `setQuery`), first focus loads camps, Down/Up across sections with wrap, Enter,
   Escape closes then clears, Tab closes and moves on, mousedown on the list keeps focus, "/" focuses `#homeQ` on Home.
   Choosing a row navigates; route focus then lands on the page `h1` (#453).
 - Layout: results in normal flow under the box at every width, pushing the three options down while shown; no overlay,
-  so nothing new in the header/panel stacking order. Box full width up to 720 px; rows at least 44 px tall. On phones
-  focus scrolls the box to the top of the viewport so rows show above the keyboard. Page colour tokens only (both
-  themes).
+  so nothing new in the header/panel stacking order. On phones focus scrolls the box to the top of the viewport so rows
+  show above the keyboard. Page colour tokens only (both themes), plus one new token pair, `--home-q-placeholder` in
+  `[data-theme="light"]` and `[data-theme="dark"]`, used by `.home-q::placeholder`, so the contrast test can read the
+  placeholder colour from a token (the cascade helper cannot read pseudo-elements).
+- The layout lives on single-class selectors only, so `exactLayout` can pin them (it refuses descendant, compound and
+  pseudo selectors):
+  - `.home-search` (wrapper): `width: 100%; max-width: 720px`;
+  - `.home-q` (the input): `width: 100%; min-width: 0`;
+  - `.home-list`, `.home-msg`: block, in flow, no `position`;
+  - `.home-opt` (every option): `display: flex; flex-direction: column; min-height: 44px`;
+  - `.home-opt-name`, `.home-opt-sub` (option text): `min-width: 0; overflow-wrap: anywhere`.
 - The header box `#q` stays hidden on Home (`SEARCH_VIEWS` unchanged).
 - When the program index failed to load, Home draws the try-again card and no box (`boot()` 6160-6170 renders Home
   without data); a test pins it.
@@ -191,18 +237,34 @@ What changes
 Tests changed on purpose (decision 1)
 - `tests/shell_nav.test.mjs` 60-70: still exactly one `id="q"` in the header and Home never reaches for `#q`, but
   `renderHome` may draw `#homeQ`. 259-280: "/" on Home focuses `#homeQ`. 282-300: Home is a heading, one line, the
-  search box and three options (an `<input>` is allowed; still no rail, chips or Continue).
+  search box and three options (an `<input>` is allowed; still no rail, chips or Continue). Its existing assertion that
+  Home writes nothing to `localStorage` (297) is kept and extended to typing and choosing in the box: the box never
+  remembers a query (#447 decision 4).
 - `tests/route_focus.test.mjs` 198-203: the pinned live-region list gains `homeStatus` (eight).
 
 New tests that fail on main first
 - `tests/home_search.test.mjs` (stub DOM, in the style of `tests/header_combobox.test.mjs`), on the PR 1 fixture and
-  clock: the combobox ARIA; every option tied to a program carries `class="div-tag"` with that program's division and
-  shows `shortName || name`; keys; Enter rules; links (`#/p/<slug>`, `#/p/<slug>/camps`, `#/programs?q=…`); the status
-  text; exactly one request (`/api/v1/camps`) after the first focus and none while typing, none without focus;
-  failed camps load keeps Programs.
-- A CSS cascade check (as `tests/header_narrow.test.mjs`): no horizontal overflow from the box or rows at 320, 375,
-  768 and 1440 px; AA contrast of box text, placeholder, headings and the active row in both themes (as
-  `tests/conference_counts.test.mjs`).
+  clock:
+  - the combobox ARIA; every option tied to a program carries `class="div-tag"` with that program's division and shows
+    `shortName || name`; keys; Enter rules; links (`#/p/<slug>`, `#/p/<slug>/camps`, `#/programs?q=…`);
+  - the listbox rule: every child of `#homeList` is a `role=group`, every child of a group is a `role=option` or its
+    one `aria-hidden` heading, and each group's `aria-labelledby` names that heading; "Show all N camps" and "Browse
+    all ID camps →" are options;
+  - the no-match (zzzz), no-camp (stanford camps), loading and failed-load messages appear in `#homeMsg`, never inside
+    `#homeList`, and the same text is in `#homeStatus`;
+  - exactly one request (`/api/v1/camps`) after the first focus, none while typing, none without focus; a failed camps
+    load keeps Programs;
+  - Home draws no box when the program index failed to load.
+  - The clock: `todayLocal` is a top-level `const` (1009) and calls `new Date()`, so the sandbox's `Date` is a
+    subclass whose no-argument constructor (and `now()`) returns the fixture clock; `load_failed_view.test.mjs:48`'s
+    `FakeDate` overrides only `now()` and is not enough.
+- `tests/home_search_css.test.mjs`: `exactLayout` (`tests/lib/css_cascade.mjs`) pins the exact layout declarations of
+  the selectors listed above, at every `@media` they appear in; AA contrast (`tests/lib/contrast.mjs`) of the box text,
+  `--home-q-placeholder`, headings, option text and the active option in both themes, as
+  `tests/conference_counts.test.mjs` does. Node has no layout engine, so this pins the CSS, not the rendering.
+- A human browser check, recorded in the PR body (as `header_narrow.test.mjs:5-16` records its widths): local
+  `serve.py`, widths 320, 375, 768 and 1440 px, light and dark; at each, no sideways scroll, the box and rows inside
+  the viewport, rows at least 44 px, focus ring visible, a screenshot or the measured widths per case.
 
 Cost: about $15-30 (mockup artifact, build, one review round). Risk: medium. It changes the landing page and reverses
 a pinned owner decision, and it adds a second combobox to the page. Under this seat's tier rule a visible redesign is
@@ -214,11 +276,12 @@ Opus work; the coordinator decides the model.
   Tests that touch live `public/data` assert only relations (for example "the box's Programs set equals
   `searchMatches` for the same text"), never a number.
 - **No test depends on today's date.** "Upcoming" is computed with the injected clock (`campsData`'s third argument,
-  and `homeSearch` receives rows already cut). Page-level tests stub `todayLocal`.
+  and `homeSearch` receives rows already cut). Page-level tests give the sandbox a `Date` subclass whose no-argument
+  constructor and `now()` return the fixture clock, because `todayLocal` (1009) cannot be reassigned.
 - **No network.** `getJSON` is stubbed; tests count the requests it receives. CI's network guard stays on.
 - Tests read `index.html` text and slice functions by their banner comments, as today's search tests do.
 
-## 6. Judged set (22 queries)
+## 6. Judged set (23 queries)
 
 "Today" is what exists now: Home has no box, so each query is scored against the header box on Programs and the ID
 Camps page's box, the full plan's rule (`plan.md` 7.3). Counts are probe output on 2026-10-22 data; PR 1 re-measures
@@ -232,12 +295,13 @@ them on the frozen fixture and pins those. IDs from `judged-draft.json` where on
 | K01 | tar heels | 1 North Carolina / 0 | P North Carolina |
 | K06 | bulldogs | 27 / 0 | P 27; C 3, Mississippi State's (rule 3) |
 | E08 | st. mary's | 6, St. Mary's (TX) first / 1 | P 6; C 1, St. Mary's (TX) |
-| L01 | boston | 9 (3 name, 6 place) / 0 | P 9, Boston University first; Enter opens `#/programs?q=boston` |
-| L03 | TX | 51 / 3 | P 51; C 3 (St. Mary's TX, Concordia Texas, TCU) |
+| L01 | boston | 9 (3 name, 6 place) / 0 | P 3 rows (Boston University first) + "All 9 matching programs"; Enter opens `#/programs?q=boston` |
+| L03 | TX | 51 / 3 | P 2 rows (St. Thomas TX, Trinity TX) + "All 51"; C 3 (St. Mary's TX, Concordia Texas, TCU); Enter opens `#/programs?q=TX` |
+| N05 | ID | 4 (Idaho, Idaho State, 2 by place) / 81 | Programs first: 2 rows + "All 4"; C 1 (Northwest Nazarene, state ID); Enter opens `#/programs?q=ID` |
 | E10 | washington | 23, Washington first / 1 | P 23; C 1 (Puget Sound) |
 | M02 | id camp december | 0 / 14 | Camps first: C 19 (all December camps; the camp words no longer have to be in the title); no programs |
-| M03 | ucla id camp | 0 / 1 | Camps first: C 1 UCLA; P UCLA |
-| M04 | stanford camps | 0 / 0 | Camps first: "No upcoming ID camps match", "Browse all ID camps"; P Stanford |
+| M03 | ucla id camp | 0 / 1 | Camps first: C 1 UCLA; P UCLA; "ucla id-camp" gives the same |
+| M04 | stanford camps | 0 / 0 | Camps first: only "Browse all ID camps", message "No upcoming ID camps match" in `#homeMsg`; P Stanford; Enter opens Stanford |
 | N01 | usc camps | 0 / 0 | Camps first: C 5, all USC; P USC, USC Upstate |
 | N02 | msu | 8 / 0 | P 8 (MSU alias); C 3, Mississippi State's (rule 3) |
 | N03 | trojans | 7 / 0 | P 7; C 7 (USC, Troy, Trevecca Nazarene) |
@@ -256,7 +320,7 @@ and fact queries beyond these samples (all v2), and player names (out by the pri
 ## 7. Risks and open owner decisions
 
 Risks
-- **Saved Programs filters.** "Show all N programs" opens `#/programs?q=…`, which, like any shared Programs link,
+- **Saved Programs filters.** "All N matching programs" opens `#/programs?q=…`, which, like any shared Programs link,
   replaces and saves the visitor's Programs filters (`listArrive` → `saveState`). Decision 4.
 - **Two matchers in one panel.** Programs and camps match words differently (for example "d3 ohio" finds 2 camps and
   no programs; "texas" finds camps by state name while programs list Texas by place). v1 accepts this. One engine
@@ -275,8 +339,27 @@ Open decisions (each with a recommendation)
 3. **Camp matching = the ID Camps page's matcher plus rule 3.** Recommendation: yes. It keeps the camps page's
    words (city, state, region, month, D1-D3) and finds camps by alias and mascot. The alternative, names and camp
    titles only, is a new matcher and loses "TX" and "december".
-4. **"Show all N programs" is a link to Programs** (exact count, replaces saved filters). Recommendation: yes, as
+4. **"All N matching programs" is a link to Programs** (exact count, replaces saved filters). Recommendation: yes, as
    every shared Programs link does. The alternative is expanding in place, as the Camps section does.
 
 Team defaults (stand unless overridden): first show 6 programs and 4 camps; camps load at first focus; test clock =
 the fixture's date; the fixture is regenerated only by a reviewed PR.
+
+## Changes since review round 1
+
+Huatuo's round-1 review (CHANGES REQUESTED). Every item is applied.
+
+| Item | Change |
+|---|---|
+| R1 "ID" in capitals | Section 3: the Idaho exception (whole query exactly `ID` in capitals is a state code, not a camp word; Camps then shows camps at Idaho programs only). Judged row N05 added with section order and Enter target. Probe: Programs 4 (2 rows + place option), Camps 1, Enter opens `#/programs?q=ID`. |
+| R2 fixture test and live data | PR 1: `tools/search_fixture.py`'s cut is a pure `cut()`; `search_fixture_test.py` runs it on made-up rows and on the committed fixture's own rows, never on `public/data`. `--check` against `public/data` is manual only. |
+| R3 overflow test | PR 2: replaced by `exactLayout` pins on named single-class selectors (`.home-search`, `.home-q`, `.home-list`, `.home-msg`, `.home-opt`, `.home-opt-name`, `.home-opt-sub`), AA contrast with a new `--home-q-placeholder` token, and a recorded human browser check at 320/375/768/1440 px in both themes. |
+| R4 listbox content | Section 3 "What sits inside `#homeList`": groups and options only, `aria-hidden` headings naming their group through `aria-labelledby`, the two camps links as options, every message in `#homeMsg` outside the listbox and written to `#homeStatus`. PR 2 tests each. |
+| O1 Enter on an empty leading Camps section | Section 3 Enter rules: the first row in the panel ("stanford camps" opens Stanford); pinned in M04. |
+| O2 page-test clock | Sections 4 and 5: a `Date` subclass whose no-argument constructor returns the fixture clock. |
+| O3 the `idx` argument | Dropped: `homeSearch(campRows, raw)` reads `S.index`, as `searchMatches` does; callers and tests set it. |
+| O4 place rows among the first six | Changed rather than only explained: Programs rows are non-place hits, and place hits are counted in one "All N matching programs →" option, exactly as the header box does (2587-2592). This reuses today's behaviour; L01, L03 and N05 show it. |
+| O5 hyphens | Camp words are found among `normText` words; "ucla id-camp" is in M03 and the PR 1 test. |
+| O6 Python report format | PR 1: `search_fixture_test.py` copies `recs_catalog_test.py`'s `ok()` and `main()`. |
+| O7 no saved state | PR 2: the `localStorage` assertion in `shell_nav.test.mjs` is kept and extended to typing and choosing in the box. |
+| O8 the `campsData` fail-on-main case | Replaced by two fixed clocks; the file fails on main through the missing `homeSearch`. |
