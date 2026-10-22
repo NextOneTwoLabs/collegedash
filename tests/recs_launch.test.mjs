@@ -37,7 +37,7 @@ const card = () => /<div class="card" id="faqRecs"\$\{S\.recs\.on \? '' : ' hidd
 test('the About page has a "Find programs for me" card, hidden unless the switch is on', () => {
   assert.ok(card(), 'renderFaq draws the card, hidden while S.recs.on is false');
   // the About page can be drawn before api/status answers: switching on shows the card already on screen
-  assert.match(fn('recsSwitchedOn'), /\$\('#faqRecs'\)\?\.removeAttribute\('hidden'\)/, 'switching on unhides the card');
+  assert.match(fn('recsSwitchedOn'), /const faqRecs = \$\('#faqRecs'\); if \(faqRecs\) faqRecs\.hidden = false;/, 'switching on unhides the card');
 });
 
 test('the card states the approved method', () => {

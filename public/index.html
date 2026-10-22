@@ -2834,7 +2834,7 @@ function recsSwitchedOn() {
   if (S.recs.on) return;
   S.recs.on = true;
   renderHeaderRecs(); // #434: the header's entry, drawn before the index is needed (the #433 pilot switches recs on at start)
-  $('#faqRecs')?.removeAttribute('hidden'); // #400 release: the About page may be drawn before api/status answers
+  const faqRecs = $('#faqRecs'); if (faqRecs) faqRecs.hidden = false; // #400 release: the About page may draw before api/status answers
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
