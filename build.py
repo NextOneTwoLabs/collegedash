@@ -16,6 +16,7 @@ Curated fields override machine fields; machines never write curated.json.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import os
 import re
 import urllib.parse
@@ -198,6 +199,17 @@ LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", 
 REVIEWED_UNPUBLISHED = {
     "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
 }
+# Long-standing programs published in a division other than D1, each reviewed (issue #126, F-b): the anchor saw only
+# absence, so relabelling long-standing D1 programs (still published, now in D2) passed while they left everything
+# scoped to D1. slug -> (division, why). A real reclassification is a one-line edit here, in its own reviewed PR.
+REVIEWED_RECLASSIFIED = {
+    "saint-francis": ("D3", "issue #94: Saint Francis left Division I for Division III and followed D3 into publication"),
+}
+# The fixture is the anchor, so it is pinned too (issue #126, F-a): a fixture cut short with the same programs
+# unpublished would otherwise pass. Its program count and the SHA-256 of its sorted slugs, one per line. The fixture
+# records the registry before #100 and never changes; if it ever must, these two lines change in the same reviewed PR.
+LONG_STANDING_COUNT = 350
+LONG_STANDING_SHA256 = "dc97d1cf4eb3773e46c7a01aaa94b9644b1b478639874fe06382e40b2365a194"
 
 
 def check_membership_anchor(registry: dict) -> bool:
@@ -207,6 +219,12 @@ def check_membership_anchor(registry: dict) -> bool:
         print(f"MEMBERSHIP: cannot read the long-standing program list {LONG_STANDING_PATH}")
         return False
     long_standing = {p["slug"] for p in doc["programs"]}
+    digest = hashlib.sha256("\n".join(sorted(long_standing)).encode("utf-8")).hexdigest()
+    if len(doc["programs"]) != LONG_STANDING_COUNT or len(long_standing) != LONG_STANDING_COUNT or digest != LONG_STANDING_SHA256:
+        print(f"MEMBERSHIP: the long-standing program fixture {LONG_STANDING_PATH} changed: {len(doc['programs'])} programs "
+              f"({len(long_standing)} distinct), expected {LONG_STANDING_COUNT} with build.LONG_STANDING_SHA256 - the anchor "
+              f"cannot be trusted; restore the fixture, or change it and both pins in one reviewed PR")
+        return False
     unpublished = long_standing - {p["slug"] for p in published_programs(registry)}
     ok = True
     for slug in sorted(unpublished - set(REVIEWED_UNPUBLISHED)):
@@ -216,6 +234,13 @@ def check_membership_anchor(registry: dict) -> bool:
     for slug in sorted(set(REVIEWED_UNPUBLISHED) - unpublished):
         print(f"MEMBERSHIP {slug}: listed in build.REVIEWED_UNPUBLISHED but published again - remove it from that list")
         ok = False
+    division = {p["slug"]: p.get("division") for p in published_programs(registry)}
+    for slug in sorted(long_standing & set(division)):
+        want = REVIEWED_RECLASSIFIED.get(slug, ("D1", ""))[0]
+        if division[slug] != want:
+            print(f"MEMBERSHIP {slug}: a long-standing program is published as {division[slug]}, not {want} - if this is a "
+                  f"real reclassification, add it to build.REVIEWED_RECLASSIFIED in a reviewed PR; otherwise the registry is wrong")
+            ok = False
     return ok
 
 
@@ -2101,9 +2126,13 @@ def search_names(p: dict, aliases=()) -> list[str]:
             full_words = words + extra
             if len(full_words) >= 3:
                 add("".join((w if w.isupper() and len(w) <= 4 else w[0]) for w in full_words if w[0].isalpha()))
+    # 'St.' is ambiguous in NCAA names: Saint ('Mount St. Mary's') or State ('Cal St. Fullerton').
+    # When the program's own name says State and never Saint/St, it means State (issue #513).
+    own = f"{name} {short}"
+    st_word = "State " if re.search(r"\bState\b", own) and not re.search(r"\bSaint\b|\bSt\b", own) else "Saint "
     for s in list(out):
         if re.search(r"\bSt\.?\s", s):
-            add(re.sub(r"\bSt\.?\s", "Saint ", s))
+            add(re.sub(r"\bSt\.?\s", st_word, s))
         elif re.search(r"\bSaint\s", s):
             add(re.sub(r"\bSaint\s", "St ", s))
     return out
@@ -2402,7 +2431,37 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     return rows
 
 
+# Issue #462: the one guarded reader for every profile validate's checks open (#459 did this for camps alone). A
+# half-written build can leave any bytes at all, and one bare json.load ended the whole validate run with a traceback.
+# A malformed profile is named by path instead, and the caller skips it. Within one validate() run the file is named
+# once, by the first check that opens it; a check called on its own always names it.
+_unreadable_reported: set | None = None
+
+
+def read_profile_checked(path: str, label: str, consequence: str) -> tuple[dict | None, bool]:
+    """(the profile, or None when the file is missing; readable). An unreadable file prints
+    "<label>: <path> is not readable JSON: <error>; <consequence>" and returns (None, False)."""
+    try:
+        return common.read_json(path), True
+    except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
+        seen = _unreadable_reported
+        if seen is None or path not in seen:
+            print(f"{label}: {path} is not readable JSON: {type(e).__name__}: {e}; {consequence}")
+            if seen is not None:
+                seen.add(path)
+        return None, False
+
+
 def validate(registry: dict, verbose: bool = False) -> bool:
+    global _unreadable_reported
+    _unreadable_reported = set()
+    try:
+        return _validate(registry, verbose)
+    finally:
+        _unreadable_reported = None
+
+
+def _validate(registry: dict, verbose: bool = False) -> bool:
     ok = True
     schema = common.read_json(common.SCHEMA_PATH)
     try:
@@ -2412,7 +2471,10 @@ def validate(registry: dict, verbose: bool = False) -> bool:
         common.log("!! jsonschema not installed; skipping schema validation (pip install jsonschema)")
     for program in published_programs(registry):
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{program['slug']}.json")
-        p = common.read_json(path)
+        p, readable = read_profile_checked(path, "PROFILE", "it cannot be validated")
+        if not readable:
+            ok = False
+            continue
         if not p:
             print(f"MISSING {path}")
             ok = False
@@ -2556,7 +2618,15 @@ def check_fit_index() -> bool:
     except Exception as e:  # noqa: BLE001 - malformed JSON is the thing to name, not to die on
         print(f"FIT: {path} or {index_path} is not readable JSON: {type(e).__name__}: {e}")
         return False
-    lines = fit_complaints(doc, index_doc, lambda slug: common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")))
+    unreadable: list[str] = []
+
+    def load(slug):  # issue #462: a malformed profile is named once and its entry is not compared
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "FIT",
+                                           "its fit entry cannot be checked")
+        if not readable:
+            unreadable.append(slug)
+        return p
+    lines = [line for line in fit_complaints(doc, index_doc, load) if not any(line.startswith(f"{u}: ") for u in unreadable)]
     schema = common.read_json(FIT_SCHEMA_PATH)
     try:
         import jsonschema
@@ -2567,7 +2637,7 @@ def check_fit_index() -> bool:
         lines += [f"schema: {'/'.join(str(x) for x in e.path)}: {e.message[:160]}" for e in errs[:10]]
     for line in lines:
         print(f"FIT: {line}")
-    return not lines
+    return not lines and not unreadable
 
 
 def check_camps_index(registry: dict) -> bool:
@@ -2720,13 +2790,12 @@ def check_camps_index(registry: dict) -> bool:
     for program in published_programs(registry):
         slug = program.get("slug")
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")
-        try:
-            p = common.read_json(path) or {}
-        except Exception as e:  # noqa: BLE001 - issue #70: one bad profile is named, and the rest still checked
-            print(f"CAMPS: {path} is not readable JSON: {type(e).__name__}: {e}; its camps cannot be checked")
+        p, readable = read_profile_checked(path, "CAMPS", "its camps cannot be checked")  # issue #70, #462
+        if not readable:
             ok = False
             unreadable.add(slug)
             continue
+        p = p or {}
         camps = p.get("camps") if isinstance(p, dict) else None
         camp_blocks.append({"camps": camps})
         cause = camps.get("unreadable") if isinstance(camps, dict) else None
@@ -2855,7 +2924,11 @@ def check_seasons(registry: dict) -> bool:
             hist_claims.setdefault(hist_name, []).append(slug)
         if ncaa_name:
             ncaa_claims.setdefault(ncaa_name, []).append(slug)
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "SEASONS", "its seasons cannot be checked")  # #462
+        if not readable:
+            ok = False
+            continue
+        p = p or {}
         if not isinstance(p, dict):
             print(f"SEASONS {slug}: the profile is a {type(p).__name__}, not an object")
             ok = False
@@ -2920,7 +2993,11 @@ def check_academic_ranks(registry: dict) -> bool:
     ok, claims = True, {}
     for program in published_programs(registry):
         slug = program["slug"]
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "RANKS", "its academic rank cannot be checked")  # #462
+        if not readable:
+            ok = False
+            continue
+        p = p or {}
         ar = p.get("academicRank")
         if not isinstance(ar, dict):
             print(f"RANK {slug}: profile carries no academicRank block")
@@ -2961,11 +3038,16 @@ def check_titles(registry: dict) -> bool:
     fail. Every line that fails starts "TITLES ", which is the prefix tests/seasons_test.py reads as an
     invariant failure, so the notes deliberately do not use it."""
     programs = published_programs(registry)
-    published, notes = set(), []
+    published, notes, unreadable = set(), [], set()
     ok = True
     for program in programs:
         slug, division = program["slug"], program.get("division")
-        p = common.read_json(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")) or {}
+        p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "TITLES", "its titles cannot be checked")  # #462
+        if not readable:
+            ok = False
+            unreadable.add(slug)
+            continue
+        p = p or {}
         pr = p.get("program") or {}
         for y in pr.get("nationalTitles") or []:
             published.add((division, y, slug))
@@ -2978,7 +3060,8 @@ def check_titles(registry: dict) -> bool:
         for year, champion in table.items():
             winners = [q["slug"] for q in programs if q.get("division") == division and title_matches(q, champion, division)]
             if len(winners) == 1:
-                expected.add((division, year, winners[0]))
+                if winners[0] not in unreadable:  # #462: its published years are unknown, so nothing is "missing"
+                    expected.add((division, year, winners[0]))
             elif len(winners) > 1:
                 print(f"TITLES {division} {year}: champion {champion!r} matches more than one published program: {sorted(winners)}")
                 ok = False
