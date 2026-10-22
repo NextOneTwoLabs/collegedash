@@ -171,6 +171,23 @@ test('an element already inert for another reason stays inert when either sheet 
   }
 });
 
+// #477 (GUARD, passes on main by design): the phone bottom bar is outside every phone sheet, so it is inert while each one
+// is open and released when it closes. The #400 recommendations sheet, which was missing it, is checked in
+// tests/recs_form.test.mjs (it needs that suite's recs harness).
+test('GUARD #477: the bottom bar is inert while either sheet is open, and released after', async () => {
+  for (const [what, openIt, closeIt] of [
+    ['Programs', pg => pg.sb.openDrawer(), pg => pg.sb.closeDrawer({ focus: true })],
+    ['ID Camps', pg => pg.sb.campsSheet(true), pg => pg.sb.campsSheet(false)]]) {
+    const pg = await open({ width: 390 });
+    const all = tree(pg);
+    openIt(pg);
+    assert.equal(all.bar.inert, true, `${what}: the bottom bar is reachable behind the open sheet`);
+    assert.equal(all.header.inert, true, `${what}: the header is reachable behind the open sheet`);
+    closeIt(pg);
+    assert.equal(all.bar.inert, false, `${what}: the bottom bar stayed inert`);
+  }
+});
+
 test('GUARD: opening twice and closing once leaves nothing inert, for both sheets', async () => {
   for (const [what, openIt, closeIt] of [
     ['Programs', pg => pg.sb.openDrawer(), pg => pg.sb.closeDrawer()],
