@@ -23,6 +23,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
 import { parseCss, decls } from './lib/css_cascade.mjs';
+import { bootable, track, ready } from './lib/page_ready.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -133,13 +134,14 @@ function loadPage({ hash = '#/programs', width = 1280, store = {} } = {}) {
   const lines = HTML.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   const names = ['S', 'route', 'renderList', 'renderSidebar', 'confPillName', 'confOptId', 'confOptKey'];
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = bootable(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const pending = track(sandbox);  // tests/lib/page_ready.mjs: the page's fetches and short timers, for ready()
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sb: sandbox, $: bySelector, body, header, bar, hist, FOCUS, docListeners, winListeners };
+  return { sb: sandbox, pending, $: bySelector, body, header, bar, hist, FOCUS, docListeners, winListeners };
 }
 const settle = (ms = 80) => new Promise(r => setTimeout(r, ms));
-async function open(opts) { const pg = loadPage(opts); await settle(300); return pg; }
+async function open(opts) { const pg = loadPage(opts); await ready(pg.sb, pg.pending); return pg; }  // the first view, not a fixed delay (tests/lib/page_ready.mjs)
 const key = (pg, k, extra = {}) => { const ev = { key: k, defaultPrevented: false, preventDefault() { ev.prevented = true; ev.defaultPrevented = true; }, stopPropagation() { ev.stopped = true; }, ...extra }; (pg.$('#mfConfInput')._listeners.keydown || []).forEach(fn => fn(ev)); return ev; };
 const typeConf = (pg, text) => { const box = pg.$('#mfConfInput'); box.value = text; (box._listeners.input || []).forEach(fn => fn({ target: box })); };
 const options = pg => [...pg.$('#mfConfList').innerHTML.matchAll(/<div role="option" id="([^"]+)" class="([^"]*)" aria-selected="(true|false)" data-i="(\d+)" aria-label="([^"]*)"/g)]

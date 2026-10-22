@@ -25,6 +25,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { bootable, track, ready } from './lib/page_ready.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -130,13 +131,14 @@ function loadPage({ hash = '#/programs', store = {}, session = {}, ask = false }
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'index.html: could not find the inline <script>');
   const names = ['S', 'route', 'setQuery', 'renderSidebar', 'loadIndex', 'listHashOf', 'listStateOf', 'condFormOpen', 'condFormSubmit', 'condRemove', 'feedbackRoute', 'SORT_SPECS'];
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = bootable(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ${JSON.stringify(names)}) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const pending = track(sandbox);  // tests/lib/page_ready.mjs: the page's fetches and short timers, for ready()
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sb: sandbox, $: bySelector, hist, writes, requests, sinks, docListeners, ls, ss };
+  return { sb: sandbox, pending, $: bySelector, hist, writes, requests, sinks, docListeners, ls, ss };
 }
 const settle = (ms = 60) => new Promise(r => setTimeout(r, ms));
-async function open(opts) { const pg = loadPage(opts); await settle(250); return pg; }
+async function open(opts) { const pg = loadPage(opts); await ready(pg.sb, pg.pending); return pg; }  // the first view, not a fixed delay (tests/lib/page_ready.mjs)
 const pushes = pg => pg.writes.filter(w => w.kind === 'push').length;
 function pill(pg, attr, value, div) {
   const nodes = pg.$('#sidebar')._q[`[data-${attr}]`] || [];
