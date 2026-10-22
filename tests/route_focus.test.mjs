@@ -19,6 +19,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import vm from 'node:vm';
 import { fileURLToPath } from 'node:url';
+import { bootable, track, ready } from './lib/page_ready.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const PUBLIC = path.join(HERE, '..', 'public');
@@ -100,13 +101,14 @@ function loadPage({ hash = '#/' } = {}) {
   const lines = HTML.split(/\r?\n/);
   const a = lines.findIndex(l => l.trim() === '<script>'), b = lines.findIndex(l => l.trim() === '</script>');
   assert.ok(a >= 0 && b > a, 'index.html: could not find the inline <script>');
-  const src = lines.slice(a + 1, b).join('\n') + `\n;for (const k of ['S', 'route']) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const src = bootable(lines.slice(a + 1, b).join('\n')) + `\n;for (const k of ['S', 'route']) { try { globalThis[k] = eval(k); } catch { } }\n`;
+  const pending = track(sandbox);  // tests/lib/page_ready.mjs: the page's fetches and short timers, for ready()
   vm.createContext(sandbox);
   new vm.Script(src, { filename: 'public/index.html' }).runInContext(sandbox);
-  return { sb: sandbox, $: bySelector, focus, hist };
+  return { sb: sandbox, pending, $: bySelector, focus, hist };
 }
 const settle = (ms = 60) => new Promise(r => setTimeout(r, ms));
-async function open(hash = '#/') { const pg = loadPage({ hash }); await settle(250); return pg; }
+async function open(hash = '#/') { const pg = loadPage({ hash }); await ready(pg.sb, pg.pending); return pg; }  // the first view, not a fixed delay (tests/lib/page_ready.mjs)
 async function nav(pg, hash, ms = 250) { pg.focus.length = 0; pg.sb.location.hash = hash; await settle(ms); return pg.focus.slice(); }
 const at = (sel, extra = {}) => ({ matches: s => s === sel || extra.matches?.(s), closest: s => (extra.closest?.(s) ?? null) });
 const IN_SEARCH = { matches: s => s === 'input, select, textarea', closest: s => (s.includes('.header-search') ? {} : null) };

@@ -33,7 +33,9 @@ both, guarding against a fix broad enough to invent noise for names it should le
 from __future__ import annotations
 
 import argparse
+import json
 import os
+import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -138,6 +140,75 @@ def test_registry_aliases() -> None:
        build.search_names(prog("Cal Poly", "Cal Poly"), ["cal poly"]) == ["Cal Poly"])
 
 
+def _own_name_says_state(p: dict) -> bool:
+    """The issue #513 rule, restated independently of build.py: the program's own name or short name
+    says 'State' and says neither 'Saint' nor 'St'/'St.'."""
+    own = f"{p.get('name') or ''} {p.get('shortName') or ''}"
+    return bool(re.search(r"\bState\b", own)) and not re.search(r"\bSaint\b|\bSt\b", own)
+
+
+# Frozen fixtures for #513: the name fields of four real programs, copied from the committed
+# public/data/programs/<slug>.json (and searchAliases from public/data/registry.json) on 2026-10-22,
+# so these checks never move with a data refresh.
+ALIASES_513 = {"cal-state-fullerton": ["CSUF"]}
+FIXTURE_513 = {
+    "cal-state-fullerton": {"shortName": "Cal State Fullerton", "name": "California State University, Fullerton",
+                            "ids": {"ncaaName": "Cal St. Fullerton", "rpiHistoryName": "CalStateFullerton"}},
+    "saint-mary-s": {"shortName": "Saint Mary's", "name": "Saint Mary's College of California",
+                     "ids": {"ncaaName": "Saint Mary's (CA)", "rpiHistoryName": "StMarys"}},
+    "mount-st-marys": {"shortName": "Mount St. Mary's", "name": "Mount St. Mary's University",
+                       "ids": {"ncaaName": "Mount St. Mary's", "rpiHistoryName": "MountStMary"}},
+    "ohio-state": {"shortName": "Ohio State", "name": "Ohio State University",
+                   "ids": {"ncaaName": "Ohio St.", "rpiHistoryName": "OhioState"}},
+}
+
+
+def test_st_means_state() -> None:
+    print("#513: an NCAA 'St.' on a program whose own name says State is State, not Saint")
+    fx = {slug: build.search_names(p, ALIASES_513.get(slug, ())) for slug, p in FIXTURE_513.items()}
+    csuf = fx["cal-state-fullerton"]
+    ok("FIX cal-state-fullerton has no 'Saint' search name", not any("Saint" in n for n in csuf), str(csuf))
+    ok("FIX cal-state-fullerton publishes exactly its own names, NCAA 'Cal St. Fullerton' kept verbatim",
+       csuf == ["Cal State Fullerton", "California State University, Fullerton", "Cal St. Fullerton", "CSUF", "CSF"],
+       str(csuf))
+    ok("CONTROL Saint Mary's keeps its 'Saint' and 'St' forms",
+       fx["saint-mary-s"] == ["Saint Mary's", "Saint Mary's College of California", "St Marys", "St Mary's",
+                              "St Mary's College of California", "Saint Marys"], str(fx["saint-mary-s"]))
+    ok("CONTROL Mount St. Mary's (St. means Saint) still gains its 'Saint' forms",
+       fx["mount-st-marys"] == ["Mount St. Mary's", "Mount St. Mary's University", "Mount St Mary", "MSM", "MSMU",
+                                "Mount Saint Mary's", "Mount Saint Mary's University", "Mount Saint Mary"],
+       str(fx["mount-st-marys"]))
+    ok("CONTROL a trailing 'Ohio St.' is untouched (no Saint, nothing invented)",
+       fx["ohio-state"] == ["Ohio State", "Ohio State University", "Ohio St.", "OSU"], str(fx["ohio-state"]))
+    # A mid-name 'St.' on a State-side program with no plain State form elsewhere becomes 'State'.
+    sn = build.search_names({"shortName": "Test State", "name": "Test State University",
+                             "ids": {"ncaaName": "Test St. Upstate"}})
+    ok("FIX a State-side mid-name 'St.' expands to 'State'", "Test State Upstate" in sn and
+       not any("Saint" in n for n in sn), str(sn))
+
+    # Every committed profile, recomputed with the code under test. No counts pinned (the data moves);
+    # only the rule: a State-side program never gets a Saint name, and every other program with a
+    # mid-name 'St. ' still gets its Saint form (the swap is untouched there).
+    prog_dir = os.path.join(ROOT, "public", "data", "programs")
+    with open(os.path.join(prog_dir, "index.json"), encoding="utf-8") as fh:
+        index = json.load(fh)
+    bad, saint_kept, seen = [], [], 0
+    for row in index["programs"]:
+        with open(os.path.join(prog_dir, f"{row['slug']}.json"), encoding="utf-8") as fh:
+            p = json.load(fh)
+        sn = build.search_names(p)
+        seen += 1
+        if _own_name_says_state(p):
+            if any(re.search(r"\bSaint\b", n) for n in sn):
+                bad.append((row["slug"], sn))
+        elif any(re.search(r"\bSt\.?\s", n) for n in sn):
+            saint_kept.append(any(re.search(r"\bSaint\b", n) for n in sn))
+    ok("CONTROL the committed index was read", seen > 0, str(seen))
+    ok("FIX no committed State-side program gets a 'Saint' search name", not bad, str(bad))
+    ok("CONTROL every non-State-side program with a 'St. ' name still gets its 'Saint' form",
+       bool(saint_kept) and all(saint_kept), f"{saint_kept.count(False)} of {len(saint_kept)} lost it")
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -145,7 +216,8 @@ def main(argv=None) -> int:
     VERBOSE = ap.parse_args(argv).verbose
     if CODE_ROOT != ROOT:
         print(f"code under test imported from {CODE_ROOT}")
-    for case in (test_restored_initials, test_gated_against_noise, test_still_ordered_and_deduped, test_registry_aliases):
+    for case in (test_restored_initials, test_gated_against_noise, test_still_ordered_and_deduped, test_registry_aliases,
+                 test_st_means_state):
         try:
             case()
         except Exception as e:  # a case that raises is a failed case, not a lost run
