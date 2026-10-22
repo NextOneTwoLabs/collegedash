@@ -1252,6 +1252,31 @@ def test_host_stop_collector_skip(tmp: str) -> None:
         stub.close()
 
 
+def test_host_stop_counts_the_failing_hop(tmp: str) -> None:
+    """Issue #108 A (Huatuo's review, optional 1): a fetch that gives up after a redirect counts against the host that
+    failed, not the origin that only redirected; the origin stays open."""
+    print("host stop (#108 A): a failure through a redirect counts against the failing host only")
+    sick = Stub("sick", {"/": lambda path, n: (429, {"Content-Type": "text/plain"}, b"x", 0.0)})
+    origin = Stub("origin", {"/go/": lambda path, n: (301, {"Location": sick.url(path)}, b"", 0.0)})
+    clock = FakeClock()
+    try:
+        with fresh_state(tmp), stop_rules(clock):
+            for i in range(5):
+                clock.t += 200
+                try_fetch(origin.url(f"/go/{i}"))
+            stops = common._stops
+            ok("the host that kept failing is stopped", stops.get(sick.host) is not None and stops[sick.host].until is not None,
+               str({h: (st.fails, st.until) for h, st in stops.items()}))
+            ok("FIX the origin that only redirected has no failures counted against it",
+               stops.get(origin.host) is None or stops[origin.host].fails == 0, str({h: (st.fails, st.until) for h, st in stops.items()}))
+            origin.reset()
+            ok("FIX the origin is still open: its own page is fetched", try_fetch(origin.url("/page")) is None and origin.hits == {"/page": 1},
+               str(origin.hits))
+    finally:
+        sick.close()
+        origin.close()
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -1264,7 +1289,8 @@ def main() -> int:
              test_the_gap_starts_when_the_request_is_sent, test_body_read_inside_gate, test_backoff,
              test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
              test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
-             test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip]
+             test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip,
+             test_host_stop_counts_the_failing_hop]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
