@@ -1,7 +1,8 @@
-# Plan: #90, a renamed or removed build() output must not lose a gated run's collection
+# Plan: #90, a renamed build() output must not lose a gated run's collection
 
 Issue #90 and its 2026-10-01 triage comment; gate from #82; `.github/workflows/refresh.yml`, step "Commit changed
-data", `publish_sources_only` (main 60bc94e17, lines 298-342). Author: Jueying. Status: for plan review.
+data", `publish_sources_only` (main 60bc94e17, lines 298-342). Author: Jueying. Revision 2, after Bianque's round-1
+review, which endorsed C and the change to #82's behaviour.
 
 ## The failure today
 - **What the gate does.** On a gate (build or validate fails after the rebase), the step puts what build() writes
@@ -18,62 +19,59 @@ data", `publish_sources_only` (main 60bc94e17, lines 298-342). Author: Jueying. 
 **The key point.** The step runs the workflow as it was when the run started. If a rename is merged mid-run (the
 issue's scenario), main's build writes the new name, but the running step's restore list still names the old one.
 
+**A removed output is already safe, so it is not the bug.** Every build rewrites every output (a fresh `builtAt`), so
+when main deletes one, the rebase stops on a modify/delete conflict. `save_collection` then saves the run on
+`refresh-sources/<run>-unpublished` before `publish_sources_only` is reached (measured by Bianque). A rename that
+falls below git's 50% similarity threshold (a rename PR that also rebuilt the file) takes the same path. Only a
+rename git detects reaches the gate's restore; that is test 1.
+
 ## Options
-**A. Per-file tolerance for the three strict paths** (the triage comment), using the same `checkout || rm -rf` pattern.
-- Fixes a *removed* output.
-- Does **not** fix a *rename*. The new name is not in the running step's list, so it still differs from main, the
-  fifth-output assertion fires, and the collection is lost anyway.
-- Keeps the hard stop exactly as it is.
-
-**B. Directory pathspecs** (`public/data/camps` instead of `camps/index.json`).
-Fixes a rename inside one folder only. Still fatal when a whole folder is removed, and the measured rename
-(`camps/index.json` to `camps-index.json`) still trips the assertion.
-
-**C. Restore `public/data` except the collected parts, with no list of build outputs** (recommended):
+- **A. Per-file tolerance for the three strict paths** (the triage comment). Does not fix the rename: the new name is
+  not in the running step's list, so the assertion fires and the collection is lost anyway (measured).
+- **B. Directory pathspecs.** Covers only a rename inside one folder, not the measured `camps/index.json` to
+  `camps-index.json`.
+- **C. Restore `public/data` except the collected parts, with no list of build outputs** (approved):
 ```sh
 find public/data -mindepth 1 -maxdepth 1 ! -name rpi ! -name registry.json -exec rm -rf {} +
-git checkout FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'
+if ! git checkout FETCH_HEAD -- public/data ':(exclude)public/data/rpi' ':(exclude)public/data/registry.json'; then
+  ::error ...; exit 1     # the guard line 318 has today
+fi
 ```
-- `public/data` always exists on main, so the checkout cannot hit a missing path.
-- The `rm` drops whatever main lacks: an old name, a new name, a fifth output.
-- The review reports outside `public/data` keep their tolerant per-file lines.
-- The two exclusions become the only list. They name what is *collected*, which a build change does not move.
+  `public/data` always exists on main, so the checkout cannot hit a missing path. The `rm` drops whatever main lacks:
+  an old name, a new name, a fifth output.
 
-**C and the fifth-output rule.** The rule exists so that an unlisted build output is never *published*. Under C:
-- That holds by construction: nothing outside the exclusions can differ from main on the sources branch, and the
-  sources branch is the only place this path pushes.
-- So a fifth output is no longer a hard stop: it is reset to main's state and the collection is saved.
-- The `git diff --quiet` assertion stays word for word, as the check that the restore ran. #82's
-  "restore silently no-ops" shim case still trips it. Only its annotation text changes.
-- **The new risk:** a future collector writing under `public/data` outside `rpi/` and `registry.json` would be
-  reset on a gated run's branch. Today that case is a hard stop that loses the whole collection, so C still loses
-  less. Optional guard (reviewer's call): a harness check that every `*_OUT_DIR` / `*_PATH` under `PUBLIC_DATA_DIR`
-  in `collect/common.py` is written by build.py or is one of the two exclusions.
+**This changes #82's behaviour.** A fifth build output is no longer a hard stop that loses the collection. It is
+reset to main's state, and the collection is saved. What #82's rule protects still holds by construction: nothing
+outside `rpi/` and `registry.json` can differ from main on the sources branch, and main is pushed only after build
+and validate pass. The `git diff --quiet` assertion stays word for word, as the check that the restore really ran.
+- **Annotations.** The assertion's (line 324) and the success annotation's (line 340) hand-written lists of build
+  outputs become "everything under public/data except rpi/ and registry.json", so no list is left to go stale. The
+  success annotation gains "Delete $branch once the failure is triaged; nothing else deletes it."
+- **Review reports.** The two `data/*-review.json` reports stay per-file and tolerant. A future rename of one would
+  reach the sources branch as the run's copy, unseen by the assertion. That is the branch only, never main: low risk,
+  noted in a comment.
+- **Collector guard.** A static test (new file, `tests/public_data_writers_test.py`): every path under
+  `PUBLIC_DATA_DIR` that `collect/` writes is under `RPI_OUT_DIR` or is `REGISTRY_PATH`. A future collector
+  writing elsewhere in `public/data` would be reset silently on a gated run's branch; this makes CI red instead.
 
-**Recommendation: C.** It is the only option that fixes the rename #90 describes, and it removes a list someone must
-edit by hand. Nothing unvalidated reaches a branch. The cost is changing #82's agreed `fifth-output` behaviour from
-"nothing pushed" to "collection saved, fifth output not on the branch". I am asking for that explicitly. If
-reviewers want the hard stop kept, the fallback is A, with the plan stating plainly that it does not cover a mid-run
-rename.
-
-**The smaller item, either way.** The gate's `::error` (line 340) gains: "Delete $branch once the failure is
-triaged; nothing else deletes it."
-
-## Reproduction and tests (offline, in the existing harness)
-`tests/refresh_commit_step_test.py` already runs the step's shell, taken verbatim from `refresh.yml`, under `bash -e`
-in a scratch bare `origin` and clone, with a stand-in `python` for build and validate driven by marker files. I add markers `CAMPS_RENAMED` (the stand-in writes `public/data/camps-index.json` instead of `camps/index.json`) and
-`CAMPS_REMOVED` (it writes neither). The cases:
-1. **`renamed-output`.** Main, mid-run, commits `CAMPS_RENAMED` and renames the file (the issue's measured rename),
-   and the run's validate fails.
-   - Expect: main unchanged; one `refresh-sources/*` branch holding the run's sources; the branch's `public/data`
+## Tests (offline, in `tests/refresh_commit_step_test.py`, which runs the step's shell verbatim in scratch repos)
+1. **`renamed-output`, the test that fails on main.** Main, mid-run, renames `camps/index.json` to
+   `camps-index.json`, and its stand-in build writes the new name; the run's validate fails.
+   - Expect: main unchanged; branch `refresh-sources/123-1-1` with the run's sources and RPI table; its `public/data`
      byte-equal to main's apart from `rpi/` and `registry.json`.
-   - On main's `refresh.yml` today: no branch, and the output says `could not then be restored`. This is the
-     test that fails on main.
-2. **`removed-output`.** Main deletes `camps/index.json` and commits `CAMPS_REMOVED`. Same expectations, and it
-   fails on main the same way.
-3. **`fifth-output`, changed** (only if C is approved). Expect the collection on a branch with no
-   `public/data/extra`. A control run of main's step shows today's hard stop.
-4. **The new annotation sentence,** asserted in the `build-gate` case.
+   - On main today: no branch, `could not then be restored`.
+2. **`removed-output`, a guard, not a failing test.** Main deletes `camps/index.json` and stops writing it. Passes on
+   main and on the branch: the collection is on `refresh-sources/123-1-unpublished` and main is unchanged.
+3. **`restore-control`, replacing the list/fit controls.** C's checkout is replaced by `true` (the `rm` still runs).
+   The step must stop on `does not match` with nothing pushed. This keeps the only test that the assertion catches a
+   restore that did nothing.
+4. **Repointed checks.** `list-restore`, `fit-restore` and `tests/trends_test.py:529` assert C's restore lines
+   instead of their own deleted lines. Their absent / main's-copy / published checks stay.
+5. **`fifth-output`, changed.** The collection is on a branch with no `public/data/extra`, and the error annotation
+   is the ordinary gate one, not `does not match`.
+6. **`build-gate`** also asserts the new "Delete ... once the failure is triaged" sentence.
 
-Each new case runs first against main's step (`REFRESH_YML=<main copy>`) to show it failing, then on the branch.
-Every existing case (#82, #117, #132, #235, #321) must pass unchanged, then the full suites via `run-tests`. Out of scope: #89 (README), #86 (`always()` on the fail step), any retention job for `refresh-sources/*`.
+**Order of work.** First the rename test (shown failing on main's step), then the fix and the repointed checks, then
+the full harness and the full suites via `run-tests`.
+
+**Out of scope.** #89 (README), #86 (`always()` on the fail step), and any retention job for `refresh-sources/*`.
