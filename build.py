@@ -199,6 +199,12 @@ LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", 
 REVIEWED_UNPUBLISHED = {
     "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
 }
+# Long-standing programs published in a division other than D1, each reviewed (issue #126, F-b): the anchor saw only
+# absence, so relabelling long-standing D1 programs (still published, now in D2) passed while they left everything
+# scoped to D1. slug -> (division, why). A real reclassification is a one-line edit here, in its own reviewed PR.
+REVIEWED_RECLASSIFIED = {
+    "saint-francis": ("D3", "issue #94: Saint Francis left Division I for Division III and followed D3 into publication"),
+}
 # The fixture is the anchor, so it is pinned too (issue #126, F-a): a fixture cut short with the same programs
 # unpublished would otherwise pass. Its program count and the SHA-256 of its sorted slugs, one per line. The fixture
 # records the registry before #100 and never changes; if it ever must, these two lines change in the same reviewed PR.
@@ -228,6 +234,13 @@ def check_membership_anchor(registry: dict) -> bool:
     for slug in sorted(set(REVIEWED_UNPUBLISHED) - unpublished):
         print(f"MEMBERSHIP {slug}: listed in build.REVIEWED_UNPUBLISHED but published again - remove it from that list")
         ok = False
+    division = {p["slug"]: p.get("division") for p in published_programs(registry)}
+    for slug in sorted(long_standing & set(division)):
+        want = REVIEWED_RECLASSIFIED.get(slug, ("D1", ""))[0]
+        if division[slug] != want:
+            print(f"MEMBERSHIP {slug}: a long-standing program is published as {division[slug]}, not {want} - if this is a "
+                  f"real reclassification, add it to build.REVIEWED_RECLASSIFIED in a reviewed PR; otherwise the registry is wrong")
+            ok = False
     return ok
 
 
