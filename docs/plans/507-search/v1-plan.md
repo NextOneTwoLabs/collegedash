@@ -178,7 +178,7 @@ measurements.
 ### PR 1: the engine, the frozen fixture and the judged set (not visible)
 
 What changes
-- `public/index.html`: `homeSearch(campRows, raw)` returning `{ sections, programsHref, enterTarget, message }`, in
+- `public/index.html`: `homeSearch(campRows, raw)` returning `{ typed, pq, camp, idaho, order, programs: { hits, rows, n, place, href }, camps: { all, shown, n } | null, enter, message }` (as built in PR 1), in
   its own banner block so tests can slice it. It reads the global `S.index`, as `searchMatches` and the place memo do
   (1173-1175); the caller (and every test) sets `S.index` first. `campRows` are `campsData(...).all`, already cut to
   upcoming. Plus `campsData(idx, doc, today = todayLocal())`. No caller on the page yet; no visible change.
