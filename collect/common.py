@@ -383,6 +383,7 @@ _gates: dict[str, _HostGate] = {}
 _gates_lock = threading.Lock()
 _sending = threading.local()   # the request this thread is sending: .gate, .sent_at
 _retry = threading.local()     # fetch()'s attempt number (1-based), so the gate can scale a backoff
+_stop_probe = threading.local()  # .host: the host this thread is probing (issue #108 A), so its own hops are let through
 
 # A caller-scoped host veto (issue #284). A caller that must never send a request to certain hosts -
 # camps, for the camp hosts that refused it with a 403/429 - installs a guard with host_guard() around
@@ -408,6 +409,91 @@ def host_guard(guard):
         yield
     finally:
         _host_guard.guard = prev
+
+
+# ---------- per-run host stop (issue #108 A) ----------
+# A host that keeps failing is stopped for the rest of the run, so one sick host (a shared one like SoccerWire, or any
+# program's own site) cannot hold every worker on its gate for hours. fetch() records, per host, each fetch that gave
+# up after its retries on a retry status (429/5xx) or a network error; any success resets the count. Other outcomes
+# (a 404, a robots denial, camps' HostRefused, a cache hit) are no verdict either way. The host is stopped once
+# STOP_FAILS such fetches have happened in a row AND STOP_MIN_SECONDS have passed since the first of them, so a short
+# blip, which ends in a success, never trips it. While stopped, a fetch is refused with HostStopped before the gate:
+# nothing is sent, nothing waits for the gap, and the gate's last-request stamp does not move. After
+# STOP_COOLDOWN_SECONDS exactly one caller is let through as a probe: its success reopens the host, its failure stops
+# the host for another cooldown, and anything else frees the slot for the next caller.
+# HostStopped is a FetchError, so a collector that catches FetchError for an optional page (bios, a camp link) carries
+# on and saves what it has, as it does today when a host fails; one that does not catch it ends as a skip.
+STOP_FAILS = int(os.environ.get("COLLEGEDASH_STOP_FAILS", "5"))
+STOP_MIN_SECONDS = float(os.environ.get("COLLEGEDASH_STOP_MIN_SECONDS", "600"))
+STOP_COOLDOWN_SECONDS = float(os.environ.get("COLLEGEDASH_STOP_COOLDOWN_SECONDS", "300"))
+_stop_clock = time.monotonic  # tests move a fake clock
+
+
+class HostStopped(FetchError):
+    """A fetch refused because its host is stopped for this run (issue #108 A). Nothing was sent."""
+
+    def __init__(self, host: str, url: str):
+        super().__init__(f"host stopped: {host} (it kept failing this run; nothing was sent to {redact(url)})",
+                         final_url=url)
+        self.host = host
+
+
+class _StopState:
+    __slots__ = ("fails", "first_at", "until", "probing", "stops", "refused")
+
+    def __init__(self) -> None:
+        self.fails = 0
+        self.first_at: float | None = None
+        self.until: float | None = None   # stopped while set; probe allowed once the clock passes it
+        self.probing = False
+        self.stops = 0                    # how many times this run it was stopped (a failed probe counts again)
+        self.refused = 0                  # fetches refused unsent
+
+
+_stops: dict[str, _StopState] = {}
+_stops_lock = threading.Lock()
+
+
+def _stop_admit(host: str, url: str) -> bool:
+    """Before a live request: raise HostStopped if `host` is stopped; True when this caller is the probe."""
+    with _stops_lock:
+        st = _stops.get(host)
+        if st is None or st.until is None:
+            return False
+        if st.probing or _stop_clock() < st.until:
+            st.refused += 1
+            raise HostStopped(host, url)
+        st.probing = True
+        return True
+
+
+def _stop_verdict(hosts, ok: bool | None, probe: bool) -> None:
+    """After a live fetch: True = it succeeded, False = it gave up on a retry status or a network error, None = no
+    verdict. Always called (try/finally), so a probe slot is freed whatever the probe ended in."""
+    now = _stop_clock()
+    with _stops_lock:
+        for i, host in enumerate(dict.fromkeys(h for h in hosts if h)):
+            st = _stops.setdefault(host, _StopState())
+            if probe and i == 0:
+                st.probing = False
+            if ok is True:
+                if st.until is not None:
+                    log(f"host stop: {host} answered again; reopened")
+                st.fails, st.first_at, st.until = 0, None, None
+            elif ok is False:
+                st.fails += 1
+                st.first_at = now if st.first_at is None else st.first_at
+                if st.until is not None or (st.fails >= STOP_FAILS and now - st.first_at >= STOP_MIN_SECONDS):
+                    st.until = now + STOP_COOLDOWN_SECONDS
+                    st.stops += 1
+                    log(f"host stop: {host} failed {st.fails} fetches in a row over {now - st.first_at:.0f}s; "
+                        f"stopped, one probe after {STOP_COOLDOWN_SECONDS:.0f}s")
+
+
+def stopped_hosts() -> dict[str, dict]:
+    """Every host stopped at least once this run: {host: {"stops": n, "refused": n}}."""
+    with _stops_lock:
+        return {h: {"stops": st.stops, "refused": st.refused} for h, st in sorted(_stops.items()) if st.stops}
 
 
 def _gate(host: str) -> _HostGate:
@@ -497,6 +583,12 @@ class _PoliteAdapter(HTTPAdapter):
         self.poolmanager.pool_classes_by_scheme = {"http": _StampingHTTPPool, "https": _StampingHTTPSPool}
 
     def send(self, request, **kwargs):
+        hop = _host(request.url)
+        with _stops_lock:  # issue #108 A: a hop onto a stopped host is refused before its gate, unsent
+            st = _stops.get(hop)
+            if st is not None and st.until is not None and getattr(_stop_probe, "host", None) != hop:
+                st.refused += 1
+                raise HostStopped(hop, request.url)
         guard = getattr(_host_guard, "guard", None)
         robots_host = _robots_check(request.url)  # issue #101: before the gate, on every hop; None = not checked
         with _polite(request.url) as g:
@@ -929,48 +1021,66 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
     if json_body is not None:
         hdrs.setdefault("Content-Type", "application/json")
 
-    last_err: Exception | None = None
-    for attempt in range(retries):
-        _retry.attempt = attempt + 1  # the gate scales the answering host's hold by it
-        try:
-            with _session() as s:  # what requests.request() does, plus the per-host gate on every hop
-                resp = s.request(method, url, headers=hdrs, data=body_str, timeout=timeout)
-        except requests.RequestException as e:  # network; the host that failed is already held
-            last_err = e
-            time.sleep(_backoff_seconds(None))  # and this thread pauses too, as it always did
-            continue
-        finally:
-            _retry.attempt = 1
-        if resp.status_code in allow_status:
-            meta = {"url": url, "status": resp.status_code, "fetchedAt": now_iso(), "fromCache": False,
-                    "contentType": resp.headers.get("Content-Type", ""), "finalUrl": resp.url}
-            # temp file + os.replace, like write_json: a reader never sees a half-written body
-            fd, tmp = tempfile.mkstemp(dir=CACHE_DIR, prefix=key + ".", suffix=".tmp")
+    host = _host(url)
+    probe = _stop_admit(host, url)  # issue #108 A: after the cache (a hit is served whatever the host's state), before the gate
+    verdict, failed_host = None, host
+    if probe:
+        _stop_probe.host = host
+    try:
+        last_err: Exception | None = None
+        for attempt in range(retries):
+            last = attempt + 1 == retries
+            _retry.attempt = attempt + 1  # the gate scales the answering host's hold by it
             try:
-                with os.fdopen(fd, "wb") as raw, gzip.GzipFile(filename="", mode="wb", compresslevel=6,
-                                                               fileobj=raw) as f:
-                    f.write(resp.content)
-                os.replace(tmp, gz_path)
-            except BaseException:
-                with contextlib.suppress(OSError):
-                    os.remove(tmp)
-                raise
-            if os.path.exists(body_path):
-                os.remove(body_path)
-            write_json(meta_path, meta)
-            return resp.content, meta
-        if resp.status_code in RETRY_STATUSES:
-            last_err = FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code,
-                                  final_url=resp.url)
-            # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
-            # gate already holds the host that answered for this long; this thread pauses with it.
-            _retry.attempt = attempt + 1
-            time.sleep(_backoff_seconds(resp.status_code))
-            _retry.attempt = 1
-            continue
-        raise FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code, final_url=resp.url)
-    raise FetchError(f"giving up after {retries} attempts: {redact(last_err)}",  # last_err names the URL
-                     status=getattr(last_err, "status", None), final_url=getattr(last_err, "final_url", None))
+                with _session() as s:  # what requests.request() does, plus the per-host gate on every hop
+                    resp = s.request(method, url, headers=hdrs, data=body_str, timeout=timeout)
+            except requests.RequestException as e:  # network; the host that failed is already held
+                last_err = e
+                if getattr(e, "request", None) is not None and getattr(e.request, "url", None):
+                    failed_host = _host(e.request.url)
+                if not last:  # issue #108 3b: nothing to wait for after the last attempt
+                    time.sleep(_backoff_seconds(None))  # and this thread pauses too, as it always did
+                continue
+            finally:
+                _retry.attempt = 1
+            if resp.status_code in allow_status:
+                meta = {"url": url, "status": resp.status_code, "fetchedAt": now_iso(), "fromCache": False,
+                        "contentType": resp.headers.get("Content-Type", ""), "finalUrl": resp.url}
+                # temp file + os.replace, like write_json: a reader never sees a half-written body
+                fd, tmp = tempfile.mkstemp(dir=CACHE_DIR, prefix=key + ".", suffix=".tmp")
+                try:
+                    with os.fdopen(fd, "wb") as raw, gzip.GzipFile(filename="", mode="wb", compresslevel=6,
+                                                                   fileobj=raw) as f:
+                        f.write(resp.content)
+                    os.replace(tmp, gz_path)
+                except BaseException:
+                    with contextlib.suppress(OSError):
+                        os.remove(tmp)
+                    raise
+                if os.path.exists(body_path):
+                    os.remove(body_path)
+                write_json(meta_path, meta)
+                verdict, failed_host = True, _host(resp.url)
+                return resp.content, meta
+            if resp.status_code in RETRY_STATUSES:
+                last_err = FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code,
+                                      final_url=resp.url)
+                failed_host = _host(resp.url)
+                if not last:  # issue #108 3b
+                    # 429: per-minute quotas (Open-Meteo, api.data.gov) need a real pause, not a token one. The
+                    # gate already holds the host that answered for this long; this thread pauses with it.
+                    _retry.attempt = attempt + 1
+                    time.sleep(_backoff_seconds(resp.status_code))
+                    _retry.attempt = 1
+                continue
+            raise FetchError(f"HTTP {resp.status_code} for {redact(url)}", status=resp.status_code, final_url=resp.url)
+        verdict = False  # gave up on retry statuses or network errors: counts toward the host's stop
+        raise FetchError(f"giving up after {retries} attempts: {redact(last_err)}",  # last_err names the URL
+                         status=getattr(last_err, "status", None), final_url=getattr(last_err, "final_url", None))
+    finally:
+        _stop_probe.host = None
+        # the host asked for first (its probe slot), then the hop that answered or failed, when it is another one
+        _stop_verdict([host, failed_host] if verdict is not None else [host], verdict, probe)
 
 
 def fetch_text(url: str, **kw) -> tuple[str, dict]:

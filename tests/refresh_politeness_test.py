@@ -1038,7 +1038,8 @@ def test_host_stop(tmp: str) -> None:
         with fresh_state(tmp), stop_rules(clock):
             outcomes = []
             for i in range(20):
-                clock.t += 200
+                if i < 5:
+                    clock.t += 200  # the five failures span 800 s; the other 15 come at once, inside the cooldown
                 outcomes.append(try_fetch(stub.url(f"/c/{i}")))
             hits = sum(stub.hits.values())
             ok("FIX a stopped host gets no request: 5 fetches x 3 attempts reach it, the other 15 are refused (main: 60)",
