@@ -16,6 +16,7 @@ Curated fields override machine fields; machines never write curated.json.
 from __future__ import annotations
 
 import datetime as dt
+import hashlib
 import os
 import re
 import urllib.parse
@@ -198,6 +199,17 @@ LONG_STANDING_PATH = os.path.join(common.ROOT, "tests", "fixtures", "registry", 
 REVIEWED_UNPUBLISHED = {
     "mississippi-val": "issue #100: in no NCAA Directory women's soccer list for 2026-27; held",
 }
+# Long-standing programs published in a division other than D1, each reviewed (issue #126, F-b): the anchor saw only
+# absence, so relabelling long-standing D1 programs (still published, now in D2) passed while they left everything
+# scoped to D1. slug -> (division, why). A real reclassification is a one-line edit here, in its own reviewed PR.
+REVIEWED_RECLASSIFIED = {
+    "saint-francis": ("D3", "issue #94: Saint Francis left Division I for Division III and followed D3 into publication"),
+}
+# The fixture is the anchor, so it is pinned too (issue #126, F-a): a fixture cut short with the same programs
+# unpublished would otherwise pass. Its program count and the SHA-256 of its sorted slugs, one per line. The fixture
+# records the registry before #100 and never changes; if it ever must, these two lines change in the same reviewed PR.
+LONG_STANDING_COUNT = 350
+LONG_STANDING_SHA256 = "dc97d1cf4eb3773e46c7a01aaa94b9644b1b478639874fe06382e40b2365a194"
 
 
 def check_membership_anchor(registry: dict) -> bool:
@@ -207,6 +219,12 @@ def check_membership_anchor(registry: dict) -> bool:
         print(f"MEMBERSHIP: cannot read the long-standing program list {LONG_STANDING_PATH}")
         return False
     long_standing = {p["slug"] for p in doc["programs"]}
+    digest = hashlib.sha256("\n".join(sorted(long_standing)).encode("utf-8")).hexdigest()
+    if len(doc["programs"]) != LONG_STANDING_COUNT or len(long_standing) != LONG_STANDING_COUNT or digest != LONG_STANDING_SHA256:
+        print(f"MEMBERSHIP: the long-standing program fixture {LONG_STANDING_PATH} changed: {len(doc['programs'])} programs "
+              f"({len(long_standing)} distinct), expected {LONG_STANDING_COUNT} with build.LONG_STANDING_SHA256 - the anchor "
+              f"cannot be trusted; restore the fixture, or change it and both pins in one reviewed PR")
+        return False
     unpublished = long_standing - {p["slug"] for p in published_programs(registry)}
     ok = True
     for slug in sorted(unpublished - set(REVIEWED_UNPUBLISHED)):
@@ -216,6 +234,13 @@ def check_membership_anchor(registry: dict) -> bool:
     for slug in sorted(set(REVIEWED_UNPUBLISHED) - unpublished):
         print(f"MEMBERSHIP {slug}: listed in build.REVIEWED_UNPUBLISHED but published again - remove it from that list")
         ok = False
+    division = {p["slug"]: p.get("division") for p in published_programs(registry)}
+    for slug in sorted(long_standing & set(division)):
+        want = REVIEWED_RECLASSIFIED.get(slug, ("D1", ""))[0]
+        if division[slug] != want:
+            print(f"MEMBERSHIP {slug}: a long-standing program is published as {division[slug]}, not {want} - if this is a "
+                  f"real reclassification, add it to build.REVIEWED_RECLASSIFIED in a reviewed PR; otherwise the registry is wrong")
+            ok = False
     return ok
 
 
