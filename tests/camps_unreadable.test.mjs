@@ -53,8 +53,10 @@ function loadPage() {
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
     fetch: async url => {
       if (url === '/api/v1/camps' && SERVED_CAMPS) { const body = JSON.stringify(SERVED_CAMPS); return { ok: true, status: 200, async json() { return JSON.parse(body); } }; }
-      if (url !== '/api/v1/programs') return { ok: false, status: 404, async json() { throw new Error('404'); } };
-      const body = fs.readFileSync(path.join(PUBLIC, 'data/programs/index.json'), 'utf8');
+      // #395 PR B (#519): the list views load the slim list at /api/v1/list; the full index stays at /api/v1/programs
+      const rel = url === '/api/v1/list' ? 'data/list/index.json' : url === '/api/v1/programs' ? 'data/programs/index.json' : null;
+      if (!rel) return { ok: false, status: 404, async json() { throw new Error('404'); } };
+      const body = fs.readFileSync(path.join(PUBLIC, rel), 'utf8');
       return { ok: true, status: 200, async json() { return JSON.parse(body); } };
     },
   };
