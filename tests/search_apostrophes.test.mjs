@@ -78,11 +78,13 @@ test('a name with an ʻokina or apostrophe is found by its words typed without t
   assert.equal(top("st. mary's")?.m.score, 95, 'typed with its punctuation, the same');
 });
 
-test('on the committed index: every label carrying such a mark is found by its words typed without it', () => {
+test('on the committed index: every search name carrying such a mark is found by its words typed without it', () => {
   const index = JSON.parse(fs.readFileSync(path.join(PUBLIC, 'data', 'programs', 'index.json'), 'utf8'));
   const A = load(index);
   const labels = [];
-  for (const p of index.programs) for (const l of [p.name, ...(p.searchNames || [])]) if (l && APOS.test(l)) labels.push([p.slug, l]);
+  // the labels search reads (prepareSearch: searchNames, else shortName and name); a full name such as "St. John's University
+  // (New York City)" is not one of them, with or without its apostrophe
+  for (const p of index.programs) for (const l of (p.searchNames || [p.shortName, p.name])) if (l && APOS.test(l)) labels.push([p.slug, l]);
   APOS.lastIndex = 0;
   assert.ok(labels.length >= 20, `fixture: only ${labels.length} labels with an apostrophe-like mark`);
   const missed = [];
