@@ -2839,13 +2839,18 @@ function recsSwitchedOn() {
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   // a control inside the list keeps focus across the redraw below, when it has an id to find it again by
-  const inList = document.activeElement && document.activeElement.id && document.activeElement.closest?.('#app') ? document.activeElement.id : '';
+  const ae = document.activeElement, inList = ae && ae.id && ae.closest?.('#app') ? ae.id : '';
   renderSidebar();
-  // The list is usually drawn before api/status answers: redraw it so a returning visitor's saved preferences are
-  // offered ("Personalization paused · Show recommended") without waiting for the next redraw (#400 polish).
-  if (isProgramsView()) renderList();
   if (typing) $('#q')?.focus();
-  else if (inList) document.getElementById(inList)?.focus();
+  // The list is usually drawn before api/status answers: redraw it so a returning visitor's saved preferences are
+  // offered ("Personalization paused · Show recommended") without waiting for the next redraw (#400 polish). Only
+  // when there are saved preferences to offer: otherwise the redraw would change nothing. renderList is async (it
+  // waits for the index), so focus is put back once it has drawn, and only if the redraw took it (Huatuo r2).
+  if (!isProgramsView() || !recsHasSaved()) return;
+  renderList().then(() => {
+    const now = document.activeElement;
+    if (inList && (!now || now === document.body || now.isConnected === false)) document.getElementById(inList)?.focus();
+  });
 }
 // public/recs.js, once, the first time the panel opens. Rejects if it can't be loaded.
 let recsLibLoading = null;
