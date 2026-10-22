@@ -2735,6 +2735,9 @@ function askSwitchedOn() {
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
+  // The list is usually drawn before api/status answers: redraw it so a returning visitor's saved preferences are
+  // offered ("Personalization paused · Show recommended") without waiting for the next redraw (#400 polish).
+  if (isProgramsView()) renderList();
   if (typing) $('#q')?.focus();
 }
 const askKey = () => { const f = S.filters; return JSON.stringify([f.division, f.conf, f.region, f.classYear, f.cond, f.sort, f.sortDir]); };
@@ -2839,6 +2842,9 @@ function recsSwitchedOn() {
   if (!S.index || S.sidebarTab !== 'programs') return;
   const typing = document.activeElement && document.activeElement.id === 'q';
   renderSidebar();
+  // The list is usually drawn before api/status answers: redraw it so a returning visitor's saved preferences are
+  // offered ("Personalization paused · Show recommended") without waiting for the next redraw (#400 polish).
+  if (isProgramsView()) renderList();
   if (typing) $('#q')?.focus();
 }
 // public/recs.js, once, the first time the panel opens. Rejects if it can't be loaded.
@@ -3168,8 +3174,9 @@ function recsChip(cls, icon, label, text, source) {
 }
 // The source pages the About page already links (#400 polish). Matched on the start of the name, so the fit file's
 // longer climate name ("NOAA NCEI U.S. Climate Normals, 1991-2020 (monthly), nearest station") still links.
-const RECS_SOURCE_LINKS = [['College Scorecard', 'https://collegescorecard.ed.gov/'],
-  ['NOAA', 'https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals']];
+// A short label keeps the line to a line or two at 320 px; the full name stays the link's title and accessible name.
+const RECS_SOURCE_LINKS = [['College Scorecard', 'https://collegescorecard.ed.gov/', ''],
+  ['NOAA', 'https://www.ncei.noaa.gov/products/land-based-station/us-climate-normals', 'NOAA climate normals']];
 // Every source the card's reasons and tradeoff use, once each, as visible text under the chips: a phone has no hover,
 // so the chip titles alone showed nothing there (#400 polish). Screen readers read this line, once.
 function recsSourcesHtml(srcs) {
@@ -3177,7 +3184,8 @@ function recsSourcesHtml(srcs) {
   for (const s of srcs) if (s && s.name && !seen.has(s.name)) seen.set(s.name, s);
   if (!seen.size) return '';
   const one = s => { const link = RECS_SOURCE_LINKS.find(([k]) => s.name.startsWith(k));
-    return `${link ? `<a href="${esc(link[1])}" target="_blank" rel="noopener">${esc(s.name)}</a>` : esc(s.name)}${s.asOf ? `, fetched ${esc(s.asOf)}` : ''}`; };
+    const label = link && link[2] && link[2] !== s.name ? link[2] : '';
+    return `${link ? `<a href="${esc(link[1])}" target="_blank" rel="noopener"${label ? ` title="${esc(s.name)}" aria-label="${esc(s.name)}"` : ''}>${esc(label || s.name)}</a>` : esc(s.name)}${s.asOf ? `, fetched ${esc(s.asOf)}` : ''}`; };
   return `<p class="recs-src">Sources: ${[...seen.values()].map(one).join(' · ')}</p>`;
 }
 // At most three reasons, one tradeoff and every unknown, each built only from its own contribution (recs.js).

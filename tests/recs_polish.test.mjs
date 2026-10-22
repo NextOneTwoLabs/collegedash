@@ -57,11 +57,12 @@ test('1: a visible Sources line names each source of the card\'s reasons and tra
     for (const n of names) {
       const s = srcs.find((x) => x.name === n);
       const shown = line[1].replace(/<[^>]+>/g, '');
-      assert.equal(shown.split(n).length - 1, 1, `${it.slug}: "${n}" once`);
-      if (s.asOf) assert.ok(shown.includes(`${n}, fetched ${s.asOf}`), `${it.slug}: ${n} with its date`);
+      const label = n.startsWith('NOAA') ? 'NOAA climate normals' : n; // the short label (test 5); the full name is its accessible name
+      assert.equal(shown.split(label).length - 1, 1, `${it.slug}: "${label}" once`);
+      if (s.asOf) assert.ok(shown.includes(`${label}, fetched ${s.asOf}`), `${it.slug}: ${label} with its date`);
     }
     if (names.includes('College Scorecard')) assert.ok(line[1].includes('<a href="https://collegescorecard.ed.gov/" target="_blank" rel="noopener">College Scorecard</a>'), 'Scorecard links');
-    if (names.some((n) => n.startsWith('NOAA'))) assert.match(line[1], /<a href="https:\/\/www\.ncei\.noaa\.gov\/products\/land-based-station\/us-climate-normals" target="_blank" rel="noopener">NOAA/);
+    if (names.some((n) => n.startsWith('NOAA'))) assert.match(line[1], /<a href="https:\/\/www\.ncei\.noaa\.gov\/products\/land-based-station\/us-climate-normals" target="_blank" rel="noopener"[^>]*>NOAA/);
     assert.ok(!/<span class="sr-only"> \(source: /.test(card), `${it.slug}: no hidden per-chip source left to read twice`);
     assert.ok(!line[0].includes('sr-only'), 'the line itself is visible text');
   }
