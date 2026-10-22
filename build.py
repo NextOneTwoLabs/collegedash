@@ -2881,13 +2881,14 @@ def check_titles(registry: dict) -> bool:
     fail. Every line that fails starts "TITLES ", which is the prefix tests/seasons_test.py reads as an
     invariant failure, so the notes deliberately do not use it."""
     programs = published_programs(registry)
-    published, notes = set(), []
+    published, notes, unreadable = set(), [], set()
     ok = True
     for program in programs:
         slug, division = program["slug"], program.get("division")
         p, readable = read_profile_checked(os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json"), "TITLES", "its titles cannot be checked")  # #462
         if not readable:
             ok = False
+            unreadable.add(slug)
             continue
         p = p or {}
         pr = p.get("program") or {}
@@ -2902,7 +2903,8 @@ def check_titles(registry: dict) -> bool:
         for year, champion in table.items():
             winners = [q["slug"] for q in programs if q.get("division") == division and title_matches(q, champion, division)]
             if len(winners) == 1:
-                expected.add((division, year, winners[0]))
+                if winners[0] not in unreadable:  # #462: its published years are unknown, so nothing is "missing"
+                    expected.add((division, year, winners[0]))
             elif len(winners) > 1:
                 print(f"TITLES {division} {year}: champion {champion!r} matches more than one published program: {sorted(winners)}")
                 ok = False
