@@ -15,6 +15,11 @@ file - 40 slugs removed, the same 40 unpublished in the registry - made validate
 profiles; only a single `len(pre) == 350` literal in one test suite noticed. The anchor now checks the fixture itself:
 its program count and a SHA-256 of its sorted slugs are pinned in build.py, so an edited fixture fails validate.
 
+F-b, the same review: the anchor only saw absence, so relabelling 40 long-standing D1 programs as D2 (with D2
+onboarded) deleted nothing and passed, while they quietly left everything scoped to D1 (the RPI join, D1 counts).
+The anchor now also requires each published long-standing program to be D1, unless build.REVIEWED_RECLASSIFIED names
+its division and the reviewed reason (Saint Francis, D3, #94).
+
 FIX checks fail on origin/main (where any fixture is taken at its word); CONTROL checks pass on both.
 """
 from __future__ import annotations
@@ -114,6 +119,32 @@ def main(argv=None) -> int:
        getattr(build, "LONG_STANDING_COUNT", None))
     ok("CONTROL reordering the fixture's entries changes nothing (the digest is over sorted slugs)",
        anchor(registry, {**fixture, "programs": list(reversed(fixture["programs"]))})[0])
+
+    print("F-b: relabelling long-standing D1 programs to another division fails validate")
+    d1 = sorted(p["slug"] for p in build.published_programs(registry) if p["slug"] in {q["slug"] for q in fixture["programs"]}
+                and p["division"] == "D1")[:40]
+    ok("CONTROL 40 long-standing D1 programs to relabel", len(d1) == 40, str(len(d1)))
+    relabelled = copy.deepcopy(registry)
+    for p in relabelled["programs"]:
+        if p["slug"] in d1:
+            p["division"] = "D2"
+    ok("CONTROL they stay published (D2 is onboarded), so the absence check cannot see them",
+       set(d1) <= {p["slug"] for p in build.published_programs(relabelled)})
+    result, text = anchor(relabelled)
+    ok("FIX 40 long-standing D1 programs relabelled D2 fail the anchor", result is False, text)
+    ok("FIX ... naming each one and its new division", all(s in text for s in d1) and "D2" in text, text[:300])
+    one = copy.deepcopy(registry)
+    for p in one["programs"]:
+        if p["slug"] == d1[0]:
+            p["division"] = "D3"
+    ok("FIX even one relabelled program fails", anchor(one)[0] is False)
+    by = {p["slug"]: p for p in registry["programs"]}
+    ok("CONTROL a reviewed reclassification passes: saint-francis is D3 (#94) on today's registry",
+       by.get("saint-francis", {}).get("division") == "D3" and anchor(registry)[0])
+    ok("FIX every reviewed reclassification names its division and why",
+       all(isinstance(v, tuple) and len(v) == 2 and v[0] in ("D1", "D2", "D3") and v[1]
+           for v in getattr(build, "REVIEWED_RECLASSIFIED", {"x": ("D3", "")}).values())
+       if hasattr(build, "REVIEWED_RECLASSIFIED") else False)
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
     if FAILS:
