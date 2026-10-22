@@ -18,7 +18,8 @@ Cases:
   control   the scratch tree with no damage passes validate, so every failure below is the damaged file's
   readers   each reader, called on its own, returns False and names the file instead of raising
   validate  the whole validate run returns False with exactly one "is not readable JSON" line naming the file,
-            and every check after the schema loop still runs
+            no other line names the program (check_titles once printed "is the champion but publishes no title"
+            for the skipped profile), and every check after the schema loop still runs
 """
 
 from __future__ import annotations
@@ -147,6 +148,8 @@ def main(argv=None) -> int:
         ok("FIX validate: exactly one 'is not readable JSON' line, naming the file", len(lines) == 1 and f"{BAD}.json" in lines[0],
            lines or out[-600:])
         ok("FIX validate: every check after the schema loop still ran", called == later, called)
+        others = [line for line in out.splitlines() if BAD in line and "is not readable JSON" not in line]
+        ok("FIX validate: no other line names the unreadable program (no false 'publishes no title')", not others, others[:5])
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed")
