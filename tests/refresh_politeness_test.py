@@ -1166,6 +1166,92 @@ def test_host_stop_report(tmp: str) -> None:
         os.environ.pop("GITHUB_ACTIONS", None)
 
 
+def test_host_stop_queued_workers(tmp: str) -> None:
+    """Issue #108 A (Huatuo's review of 0a240a5d0, REQUIRED 1): workers already waiting on the host's gate when it is
+    stopped send nothing once their turn comes, and their refusals do not move the gate's last-request stamp."""
+    print("host stop (#108 A): workers queued on the gate at trip time send nothing after the stop")
+
+    def always_429(path, n):
+        return 429, {"Content-Type": "text/plain"}, b"x", 0.0
+    stub = Stub("sick", {"/": always_429})
+    try:
+        with fresh_state(tmp), stop_rules(time.monotonic, fails=1, min_seconds=0.0):
+            common.BACKOFF_429_SECONDS = 0.3  # each 429 holds the gate, so the other workers queue behind it
+            tripped = {}
+            real_verdict = common._stop_verdict
+
+            def verdict(hosts, ok_, probe):
+                real_verdict(hosts, ok_, probe)
+                st = common._stops.get(stub.host)
+                if st is not None and st.until is not None and "hits" not in tripped:
+                    tripped["hits"] = sum(stub.hits.values())
+                    g = common._gates.get(stub.host)
+                    tripped["last"] = g.last if g else None
+            common._stop_verdict = verdict
+            try:
+                outcomes = []
+                lock = threading.Lock()
+
+                def job(i):
+                    r = try_fetch(stub.url(f"/q/{i}"))
+                    with lock:
+                        outcomes.append(r)
+                run_threads([lambda i=i: job(i) for i in range(12)], workers=12)
+            finally:
+                common._stop_verdict = real_verdict
+            total = sum(stub.hits.values())
+            ok("the host tripped while other workers were still waiting to send", "hits" in tripped and len(outcomes) == 12
+               and tripped["hits"] < 36, f"{tripped} {outcomes}")
+            ok("FIX the workers queued at the trip are refused with HostStopped", outcomes.count("HostStopped") >= 8, str(outcomes))
+            ok("FIX no request reaches the host after it is stopped (0a240a5d0: 11 of 12 workers' requests)",
+               total == tripped.get("hits"), f"{total} requests, {tripped.get('hits')} when it tripped")
+            g = common._gates.get(stub.host)
+            ok("FIX a refusal inside the gate leaves its last-request stamp where the last real request put it",
+               g is not None and g.last == tripped.get("last"), f"{getattr(g, 'last', None)} vs {tripped.get('last')}")
+    finally:
+        stub.close()
+
+
+def test_host_stop_collector_skip(tmp: str) -> None:
+    """Issue #108 A (REQUIRED 2): a real collector whose fetch hits a stopped host is recorded as a skip, not a
+    failure: collegedash's `except common.HostStopped` branch, run end to end."""
+    print("host stop (#108 A): a collector that hits a stopped host is a skip, and its source is not rewritten")
+    import collegedash
+    stub = Stub("soccerwire")
+    saved_programs = common.PROGRAMS_DIR
+    clock = FakeClock()
+    try:
+        with fresh_state(tmp), stop_rules(clock):
+            common.PROGRAMS_DIR = tempfile.mkdtemp(dir=tmp)
+            st = common._StopState()
+            st.until, st.stops = clock.t + 300, 1  # stopped, inside its cooldown
+            common._stops[stub.host] = st
+            registry = {"sources": {"soccerwire": {"elasticProxy": stub.url("/es"), "directory": stub.url("/dir")}},
+                        "season": {"gradYears": [2027]}}
+            program = {"slug": "hs-test", "ids": {"soccerwireTeam": "hs-test-women"}}
+            with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                r, entry = collegedash.collect_one("soccerwire", program, registry)
+            want = f"host stopped: {stub.host}"
+            ok("FIX the collector's outcome is skipped, naming the stopped host",
+               r.get("outcome") == "skipped" and r.get("error") == want, str(r))
+            ok("FIX its refresh-state entry is ok with the skip reason, not a failure",
+               entry is not None and entry.get("ok") is True and entry.get("skipped") == want, str(entry))
+            ok("nothing was sent and the source was not written",
+               not stub.hits and not os.path.exists(common.source_path("hs-test", "commitments.soccerwire")), str(stub.hits))
+            out = io.StringIO()
+            real_one = common.update_refresh_state
+            common.update_refresh_state = lambda key, info: None
+            try:
+                with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+                    code = collegedash.report_refresh([r], threshold=0.05, mode="daily")
+            finally:
+                common.update_refresh_state = real_one
+            ok("FIX the run is not red: report_refresh exits 0", code == 0, out.getvalue()[-300:])
+    finally:
+        common.PROGRAMS_DIR = saved_programs
+        stub.close()
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -1178,7 +1264,7 @@ def main() -> int:
              test_the_gap_starts_when_the_request_is_sent, test_body_read_inside_gate, test_backoff,
              test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
              test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
-             test_host_stop, test_host_stop_report]
+             test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
