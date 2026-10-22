@@ -713,6 +713,11 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
     stale = not_recorded()
     not_started = sorted({r["program"] for r in results if r["outcome"] == "skipped" and r.get("error") == TIME_BUDGET})
     robots_skips = sum(1 for r in results if r["outcome"] == "skipped" and str(r.get("error", "")).startswith("robots: "))
+    # issue #393: current schedule pages that loaded but gave no game (stored empty). Taken on every run, so the notes
+    # never carry over; one combined warning below, after the failure warnings, so those stay in view.
+    from collect import athletics_site
+    zero = athletics_site.take_zero_games()
+    zero_text = ", ".join(f"{s} {y if y is not None else '?'}" for s, y in zero[:20]) + (" …" if len(zero) > 20 else "")
     common.log(f"refresh summary: {total} runs, {ok} ok, {skipped} skipped, {len(failed)} failed "
                f"({share:.1%}, threshold {threshold:.0%}){' - THRESHOLD EXCEEDED' if exceeded else ''}")
     if not_started:
@@ -720,6 +725,9 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
                    f"stored sources kept: {', '.join(not_started[:20])}{' …' if len(not_started) > 20 else ''}")
     for r in failed:
         common.log(f"   {r['program']:24} {r['collector']:10} {r['error'][:120]}")
+    if zero:
+        common.log(f"!! {len(zero)} program(s) stored an empty schedule: the page loaded but gave 0 games "
+                   f"(issue #393): {zero_text}")
     if stale:
         common.log(f"!! refresh-state not recorded for {len(stale)} program(s), "
                    f"{sum(n for _, n, _ in stale)} entries: {', '.join(s for s, _, _ in stale[:20])}"
@@ -743,6 +751,9 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
             print(f"::warning title=refresh::refresh-state was not recorded for {len(stale)} program(s) "
                   f"({sum(n for _, n, _ in stale)} entries). Their published collector status and "
                   f"`refresh --failed` selection are stale until the next run records them.")
+        if zero:
+            print(f"::warning title=athletics schedule::{len(zero)} program(s) stored an empty schedule: the schedule "
+                  f"page loaded but gave 0 games (issue #393): {zero_text}")
         if exceeded:
             print(f"::error title=refresh::{share:.1%} of collector runs failed (threshold {threshold:.0%}); the flow needs attention")
         summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
@@ -754,6 +765,9 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
                 if not_started:
                     f.write(f"**Time budget ({time_budget:g} min) reached:** {len(not_started)} program(s) not started; "
                             f"their stored sources are kept: {', '.join(not_started[:20])}.\n\n")
+                if zero:
+                    f.write(f"**{len(zero)} program(s) stored an empty schedule** (the page loaded but gave 0 games, "
+                            f"issue #393): {zero_text}.\n\n")
                 if stale:
                     f.write(f"**refresh-state not recorded for {len(stale)} program(s)** "
                             f"({sum(n for _, n, _ in stale)} entries): {', '.join(s for s, _, _ in stale[:20])}. "
