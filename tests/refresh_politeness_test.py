@@ -980,6 +980,50 @@ def test_failed_state_write_is_visible(tmp: str) -> None:
         os.environ.pop("GITHUB_STEP_SUMMARY", None)
 
 
+# ---------- issue #108 B: one gate per server ----------
+
+def test_one_gate_per_server(tmp: str) -> None:
+    """Issue #108 B: www.x, x and x:443 are one server, so they share one gate, one backoff hold and one Crawl-delay
+    (the larger one asked). Nothing is fetched: _polite and _use_crawl_delay are driven directly."""
+    print("one gate per server (#108 B): www/bare/:443 share the gap, holds and Crawl-delay")
+    key = getattr(common, "_gate_key", lambda h: h)  # main has no key: every name is its own
+    with fresh_state(tmp):
+        with common._polite("https://www.alias-a.test/one"):
+            pass
+        t0 = time.monotonic()
+        with common._polite("https://alias-a.test:443/two"):
+            waited = time.monotonic() - t0
+        ok("FIX www.x then x:443 waits the gap (main: a second gate, no wait)", waited >= GAP - TOL, f"{waited:.3f}s")
+
+        with common._polite("https://alias-b.test/one") as g:
+            common._hold(g, 0.6)
+        t0 = time.monotonic()
+        with common._polite("https://www.alias-b.test/two"):
+            waited = time.monotonic() - t0
+        ok("FIX a backoff held on x also holds www.x", waited >= 0.6 - TOL, f"{waited:.3f}s")
+
+        with common._polite("https://alias-c.test/one"):
+            pass
+        t0 = time.monotonic()
+        with common._polite("https://other-c.test/one"):
+            waited = time.monotonic() - t0
+        ok("another server is not held by it", waited < GAP / 2, f"{waited:.3f}s")
+
+        for first, second in (("www.delay-a.test", "delay-a.test"), ("delay-b.test", "www.delay-b.test")):
+            common._robots_delay[first] = 9.0
+            common._use_crawl_delay(first)
+            common._robots_delay[second] = 4.0
+            common._use_crawl_delay(second)
+            got = common._host_delay.get(key(second))
+            ok(f"FIX Crawl-delays of 9 s ({first}) and 4 s ({second}) leave 9 s on the server, whichever is read last",
+               got == 9.0, str(got))
+        common._robots_delay.clear()
+    with fresh_state(tmp):
+        common.set_robots_txt("www.exact.test", "User-agent: *\nDisallow: /\n")
+        ok("the robots.txt verdicts stay per exact host (RFC 9309 scopes robots.txt to the authority)",
+           "www.exact.test" in common._robots and "exact.test" not in common._robots, str(sorted(common._robots)))
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -991,7 +1035,8 @@ def main() -> int:
     cases = [test_sequential_unchanged, test_gap_overlap_redirect_crawl_delay, test_gap_under_cpu_load,
              test_the_gap_starts_when_the_request_is_sent, test_body_read_inside_gate, test_backoff,
              test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
-             test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible]
+             test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
+             test_one_gate_per_server]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]

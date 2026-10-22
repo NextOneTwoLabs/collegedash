@@ -64,7 +64,7 @@ def ok(name: str, cond: bool, detail: str = "") -> bool:
 
 def seed(text: str | None) -> None:
     """Install `text` as HOST's robots.txt and clear any Crawl-delay left by an earlier case."""
-    common._host_delay.pop(HOST, None)
+    common._host_delay.pop(common._gate_key(HOST), None)
     common.set_robots_txt(HOST, text)
 
 
@@ -157,14 +157,14 @@ def test_resolution() -> None:
        common.robots_allowed(u("/private/x")) is True)
     ok("paths neither group names are allowed", common.robots_allowed(u("/roster")) is True)
     ok("our Crawl-delay wins over the '*' one",
-       common._host_delay.get(HOST) == 9.0, common._host_delay.get(HOST))
+       common._host_delay.get(common._gate_key(HOST)) == 9.0, common._host_delay.get(common._gate_key(HOST)))
 
     seed(STAR_ONLY)
     ok("'*' still applies when no group names us",
        common.robots_allowed(u("/private/x")) is False)
     ok("'*' allowance still applies", common.robots_allowed(u("/roster")) is True)
-    ok("'*' Crawl-delay still applies", common._host_delay.get(HOST) == 4.0,
-       common._host_delay.get(HOST))
+    ok("'*' Crawl-delay still applies", common._host_delay.get(common._gate_key(HOST)) == 4.0,
+       common._host_delay.get(common._gate_key(HOST)))
 
     seed(STAR_BANS_US_ALLOWED)
     ok("an exception written for us is honoured", common.robots_allowed(u("/roster")) is True)
@@ -175,8 +175,8 @@ def test_resolution() -> None:
 
     # A Crawl-delay below MIN_GAP_SECONDS must not speed us up.
     seed("User-agent: CollegeDashBot\nCrawl-delay: 0.1\n")
-    ok("a tiny Crawl-delay does not lower the floor", HOST not in common._host_delay,
-       common._host_delay.get(HOST))
+    ok("a tiny Crawl-delay does not lower the floor", common._gate_key(HOST) not in common._host_delay,
+       common._host_delay.get(common._gate_key(HOST)))
 
     seed(None)
 
