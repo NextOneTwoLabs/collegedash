@@ -46,7 +46,7 @@ function makeEl(name, extra = {}) {
     classList: { add: (...c) => c.forEach(x => classes.add(x)), remove: (...c) => c.forEach(x => classes.delete(x)), contains: c => classes.has(c),
       toggle: (c, f) => { const on = f === undefined ? !classes.has(c) : !!f; on ? classes.add(c) : classes.delete(c); return on; } },
     addEventListener(type, fn) { (listeners[type] ||= []).push(fn); }, removeEventListener() { },
-    querySelector: () => null, querySelectorAll: () => [], closest: () => null, matches: () => false, contains: () => false,
+    querySelector: () => makeEl(`${name} child`), querySelectorAll: () => [], closest: () => null, matches: () => false, contains: () => false,
     scrollIntoView() { }, focus() { FOCUS.el = name; }, blur() { if (FOCUS.el === name) FOCUS.el = null; },
   };
 }
