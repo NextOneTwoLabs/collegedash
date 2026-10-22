@@ -413,8 +413,10 @@ def host_guard(guard):
 
 # ---------- per-run host stop (issue #108 A) ----------
 # A host that keeps failing is stopped for the rest of the run, so one sick host (a shared one like SoccerWire, or any
-# program's own site) cannot hold every worker on its gate for hours. fetch() records, per host, each fetch that gave
-# up after its retries on a retry status (429/5xx) or a network error; any success resets the count. Other outcomes
+# program's own site) cannot hold every worker on its gate for hours. The state is kept per server, by _gate_key (issue
+# #108 B): www.x, x and x:443 are stopped, counted and probed as one; robots.txt verdicts stay per exact host.
+# fetch() records, per server, each fetch that gave up after its retries on a retry status (429/5xx) or a network
+# error; any success resets the count. Other outcomes
 # (a 404, a robots denial, camps' HostRefused, a cache hit) are no verdict either way. The host is stopped once
 # STOP_FAILS such fetches have happened in a row AND STOP_MIN_SECONDS have passed since the first of them, so a short
 # blip, which ends in a success, never trips it. While stopped, a fetch is refused with HostStopped before the gate:
@@ -455,7 +457,8 @@ _stops_lock = threading.Lock()
 
 
 def _stop_admit(host: str, url: str) -> bool:
-    """Before a live request: raise HostStopped if `host` is stopped; True when this caller is the probe."""
+    """Before a live request: raise HostStopped if `host`'s server is stopped; True when this caller is the probe."""
+    host = _gate_key(host)  # issue #108 B's key: www.x, x and x:443 are one server, one stop, one probe slot
     with _stops_lock:
         st = _stops.get(host)
         if st is None or st.until is None:
@@ -473,7 +476,7 @@ def _stop_verdict(hosts, ok: bool | None, probe: bool) -> None:
     whatever the probe ended in); the last is the hop that answered or failed. A success clears every one of them (the
     origin answered too, with a redirect); a failure counts only against the last, the host that actually failed."""
     now = _stop_clock()
-    hosts = list(dict.fromkeys(h for h in hosts if h))
+    hosts = list(dict.fromkeys(_gate_key(h) for h in hosts if h))  # per server (#108 B's key)
     with _stops_lock:
         if probe and hosts and hosts[0] in _stops:
             st = _stops[hosts[0]]
@@ -499,6 +502,7 @@ def _stop_verdict(hosts, ok: bool | None, probe: bool) -> None:
 def _stop_refuse_hop(hop: str, url: str) -> None:
     """Raise HostStopped if `hop` is stopped, unless this thread is that host's probe. Checked before a hop's gate and
     again inside it, after the wait, so a worker that was queued on the gate when the host tripped sends nothing."""
+    hop = _gate_key(hop)  # per server (#108 B's key), as fetch() records it
     with _stops_lock:
         st = _stops.get(hop)
         if st is not None and st.until is not None and getattr(_stop_probe, "host", None) != hop:
@@ -507,7 +511,7 @@ def _stop_refuse_hop(hop: str, url: str) -> None:
 
 
 def stopped_hosts() -> dict[str, dict]:
-    """Every host stopped at least once this run: {host: {"stops": n, "refused": n}}."""
+    """Every server stopped at least once this run, by #108 B's key: {host: {"stops": n, "refused": n}}."""
     with _stops_lock:
         return {h: {"stops": st.stops, "refused": st.refused} for h, st in sorted(_stops.items()) if st.stops}
 
@@ -552,7 +556,7 @@ def _polite(url: str):
     with g.lock:
         # issue #108 A: the host may have been stopped while this thread waited for the lock, or (below) during its
         # own wait. Refused here, before anything is sent and before the try, so the gate's last stamp does not move.
-        _stop_refuse_hop(_host(url), url)
+        _stop_refuse_hop(host, url)
         wait_until = g.not_before
         if g.last is not None:
             gap = max(MIN_GAP_SECONDS, _host_delay.get(host, 0.0)) + random.uniform(0, JITTER_SECONDS)
@@ -560,7 +564,7 @@ def _polite(url: str):
         delay = wait_until - time.monotonic()
         if delay > 0:
             time.sleep(delay)
-            _stop_refuse_hop(_host(url), url)
+            _stop_refuse_hop(host, url)
         _sending.gate, _sending.sent_at = g, None
         try:
             yield g
@@ -1061,7 +1065,7 @@ def _fetch_locked(url, key, body_str, *, method, headers, json_body, max_age_hou
     probe = _stop_admit(host, url)  # issue #108 A: after the cache (a hit is served whatever the host's state), before the gate
     verdict, failed_host = None, host
     if probe:
-        _stop_probe.host = host
+        _stop_probe.host = _gate_key(host)  # this probe's own hops on any name of the server are let through
     try:
         last_err: Exception | None = None
         for attempt in range(retries):
