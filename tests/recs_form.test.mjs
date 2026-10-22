@@ -9,8 +9,8 @@
 // What this proves:
 //   - the switch: only api/status {recs: true} shows the entry button. Off ({"local":false}, serve.py's
 //     {"local":true}, no status, or recs given as anything but true) there is no recs markup, and opening does
-//     nothing. The Worker answers {"local":false} byte for byte unless RECS_ENABLED is exactly "true", and
-//     wrangler.toml keeps it "false".
+//     nothing. The Worker answers {"local":false} byte for byte unless RECS_ENABLED is exactly "true". What
+//     wrangler.toml sets for production is pinned in tests/recs_launch.test.mjs.
 //   - no extra request: a page load makes exactly the same requests with the switch on and off, and the panel
 //     loads public/recs.js once, on first open, and nothing else (no /api/v1/fit: nothing is ranked yet).
 //   - the panel: a dialog (modal only at phone width), four fieldsets with legends, Skip/Choose, pills with
@@ -79,13 +79,12 @@ test('opening loads public/recs.js once, on first open, and nothing else (no /ap
   assert.ok(!pg.requests.some((u) => /fit/.test(u)));
 });
 
-test('the Worker answers {"local":false} byte for byte unless RECS_ENABLED is exactly "true"; production keeps it off', async () => {
+test('the Worker answers {"local":false} byte for byte unless RECS_ENABLED is exactly "true"', async () => {
   const status = async (env) => (await worker.fetch(new Request('https://college.nextonetwo.com/api/status'), env)).text();
   for (const v of [undefined, 'false', 'TRUE', '1', 'yes', ' true']) assert.equal(await status({ RECS_ENABLED: v }), '{"local":false}', String(v));
   assert.equal(await status({}), '{"local":false}');
   assert.equal(await status({ RECS_ENABLED: 'true' }), '{"local":false,"recs":true}');
-  const toml = fs.readFileSync(path.join(HERE, '..', 'wrangler.toml'), 'utf8');
-  assert.match(toml, /^RECS_ENABLED = "false"$/m, 'wrangler.toml must keep recommendations off in production');
+  // What production sets is pinned in tests/recs_launch.test.mjs (#400 PR 8 part 2, the release).
 });
 
 // ---------- the panel and form ----------
