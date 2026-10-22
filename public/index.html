@@ -1459,12 +1459,29 @@ function isProgramsView() { const v = currentView(); return v === 'list' || v ==
    when it is modal at all. */
 const PHONE_SHEETS = [];
 function phoneSheet({ sheet, labelledBy = null, bodyClass = null, regions, isOpen, onWide }) {
-  let mine = [];
+  let mine = [], active = false;
   const inert = on => {
     mine.forEach(e => { e.inert = false; });
     mine = [];
+    active = !!on;
     if (on) for (const e of regions()) if (e && !e.inert) { e.inert = true; mine.push(e); }
   };
+  /* #477: inert keeps Tab off the page behind the sheet, but past the sheet's last control (or before its first) a
+     browser moves focus out of the document - to <body> or its own toolbar - where the sheet's Escape no longer hears
+     the key. So while the sheet is modal, a Tab or Shift+Tab that leaves focus outside it brings focus back to its
+     first or last control. Checked after the browser has moved focus, so radios, disabled controls and anything else
+     the browser skips are its business; a sheet's own trap (the #400 sheet's) that already kept focus inside wins. */
+  document.addEventListener('keydown', e => {
+    if (!active || e.key !== 'Tab') return;
+    const back = e.shiftKey;
+    setTimeout(() => {
+      const el = $(sheet), at = document.activeElement;
+      if (!active || !el || (at && at !== document.body && el.contains(at))) return;
+      const items = [...el.querySelectorAll('a[href], button, input, select, textarea, [tabindex]')].filter(x =>
+        !x.disabled && x.getAttribute('tabindex') !== '-1' && x.type !== 'hidden' && !x.closest?.('[hidden]') && (!x.getClientRects || x.getClientRects().length > 0));
+      (back ? items[items.length - 1] : items[0])?.focus();
+    }, 0);
+  });
   const modal = on => {
     const el = $(sheet);
     if (el && on) { el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true'); if (labelledBy) el.setAttribute('aria-labelledby', labelledBy); }
