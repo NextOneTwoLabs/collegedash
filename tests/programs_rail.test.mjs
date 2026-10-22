@@ -439,7 +439,8 @@ test('GUARD (passes on main by design): the exact set of live regions - the rail
   const pg = await open({ width: 375, store: { 'cd.filters': { conf: ['D1|ACC'] } } });
   pg.$('#sidebarToggle').onclick();
   const ids = [...HTML.matchAll(/<[^<>]*aria-live="(polite|assertive)"[^<>]*>/g)].map(m => (/id="([\w-]+)"/.exec(m[0]) || [])[1]).sort();
-  // campsStatus is the ID Camps page's own count line (#471), pinned the same way in route_focus
-  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive']);
+  // campsStatus is the ID Camps page's own count line (#471), homeStatus Home's search box's (#507); pinned the same way
+  // in route_focus
+  assert.deepEqual(ids, ['campsStatus', 'feedbackNote', 'homeStatus', 'qStatus', 'recsCount', 'recsStatus', 'recsToast', 'trLive']);
   assert.ok(!/aria-live/.test(pg.$('#sidebar').innerHTML + pg.$('#app').innerHTML), 'a live region drawn by the rail, the sheet or the chips');
 });
