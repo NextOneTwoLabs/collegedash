@@ -99,7 +99,7 @@ function loadPage() {
     location: { hash: '#/', replace(h) { this.hash = h; } }, history: { replaceState() { } },
     matchMedia: () => ({ matches: false }), localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
     innerWidth: 1400, addEventListener() { },
-    fetch: async url => url === '/api/v1/programs'
+    fetch: async url => url === '/api/v1/programs' || url === '/api/v1/list'
       ? { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(INDEX)); } }
       : { ok: false, status: 404, async json() { throw new Error('404'); } },
   };

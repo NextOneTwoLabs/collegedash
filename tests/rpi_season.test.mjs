@@ -50,7 +50,8 @@ function loadPage(files) {
     matchMedia: () => ({ matches: false }), innerWidth: 1400, addEventListener() { },
     localStorage: { getItem: () => null, setItem() { }, removeItem() { } },
     fetch: async url => {
-      const body = files[url.replace(/^\//, '')];
+      const rel = url.replace(/^\//, '');
+      const body = files[rel === 'api/v1/list' ? 'api/v1/programs' : rel];  // #395: a full index at the list URL is read the old way
       return body === undefined ? { ok: false, status: 404, async json() { throw new Error('404'); } }
         : { ok: true, status: 200, async json() { return JSON.parse(JSON.stringify(body)); } };
     },

@@ -80,7 +80,7 @@ test('never sent on visibilitychange, pagehide or a back-forward cache restore; 
 test('the visibilitychange listener only records: hiding and showing the page sends nothing', async () => {
   const p = load({ random: 0, entries: () => [entry()] });
   p.perfLatch(answer('1'));
-  p.perfLoaded('/api/v1/programs');
+  p.perfLoaded('/api/v1/list');
   assert.equal(p.listeners.visibilitychange?.length, 1, 'the block registered its one listener');
   p.clock.now = 5000;
   p.setHidden(true);
@@ -126,7 +126,7 @@ test('latch: the first answer carrying a rate decides, once; sampled when random
 test('rate 1 (the owner\'s decision, #394): every page load is sampled, whatever Math.random gives', async () => {
   for (const random of [0, 0.5, 0.999999]) {
     const p = load({ random, entries: () => [entry()] });
-    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    await visit(p, 'list', '/api/v1/list', 'landing', { rate: '1' });
     assert.equal(p.PERF.sampled, true, String(random));
     assert.equal(p.sent.length, 1, String(random));
     const body = await bodyOf(p.sent[0]);
@@ -161,7 +161,8 @@ test('the About page card and docs/data-api.md say exactly the approved wording,
 
 test('perfRes: only the four measured files, never a path with anything else in it', () => {
   const { perfRes } = load();
-  assert.equal(perfRes('/api/v1/programs'), 'programs');
+  assert.equal(perfRes('/api/v1/programs'), 'programs');  // the full index keeps its own name
+  assert.equal(perfRes('/api/v1/list'), 'list');  // #395: the list view's file
   assert.equal(perfRes('/api/v1/programs/stanford'), 'program');
   assert.equal(perfRes('/api/v1/trends'), 'trends');
   assert.equal(perfRes('/api/v1/camps'), 'camps');
@@ -170,9 +171,9 @@ test('perfRes: only the four measured files, never a path with anything else in 
 
 test('the report: exactly the Worker\'s FIELDS, accepted by the Worker\'s own parser, no URL or slug', () => {
   const { perfBody } = load();
-  const body = perfBody('list', { url: '/api/v1/programs', done: 610 }, 900, 'landing', entry(), 0.1, 'phone');
+  const body = perfBody('list', { url: '/api/v1/list', done: 610 }, 900, 'landing', entry(), 0.1, 'phone');
   assert.deepEqual(Object.keys(body), FIELDS, 'same keys, same order');
-  assert.deepEqual(JSON.parse(JSON.stringify(body)), { v: 1, view: 'list', res: 'programs', device: 'phone', nav: 'landing', cache: 'network', server: 45, wait: 80,
+  assert.deepEqual(JSON.parse(JSON.stringify(body)), { v: 1, view: 'list', res: 'list', device: 'phone', nav: 'landing', cache: 'network', server: 45, wait: 80,
     download: 310, parse: 120, render: 290, first: 900, tx: 171300, size: 1900000, rate: 0.1 });
   const point = pagePoint(JSON.stringify(body), 0.1, new Request('https://college.nextonetwo.com/api/perf'));
   assert.ok(point, 'the Worker accepts what the page sends');
@@ -195,14 +196,14 @@ test('privacy: two profiles of different lengths give identical size fields (0)'
 
 test('cache state from transfer size against body size; nothing measured, nothing sent', () => {
   const { perfBody } = load();
-  const at = e => perfBody('list', { url: '/api/v1/programs', done: 610 }, 900, 'landing', entry(e), 0.1, 'phone');
+  const at = e => perfBody('list', { url: '/api/v1/list', done: 610 }, 900, 'landing', entry(e), 0.1, 'phone');
   assert.equal(at({}).cache, 'network');
   assert.equal(at({ transferSize: 300 }).cache, 'revalidated', 'a 304: headers only');
   assert.equal(at({ transferSize: 0, requestStart: 0 }).cache, 'memory');
   assert.equal(at({ transferSize: 0, requestStart: 0 }).wait, 0);
   assert.equal(at({ serverTiming: undefined }).server, 0, 'no Server-Timing (older Safari): 0');
-  assert.equal(perfBody('list', { url: '/api/v1/programs', done: 610 }, 900, 'landing', undefined, 0.1, 'phone'), null, 'no timing entry: no report');
-  assert.equal(perfBody('compare', { url: '/api/v1/programs', done: 610 }, 900, 'landing', entry(), 0.1, 'phone'), null);
+  assert.equal(perfBody('list', { url: '/api/v1/list', done: 610 }, 900, 'landing', undefined, 0.1, 'phone'), null, 'no timing entry: no report');
+  assert.equal(perfBody('compare', { url: '/api/v1/list', done: 610 }, 900, 'landing', entry(), 0.1, 'phone'), null);
 });
 
 // A page load: the rate arrives, a view's data loads while it renders, the view is drawn.
@@ -218,12 +219,12 @@ async function visit(p, view, url, nav, { rate = '0.1' } = {}) {
 
 test('a sampled load: one report per view kind, at most 3, each right after its view renders', async () => {
   const p = load({ random: 0, entries: () => [entry()] });
-  assert.equal(await visit(p, 'list', '/api/v1/programs', 'landing'), 'rendered', 'the render\'s own result passes through');
+  assert.equal(await visit(p, 'list', '/api/v1/list', 'landing'), 'rendered', 'the render\'s own result passes through');
   assert.equal(p.sent.length, 1);
   assert.equal(p.sent[0].url, '/api/perf');
   assert.equal(p.sent[0].blob.type, 'text/plain');
   assert.equal((await bodyOf(p.sent[0])).nav, 'landing');
-  await visit(p, 'list', '/api/v1/programs', 'in-app');
+  await visit(p, 'list', '/api/v1/list', 'in-app');
   assert.equal(p.sent.length, 1, 'the list once');
   await visit(p, 'profile', '/api/v1/programs/stanford', 'in-app');
   await visit(p, 'profile', '/api/v1/programs/yale', 'in-app');
@@ -234,33 +235,33 @@ test('a sampled load: one report per view kind, at most 3, each right after its 
 
 test('not sampled, rate 0, or data already in memory: nothing is sent', async () => {
   let p = load({ random: 0.5, entries: () => [entry()] });
-  await visit(p, 'list', '/api/v1/programs', 'landing');
+  await visit(p, 'list', '/api/v1/list', 'landing');
   assert.equal(p.sent.length, 0, 'not sampled');
   p = load({ random: 0, entries: () => [entry()] });
-  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '0' });
+  await visit(p, 'list', '/api/v1/list', 'landing', { rate: '0' });
   assert.equal(p.sent.length + p.fetched.length, 0, 'rate 0');
   // in-app: the list's data came in with an earlier view (a profile landing loads the index too), so this list view
   // loaded nothing and has nothing of its own to report
   p = load({ random: 0, entries: () => [entry()] });
   p.perfLatch(answer('0.1'));
-  p.perfLoaded('/api/v1/programs');
+  p.perfLoaded('/api/v1/list');
   p.clock.now += 100;
   await p.perfView('list', Promise.resolve(), 'in-app');
   assert.equal(p.sent.length, 0, 'an in-app view does not report a load from before it started');
 });
 
 test('the landing list, in boot()\'s real order: the index loads before route() runs, and is still reported', async () => {
-  // boot() awaits loadIndex() before route(), so /api/v1/programs has finished before perfView('list', ..., 'landing')
+  // boot() awaits loadIndex() before route(), so /api/v1/list has finished before perfView('list', ..., 'landing')
   // records its start (Bianque, #397). The landing view is the one #395 needs most: it must be reported.
   const p = load({ random: 0, entries: () => [entry()] });
   p.clock.now = 300;
   p.perfLatch(answer('0.1'));
-  p.perfLoaded('/api/v1/programs'); // boot(): loadIndex()
+  p.perfLoaded('/api/v1/list'); // boot(): loadIndex()
   p.clock.now = 420;
   await p.perfView('list', Promise.resolve(), 'landing'); // then route() -> renderList()
   assert.equal(p.sent.length, 1, 'one report for the landing list');
   const body = await bodyOf(p.sent[0]);
-  assert.equal(body.res, 'programs');
+  assert.equal(body.res, 'list');
   assert.equal(body.nav, 'landing');
   assert.ok(body.first > 0, 'with its first render time: ' + body.first);
   assert.equal(body.first, 420);
@@ -271,11 +272,11 @@ test('a view drawn while the page is hidden is not reported, and does not use up
   // Found on the #399 preview: in a background tab the browser holds animation frames until the tab is shown, so the
   // render and first-render times would include the time spent hidden.
   const p = load({ random: 0, hidden: true, entries: () => [entry()] });
-  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  await visit(p, 'list', '/api/v1/list', 'landing', { rate: '1' });
   assert.equal(p.sent.length, 0, 'hidden when drawn: nothing sent');
   assert.equal(p.PERF.sent.size, 0, 'and the list can still be reported later');
   p.setHidden(false);
-  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  await visit(p, 'list', '/api/v1/list', 'in-app', { rate: '1' });
   assert.equal(p.sent.length, 1, 'shown again: the next list view is reported');
 });
 
@@ -284,12 +285,12 @@ test('a slow paint on a visible page is reported, however long: that is the tail
   // seconds. Nothing but a real hide may drop it.
   for (const frameWait of [1000, 1500, 2500]) {
     const p = load({ random: 0, frameWait, entries: () => [entry()] });
-    await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+    await visit(p, 'list', '/api/v1/list', 'landing', { rate: '1' });
     assert.equal(p.sent.length, 1, `two frames of ${frameWait} ms, visible: reported`);
     assert.equal((await bodyOf(p.sent[0])).render, 50 + 2 * frameWait, 'render counts to the drawn frame');
   }
   const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
-  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  await visit(q, 'list', '/api/v1/list', 'landing', { rate: '1' });
   assert.equal((await bodyOf(q.sent[0])).render, 82, 'normal frames (50 + 2 x 16)');
 });
 
@@ -297,24 +298,24 @@ test('a hide between draw and paint drops the report and frees its view kind', a
   let p;
   // the page is hidden as the second frame is requested, and shown again later: the browser held the frame meanwhile
   p = load({ random: 0, frameWait: 16, entries: () => [entry()], duringFrame: n => { if (n === 2) { p.clock.now += 5; p.setHidden(true); p.clock.now += 4000; p.setHidden(false); } } });
-  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  await visit(p, 'list', '/api/v1/list', 'landing', { rate: '1' });
   assert.equal(p.sent.length, 0, 'hidden in between: dropped');
   assert.equal(p.PERF.sent.has('list'), false, 'and the list kind is free again');
   assert.equal(p.PERF.sent.size, 0, 'no slot used');
-  await visit(p, 'list', '/api/v1/programs', 'in-app', { rate: '1' });
+  await visit(p, 'list', '/api/v1/list', 'in-app', { rate: '1' });
   assert.equal(p.sent.length, 1, 'a later list view is reported');
   // a hide before the view was drawn (and long over) does not drop a later view's report
   const q = load({ random: 0, frameWait: 16, entries: () => [entry()] });
   q.clock.now = 100;
   q.setHidden(true);
   q.setHidden(false);
-  await visit(q, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  await visit(q, 'list', '/api/v1/list', 'landing', { rate: '1' });
   assert.equal(q.sent.length, 1, 'an earlier hide is not this view\'s');
 });
 
 test('a report that cannot be measured frees its view kind', async () => {
   const p = load({ random: 0, entries: () => [] }); // no resource timing entry: perfBody gives null
-  await visit(p, 'list', '/api/v1/programs', 'landing', { rate: '1' });
+  await visit(p, 'list', '/api/v1/list', 'landing', { rate: '1' });
   assert.equal(p.sent.length, 0);
   assert.equal(p.PERF.sent.size, 0, 'nothing sent, nothing used up');
 });
@@ -322,7 +323,7 @@ test('a report that cannot be measured frees its view kind', async () => {
 test('transport: sendBeacon, else fetch with keepalive; nothing throws', async () => {
   for (const mode of ['absent', 'false', 'throws']) {
     const p = load({ random: 0, sendBeacon: mode === 'false' ? false : mode, entries: () => [entry()] });
-    await visit(p, 'list', '/api/v1/programs', 'landing');
+    await visit(p, 'list', '/api/v1/list', 'landing');
     assert.equal(p.fetched.length, 1, mode);
     assert.equal(p.fetched[0].url, '/api/perf');
     assert.equal(p.fetched[0].opts.method, 'POST');
@@ -331,12 +332,12 @@ test('transport: sendBeacon, else fetch with keepalive; nothing throws', async (
   }
   const p = load({ random: 0, sendBeacon: 'absent', entries: () => [entry()] });
   p.fetch = () => { throw new Error('offline'); };
-  await visit(p, 'list', '/api/v1/programs', 'landing');
+  await visit(p, 'list', '/api/v1/list', 'landing');
 });
 
 test('a failure in measuring never reaches rendering', async () => {
   const p = load({ random: 0, entries: () => { throw new Error('timing broken'); } });
-  assert.equal(await visit(p, 'list', '/api/v1/programs', 'landing'), 'rendered');
+  assert.equal(await visit(p, 'list', '/api/v1/list', 'landing'), 'rendered');
   assert.equal(p.sent.length, 0);
   const q = load({ random: 0 });
   q.performance = undefined;

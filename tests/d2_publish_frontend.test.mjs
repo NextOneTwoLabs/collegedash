@@ -119,12 +119,12 @@ function loadPage(html = PAGE, files = {}) {
       const ok = (body, st = 200) => ({ ok: st < 400, status: st, async json() { return clone(body); } });
       let u = String(url);
       if (files[u]) return ok(files[u]);
-      if (u === '/api/v1/programs' && files['data/programs/index.json']) return ok(files['data/programs/index.json']);
+      if ((u === '/api/v1/programs' || u === '/api/v1/list') && files['data/programs/index.json']) return ok(files['data/programs/index.json']);
       if (u.startsWith('/api/v1/programs/')) {
         const slug = u.slice('/api/v1/programs/'.length);
         if (files[`data/programs/${slug}.json`]) return ok(files[`data/programs/${slug}.json`]);
       }
-      if (u === '/api/v1/programs') u = 'data/programs/index.json';
+      if (u === '/api/v1/programs') u = 'data/programs/index.json'; else if (u === '/api/v1/list') u = 'data/list/index.json';
       else if (u === '/api/v1/status') u = 'archive/refresh-state.json';
       else if (u.startsWith('/api/v1/programs/')) u = `data/programs/${u.slice('/api/v1/programs/'.length)}.json`;
       else if (u === '/api/v1/camps') u = 'data/camps/index.json';
