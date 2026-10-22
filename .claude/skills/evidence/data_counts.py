@@ -15,7 +15,9 @@ It prints Markdown, ready to paste into a report or PR description:
   1. files added, removed and changed, per folder;
   2. for the program profiles that changed (programs/index.json is not one): how many changed in each top-level field
      (--ignore skips fields, `_build` by default, that change on every build; a profile that differs only there is
-     counted on its own line, not hidden);
+     counted on its own line, not hidden). A last column says in how many of those profiles the field differs only in
+     strings that are ISO dates or timestamps (an `asOf` or `updated` moved, nothing else), so a refresh's
+     timestamp churn is not read as changed data;
   3. one table per --count: profiles where the field is present and non-empty, items in it (lists and objects),
      and its values when there are at most 12 distinct scalars (so `division` shows D1/D2/D3).
 Exact counts here describe one tree on one day. They go in a PR as evidence; a test never pins them on live data.
@@ -27,6 +29,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 from collections import Counter, defaultdict
@@ -88,6 +91,21 @@ def dig(obj, dotted: str):
     return obj
 
 
+DATE = re.compile(r"\d{4}-\d{2}-\d{2}([T ][\d:.]+(Z|[+-]\d{2}:?\d{2})?)?")
+
+
+def undated(v):
+    """v with every string that is only an ISO date or timestamp replaced by one marker, so two values that differ
+    only in when something was fetched or checked compare equal. A list keeps its length: an added row still counts."""
+    if isinstance(v, dict):
+        return {k: undated(x) for k, x in v.items()}
+    if isinstance(v, list):
+        return [undated(x) for x in v]
+    if isinstance(v, str) and DATE.fullmatch(v):
+        return "<date>"
+    return v
+
+
 def present(v) -> bool:
     return v not in (None, "", [], {}, False)
 
@@ -112,7 +130,7 @@ def file_table(a: Tree, b: Tree, depth: int) -> list[str]:
 
 
 def field_table(a: Tree, b: Tree, ignore: set) -> list[str]:
-    per = Counter()
+    per, dates = Counter(), Counter()
     real = ignored_only = 0
     for p in sorted(a.ids.keys() & b.ids.keys()):
         if not p.startswith(PROFILES + "/") or a.ids[p] == b.ids[p]:
@@ -122,13 +140,14 @@ def field_table(a: Tree, b: Tree, ignore: set) -> list[str]:
             continue
         fields = {k for k in (x.keys() | y.keys()) - ignore if x.get(k) != y.get(k)}
         per.update(fields)
+        dates.update(k for k in fields if undated(x.get(k)) == undated(y.get(k)))
         if fields:
             real += 1
         else:
             ignored_only += 1
     out = [f"{real} program profiles changed in a field that counts; {ignored_only} more differ only in {', '.join(sorted(ignore))}.", "",
-           "| field | profiles where it changed |", "| --- | ---: |"]
-    out += [f"| {k} | {n} |" for k, n in per.most_common()] or ["| (none) | 0 |"]
+           "| field | profiles where it changed | of those, only dates differ |", "| --- | ---: | ---: |"]
+    out += [f"| {k} | {n} | {dates[k]} |" for k, n in per.most_common()] or ["| (none) | 0 | 0 |"]
     return out
 
 
