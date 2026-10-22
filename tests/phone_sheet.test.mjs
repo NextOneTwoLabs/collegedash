@@ -198,6 +198,8 @@ test('#477: Tab and Shift+Tab that leave an open phone sheet bring focus back to
     ['ID Camps', pg => pg.sb.campsSheet(true), pg => pg.sb.campsSheet(false), '#campsBar >']]) {
     const pg = await open({ width: 390 });
     tree(pg);
+    // this harness opens the camps sheet without drawing ID Camps; give it the two kinds of control its sidebar has
+    if (what === 'ID Camps') pg.$('#campsBar').innerHTML = '<button type="button" data-camps-when="30d">Next 30 days</button><input type="date" id="campsFrom"><button type="button" class="sheet-close">Close</button>';
     openIt(pg);
     const press = async shiftKey => {
       pg.sb.document.activeElement = pg.body; pg.FOCUS.el = null;  // where a Tab past the end leaves focus
