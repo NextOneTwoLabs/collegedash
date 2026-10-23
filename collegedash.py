@@ -101,6 +101,10 @@ def _collect_one(name: str, program: dict, registry: dict, r: dict, **kw) -> tup
         common.log(f"-- {name} skipped for {program['slug']}: {e}")
         r.update(outcome="skipped", error=common.error_text(e, 300))
         entry = {"ok": True, "skipped": common.error_text(e, 300)}
+    except common.HostStopped as e:  # issue #108 A: the host is stopped for this run; a skip, the source is not rewritten
+        common.log(f"-- {name} skipped for {program['slug']}: host stopped: {e.host}")
+        r.update(outcome="skipped", error=common.error_text(f"host stopped: {e.host}", 300))
+        entry = {"ok": True, "skipped": r["error"]}
     except common.RobotsDisallowed as e:  # enforce mode (#101): a skip, not a failure; the source is not rewritten
         common.log(f"-- {name} skipped for {program['slug']}: {e}")
         r.update(outcome="skipped", error=common.error_text(f"robots: {e.site}", 300))
@@ -713,6 +717,7 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
     stale = not_recorded()
     not_started = sorted({r["program"] for r in results if r["outcome"] == "skipped" and r.get("error") == TIME_BUDGET})
     robots_skips = sum(1 for r in results if r["outcome"] == "skipped" and str(r.get("error", "")).startswith("robots: "))
+    hosts_stopped = common.stopped_hosts()  # issue #108 A: {host: {stops, refused}}, one warning each
     # issue #393: current schedule pages that loaded but gave no game (stored empty). Taken on every run, so the notes
     # never carry over; one combined warning below, after the failure warnings, so those stay in view.
     from collect import athletics_site
@@ -740,11 +745,18 @@ def report_refresh(results: list[dict], *, threshold: float, mode: str, time_bud
                         "slugs": [s for s, _, _ in stale[:100]]},
         "timeBudget": {"minutes": time_budget, "programsNotStarted": len(not_started), "slugs": not_started[:100]},
         "robotsSkipped": robots_skips,
+        "hostsStopped": hosts_stopped,
     })
+    for h, n in hosts_stopped.items():
+        common.log(f"!! host stopped this run: {h} ({n['refused']} fetch(es) refused unsent, stopped {n['stops']} time(s)); "
+                   f"its collectors are skips and keep their stored sources")
     if os.environ.get("GITHUB_ACTIONS"):
         if not_started:
             print(f"::warning title=refresh::time budget ({time_budget:g} min) reached: {len(not_started)} program(s) "
                   f"not started; their stored sources are kept")
+        for h, n in hosts_stopped.items():
+            print(f"::warning title=refresh: host stopped::{h} kept failing, so it was stopped for the rest of this run "
+                  f"({n['refused']} fetch(es) refused unsent); its collectors were skipped and keep their stored sources")
         for r in failed:
             print(f"::warning title=refresh: {r['collector']} failed for {r['program']}::{r['error'][:200]}")
         if stale:
