@@ -353,7 +353,7 @@
       "athletics": {
         "source": "athletics",
         "url": "https://www.gosaxons.com/sports/womens-soccer/roster",
-        "asOf": "2026-10-22T16:08:55Z"
+        "asOf": "2026-10-23T16:03:17Z"
       }
     }
   },
@@ -1226,7 +1226,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gosaxons.com/sports/womens-soccer/roster",
-      "asOf": "2026-10-22T16:08:55Z"
+      "asOf": "2026-10-23T16:03:17Z"
     }
   },
   "rosterHistory": {
@@ -1965,7 +1965,7 @@
       "ties": 4,
       "text": "2-10-4",
       "played": 16,
-      "scheduled": 20,
+      "scheduled": 17,
       "notPlayed": 0,
       "confText": "1-7-2",
       "exhibitions": 0
@@ -2275,54 +2275,6 @@
           "watch": "https://www.empire8network.com/alfredsaxons/",
           "live stats": "https://gosaxons.com/sidearmstats/wsoc/summary",
           "history": "https://www.gosaxons.com/sports/womens-soccer/opponent-history/russell-sage-college/165"
-        }
-      },
-      {
-        "date": "2026-10-31",
-        "datetime": null,
-        "exhibition": false,
-        "conferenceGame": false,
-        "homeAway": "N",
-        "opponent": "Empire 8 Championship Tournament",
-        "opponentRank": null,
-        "opponentSeed": null,
-        "location": "TBD",
-        "result": null,
-        "score": null,
-        "links": {
-          "history": "https://www.gosaxons.com/sports/womens-soccer/opponent-history/empire-8/84"
-        }
-      },
-      {
-        "date": "2026-11-04",
-        "datetime": null,
-        "exhibition": false,
-        "conferenceGame": false,
-        "homeAway": "N",
-        "opponent": "Empire 8 Championship Tournament",
-        "opponentRank": null,
-        "opponentSeed": null,
-        "location": "TBD",
-        "result": null,
-        "score": null,
-        "links": {
-          "history": "https://www.gosaxons.com/sports/womens-soccer/opponent-history/empire-8/84"
-        }
-      },
-      {
-        "date": "2026-11-07",
-        "datetime": null,
-        "exhibition": false,
-        "conferenceGame": false,
-        "homeAway": "N",
-        "opponent": "Empire 8 Championship Tournament",
-        "opponentRank": null,
-        "opponentSeed": null,
-        "location": "TBD",
-        "result": null,
-        "score": null,
-        "links": {
-          "history": "https://www.gosaxons.com/sports/womens-soccer/opponent-history/empire-8/84"
         }
       }
     ],
@@ -3335,7 +3287,7 @@
     "_meta": {
       "source": "athletics",
       "url": "https://www.gosaxons.com/sports/womens-soccer/schedule",
-      "asOf": "2026-10-22T16:08:55Z"
+      "asOf": "2026-10-23T16:03:17Z"
     }
   },
   "commitments": [],
@@ -3418,7 +3370,7 @@
     "_meta": {
       "source": "news",
       "url": "https://www.gosaxons.com/sports/womens-soccer/archives",
-      "asOf": "2026-10-22T16:09:06Z"
+      "asOf": "2026-10-23T16:03:26Z"
     }
   },
   "camps": {
@@ -3438,14 +3390,14 @@
       {
         "source": "camps",
         "url": "https://www.alfred.edu/about/summers-at-alfred/summer-camps/",
-        "asOf": "2026-10-22T16:09:09Z"
+        "asOf": "2026-10-23T16:03:28Z"
       }
     ]
   },
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-10-22T16:24:14Z",
+    "builtAt": "2026-10-23T16:20:46Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3459,12 +3411,18 @@
       "news": true
     },
     "stale": [],
-    "failed": [],
+    "failed": [
+      {
+        "collector": "soccerwire",
+        "error": "Expecting value: line 1 column 1 (char 0)",
+        "at": "2026-10-23T16:03:20Z"
+      }
+    ],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-10-22T16:08:55Z"
+        "at": "2026-10-23T16:03:17Z"
       },
       {
         "collector": "wikipedia",
