@@ -1,0 +1,822 @@
+{
+ "schema": "judged-v1",
+ "about": "Judged set for the Home search, v1 (issue #507; docs/plans/507-search/v1-plan.md section 6). Scored by tests/home_search_engine.test.mjs on the frozen fixture tests/fixtures/search/*.json at its clock (the date part of camps.json's updated). Expected values were worked out from the approved plan's rules with the page's own matchers (searchMatches, campsQueryMatch), not from homeSearch. scope v2 rows pin today's known gaps (conferences, fact words, typos, coaches); v2 flips them on purpose. Regenerate only in a reviewed PR, together with the fixture.",
+ "fields": {
+  "order": "section order, first section first",
+  "programs.n": "all program hits (rows + place hits + overflow)",
+  "programs.rows": "the program rows drawn, in order (non-place hits, at most 6)",
+  "programs.allHref": "the closing 'All N matching programs' link, or null when there is none",
+  "camps.n": "upcoming ID camps in the section",
+  "camps.first": "the first camps drawn (at most 4), in order",
+  "enter": "what Enter opens with no active option, or null",
+  "message": "null, 'nomatch' or 'nocamp'"
+ },
+ "queries": [
+  {
+   "id": "S01",
+   "q": "unc",
+   "intent": "school by initials",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 4,
+    "rows": [
+     "north-carolina",
+     "unc-wilmington",
+     "unc-greensboro",
+     "unc-asheville"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/north-carolina"
+   },
+   "message": null
+  },
+  {
+   "id": "S02",
+   "q": "cal",
+   "intent": "school by its common short name",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 34,
+    "rows": [
+     "california",
+     "cal-state-fullerton",
+     "cal-poly",
+     "csu-bakersfield",
+     "california-baptist",
+     "csun"
+    ],
+    "allHref": "#/programs?q=cal&sort=name"
+   },
+   "camps": {
+    "n": 6,
+    "first": [
+     {
+      "slug": "usc",
+      "startDate": "2026-12-13"
+     },
+     {
+      "slug": "ucla",
+      "startDate": "2027-01-17"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-01-31"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-03-21"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/california"
+   },
+   "message": null
+  },
+  {
+   "id": "S06",
+   "q": "university of michigan",
+   "intent": "school by full name",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "michigan"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/michigan"
+   },
+   "message": null
+  },
+  {
+   "id": "K01",
+   "q": "tar heels",
+   "intent": "nickname",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "north-carolina"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/north-carolina"
+   },
+   "message": null
+  },
+  {
+   "id": "K06",
+   "q": "bulldogs",
+   "intent": "nickname shared by many",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 27,
+    "rows": [
+     "mississippi-state",
+     "georgia",
+     "samford",
+     "gonzaga",
+     "drake",
+     "butler"
+    ],
+    "allHref": "#/programs?q=bulldogs&sort=name"
+   },
+   "camps": {
+    "n": 3,
+    "first": [
+     {
+      "slug": "mississippi-state",
+      "startDate": "2026-12-12"
+     },
+     {
+      "slug": "mississippi-state",
+      "startDate": "2027-01-23"
+     },
+     {
+      "slug": "mississippi-state",
+      "startDate": "2027-05-08"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/mississippi-state"
+   },
+   "message": null
+  },
+  {
+   "id": "E08",
+   "q": "st. mary's",
+   "intent": "one name, five schools, punctuation",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 6,
+    "rows": [
+     "st-marys-tx",
+     "saint-mary-s",
+     "saint-marys-college-in",
+     "st-marys-college-maryland",
+     "mount-st-marys",
+     "saint-marys-minnesota"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "st-marys-tx",
+      "startDate": "2026-12-05"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/st-marys-tx"
+   },
+   "message": null
+  },
+  {
+   "id": "L01",
+   "q": "boston",
+   "intent": "city",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 9,
+    "rows": [
+     "boston-university",
+     "boston-college",
+     "massachusetts-boston"
+    ],
+    "allHref": "#/programs?q=boston&sort=name"
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": {
+    "kind": "list",
+    "href": "#/programs?q=boston&sort=name"
+   },
+   "message": null
+  },
+  {
+   "id": "L03",
+   "q": "TX",
+   "intent": "state code in capitals",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 51,
+    "rows": [
+     "st-thomas-tx",
+     "trinity-tx"
+    ],
+    "allHref": "#/programs?q=TX&sort=name"
+   },
+   "camps": {
+    "n": 3,
+    "first": [
+     {
+      "slug": "st-marys-tx",
+      "startDate": "2026-12-05"
+     },
+     {
+      "slug": "concordia-texas",
+      "startDate": "2026-12-13"
+     },
+     {
+      "slug": "tcu",
+      "startDate": "2027-01-30"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "list",
+    "href": "#/programs?q=TX&sort=name"
+   },
+   "message": null
+  },
+  {
+   "id": "N05",
+   "q": "ID",
+   "intent": "Idaho's state code in capitals, not a camp word",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 4,
+    "rows": [
+     "idaho",
+     "idaho-state"
+    ],
+    "allHref": "#/programs?q=ID&sort=name"
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "northwest-nazarene",
+      "startDate": "2026-12-05"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "list",
+    "href": "#/programs?q=ID&sort=name"
+   },
+   "message": null
+  },
+  {
+   "id": "E10",
+   "q": "washington",
+   "intent": "school vs state vs DC",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 23,
+    "rows": [
+     "washington",
+     "washington-state",
+     "washington-and-lee",
+     "washington-jefferson",
+     "washington-college-md",
+     "washington-st-louis"
+    ],
+    "allHref": "#/programs?q=washington&sort=name"
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "puget-sound",
+      "startDate": "2027-02-05"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "list",
+    "href": "#/programs?q=washington&sort=name"
+   },
+   "message": null
+  },
+  {
+   "id": "M02",
+   "q": "id camp december",
+   "intent": "camps by month",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 19,
+    "first": [
+     {
+      "slug": "randolph-macon-college",
+      "startDate": "2026-12"
+     },
+     {
+      "slug": "st-marys-tx",
+      "startDate": "2026-12-05"
+     },
+     {
+      "slug": "northwest-nazarene",
+      "startDate": "2026-12-05"
+     },
+     {
+      "slug": "harding",
+      "startDate": "2026-12-05"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/randolph-macon-college/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "M03",
+   "q": "ucla id camp",
+   "intent": "one program's camps",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "ucla"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "ucla",
+      "startDate": "2027-01-17"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/ucla/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "M03b",
+   "q": "ucla id-camp",
+   "intent": "camp words joined by a hyphen",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "ucla"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "ucla",
+      "startDate": "2027-01-17"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/ucla/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "M04",
+   "q": "stanford camps",
+   "intent": "camps of a program that lists none",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "stanford"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/stanford"
+   },
+   "message": "nocamp"
+  },
+  {
+   "id": "N01",
+   "q": "usc camps",
+   "intent": "one program's camps, many",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 2,
+    "rows": [
+     "usc",
+     "usc-upstate"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 5,
+    "first": [
+     {
+      "slug": "usc",
+      "startDate": "2026-12-13"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-01-31"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-03-21"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-06-13"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/usc/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "N02",
+   "q": "msu",
+   "intent": "ambiguous alias, camps by program hit",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 8,
+    "rows": [
+     "michigan-state",
+     "mississippi-state",
+     "murray-state",
+     "missouri-state",
+     "morehead-state",
+     "midwestern-state"
+    ],
+    "allHref": "#/programs?q=msu&sort=name"
+   },
+   "camps": {
+    "n": 3,
+    "first": [
+     {
+      "slug": "mississippi-state",
+      "startDate": "2026-12-12"
+     },
+     {
+      "slug": "mississippi-state",
+      "startDate": "2027-01-23"
+     },
+     {
+      "slug": "mississippi-state",
+      "startDate": "2027-05-08"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/michigan-state"
+   },
+   "message": null
+  },
+  {
+   "id": "N03",
+   "q": "trojans",
+   "intent": "mascot, camps by program hit",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 7,
+    "rows": [
+     "usc",
+     "little-rock",
+     "troy",
+     "anderson-sc",
+     "mount-olive",
+     "trevecca-nazarene"
+    ],
+    "allHref": "#/programs?q=trojans&sort=name"
+   },
+   "camps": {
+    "n": 7,
+    "first": [
+     {
+      "slug": "trevecca-nazarene",
+      "startDate": "2026-11-22"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2026-12-13"
+     },
+     {
+      "slug": "troy",
+      "startDate": "2027-01-30"
+     },
+     {
+      "slug": "usc",
+      "startDate": "2027-01-31"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/usc"
+   },
+   "message": null
+  },
+  {
+   "id": "N04",
+   "q": "gvsu camps",
+   "intent": "alias plus camp word",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 1,
+    "rows": [
+     "grand-valley-state"
+    ],
+    "allHref": null
+   },
+   "camps": {
+    "n": 1,
+    "first": [
+     {
+      "slug": "grand-valley-state",
+      "startDate": "2026-12-19"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/grand-valley-state/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "E02",
+   "q": "a",
+   "intent": "one letter",
+   "scope": "v1",
+   "order": [
+    "programs",
+    "camps"
+   ],
+   "programs": {
+    "n": 139,
+    "rows": [
+     "arkansas",
+     "alabama",
+     "army",
+     "arizona-state",
+     "auburn",
+     "arizona"
+    ],
+    "allHref": "#/programs?q=a&sort=name"
+   },
+   "camps": {
+    "n": 37,
+    "first": [
+     {
+      "slug": "hood-college",
+      "startDate": "2026-10-25"
+     },
+     {
+      "slug": "neumann",
+      "startDate": "2026-10-25"
+     },
+     {
+      "slug": "albany",
+      "startDate": "2026-10-25"
+     },
+     {
+      "slug": "pittsburgh",
+      "startDate": "2026-10-31"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "program",
+    "href": "#/p/arkansas"
+   },
+   "message": null
+  },
+  {
+   "id": "E05",
+   "q": "zzzz",
+   "intent": "nothing matches",
+   "scope": "v1",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": null,
+   "message": "nomatch"
+  },
+  {
+   "id": "C01",
+   "q": "big ten",
+   "intent": "conference by name",
+   "scope": "v2",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": null,
+   "message": "nomatch"
+  },
+  {
+   "id": "D01",
+   "q": "d3 ohio",
+   "intent": "division plus state",
+   "scope": "v2",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 2,
+    "first": [
+     {
+      "slug": "heidelberg",
+      "startDate": "2026-11-21"
+     },
+     {
+      "slug": "denison",
+      "startDate": "2026-11-29"
+     }
+    ]
+   },
+   "enter": {
+    "kind": "camp",
+    "href": "#/p/heidelberg/camps"
+   },
+   "message": null
+  },
+  {
+   "id": "Y01",
+   "q": "standford",
+   "intent": "misspelled school",
+   "scope": "v2",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": null,
+   "message": "nomatch"
+  },
+  {
+   "id": "H01",
+   "q": "erica dambach",
+   "intent": "head coach by full name",
+   "scope": "v2",
+   "order": [
+    "camps",
+    "programs"
+   ],
+   "programs": {
+    "n": 0,
+    "rows": [],
+    "allHref": null
+   },
+   "camps": {
+    "n": 0,
+    "first": []
+   },
+   "enter": null,
+   "message": "nomatch"
+  }
+ ]
+}
