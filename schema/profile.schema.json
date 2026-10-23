@@ -119,6 +119,10 @@
         "vendor": {"type": ["string", "null"]},
         "discoveredVia": {"type": ["string", "null"], "enum": ["registry", "anchor", "json", null]},
         "robotsBlocked": {"type": "boolean"},
+        "hostRefused": {"type": "boolean", "description": "the camp host refused us (HTTP 403/429, recorded and not re-requested); absent before issue #79"},
+        "unreadable": {"type": ["object", "null"], "description": "issue #79: null, or why a camp page with nothing dated could not be read (build.camp_readability)",
+          "required": ["cause"], "additionalProperties": false,
+          "properties": {"cause": {"enum": ["app-shell", "not-a-listing", "not-html"]}}},
         "parsed": {"type": ["boolean", "null"], "description": "false = the camp page was fetched but could not be read (PDF, empty or non-HTML body); null = collected before the flag existed"},
         "items": {"type": "array", "items": {"type": "object", "required": ["name", "kind"],
           "properties": {
