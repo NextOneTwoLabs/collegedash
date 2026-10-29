@@ -314,7 +314,7 @@ test('a program that has a dated camp is not also given a camp-page row; Enter s
   assert.equal(pg2.sb.location.hash, '#/p/duke');
 });
 
-test('camp-page rows share the group\'s 4 rows with the dated camps, the rest wait behind "Show N more camp pages"', async () => {
+test('"Show all N camps" also reveals the page rows the cap hid', async () => {
   const pg = await home({ campPages: ALL_PAGES });
   await pg.focus(); await pg.type('state');
   const camps = groupsOf(pg).find(g => /^ID Camps/.test(g.head.text));
