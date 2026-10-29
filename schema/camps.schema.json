@@ -4,7 +4,7 @@
   "title": "CollegeDash camps index (public/data/camps/index.json, /api/v1/camps; issues #65, #78, #465)",
   "description": "Every upcoming camp across the published programs, one row per camp. build.check_camps_index also checks it against the profiles and the programs index of the same build (each row equal to the profile item it came from, each `program` block equal to that program's index row); this schema pins the shape. A row carries exactly `slug`, build.CAMP_INDEX_FIELDS and `program` (build.CAMP_PROGRAM_FIELDS), in that order.",
   "type": "object",
-  "required": ["updated", "window", "counts", "coverage", "camps"],
+  "required": ["updated", "window", "counts", "coverage", "campPages", "camps"],
   "additionalProperties": false,
   "properties": {
     "updated": {"type": "string", "minLength": 1, "description": "When the build wrote the file: the page's 'List refreshed' date. Not a per-camp check date."},
@@ -27,6 +27,12 @@
         "youth": {"type": "integer", "minimum": 0},
         "unknown": {"type": "integer", "minimum": 0}
       }
+    },
+    "campPages": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 },
+      "description": "Issue #507: the slugs, sorted, of the programs whose profile names a camp page (camps.url), robots-blocked and unreadable pages included because the program's Camps tab still links out to them. Home search reads it to offer a camp-page link for a program with no dated camp. Slugs only: no URLs, hosts or page text. check_camps_index recomputes it from the profiles."
     },
     "coverage": {
       "type": "object",

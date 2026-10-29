@@ -86,6 +86,8 @@ LIVE_INDEX = os.path.join(common.PUBLIC_DATA_DIR, "camps", "index.json")
 # which the program blocks are 1,803 B. test_emitter checks the pins on seeded subsets of the real built rows.
 CAMPS_GZ_BASE, CAMPS_GZ_PER_ROW = 1000, 85
 PROGRAM_BLOCK_GZ_BASE, PROGRAM_BLOCK_GZ_PER_ROW = 250, 24
+# #507: campPages, the slugs of programs with a camp page. Measured 4,396 B gzipped for 814 slugs (5.4 B each).
+CAMP_PAGES_GZ_BASE, CAMP_PAGES_GZ_PER_SLUG = 100, 8
 
 
 def camps_size_ok(gz: int, rows: int) -> bool:
@@ -418,6 +420,16 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     raw = open(path, "rb").read()
     ok("#465 the camps index is written compact, like the slim list (#395)", b"\n  " not in raw and raw.endswith(b"}\n"))
     stripped = json.dumps({**doc, "camps": [{k: v for k, v in r.items() if k != "program"} for r in rows]},
+                          ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
+    # #507: campPages is the one part that follows the number of programs with a camp page, not the number of camps, so
+    # it has its own pin (CAMP_PAGES_GZ_BASE + CAMP_PAGES_GZ_PER_SLUG B per slug) and the #465 pins measure the rest.
+    pages = doc.get("campPages") or []
+    nopages = json.dumps({k: v for k, v in doc.items() if k != "campPages"}, ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
+    pages_gz = len(gzip.compress(raw, 9)) - len(gzip.compress(nopages, 9))
+    ok(f"#507 size: campPages adds at most {CAMP_PAGES_GZ_BASE} + {CAMP_PAGES_GZ_PER_SLUG} B per slug, gzipped",
+       pages_gz <= CAMP_PAGES_GZ_BASE + CAMP_PAGES_GZ_PER_SLUG * len(pages), f"+{pages_gz} B for {len(pages)} slugs")
+    raw = nopages
+    stripped = json.dumps({**{k: v for k, v in doc.items() if k != "campPages"}, "camps": [{k: v for k, v in r.items() if k != "program"} for r in rows]},
                           ensure_ascii=False, separators=(",", ":")).encode("utf-8") + b"\n"
     gz, gz0 = len(gzip.compress(raw, 9)), len(gzip.compress(stripped, 9))
     ok(f"#465 size: the gzipped camps document is at most {CAMPS_GZ_BASE} + {CAMPS_GZ_PER_ROW} B per row",
