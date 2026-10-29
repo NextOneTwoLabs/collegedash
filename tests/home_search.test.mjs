@@ -230,7 +230,7 @@ test('no match: the message is in #homeMsg and #homeStatus, never in the listbox
   const text = 'No program or upcoming ID camp matches “zzzz”. Try a school’s short name, a mascot, a state or a city.';
   assert.equal(unesc(msg.text), text);
   assert.ok(!all(list, n => n.attrs.id === 'homeMsg').length, 'the message is inside the listbox');
-  assert.equal(statusOf(pg), `${text} Enter opens the list of 0 programs.`.replace(/ Enter opens.*$/, ''));
+  assert.equal(statusOf(pg), text);
   assert.equal(pg.box.getAttribute('aria-expanded'), 'true');
 });
 
@@ -332,6 +332,44 @@ test('camp-page rows share the group\'s 4 rows with the dated camps, the rest wa
   const dated = new Set(CAMPS.camps.map(c => c.slug));
   const programRows = groupsOf(pg)[0].opts.filter(o => o.attrs['data-kind'] === 'program').map(o => o.attrs['data-slug']);
   assert.deepEqual(pageRows, programRows.filter(sl => !dated.has(sl)), 'every shown program without a dated camp, in order');
+});
+
+test('fewer than 4 dated camps and more camp pages than free slots: "Show N more camp pages" (plural and singular), keyboard expands, the active row moves on', async () => {
+  // "alabama": 1 dated camp (Troy) and 6 program rows, 5 of them with a camp page -> 3 free slots, 3 page rows wait
+  const pg = await home({ campPages: ALL_PAGES });
+  await pg.focus(); await pg.type('alabama');
+  const camps = () => groupsOf(pg).find(g => /^ID Camps/.test(g.head.text));
+  assert.equal(camps().head.text, 'ID Camps · 1 upcoming');
+  assert.deepEqual(kindsOf(camps()), ['camp', 'camppage', 'camppage', 'camppage', 'more', 'browse']);
+  assert.equal(unesc(camps().opts[4].text), 'Show 3 more camp pages');
+  const shownPages = camps().opts.filter(o => o.attrs['data-kind'] === 'camppage').map(o => o.attrs['data-slug']);
+  const programRows = groupsOf(pg)[0].opts.filter(o => o.attrs['data-kind'] === 'program').map(o => o.attrs['data-slug']);
+  assert.deepEqual(shownPages, programRows.slice(0, 3), 'the first program rows get the free slots, in order');
+  // expand by keyboard: arrow to "Show 3 more camp pages", Enter
+  const moreAt = options(pg).findIndex(o => o.attrs['data-kind'] === 'more');
+  for (let i = 0; i <= moreAt; i++) pg.key('ArrowDown');
+  assert.equal(pg.box.getAttribute('aria-activedescendant'), `homeOpt-${moreAt}`);
+  pg.key('Enter');
+  assert.equal(pg.sb.location.hash, '#/', 'Enter on "Show more" opened a page instead of expanding');
+  assert.deepEqual(kindsOf(camps()), ['camp', ...Array(6).fill('camppage'), 'browse'], 'every page row, the row gone');
+  assert.deepEqual(camps().opts.filter(o => o.attrs['data-kind'] === 'camppage').map(o => o.attrs['data-slug']),
+    programRows, 'every program row with a page, in order');
+  // the active row is the one that took its place: the next row, the first of the newly shown pages
+  const active = options(pg).findIndex(o => o.attrs['aria-selected'] === 'true');
+  assert.equal(active, moreAt, 'the active row did not stay at the same place');
+  assert.equal(options(pg)[active].attrs['data-kind'], 'camppage');
+  assert.equal(options(pg)[active].attrs['data-slug'], programRows[3]);
+  pg.key('Enter');
+  assert.equal(pg.sb.location.hash, `#/p/${programRows[3]}/camps`);
+  // singular: only 4 of the program rows have a page, so one waits
+  const pg2 = await home({ campPages: ['alabama', 'alabama-am', 'alabama-state', 'south-alabama'] });
+  await pg2.focus(); await pg2.type('alabama');
+  const c2 = groupsOf(pg2).find(g => /^ID Camps/.test(g.head.text));
+  assert.equal(unesc(c2.opts.find(o => o.attrs['data-kind'] === 'more').text), 'Show 1 more camp page');
+  // and nothing waits when the pages fit: no "more" row
+  const pg3 = await home({ campPages: ['alabama', 'alabama-am'] });
+  await pg3.focus(); await pg3.type('alabama');
+  assert.ok(!options(pg3).some(o => o.attrs['data-kind'] === 'more'));
 });
 
 test('keys: arrows move and wrap across sections, Enter opens the active option, Escape closes then clears', async () => {
