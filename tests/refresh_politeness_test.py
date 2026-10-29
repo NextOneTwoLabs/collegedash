@@ -76,6 +76,7 @@ GAP = 0.25          # MIN_GAP_SECONDS for the suite (production: 1.2)
 JITTER = 0.05       # JITTER_SECONDS for the suite (production: 0.8)
 CRAWL_DELAY = 1     # > GAP, so it must win. An integer: urllib.robotparser ignores "Crawl-delay: 0.8"
 BACKOFF = 0.5       # BACKOFF_5XX_SECONDS for the suite (production: 5)
+BACKOFF_429 = 0.05  # BACKOFF_429_SECONDS for the suite (production: 25)
 CPU_GAP = 0.6       # MIN_GAP_SECONDS for the CPU-load case (see there)
 TOL = 0.03          # clock slack between the client's stamp and the server's arrival stamp
 
@@ -181,11 +182,13 @@ def violations(stub: Stub, min_gap: float) -> list[str]:
 def fresh_state(tmp: str):
     """A clean politeness/robots/cache state for one case, with the suite's short timings."""
     saved = (common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.BACKOFF_5XX_SECONDS,
-             common.BACKOFF_NETWORK_SECONDS)
+             common.BACKOFF_NETWORK_SECONDS, common.BACKOFF_429_SECONDS)
     common.CACHE_DIR = tempfile.mkdtemp(dir=tmp)
     common.MIN_GAP_SECONDS, common.JITTER_SECONDS = GAP, JITTER
     common.BACKOFF_5XX_SECONDS = BACKOFF
     common.BACKOFF_NETWORK_SECONDS = 0.1
+    common.BACKOFF_429_SECONDS = BACKOFF_429
+    getattr(common, "_stops", {}).clear()  # issue #108: the per-run host stop starts open
     common._gates.clear()
     common._last_request_at.clear()
     common._robots.clear()
@@ -195,7 +198,8 @@ def fresh_state(tmp: str):
         yield
     finally:
         (common.CACHE_DIR, common.MIN_GAP_SECONDS, common.JITTER_SECONDS, common.BACKOFF_5XX_SECONDS,
-         common.BACKOFF_NETWORK_SECONDS) = saved
+         common.BACKOFF_NETWORK_SECONDS, common.BACKOFF_429_SECONDS) = saved
+        getattr(common, "_stops", {}).clear()
 
 
 @contextlib.contextmanager
@@ -980,6 +984,310 @@ def test_failed_state_write_is_visible(tmp: str) -> None:
         os.environ.pop("GITHUB_STEP_SUMMARY", None)
 
 
+# ---------- issue #108: the per-run host stop ----------
+
+class FakeClock:
+    """The stop's clock: moved by hand, so the 600 s and 300 s rules are tested without waiting."""
+
+    def __init__(self):
+        self.t = 1000.0
+
+    def __call__(self):
+        return self.t
+
+
+@contextlib.contextmanager
+def stop_rules(clock: FakeClock, fails: int = 5, min_seconds: float = 600.0, cooldown: float = 300.0):
+    """The stop's production rules, on the fake clock. Set as attributes so the same case runs (and fails) on main."""
+    names = ("STOP_FAILS", "STOP_MIN_SECONDS", "STOP_COOLDOWN_SECONDS", "_stop_clock")
+    saved = {n: getattr(common, n, None) for n in names}
+    common.STOP_FAILS, common.STOP_MIN_SECONDS, common.STOP_COOLDOWN_SECONDS, common._stop_clock = fails, min_seconds, cooldown, clock
+    try:
+        yield
+    finally:
+        for n, v in saved.items():
+            if v is None:
+                with contextlib.suppress(AttributeError):
+                    delattr(common, n)
+            else:
+                setattr(common, n, v)
+
+
+def try_fetch(url: str, **kw):
+    """(the exception's class name, or None on success). Live unless the caller passes max_age_hours."""
+    kw.setdefault("max_age_hours", None)
+    try:
+        common.fetch(url, **kw)
+        return None
+    except Exception as e:  # noqa: BLE001 - the class is what the case checks
+        return type(e).__name__
+
+
+def test_host_stop(tmp: str) -> None:
+    """Issue #108 A: a host that keeps failing is stopped for the rest of the run, recovers through one probe after a
+    cooldown, never trips on a short blip, and fetch() no longer sleeps after its last attempt."""
+    print("host stop (#108 A): trip, refuse, probe, reopen; no trip on a blip; no sleep after the last attempt")
+    mode = {"answer": 429}
+
+    def flaky(path, n):
+        return mode["answer"], {"Content-Type": "text/plain"}, b"x", 0.0
+    stub = Stub("flaky", {"/": flaky})
+    try:
+        # (a) a sustained 429: five failed fetches spread over >= 600 s trip it; then nothing is sent
+        clock = FakeClock()
+        with fresh_state(tmp), stop_rules(clock):
+            outcomes = []
+            for i in range(20):
+                if i < 5:
+                    clock.t += 200  # the five failures span 800 s; the other 15 come at once, inside the cooldown
+                outcomes.append(try_fetch(stub.url(f"/c/{i}")))
+            hits = sum(stub.hits.values())
+            ok("FIX a stopped host gets no request: 5 fetches x 3 attempts reach it, the other 15 are refused (main: 60)",
+               hits == 15, f"{hits} requests")
+            ok("FIX the refusals raise HostStopped, a FetchError", outcomes[5:] == ["HostStopped"] * 15
+               and issubclass(getattr(common, "HostStopped", RuntimeError), common.FetchError), str(outcomes[4:8]))
+            report = getattr(common, "stopped_hosts", lambda: {})()
+            ok("FIX the stop is reported per host, with what it refused",
+               report.get(stub.host, {}).get("refused") == 15 and report[stub.host].get("stops") == 1, str(report))
+
+            # (b) after the cooldown one probe goes out; the host answers again, so it reopens and fetches flow
+            mode["answer"] = 200
+            clock.t += 301
+            stub.reset()
+            outcomes = [try_fetch(stub.url(f"/b/{i}")) for i in range(3)]
+            ok("after the cooldown a probe goes out, succeeds, and the host reopens",
+               outcomes == [None, None, None] and sum(stub.hits.values()) == 3, f"{outcomes} {stub.hits}")
+
+            # (c) trip again; a failed probe stops it for another cooldown, with exactly one probe sent
+            mode["answer"] = 429
+            for i in range(5):
+                clock.t += 200
+                try_fetch(stub.url(f"/c2/{i}"))
+            clock.t += 301
+            stub.reset()
+            probe = try_fetch(stub.url("/probe"))
+            after = try_fetch(stub.url("/after"))
+            ok("FIX a failed probe (3 attempts) stops the host again; the next fetch is refused unsent",
+               probe == "FetchError" and after == "HostStopped" and sum(stub.hits.values()) == 3,
+               f"{probe} {after} {stub.hits}")
+
+            # the probe slot is freed whatever the probe ends in: a 404 is no verdict, and the next caller probes
+            mode["answer"] = 404
+            clock.t += 301
+            stub.reset()
+            first, second = try_fetch(stub.url("/p404")), try_fetch(stub.url("/p404b"))
+            ok("a probe ending in a 404 frees the slot: the next fetch probes again instead of being refused",
+               first == "FetchError" and second == "FetchError" and sum(stub.hits.values()) == 2, f"{first} {second} {stub.hits}")
+            real_send = common._PoliteAdapter.send
+
+            def boom(self, request, **kw):
+                raise ValueError("something else")
+            common._PoliteAdapter.send = boom
+            try:
+                third = try_fetch(stub.url("/boom"))
+            finally:
+                common._PoliteAdapter.send = real_send
+            mode["answer"] = 200
+            fourth = try_fetch(stub.url("/after-boom"))
+            ok("a probe that raises something else also frees the slot; the next fetch still probes",
+               third == "ValueError" and fourth is None, f"{third} {fourth}")
+
+        # a blip: five failures inside two minutes, then a success, never trips
+        clock = FakeClock()
+        mode["answer"] = 503
+        with fresh_state(tmp), stop_rules(clock):
+            for i in range(5):
+                clock.t += 20
+                try_fetch(stub.url(f"/blip/{i}"), retries=1)
+            mode["answer"] = 200
+            stub.reset()
+            ok("a two-minute blip never stops the host", try_fetch(stub.url("/blip/ok")) is None and sum(stub.hits.values()) == 1,
+               str(stub.hits))
+
+        # a cache hit is served from a stopped host's cache: the stop is checked after the cache
+        clock = FakeClock()
+        mode["answer"] = 200
+        with fresh_state(tmp), stop_rules(clock):
+            common.fetch(stub.url("/cached"), max_age_hours=6)
+            mode["answer"] = 429
+            for i in range(5):
+                clock.t += 200
+                try_fetch(stub.url(f"/t/{i}"))
+            stub.reset()
+            ok("a fresh cache hit is still served while the host is stopped", try_fetch(stub.url("/cached"), max_age_hours=6) is None
+               and not stub.hits, str(stub.hits))
+
+        # (d) 3b: no sleep after the last attempt. Three 503s: the waits after attempts 1 and 2 are the gate's holds
+        # (0.5 + 1.0 s); main then sleeps another 1.5 s before giving up
+        mode["answer"] = 503
+        with fresh_state(tmp):
+            t0 = time.monotonic()
+            try_fetch(stub.url("/three-503"))
+            took = time.monotonic() - t0
+        ok("FIX a fetch that fails 3 times gives up without sleeping after the last attempt (main: about 3.0 s)",
+           took < 2.25, f"{took:.2f}s")
+    finally:
+        stub.close()
+
+
+def test_host_stop_report(tmp: str) -> None:
+    """Issue #108 A: a stopped host's collectors are skips, not failures; one warning per host; lastRun says so."""
+    print("host stop (#108 A): the run summary")
+    import collegedash
+
+    real_one = common.update_refresh_state
+    last_run = {}
+    os.environ["GITHUB_ACTIONS"] = "true"
+    clock = FakeClock()
+    try:
+        common.update_refresh_state = lambda key, info: last_run.setdefault(key, info)
+        with fresh_state(tmp), stop_rules(clock):
+            stops = getattr(common, "_stops", None)
+            if stops is not None:
+                st = common._StopState()
+                st.stops, st.refused = 1, 2
+                stops["www.soccerwire.test"] = st
+            results = [{"program": f"p{i}", "collector": "soccerwire", "outcome": "skipped",
+                        "error": "host stopped: www.soccerwire.test"} for i in range(2)]
+            results.append({"program": "p9", "collector": "news", "outcome": "ok", "error": ""})
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                code = collegedash.report_refresh(results, threshold=0.05, mode="daily")
+        printed = out.getvalue()
+        lr = last_run.get("lastRun", {})
+        ok("stopped-host skips are no failures: exit 0, failed share 0", code == 0 and lr.get("failedShare") == 0, str(lr)[:300])
+        ok("FIX lastRun names the stopped host and its counts",
+           lr.get("hostsStopped") == {"www.soccerwire.test": {"stops": 1, "refused": 2}}, str(lr.get("hostsStopped")))
+        warns = [line for line in printed.splitlines() if line.startswith("::warning") and "www.soccerwire.test" in line]
+        ok("FIX one ::warning for the host, not one per collector", len(warns) == 1, str(warns))
+        ok("the warning does not call every stopped host shared", not any("shared" in w for w in warns), str(warns))
+    finally:
+        common.update_refresh_state = real_one
+        os.environ.pop("GITHUB_ACTIONS", None)
+
+
+def test_host_stop_queued_workers(tmp: str) -> None:
+    """Issue #108 A (Huatuo's review of 0a240a5d0, REQUIRED 1): workers already waiting on the host's gate when it is
+    stopped send nothing once their turn comes, and their refusals do not move the gate's last-request stamp."""
+    print("host stop (#108 A): workers queued on the gate at trip time send nothing after the stop")
+
+    def always_429(path, n):
+        return 429, {"Content-Type": "text/plain"}, b"x", 0.0
+    stub = Stub("sick", {"/": always_429})
+    try:
+        with fresh_state(tmp), stop_rules(time.monotonic, fails=1, min_seconds=0.0):
+            common.BACKOFF_429_SECONDS = 0.3  # each 429 holds the gate, so the other workers queue behind it
+            tripped = {}
+            real_verdict = common._stop_verdict
+
+            def verdict(hosts, ok_, probe):
+                real_verdict(hosts, ok_, probe)
+                st = common._stops.get(stub.host)
+                if st is not None and st.until is not None and "hits" not in tripped:
+                    tripped["hits"] = sum(stub.hits.values())
+                    g = common._gates.get(stub.host)
+                    tripped["last"] = g.last if g else None
+            common._stop_verdict = verdict
+            try:
+                outcomes = []
+                lock = threading.Lock()
+
+                def job(i):
+                    r = try_fetch(stub.url(f"/q/{i}"))
+                    with lock:
+                        outcomes.append(r)
+                run_threads([lambda i=i: job(i) for i in range(12)], workers=12)
+            finally:
+                common._stop_verdict = real_verdict
+            total = sum(stub.hits.values())
+            ok("the host tripped while other workers were still waiting to send", "hits" in tripped and len(outcomes) == 12
+               and tripped["hits"] < 36, f"{tripped} {outcomes}")
+            ok("FIX the workers queued at the trip are refused with HostStopped", outcomes.count("HostStopped") >= 8, str(outcomes))
+            ok("FIX no request reaches the host after it is stopped (0a240a5d0: 11 of 12 workers' requests)",
+               total == tripped.get("hits"), f"{total} requests, {tripped.get('hits')} when it tripped")
+            g = common._gates.get(stub.host)
+            ok("FIX a refusal inside the gate leaves its last-request stamp where the last real request put it",
+               g is not None and g.last == tripped.get("last"), f"{getattr(g, 'last', None)} vs {tripped.get('last')}")
+    finally:
+        stub.close()
+
+
+def test_host_stop_collector_skip(tmp: str) -> None:
+    """Issue #108 A (REQUIRED 2): a real collector whose fetch hits a stopped host is recorded as a skip, not a
+    failure: collegedash's `except common.HostStopped` branch, run end to end."""
+    print("host stop (#108 A): a collector that hits a stopped host is a skip, and its source is not rewritten")
+    import collegedash
+    stub = Stub("soccerwire")
+    saved_programs = common.PROGRAMS_DIR
+    clock = FakeClock()
+    try:
+        with fresh_state(tmp), stop_rules(clock):
+            common.PROGRAMS_DIR = tempfile.mkdtemp(dir=tmp)
+            st = common._StopState()
+            st.until, st.stops = clock.t + 300, 1  # stopped, inside its cooldown
+            common._stops[stub.host] = st
+            registry = {"sources": {"soccerwire": {"elasticProxy": stub.url("/es"), "directory": stub.url("/dir")}},
+                        "season": {"gradYears": [2027]}}
+            program = {"slug": "hs-test", "ids": {"soccerwireTeam": "hs-test-women"}}
+            with contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+                r, entry = collegedash.collect_one("soccerwire", program, registry)
+            want = f"host stopped: {stub.host}"
+            ok("FIX the collector's outcome is skipped, naming the stopped host",
+               r.get("outcome") == "skipped" and r.get("error") == want, str(r))
+            ok("FIX its refresh-state entry is ok with the skip reason, not a failure",
+               entry is not None and entry.get("ok") is True and entry.get("skipped") == want, str(entry))
+            ok("nothing was sent and the source was not written",
+               not stub.hits and not os.path.exists(common.source_path("hs-test", "commitments.soccerwire")), str(stub.hits))
+            out = io.StringIO()
+            real_one = common.update_refresh_state
+            common.update_refresh_state = lambda key, info: None
+            try:
+                with contextlib.redirect_stdout(out), contextlib.redirect_stderr(io.StringIO()):
+                    code = collegedash.report_refresh([r], threshold=0.05, mode="daily")
+            finally:
+                common.update_refresh_state = real_one
+            ok("FIX the run is not red: report_refresh exits 0", code == 0, out.getvalue()[-300:])
+    finally:
+        common.PROGRAMS_DIR = saved_programs
+        stub.close()
+
+
+def test_host_stop_counts_the_failing_hop(tmp: str) -> None:
+    """Issue #108 A (Huatuo's review, optional 1): a fetch that gives up after a redirect counts against the host that
+    failed, not the origin that only redirected; the origin stays open."""
+    print("host stop (#108 A): a failure through a redirect counts against the failing host only")
+    sick = Stub("sick", {"/": lambda path, n: (429, {"Content-Type": "text/plain"}, b"x", 0.0)})
+    origin = Stub("origin", {"/go/": lambda path, n: (301, {"Location": sick.url(path)}, b"", 0.0)})
+    clock = FakeClock()
+    try:
+        with fresh_state(tmp), stop_rules(clock):
+            for i in range(5):
+                clock.t += 200
+                try_fetch(origin.url(f"/go/{i}"))
+            stops = common._stops
+            ok("the host that kept failing is stopped", stops.get(sick.host) is not None and stops[sick.host].until is not None,
+               str({h: (st.fails, st.until) for h, st in stops.items()}))
+            ok("FIX the origin that only redirected has no failures counted against it",
+               stops.get(origin.host) is None or stops[origin.host].fails == 0, str({h: (st.fails, st.until) for h, st in stops.items()}))
+            origin.reset()
+            ok("FIX the origin is still open: its own page is fetched", try_fetch(origin.url("/page")) is None and origin.hits == {"/page": 1},
+               str(origin.hits))
+        # a stopped origin's probe that fails after a redirect still waits a full cooldown before the next probe
+        clock = FakeClock()
+        with fresh_state(tmp), stop_rules(clock):
+            st = common._StopState()
+            st.until, st.stops = clock.t - 1, 1  # stopped, cooldown just over: the next fetch probes
+            common._stops[origin.host] = st
+            first = try_fetch(origin.url("/go/probe"))
+            origin.reset()
+            second = try_fetch(origin.url("/page"))
+            ok("a failed probe through a redirect keeps the origin stopped for another cooldown: the next fetch is refused",
+               first == "FetchError" and second == "HostStopped" and not origin.hits, f"{first} {second} {origin.hits}")
+    finally:
+        sick.close()
+        origin.close()
+
+
 # ---------- issue #108 B: one gate per server ----------
 
 def test_one_gate_per_server(tmp: str) -> None:
@@ -1024,6 +1332,61 @@ def test_one_gate_per_server(tmp: str) -> None:
            "www.exact.test" in common._robots and "exact.test" not in common._robots, str(sorted(common._robots)))
 
 
+def test_host_stop_one_server(tmp: str) -> None:
+    """Issue #108 A on B's key: www.x, x and x:443 are one server, so stopping one name stops them all, with one set of
+    counters and one probe slot. Nothing reaches the network: a stopped name is refused before its gate."""
+    print("host stop (#108 A+B): stopping www.x also stops x and x:443")
+    clock = FakeClock()
+    with fresh_state(tmp), stop_rules(clock, fails=1, min_seconds=0.0):
+        common._stop_verdict(["www.stopkey.test"], False, False)  # one give-up on www.x trips it (fails=1)
+        got = [try_fetch(u) for u in ("https://www.stopkey.test/a", "https://stopkey.test/b", "https://stopkey.test:443/c",
+                                      "https://WWW.StopKey.test/d")]
+        ok("FIX www.x stopped: x, x:443 and WWW.X are refused unsent too (before: only www.x)", got == ["HostStopped"] * 4, str(got))
+        rep = common.stopped_hosts()
+        ok("FIX one server, one entry in the report, counting every refusal", len(rep) == 1 and sum(v["refused"] for v in rep.values()) == 4,
+           str(rep))
+        ok("another server is not stopped", common._stop_admit("other-stopkey.test", "https://other-stopkey.test/") is False)
+        clock.t += 301
+        first = common._stop_admit("www.stopkey.test", "https://www.stopkey.test/p")
+        try:
+            common._stop_admit("stopkey.test:443", "https://stopkey.test:443/p")
+            second = "admitted"
+        except common.HostStopped:
+            second = "HostStopped"
+        ok("FIX one probe slot per server: www.x probing, x:443 is refused", first is True and second == "HostStopped", f"{first} {second}")
+        common._stop_verdict(["stopkey.test"], True, False)  # a success on x
+        ok("FIX a success on x reopens www.x", try_fetch_admit("www.stopkey.test") is False)
+    with fresh_state(tmp):
+        common.set_robots_txt("www.robokey.test", "User-agent: *\nDisallow: /\n")
+        ok("robots.txt verdicts stay per exact host", "www.robokey.test" in common._robots and "robokey.test" not in common._robots,
+           str(sorted(common._robots)))
+
+
+def test_gate_key_idempotent(tmp: str) -> None:
+    """Issue #108 (Huatuo's note on 1568e8a872): _gate_key is applied twice on the gate path (_polite keys the host, and
+    the in-gate stop check keys it again), so it must be idempotent, or a www.www. name is looked up under another key."""
+    print("host key (#108 A+B): _gate_key is idempotent, and the in-gate stop check finds a stopped www.www.x")
+    for h in ("www.www.idem.test", "www.idem.test", "idem.test:443", "WWW.Idem.test:80", "www.bücher.test", "xn--bcher-kva.test"):
+        once = common._gate_key(h)
+        ok(f"FIX _gate_key(_gate_key({h!r})) == _gate_key({h!r})", common._gate_key(once) == once, f"{once!r} -> {common._gate_key(once)!r}")
+    clock = FakeClock()
+    with fresh_state(tmp), stop_rules(clock, fails=1, min_seconds=0.0):
+        common._stop_verdict(["www.www.idem.test"], False, False)
+        try:
+            with common._polite("https://www.www.idem.test/x"):
+                got = "entered the gate"
+        except common.HostStopped:
+            got = "HostStopped"
+        ok("FIX the in-gate stop check refuses a stopped www.www.x", got == "HostStopped", got)
+
+
+def try_fetch_admit(host: str):
+    try:
+        return common._stop_admit(host, f"https://{host}/")
+    except common.HostStopped:
+        return "HostStopped"
+
+
 def main() -> int:
     global VERBOSE
     ap = argparse.ArgumentParser()
@@ -1036,7 +1399,9 @@ def main() -> int:
              test_the_gap_starts_when_the_request_is_sent, test_body_read_inside_gate, test_backoff,
              test_redirect_backoff_holds_the_answering_host, test_backoff_with_workers_already_on_the_host,
              test_one_request_per_url, test_plan_and_state, test_path_lock, test_failed_state_write_is_visible,
-             test_one_gate_per_server]
+             test_host_stop, test_host_stop_report, test_host_stop_queued_workers, test_host_stop_collector_skip,
+             test_host_stop_counts_the_failing_hop, test_one_gate_per_server,
+             test_host_stop_one_server, test_gate_key_idempotent]
     if args.only:
         wanted = set(args.only.split(","))
         cases = [c for c in cases if c.__name__ in wanted]
