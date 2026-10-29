@@ -57,16 +57,20 @@ test('markup: the phone bar has four labelled destinations, and viewport-fit=cov
   assert.match(HTML, /<meta name="viewport" content="width=device-width, initial-scale=1\.0, viewport-fit=cover">/);
 });
 
-test('markup: one search box, in the header, on every page\'s DOM - Home never draws, moves or reaches for it', () => {
+// #507 (the owner's ruling, reversing #465's "no box on Home"): Home draws its own box, #homeQ, in its hero. The header box
+// stays the one #q, in the header, hidden on Home; Home still never moves it or reaches for it.
+test('markup: one header box #q, in the header, on every page\'s DOM - Home draws its own #homeQ and never moves or reaches for #q', () => {
   assert.equal((HTML.match(/id="q"/g) || []).length, 1, 'more than one #q');
   const header = HTML.slice(HTML.indexOf('<div class="header">'), HTML.indexOf('<div class="sidebar-overlay"'));
   assert.ok(header.includes('id="q"'), '#q is not in the header');
   const src = HTML.slice(HTML.indexOf('<script>'));
   const home = /function renderHome\([^)]*\) \{[\s\S]*?\n\}/.exec(src)?.[0] || '';
   assert.ok(home, 'no renderHome');
-  assert.ok(!/<input|appendChild|insertBefore|\.append\(|replaceChild/.test(home), 'Home draws or moves a search input');
-  // #465 (the owner, 2026-10-02): no box on Home, so nothing there points at it, fills it or focuses it
-  assert.ok(!/#q\b|setQuery|renderSuggestions/.test(home), 'Home still reaches for the search box');
+  assert.ok(!/appendChild|insertBefore|\.append\(|replaceChild/.test(home), 'Home moves an element');
+  assert.ok(/homeSearchHtml\(\)/.test(home), 'Home does not draw its own box (#507)');
+  assert.ok(!/id="q"/.test(src), 'a second #q drawn by the script');
+  // Home's box is its own: nothing on Home points at the header box, fills it or focuses it
+  assert.ok(!/#q\b|setQuery|renderSuggestions/.test(home), 'Home reaches for the header search box');
 });
 
 // ---------- 2. CSS ----------
@@ -256,14 +260,17 @@ test('the search box shows on Programs, a program\'s page and ID Camps (#471); h
   assert.equal(decl(PHONE, 'body.no-search', '--header-height'), 'calc(60px + env(safe-area-inset-top, 0px))', 'the phone header keeps an empty search row');
 });
 
-test('where the box is hidden, "/" does not reach for it, and "Clear search" puts focus on the heading, not in the box', async () => {
+test('where the box is hidden, "/" does not reach for it (on Home it focuses Home\'s own box, #507), and "Clear search" puts focus on the heading', async () => {
   const pg = loadPage({ hash: '#/' });
   await settle();
   const slash = () => { const e = { key: '/', target: { matches: () => false, closest: () => null }, prevented: false, preventDefault() { e.prevented = true; } }; FOCUS.el = null; pg.docListeners.keydown.forEach(fn => fn(e)); return e; };
   for (const hash of ['#/', '#/trends']) {
     pg.sb.location.hash = hash; pg.sb.route(); await settle(80);
     const e = slash();
-    assert.ok(!e.prevented && FOCUS.el !== '#q', `${hash}: "/" focused the hidden box`);
+    assert.ok(FOCUS.el !== '#q', `${hash}: "/" focused the hidden box`);
+    // #507: on Home, "/" goes to Home's own box; elsewhere it does nothing
+    if (hash === '#/') assert.ok(e.prevented && FOCUS.el === '#homeQ', '"/" does not focus Home\'s box');
+    else assert.ok(!e.prevented && FOCUS.el === null, `${hash}: "/" focused something`);
   }
   for (const hash of ['#/programs', '#/camps']) {  // #471: ID Camps shows the box, and "/" reaches it there too
     pg.sb.location.hash = hash; pg.sb.route(); await settle(80);
@@ -279,7 +286,9 @@ test('where the box is hidden, "/" does not reach for it, and "Clear search" put
   assert.equal(FOCUS.el, '.content-title', `focus went to ${FOCUS.el}`);
 });
 
-test('Home: a heading, one line and three large options - Programs, ID Camps, Pipelines - with no rail and no search box', async () => {
+// #507 changes this on purpose: Home is now a heading, one line, the search box (#homeQ) and the three options. Still no
+// rail, no header box, no chips or Continue, and nothing saved.
+test('Home: a heading, one line, its search box and three large options - Programs, ID Camps, Pipelines - with no rail and no header box', async () => {
   const slug = INDEX.programs[0].slug;
   // saved state that the old Home turned into Continue links: the new Home shows none of it, and writes nothing
   const pg = loadPage({ hash: '#/', store: { 'cd.filters': { division: ['D1'], region: ['West'], sort: 'rpi' }, 'cd.favorites': [slug] } });
@@ -291,8 +300,11 @@ test('Home: a heading, one line and three large options - Programs, ID Camps, Pi
     .map(m => [m[1], m[2], !!m[3], m[4] || '']);
   assert.deepEqual(opts.map(o => o.slice(0, 3)), [['#/programs', 'Programs', true], ['#/camps', 'ID Camps', true], ['#/trends', 'Pipelines', true]]);
   assert.equal(opts[0][3], `${INDEX.programs.length.toLocaleString('en-US')} programs`, 'the program count is not the live index');
-  assert.ok(!/homeFind|data-home-chip|home-continue|Continue:|Shortlist \(|<input|<button/.test(html), 'Home still draws the search button, chips, Continue or a control');
-  assert.ok(pg.body.classList.contains('no-rail') && pg.body.classList.contains('no-search'), 'Home shows the rail or the search box');
+  assert.ok(!/homeFind|data-home-chip|home-continue|Continue:|Shortlist \(|<button/.test(html), 'Home still draws the search button, chips, Continue or a button');
+  assert.deepEqual([...html.matchAll(/<input\b[^>]*>/g)].map(m => /id="(\w+)"/.exec(m[0])?.[1]), ['homeQ'], 'Home draws an input other than its one search box');
+  const at = s => html.indexOf(s);
+  assert.ok(at('class="content-subtitle"') < at('class="home-search"') && at('class="home-search"') < at('class="home-entries"'), 'the box is not between the line and the options');
+  assert.ok(pg.body.classList.contains('no-rail') && pg.body.classList.contains('no-search'), 'Home shows the rail or the header search box');
   const keys = [];
   pg.sb.localStorage.setItem = (k) => keys.push(k);
   pg.sb.location.hash = '#/'; pg.sb.route(); await settle(60);

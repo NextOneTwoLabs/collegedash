@@ -162,6 +162,24 @@ test('camp words: removed from the program query, a lone camp word still finds a
   assert.deepEqual(plain({ ...run('ucla id-camp'), typed: 0, programs: slugs(run('ucla id-camp').programs.hits) }), plain({ ...run('ucla id camp'), typed: 0, programs: slugs(run('ucla id camp').programs.hits) }), 'a hyphen joins words; it does not hide a camp word');
 });
 
+// Bianque on PR 1: with camp words dropped, the "All N" link carries what was typed, case and punctuation kept, so the
+// Programs page's box shows "St. Mary's", not "st mary s" - and it still finds exactly the same programs.
+test('camp words dropped: the program query (and the "All N" link) keeps the typed case and punctuation', () => {
+  for (const [q, pq] of [["St. Mary's camps", "St. Mary's"], ['TX camps', 'TX'], ['tx camps', 'tx'], ['ucla id-camp', 'ucla'],
+    ['ID camps Ohio', 'Ohio'], ['Texas A&M camp', 'Texas A&M'], ['camps: penn state', 'penn state'], ['bulldogs, clinics', 'bulldogs']]) {
+    const r = run(q), plainRun = run(pq);
+    assert.equal(r.pq, pq, q);
+    assert.deepEqual(slugs(r.programs.hits), slugs(plainRun.programs.hits), `${q}: not the same programs as "${pq}"`);
+  }
+  assert.equal(run('bulldogs, clinics').programs.href, '#/programs?q=bulldogs&sort=name');
+  // a link that carries punctuation: the Programs page reads back exactly what was typed, and lists the same N
+  const st = run('St. camps');
+  assert.equal(st.programs.href, '#/programs?q=St.&sort=name');
+  const back = A.listStateOf(st.programs.href.split('?')[1]).q;
+  assert.equal(back, 'St.');
+  assert.equal(A.searchMatches(A.normText(back), Infinity, back).length, st.programs.n);
+});
+
 test('the Idaho exception: exactly "ID" in capitals is a state code, not a camp word', () => {
   const r = run('ID'), spaced = run('  ID ');
   assert.deepEqual(plain(r.order), ['programs', 'camps']);
@@ -183,6 +201,8 @@ test('rule 3: camps of the programs found by name, alias or mascot - never by pl
 
 test('first show: 6 program rows and 4 camp rows; the rest are counted', () => {
   assert.equal(A.HOME_ROWS, 6);
+  // Bianque on PR 1: Home draws as many program rows as the header box does; the two must not drift apart.
+  assert.match(HTML, /\bconst SUGGEST_MAX = 6\b/, 'the header box\'s SUGGEST_MAX changed; HOME_ROWS must follow it');
   assert.equal(A.HOME_CAMP_ROWS, 4);
   const r = run('a');
   assert.equal(r.programs.rows.length, 6);

@@ -44,6 +44,7 @@
   --warn-bg: rgba(217, 119, 6, 0.10); --warn-text: #7a4d00;
   /* division tints: the fallback for a program with no team colours (#276); text on them is --text-primary */
   --div-d1: #dde6f3; --div-d2: #dcece4; --div-d3: #efe6d8;
+  --home-q-placeholder: #6b7280;  /* #507: the Home box's placeholder, 4.8:1 on --bg-surface */
 }
 [data-theme="dark"] {
   color-scheme: dark;
@@ -59,6 +60,7 @@
   --s1: #7cb3fb; --s3: #34d399; --s4: #fbbf24; --good-text: #34d399; --critical: #f87171; --warn-bg: rgba(251, 191, 36, 0.12); --warn-text: #fbbf24;
   --s1-wash: rgba(96, 165, 250, 0.14);
   --div-d1: #243149; --div-d2: #213a30; --div-d3: #3b3226;
+  --home-q-placeholder: #8b93a1;  /* #507: 5.6:1 on --bg-surface */
 }
 /* aliases: the section renderers were written against the older token names */
 :root {
@@ -725,6 +727,26 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
 .home-entry-title { display: block; font-size: 22px; font-weight: 700; }
 .home-entry-desc { display: block; margin-top: 4px; font-size: 15px; color: var(--text-secondary); }
 .home-entry-fact { display: block; margin-top: 10px; font-size: 13px; color: var(--text-secondary); }
+/* Home search (#507 v1): the box in the hero, results in normal flow under it at every width (no overlay, so nothing new
+   in the stacking order), pushing the three options down while they show. Single-class selectors only, so
+   tests/home_search_css.test.mjs can pin their layout exactly; colours are the page's tokens. */
+.home-search { width: 100%; max-width: 720px; margin: 4px 0 24px; scroll-margin-top: calc(var(--header-height) + 8px); }  /* a phone's focus scroll stops below the fixed header (Huatuo, R1) */
+.home-q-label { display: block; margin: 0 0 6px; font-size: 13px; font-weight: 600; color: var(--text-secondary); }
+.home-q { width: 100%; min-width: 0; height: 52px; padding: 0 14px 0 44px; font-size: 16px; font-family: var(--font); color: var(--text-primary); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); -webkit-appearance: none; appearance: none;
+  background: var(--bg-surface) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='18' height='18' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") 16px center no-repeat; }
+.home-q::placeholder { color: var(--home-q-placeholder); opacity: 1; }
+.home-q:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); outline: none; }
+.home-results { margin-top: 8px; }
+.home-list { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); }
+.home-group { padding: 4px; }
+.home-group + .home-group { border-top: 1px solid var(--border); }
+.home-group-label { padding: 8px 10px 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; color: var(--text-secondary); }  /* no text-transform: it names the group (aria-labelledby), and all-caps can be spelled out */
+.home-opt { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 44px; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; }
+.home-opt.active, .home-opt:hover { background: var(--bg-surface-alt); }
+.home-opt.active { box-shadow: inset 3px 0 0 var(--accent); }
+.home-opt-name { min-width: 0; overflow-wrap: anywhere; font-size: 15px; font-weight: 600; color: var(--text-primary); }
+.home-opt-sub { min-width: 0; overflow-wrap: anywhere; font-size: 13px; color: var(--text-secondary); }
+.home-msg { padding: 10px 2px; font-size: 14px; color: var(--text-secondary); }
 /* #465: the program search box shows only where it searches - Programs and a program's page (searchShownFor). It stays
    in the DOM everywhere (#447 and #445 keep working wherever it shows); elsewhere it and "Find programs for me" are not
    drawn, the Shortlist and theme toggle move to the right edge, and on a phone the header is one row. */
@@ -2492,7 +2514,10 @@ document.addEventListener('keydown', e => {
   // #93: the ID Camps and Pipelines tabs are links (routes of their own), which browsers activate on Enter
   // only; Cards and Stats beside them are buttons, which Space activates too. Space does the same here.
   if ((e.key === ' ' || e.key === 'Spacebar') && e.target.matches('a.view-tab[role="tab"]')) { e.preventDefault(); e.target.click(); return; }
-  if (e.key === '/') { if (searchShown()) { e.preventDefault(); $('#q')?.focus(); } }  // #434: the header box, where it shows (#465)
+  if (e.key === '/') {  // #434: the header box, where it shows (#465); on Home, Home's own box (#507)
+    if (searchShown()) { e.preventDefault(); $('#q')?.focus(); }
+    else if (currentView() === 'home' && S.index && $('#homeQ')) { e.preventDefault(); $('#homeQ').focus(); }
+  }
   else if (e.key === 'c' && (currentView() === 'list' || currentView() === 'c')) { S.filters.view = S.filters.view === 'cards' ? 'table' : 'cards'; saveState(); listCommit(); renderList(); }
 });
 
@@ -3661,13 +3686,15 @@ function homeSearch(campRows, raw) {
   const idaho = typed === 'ID';
   const rest = idaho ? toks : toks.filter(t => !HOME_CAMP_WORDS.has(t));
   const camp = rest.length < toks.length;
-  // The program query. With camp words dropped it is the remaining words; the capitals rule (placeQuery) reads the
-  // typed text only for a lone two-letter code, so "TX camps" keeps "TX" and "tx camps" stays lowercase.
+  // The program query, which the "All N" link also carries to the Programs page's box. With camp words dropped it is
+  // the typed text without them, its own case and punctuation kept ("St. Mary's camps" -> "St. Mary's", "TX camps" ->
+  // "TX", so the capitals rule still reads a code). When cutting the text that way does not leave exactly the remaining
+  // words (an accent or apostrophe joined to a camp word), it is the remaining words themselves.
   let pq = typed;
   if (camp && rest.length) {
-    pq = rest.join(' ');
-    const up = pq.toUpperCase();
-    if (rest.length === 1 && pq.length === 2 && new RegExp(`(^|[^A-Za-z0-9])${up}($|[^A-Za-z0-9])`).test(typed)) pq = up;
+    const cut = typed.replace(/(^|[^\p{L}\p{N}\p{M}])(?:camps?|clinics?|id)(?=$|[^\p{L}\p{N}\p{M}])/giu, '$1')
+      .replace(/\s+/g, ' ').replace(/^[\s\-\u2010-\u2015_/,;:]+|[\s\-\u2010-\u2015_/,;:]+$/g, '');
+    pq = normText(cut) === rest.join(' ') ? cut : rest.join(' ');
   }
   const hits = searchMatches(normText(pq), Infinity, pq);
   const names = hits.filter(h => !h.m.place);
@@ -3864,21 +3891,210 @@ function routeFocus(plan) {
 /* ---------- Home (#465) ----------
    The owner's direction of 2026-10-02 (recorded on #465): very simple, no sidebar, just the three options - Programs,
    ID Camps, Pipelines - each a large link with one line, Programs with a quiet count from the index already loaded
-   (left out when it is not). The page heading (route focus lands on it, #453) and one line come from pageHeader. No
-   search box here: it shows on Programs and a program's page only. It needs no data of its own, so it draws even when
-   the program index failed (`failed` is that card) and waits on nothing. */
+   (left out when it is not). The page heading (route focus lands on it, #453) and one line come from pageHeader.
+   #507 (the owner's ruling, reversing #465's "no box on Home"): a search box between the line and the options, Home's
+   own (#homeQ; the header box #q stays hidden here). It searches the index already loaded, so it is drawn only when
+   the index is; when the index failed (`failed` is that card) Home draws the card and the options, and waits on
+   nothing. */
 const HOME_ICON = { list: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>', camps: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>', trends: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="12" r="2.5"/><path d="M7 6c5 0 6 6 9.5 6M7 18c5 0 6-6 9.5-6"/></svg>' };
 function renderHome(failed = '') {
   const idx = S.index;
+  homeReset();
   const entry = (k, href, title, desc, fact) => `<a class="home-entry" href="${href}"><span class="home-entry-icon" aria-hidden="true">${HOME_ICON[k]}</span>`
     + `<span><span class="home-entry-title">${title}</span><span class="home-entry-desc">${desc}</span>${fact ? `<span class="home-entry-fact">${fact}</span>` : ''}</span></a>`;
   $('#app').innerHTML = pageHeader({ title: 'Find your college soccer path.',
     subtitle: 'NCAA women’s soccer programs, ID camps, and where club and high school players go to college.' })
     + `<div class="content-body home">${failed}
+      ${idx ? homeSearchHtml() : ''}
       <nav class="home-entries" aria-label="Start here">${entry('list', '#/programs', 'Programs', 'Explore and compare every NCAA women’s soccer program.', idx ? `${fmtNum(idx.programs.length)} programs` : '')}${entry('camps', '#/camps', 'ID Camps', 'Find upcoming ID camps and their dates.', '')}${entry('trends', '#/trends', 'Pipelines', 'See which colleges players from a club or high school went to.', '')}</nav>
     </div>`;
   return Promise.resolve();
 }
+/* ---------- Home search box (#507 v1, PR 2) ----------
+   An ARIA 1.2 editable combobox (#434/#445's pattern) over homeSearch (the engine, above the router). Results show in
+   normal flow under the box at every width, in two sections, each a listbox group named by its aria-hidden heading:
+   - #homeList (role=listbox) holds ONLY groups and options: program rows, camp rows, "All N matching programs →",
+     "Show all N camps" and "Browse all ID camps →". Every program and camp row starts its second line with the
+     program's D1/D2/D3 tag and names it shortName || name.
+   - #homeMsg, outside the listbox, holds the messages (no match, no camp, loading, couldn't load). It sits before the
+     listbox when ID Camps leads and after it otherwise, so it is next to the section it is about.
+   - #homeStatus, the one polite region, says the counts, the message and what Enter opens; written only when it changes.
+   The camps index (the ID Camps page's own, about 7 KB) is requested at the box's first focus, once; typing requests
+   nothing. Keys: Down/Up move across both sections and wrap (Down opens a closed list); Enter opens the active option,
+   or with none the engine's target; Escape closes, then clears; Tab closes. Nothing is saved (#447 decision 4).
+   Listeners are on the document, so the box that renderHome draws afresh on every visit needs no wiring of its own. */
+const HOME = { raw: '', res: null, items: [], active: -1, open: false, more: false, timer: null, camps: 'idle', rows: null };
+function homeReset() {
+  clearTimeout(HOME.timer);
+  Object.assign(HOME, { raw: '', res: null, items: [], active: -1, open: false, more: false, timer: null });
+  if (HOME.camps === 'failed') HOME.camps = 'idle';  // the next focus tries again
+}
+function homeSearchHtml() {
+  return `<div class="home-search" role="search" aria-label="Programs and ID camps">
+        <label class="home-q-label" for="homeQ">Search programs and ID camps</label>
+        <input type="search" id="homeQ" class="home-q" role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="homeList" aria-describedby="homeHint" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" placeholder="School, mascot or camp…">
+        <span class="sr-only" id="homeHint">Type a school, mascot, state, city or the word camp. Programs and upcoming ID camps show below as you type; up and down arrows move through them, Enter opens one.</span>
+        <div class="home-results" id="homeResults">${homeResultsHtml([], '')}</div>
+        <div class="sr-only" id="homeStatus" aria-live="polite"></div>
+      </div>`;
+}
+// The options of a result, section by section, in the engine's order.
+function homeSections(res) {
+  const sections = [];
+  if (!res) return sections;
+  for (const key of res.order) {
+    if (key === 'programs') {
+      const p = res.programs;
+      if (!p.rows.length && !p.href) continue;
+      const opts = p.rows.map(h => ({ kind: 'program', key: `program:${h.p.slug}`, p: h.p, href: `#/p/${h.p.slug}` }));
+      if (p.href) opts.push({ kind: 'all', key: 'all', n: p.n, place: p.place, href: p.href });
+      sections.push({ key, label: `Programs · ${fmtNum(p.n)}`, opts });
+    } else {
+      const c = res.camps;
+      if (!c || (!c.n && !(res.camp && res.order[0] === 'camps'))) continue;  // an empty Camps section only when it leads
+      const rows = HOME.more ? c.all : c.shown;
+      const opts = rows.map(x => ({ kind: 'camp', key: `camp:${x.c.slug}|${x.c.startDate}|${x.c.name}`, x, href: `#/p/${x.c.slug}/camps` }));
+      if (c.n > rows.length) opts.push({ kind: 'more', key: 'more', n: c.n });
+      opts.push({ kind: 'browse', key: 'browse', href: '#/camps' });
+      sections.push({ key, label: `ID Camps · ${fmtNum(c.n)} upcoming`, opts });
+    }
+  }
+  let i = 0;
+  sections.forEach(sec => sec.opts.forEach(o => { o.i = i++; }));
+  return sections;
+}
+function homeOptHtml(o) {
+  const on = o.i === HOME.active;
+  const attrs = `role="option" id="homeOpt-${o.i}" class="home-opt${on ? ' active' : ''}" aria-selected="${on}" data-i="${o.i}" data-kind="${o.kind}"`;
+  const two = (name, sub) => `<span class="home-opt-name">${name}</span>${sub ? `<span class="home-opt-sub">${sub}</span>` : ''}`;
+  if (o.kind === 'program') return `<div ${attrs} data-slug="${esc(o.p.slug)}">${two(esc(displayName(o.p)), programLine(o.p))}</div>`;
+  if (o.kind === 'camp') {
+    const { c, info } = o.x;
+    return `<div ${attrs} data-slug="${esc(c.slug)}">${two(esc(c.name || 'Camp'), `${divisionTag(info.division)} · ${esc(info.name)} · ${esc(campDate(c))}`)}</div>`;
+  }
+  if (o.kind === 'all') return `<div ${attrs}>${two(`All ${fmtNum(o.n)} matching programs →`, o.place ? 'Including programs by place · opens the Programs list' : 'Opens the Programs list')}</div>`;
+  if (o.kind === 'more') return `<div ${attrs}>${two(`Show all ${fmtNum(o.n)} camps`, '')}</div>`;
+  return `<div ${attrs}>${two('Browse all ID camps →', '')}</div>`;
+}
+function homeResultsHtml(sections, msg) {
+  const show = sections.length > 0;
+  const groups = sections.map(sec => `<div role="group" class="home-group" aria-labelledby="homeGrp-${sec.key}"><div class="home-group-label" id="homeGrp-${sec.key}" aria-hidden="true">${esc(sec.label)}</div>${sec.opts.map(homeOptHtml).join('')}</div>`).join('');
+  const list = `<div class="home-list" id="homeList" role="listbox" aria-label="Programs and ID camps"${show ? '' : ' hidden'}>${groups}</div>`;
+  const note = `<div class="home-msg" id="homeMsg"${msg ? '' : ' hidden'}>${esc(msg)}</div>`;
+  return HOME.res?.order[0] === 'camps' ? note + list : list + note;
+}
+function homeMessage(res) {
+  if (!res) return '';
+  const q = `“${res.typed}”`;
+  if (HOME.camps === 'failed') return res.programs.n ? 'ID camps couldn’t load.' : `No program matches ${q}. ID camps couldn’t load.`;
+  if (res.message === 'loading') return 'Loading camps…';
+  if (res.message === 'nomatch') return `No program or upcoming ID camp matches ${q}. Try a school’s short name, a mascot, a state or a city.`;
+  if (res.message === 'nocamp') return `No upcoming ID camps match ${q}.`;
+  return '';
+}
+function homeEnterLabel(res) {
+  const e = res?.enter;
+  if (!e) return '';
+  if (e.kind === 'program') return displayName(res.programs.rows[0].p);
+  if (e.kind === 'camp') { const { c, info } = res.camps.all[0]; return `${c.name || 'a camp'}, ${info.name}`; }
+  return `the list of ${fmtNum(res.programs.n)} programs`;
+}
+function homeStatusText(res, msg) {
+  if (!res) return '';
+  const plural = (n, one) => `${fmtNum(n)} ${one}${n === 1 ? '' : 's'}`;
+  const counts = res.message === 'nomatch' ? '' : `${plural(res.programs.n, 'program')}${res.camps ? ` and ${plural(res.camps.n, 'upcoming ID camp')}` : ''}.`;
+  const enter = res.enter ? `Enter opens ${homeEnterLabel(res)}.` : '';
+  return [counts, msg, enter].filter(Boolean).join(' ');
+}
+function homeRender() {
+  const box = $('#homeQ'), wrap = $('#homeResults');
+  if (!box || !wrap) return;
+  const sections = HOME.open ? homeSections(HOME.res) : [];
+  HOME.items = sections.flatMap(sec => sec.opts);
+  if (HOME.active >= HOME.items.length) HOME.active = -1;
+  const msg = HOME.open ? homeMessage(HOME.res) : '';
+  wrap.innerHTML = homeResultsHtml(sections, msg);
+  const show = HOME.items.length > 0;
+  box.setAttribute('aria-expanded', String(show));
+  if (show && HOME.active >= 0) box.setAttribute('aria-activedescendant', `homeOpt-${HOME.active}`);
+  else box.removeAttribute('aria-activedescendant');
+  const st = $('#homeStatus'), text = HOME.open ? homeStatusText(HOME.res, msg) : '';
+  if (st && st.textContent !== text) st.textContent = text;
+}
+function homeApply() {
+  clearTimeout(HOME.timer); HOME.timer = null;
+  HOME.res = homeSearch(HOME.camps === 'ready' ? HOME.rows : null, HOME.raw);
+  HOME.open = !!HOME.res; HOME.active = -1; HOME.more = false;
+  homeRender();
+}
+function homeTyped(v) {
+  HOME.raw = v;
+  clearTimeout(HOME.timer);
+  HOME.timer = setTimeout(homeApply, 80);
+}
+// The camps the ID Camps page lists, fetched once at the first focus (loadCamps keeps them for that page too).
+function homeLoadCamps() {
+  if (HOME.camps !== 'idle') return;
+  HOME.camps = 'loading';
+  loadCamps().then(doc => { HOME.rows = campsData(S.index, doc).all; HOME.camps = 'ready'; }, () => { HOME.camps = 'failed'; })
+    .then(() => {
+      if (currentView() !== 'home' || !HOME.open || !HOME.res) return;
+      // The camps arrive while the visitor may be arrowing: the same option stays active if it is still there (a
+      // leading ID Camps section moves every program down), and none is active otherwise (Huatuo, O1).
+      const key = HOME.items[HOME.active]?.key;
+      homeApply();
+      const i = key ? HOME.items.findIndex(o => o.key === key) : -1;
+      if (i >= 0) { HOME.active = i; homeRender(); }
+    });
+}
+function homeClose() { HOME.open = false; HOME.active = -1; homeRender(); }
+function homeGo(href) {
+  clearTimeout(HOME.timer); HOME.timer = null; HOME.open = false;
+  $('#homeQ')?.blur?.();  // a phone's keyboard drops
+  location.hash = href;   // the route then focuses the new page's <h1> (#453)
+}
+function homeChoose(i) {
+  const o = HOME.items[i];
+  if (!o) return;
+  if (o.kind === 'more') { HOME.more = true; HOME.active = i; homeRender(); return; }  // the 5th camp takes its place
+  homeGo(o.href);
+}
+function homeKeydown(e, box) {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+    e.preventDefault();
+    if (HOME.timer !== null) { HOME.raw = box.value; homeApply(); }
+    if (!HOME.res) return;
+    if (!HOME.open) { HOME.open = true; HOME.active = -1; homeRender(); if (e.key === 'ArrowUp') return; }
+    const n = HOME.items.length;
+    if (n) HOME.active = e.key === 'ArrowDown' ? (HOME.active + 1) % n : (HOME.active <= 0 ? n - 1 : HOME.active - 1);
+    return homeRender();
+  }
+  if (e.key === 'Enter') {
+    e.preventDefault();
+    if (HOME.open && HOME.active >= 0 && HOME.items[HOME.active]) return homeChoose(HOME.active);
+    if (HOME.timer !== null || HOME.raw !== box.value) { HOME.raw = box.value; homeApply(); }  // Enter before the wait ends
+    if (HOME.res?.enter) homeGo(HOME.res.enter.href);
+    return;
+  }
+  if (e.key === 'Escape') {
+    if (HOME.open && HOME.res) { e.preventDefault(); homeClose(); }
+    else if (box.value) { e.preventDefault(); box.value = ''; HOME.raw = ''; homeApply(); }
+    return;
+  }
+  if (e.key === 'Tab' && HOME.open) homeClose();
+}
+document.addEventListener('input', e => { if (e.target?.id === 'homeQ') homeTyped(e.target.value); });
+document.addEventListener('keydown', e => { if (e.target?.id === 'homeQ') homeKeydown(e, e.target); });
+document.addEventListener('focusin', e => {
+  if (e.target?.id !== 'homeQ') return;
+  homeLoadCamps();
+  if (HOME.res && !HOME.open) { HOME.open = true; homeRender(); }
+  // rows above the keyboard; .home-search's scroll-margin-top keeps the box below the fixed header
+  if (isPhone()) e.target.closest?.('.home-search')?.scrollIntoView?.({ block: 'start' });
+});
+document.addEventListener('focusout', e => { if (e.target?.id === 'homeQ' && HOME.open) homeClose(); });
+document.addEventListener('mousedown', e => { if (e.target?.closest?.('#homeResults')) e.preventDefault(); });  // the box keeps focus
+document.addEventListener('click', e => { const o = e.target?.closest?.('#homeList [role="option"]'); if (o) homeChoose(+o.dataset.i); });
 // #465 B: the destinations' aria-current, the Shortlist count in the header and the bottom bar, and whether this view
 // has the Programs filter rail. Filters belong to their destination (owner's D4): a view in NO_RAIL draws no sidebar.
 // Pipelines has no rail (the owner, 2026-10-02) and no longer reads the Programs filters (trendsView), so nothing hidden
