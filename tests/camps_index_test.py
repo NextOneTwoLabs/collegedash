@@ -376,6 +376,11 @@ def test_emitter(progs: str, camps_dir: str, log: str) -> None:
     said = [l for l in log.splitlines() if "build: camps index" in l]
     ok("the build log counts the undated items the index leaves out (#70)",
        len(said) == 1 and f"; {undated} undated item(s) left out" in said[0], (said or ["no camps index line"])[0][-200:])
+    # #507: the slugs of programs whose profile names a camp page, counted here independently from the profiles.
+    linked = sorted(f[:-5] for f in os.listdir(progs) if f.endswith(".json") and f != "index.json"
+                    and ((json.load(open(os.path.join(progs, f), encoding="utf-8")).get("camps") or {}).get("url")))
+    ok("#507 it publishes campPages: exactly the programs whose profile names a camp page, sorted",
+       doc.get("campPages") == linked and len(linked) > 0, f"{len(doc.get('campPages') or [])} vs {len(linked)}")
     rows = doc["camps"]
     ok("it publishes rows at all", isinstance(rows, list) and rows, str(type(rows)))
 
@@ -604,7 +609,7 @@ COVERAGE_AUTO = object()
 
 def doc(rows, window=WINDOW, counts=None) -> dict:
     return {"updated": FIXTURE_UPDATED, "window": window,
-            "counts": build.camp_counts(rows) if counts is None else counts, "coverage": COVERAGE_AUTO, "camps": rows}
+            "counts": build.camp_counts(rows) if counts is None else counts, "coverage": COVERAGE_AUTO, "campPages": [], "camps": rows}
 
 
 def item(**kw) -> dict:
@@ -814,6 +819,37 @@ def test_invariant() -> None:
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+def test_camp_pages() -> None:
+    print("campPages (#507): which programs have a camp page, for Home search")
+    blocks = [("zeta", {"url": "https://z.example/camps"}), ("alpha", {"url": "https://a.example/", "robotsBlocked": True}),
+              ("beta", {"url": None, "items": []}), ("gamma", None), ("alpha", {"url": "https://a.example/"}),
+              ("delta", {"url": ""}), ("eps", {"items": []}), ("omega", "junk")]
+    got = build.camp_page_slugs(blocks) if hasattr(build, "camp_page_slugs") else None
+    ok("camp_page_slugs: a program with a camp-page url, sorted, once; no url, empty url, no block or junk: none",
+       got == ["alpha", "zeta"], str(got))
+    ok("camp_page_slugs: robots-blocked pages are kept (the Camps tab still links out)", bool(got) and "alpha" in got)
+    with tempfile.TemporaryDirectory() as tmp:
+        items = {"clemson": [item()], "duke": []}
+        reg = scratch_tree(tmp, index_doc=doc([{**GOOD_ROW}]), items=items)
+        for slug, url in (("clemson", "https://c.example/camps"), ("duke", None)):
+            p = os.path.join(tmp, "programs", f"{slug}.json")
+            prof = json.load(open(p, encoding="utf-8"))
+            prof["camps"]["url"] = url
+            common.write_json(p, prof)
+        good = {**doc([{**GOOD_ROW}]), "coverage": build.camp_coverage([{"camps": {"url": "https://c.example/camps", "items": [item()]}},
+                                                                       {"camps": {"url": None, "items": []}}])}
+        for name, d, want in (
+                ("a campPages that matches the profiles passes", {**good, "campPages": ["clemson"]}, True),
+                ("a campPages naming a program with no camp page is caught", {**good, "campPages": ["clemson", "duke"]}, False),
+                ("a campPages missing a program that has one is caught", {**good, "campPages": []}, False),
+                ("a campPages that is not sorted and unique is caught", {**good, "campPages": ["clemson", "clemson"]}, False),
+                ("an index with no campPages is caught", {k: v for k, v in good.items() if k != "campPages"}, False)):
+            common.write_json(os.path.join(tmp, "camps", "index.json"), d)
+            with swapped(PROGRAMS_OUT_DIR=os.path.join(tmp, "programs"), CAMPS_OUT_DIR=os.path.join(tmp, "camps")):
+                good_, out = captured(build.check_camps_index, reg)
+            ok(f"invariant: {name}", good_ == want and (want or "campPages" in out), out[:300])
+
+
 def main(argv=None) -> int:
     global VERBOSE
     ap = argparse.ArgumentParser(description=__doc__,
@@ -834,6 +870,7 @@ def main(argv=None) -> int:
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
     test_invariant()
+    test_camp_pages()
 
     print(f"\n{TOTAL - len(FAILS)} of {TOTAL} checks passed"
           + (f"; FAILED: {', '.join(FAILS)}" if FAILS else ""))
