@@ -1798,6 +1798,7 @@ async function loadCamps() {
   if (!S.camps) {
     const doc = await getJSON('/api/v1/camps');
     S.camps = { updated: doc?.updated || null, window: doc?.window || null, counts: doc?.counts || null,
+                coverage: doc?.coverage || null,  // #79: counts only; absent from an older index (the view hides its line)
                 camps: Array.isArray(doc?.camps) ? doc.camps : [] };
   }
   return S.camps;
@@ -4605,6 +4606,17 @@ function campsChips(st) {
   if (S.campsSaved) out.push(['saved', 'Shortlisted programs']);
   return out;
 }
+/* #79: the programs whose camp page we could not read, from the camps index's counts-only `coverage` block (build.py
+   camp_coverage): every unreadable cause, fetch failures and refused hosts. robots.txt and no-link are left out: we
+   chose not to read those, or found nothing to read. Hidden at 0 and for an older index with no block. It names no
+   program, so it carries no division. */
+function campsCoverageHtml(cov) {
+  if (!cov || typeof cov !== 'object') return '';
+  const num = v => (Number.isInteger(v) && v > 0 ? v : 0);
+  const causes = cov.unreadable && typeof cov.unreadable === 'object' ? Object.values(cov.unreadable) : [];
+  const n = causes.reduce((a, v) => a + num(v), 0) + num(cov.fetchFailed) + num(cov.refusedHost);
+  return n ? `<p class="table-footnote camps-foot camps-coverage">Camp pages for ${n} program${n === 1 ? '' : 's'} could not be read automatically, so their camps may be missing.</p>` : '';
+}
 function campsResultsHtml(rows) {
   const st = CAMPS.st, tally = CAMPS.tally;
   // The hidden count, site-wide and not narrowed by the filters (#78, #93): never negative, never clamped.
@@ -4620,7 +4632,7 @@ function campsResultsHtml(rows) {
     `Dates and details are read automatically from each program's camp page and are not verified: confirm with the organizer. A Register link does not mean registration is still open.`,
     `Programs whose camp page we could not read do not appear here, so a program missing from this list may still hold a camp.`,
   ].filter(Boolean).join(' ');
-  const footHtml = `<p class="table-footnote camps-foot">${foot}</p>`;  // fixed words and counts only: nothing from a page
+  const footHtml = campsCoverageHtml(CAMPS.doc.coverage) + `<p class="table-footnote camps-foot">${foot}</p>`;  // fixed words and counts only: nothing from a page
   if (!rows.length && !CAMPS.all.length) {
     return `<div class="card camps-empty"><h2>No upcoming ID camp found in our sources</h2>
       <p class="muted">We list a camp here once a school has posted a dated women's soccer ID or prospect camp. Our sources do not cover every school, and many camps are announced in the spring, so a camp may exist that is not listed here. A program's own <b>ID Camps</b> tab shows everything we found for it.</p>
@@ -6022,7 +6034,9 @@ async function tabCamps(p) {
     <td class="small">${[it.registerUrl ? link(it.registerUrl, 'register') : '', it.sourceUrl ? link(it.sourceUrl, 'source') : ''].filter(Boolean).join(' · ')}</td></tr>`;
   const table = (rows, old) => `<div class="tscroll"><table><tr><th>When</th><th>Camp</th><th>Details</th><th>Links</th></tr>${rows.map(it => row(it, old)).join('')}</table></div>`;
   const shown = c.finalUrl || c.url;
-  const unreadable = c.parsed === false && c.url && !c.robotsBlocked && !c.fetchError;  // a PDF, an empty body, non-HTML
+  // a PDF, an empty body, non-HTML; and since #79 any cause build.py's camp_readability names (a TotalCamps app shell, a
+  // form or store page, a waiver document or an image), which a page with nothing dated would otherwise show as "none listed"
+  const unreadable = !!c.url && !c.robotsBlocked && !c.fetchError && (c.parsed === false || !!c.unreadable?.cause);
   const linkCard = c.url
     ? `<div class="card"><h3>Camp information</h3><p>${httpUrl(shown) ? extLink(shown, `Camp page on ${c.host || shown}`) : `<span class="muted">Camp page on ${esc(c.host || shown)}</span>`}${c.discoveredVia === 'registry' ? '' : ' <span class="muted small">(auto-detected from the athletics site navigation)</span>'}${c.hubUrl ? `<br><span class="small muted">via the all-sports camps page: ${link(c.hubUrl, c.hubUrl)}</span>` : ''}</p>
         ${c.robotsBlocked ? '<p class="small muted">This site asks automated readers not to open it (robots.txt), so only the link is shown here; open it to see dates.</p>' : ''}

@@ -1464,6 +1464,62 @@ def camp_source(item: dict) -> dict:
     return src
 
 
+# Issue #79: why a camp page with nothing dated could not be read, derived here from the stored record (vendor, rows,
+# final URL, `parsed`, the fetch fields) so collect/camps.py is untouched and today's data gets it on the next build.
+# The plan, with the evidence for each rule: docs/plans/79-camp-zero-rows.md.
+CAMP_UNREADABLE_CAUSES = ("app-shell", "not-a-listing", "not-html")
+# A registration, store, ticketing, fundraising or link-list host: the page is a form or a checkout, not a camp listing.
+# Matched as the host itself or a subdomain of it (secure.touchnet.net), never as a substring (docs.google.com.example).
+CAMP_NOT_A_LISTING_HOSTS = ("docs.google.com", "forms.gle", "forms.cloud.microsoft", "forms.office.com", "touchnet.net",
+                            "touchnet.com", "nbsstore.net", "universitytickets.com", "agileticketing.net", "givesmart.com",
+                            "givelively.org", "cvent.me", "cvent.com", "linktr.ee", "jotform.com", "eventbrite.com",
+                            "formstack.com")
+# A waiver, liability or form(s) document, as a whole word between separators: Sidearm's standard camps hub
+# (information-camps-index) and a "uniforms" page do not match.
+_CAMP_FORM_PATH = re.compile(r"(?:^|[/_.\-])(?:waivers?|liability|forms?)(?=[/_.\-]|$)", re.I)
+_CAMP_IMAGE_PATH = re.compile(r"\.(?:jpe?g|png|gif|webp|heic)$", re.I)
+
+
+def _host_is(host: str, name: str) -> bool:
+    return host == name or host.endswith("." + name)
+
+
+def camp_readability(record) -> dict | None:
+    """Why the stored camp page could not be read, as {"cause": ...}, or None (issue #79). Pure: reads only `record`.
+
+    None whenever the record has a dated row (njit's Google Form and plymouth-state's NBS store page show camps), has
+    no camp link, or carries a fetchError, robotsBlocked or hostRefused (those keep their own fields and messages).
+    Otherwise, in this order:
+      not-a-listing  the final URL's host is one of CAMP_NOT_A_LISTING_HOSTS or a subdomain of one; or its path (for
+                     Sidearm's images.sidearmdev.com/convert?url= proxy, the inner URL's path) names a waiver, liability
+                     or form(s) document, or ends in an image extension;
+      app-shell      the stored `vendor` is totalcamps (set by the collector from host and markup, so it covers the
+                     custom domains): 129 of 129 such pages never had a row in any revision;
+      not-html       `parsed` is false (a PDF, an image, an empty body)."""
+    if not isinstance(record, dict):
+        return None
+    rows = record.get("camps") if isinstance(record.get("camps"), list) else []
+    if any(isinstance(r, dict) and isinstance(r.get("startDate"), str) and r["startDate"] for r in rows):
+        return None
+    if not record.get("campsUrl") or record.get("fetchError") or record.get("robotsBlocked") or record.get("hostRefused"):
+        return None
+    url = record.get("finalUrl") or record.get("campsUrl")
+    parts = urllib.parse.urlsplit(url if isinstance(url, str) else "")
+    host = (parts.hostname or "").lower()
+    path = parts.path
+    if host == "images.sidearmdev.com" and path.startswith("/convert"):
+        inner = (urllib.parse.parse_qs(parts.query).get("url") or [""])[0]
+        path = urllib.parse.urlsplit(inner).path
+    if (any(_host_is(host, h) for h in CAMP_NOT_A_LISTING_HOSTS) or _CAMP_FORM_PATH.search(path)
+            or _CAMP_IMAGE_PATH.search(path)):
+        return {"cause": "not-a-listing"}
+    if record.get("vendor") == "totalcamps":
+        return {"cause": "app-shell"}
+    if record.get("parsed") is False:
+        return {"cause": "not-html"}
+    return None
+
+
 def build_camps(camps, news, curated) -> dict | None:
     """ID camps section: the camp page (link, host, vendor, robots state) plus one merged list of
     entries with `kind`: "camp" (extracted from the camp page), "news" (announced in a news
@@ -1526,7 +1582,9 @@ def build_camps(camps, news, curated) -> dict | None:
     return {"url": c.get("campsUrl"), "hubUrl": c.get("hubUrl"), "finalUrl": c.get("finalUrl"), "host": c.get("host"),
             "vendor": c.get("vendor"), "pageTitle": c.get("pageTitle"), "discoveredVia": c.get("discoveredVia"),
             "robotsBlocked": bool(c.get("robotsBlocked")), "fetchError": c.get("fetchError"),
+            "hostRefused": bool(c.get("hostRefused")),  # #79: the camp host refused us (recorded, not re-requested)
             "parsed": c.get("parsed"),  # False: the page was fetched but is not HTML (PDF, empty); None: older camps.json
+            "unreadable": camp_readability(c),  # #79: null, or {cause} when a page with nothing dated could not be read
             "newsScanned": c.get("newsScanned", 0), "items": merged, "_meta": metas}
 
 
@@ -1657,6 +1715,50 @@ def camp_counts(rows: list) -> dict:
         if t in counted:
             counted[t] += 1
     return {"total": len(rows), **counted}
+
+
+def camp_coverage_bucket(camps) -> str:
+    """The one coverage bucket a profile's camps block falls in (issue #79), first match in this order: no camps record
+    (skipped), no link, robots, refused host, fetch error, an unreadable cause, with dated camp-page rows, read with
+    nothing dated. A cause is one of CAMP_UNREADABLE_CAUSES; anything else is not counted as one."""
+    if not isinstance(camps, dict):
+        return "skipped"
+    metas = camps.get("_meta") if isinstance(camps.get("_meta"), list) else []
+    if not any(isinstance(m, dict) and m.get("source") == "camps" for m in metas):
+        return "skipped"  # curated camps alone make a block, but no camp page was ever looked for
+    if not camps.get("url"):
+        return "noLink"
+    if camps.get("robotsBlocked"):
+        return "robots"
+    if camps.get("hostRefused"):
+        return "refusedHost"
+    if camps.get("fetchError"):
+        return "fetchFailed"
+    cause = camps.get("unreadable").get("cause") if isinstance(camps.get("unreadable"), dict) else None
+    if cause in CAMP_UNREADABLE_CAUSES:
+        return cause
+    items = camps.get("items") if isinstance(camps.get("items"), list) else []
+    if any(isinstance(it, dict) and it.get("kind") == "camp" and isinstance(it.get("startDate"), str) and it["startDate"]
+           for it in items):
+        return "withRows"
+    return "readNothingDated"
+
+
+def camp_coverage(profiles) -> dict:
+    """What the camp pages of the published programs yielded, counts only (issue #79): every program in exactly one
+    bucket (camp_coverage_bucket), so the buckets add up to `programs` by construction. The build writes it into the
+    camps index and check_camps_index recomputes it from the profiles, as it does `counts`. The ID Camps page reports
+    unreadable + fetchFailed + refusedHost as the programs whose camps may be missing. No slugs, hosts or URLs."""
+    out = {"programs": 0, "withRows": 0, "readNothingDated": 0, "unreadable": {c: 0 for c in CAMP_UNREADABLE_CAUSES},
+           "fetchFailed": 0, "refusedHost": 0, "robots": 0, "noLink": 0, "skipped": 0}
+    for p in profiles:
+        b = camp_coverage_bucket(p.get("camps") if isinstance(p, dict) else None)
+        out["programs"] += 1
+        if b in CAMP_UNREADABLE_CAUSES:
+            out["unreadable"][b] += 1
+        else:
+            out[b] += 1
+    return out
 
 
 # ---------- commitments ----------
@@ -2250,6 +2352,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                                       school_table=school_table)  # #339: one school table for every state lookup
     rows, all_commits, all_camps = [], [], []
     camps_undated = 0  # issue #70: camp items with no date, left out of the index; counted, never silent
+    camp_blocks: list[dict] = []  # issue #79: each program's camps block, for the index's `coverage`
     fit_entries: dict[str, dict] = {}  # issue #400
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
@@ -2266,6 +2369,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                                 "clubId": (c.get("clubInfo") or {}).get("clubId"),
                                 "sourceCount": len(c["sources"]),
                                 "collegeName": program.get("shortName") or program["name"]})
+        camp_blocks.append({"camps": profile.get("camps")})
         for it in ((profile.get("camps") or {}).get("items") or []):
             if camp_in_window(it, window):
                 all_camps.append(camp_row(program["slug"], it, rows[-1]))  # rows[-1]: this program's index row (#465)
@@ -2286,15 +2390,23 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     common.write_json(os.path.join(common.COMMITS_OUT_DIR, "index.json"),
                       {"updated": updated, "commitments": all_commits})
     camp_tally = camp_counts(all_camps)
+    coverage = camp_coverage(camp_blocks)  # issue #79: counts only; check_camps_index recomputes it from the profiles
     # Written compact (#465), like the slim list (#395): Home loads it for its camp preview (owner decision D2).
     common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
-                      {"updated": updated, "window": window, "counts": camp_tally, "camps": all_camps},
+                      {"updated": updated, "window": window, "counts": camp_tally, "coverage": coverage,
+                       "camps": all_camps},
                       compact=True)
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
                f"window from {window['from']}; "
                f"{camp_tally['id']} id, {camp_tally['youth']} youth, {camp_tally['unknown']} unknown "
                f"({camp_tally['total'] - camp_tally['id']} hidden by the camp view); "
                f"{camps_undated} undated item(s) left out (each still listed on its program page)")
+    cu = coverage["unreadable"]
+    common.log(f"build: camp pages of {coverage['programs']} programs: {coverage['withRows']} with dated rows, "
+               f"{coverage['readNothingDated']} read with nothing dated, {sum(cu.values())} unreadable "
+               f"({', '.join(f'{n} {c}' for c, n in cu.items())}), {coverage['fetchFailed']} fetch failed, "
+               f"{coverage['refusedHost']} refused host, {coverage['robots']} robots.txt, {coverage['noLink']} no link, "
+               f"{coverage['skipped']} not collected")
     common.log("build: " + trends.summary_line(trends_recorder.write()) + f" -> {trends.out_path()}")
     publishing = publishing_run()
     club_report = (club_recorder.write() if publishing
@@ -2566,7 +2678,7 @@ def check_camps_index(registry: dict) -> bool:
         print(f"CAMPS: {path} is {'missing' if doc is None else 'a ' + type(doc).__name__ + ', not an object'}")
         return False
     ok = True
-    for key in ("updated", "window", "counts", "camps"):
+    for key in ("updated", "window", "counts", "coverage", "camps"):
         if key not in doc:
             print(f"CAMPS: the index declares no {key!r}")
             ok = False
@@ -2674,6 +2786,7 @@ def check_camps_index(registry: dict) -> bool:
     expected: list[dict] = []
     item_fields: set = set()
     unreadable: set = set()
+    camp_blocks: list[dict] = []  # issue #79: `coverage` is recomputed from these
     for program in published_programs(registry):
         slug = program.get("slug")
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")
@@ -2684,12 +2797,27 @@ def check_camps_index(registry: dict) -> bool:
             continue
         p = p or {}
         camps = p.get("camps") if isinstance(p, dict) else None
+        camp_blocks.append({"camps": camps})
+        cause = camps.get("unreadable") if isinstance(camps, dict) else None
+        if cause is not None and not (isinstance(cause, dict) and cause.get("cause") in CAMP_UNREADABLE_CAUSES):
+            print(f"CAMPS: {slug}'s camps block declares unreadable {cause!r}; it must be null or a cause from "
+                  f"{list(CAMP_UNREADABLE_CAUSES)}")
+            ok = False
         items = (camps or {}).get("items") if isinstance(camps, dict) else None
         for it in items if isinstance(items, list) else []:
             if isinstance(it, dict):
                 item_fields |= set(it)
             if camp_in_window(it, window):
                 expected.append(camp_row(slug, it, index_rows.get(slug)))
+    # Issue #79: `coverage` is a tally of the profiles, like `counts` of the rows, so it is recomputed with the same
+    # function the build used. Skipped when a profile could not be read: that is reported above, and a tally over
+    # the rest would only add a second, derived failure.
+    if "coverage" in doc and not unreadable:
+        declared, actual = doc.get("coverage"), camp_coverage(camp_blocks)
+        if declared != actual:
+            print(f"CAMPS: the index declares coverage {declared!r}, but the profiles tally "
+                  f"{actual!r}; the ID Camps page reports the programs whose camps may be missing from it")
+            ok = False
     # Issue #69: CAMP_INDEX_FIELDS is an allow-list, so a per-item field added to build_camps is
     # dropped on the way out and nothing said so - which is how `campType` would have reached no
     # row at all while every other check here passed. Withheld-on-purpose is declared, so the only

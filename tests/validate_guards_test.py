@@ -14,6 +14,10 @@ Each case points common.PROGRAMS_OUT_DIR at a scratch copy of the committed prof
 beside it, as build.list_path() and fit_path() expect), with one profile replaced by truncated JSON. Nothing is
 fetched and nothing under public/ is written.
 
+Issue #79: common.CAMPS_OUT_DIR points at a scratch copy of the committed camps index too, carrying the `coverage`
+block build.camp_coverage computes from the copied profiles - the block a build writes. The committed index has none
+until the first refresh after #79 merges, and this suite judges the profile readers, not that transition.
+
 Cases:
   control   the scratch tree with no damage passes validate, so every failure below is the damaged file's
   readers   each reader, called on its own, returns False and names the file instead of raising
@@ -44,6 +48,7 @@ TOTAL = 0
 VERBOSE = False
 BAD = "stanford"
 LIVE_PROGRAMS = common.PROGRAMS_OUT_DIR
+LIVE_CAMPS = common.CAMPS_OUT_DIR
 
 
 def ok(name: str, cond: bool, detail: str = "") -> None:
@@ -65,6 +70,13 @@ def scratch(tmp: str, damage: bool) -> str:
     live_data = os.path.dirname(LIVE_PROGRAMS)
     for d in ("list", "fit"):
         os.symlink(os.path.join(live_data, d), os.path.join(root, d))
+    # #79: the camps index as a build writes it, with the coverage of exactly the profiles copied above
+    camps = common.read_json(os.path.join(LIVE_CAMPS, "index.json"))
+    published = [common.read_json(os.path.join(progs, f"{p['slug']}.json")) or {}
+                 for p in build.published_programs(common.load_registry())]
+    camps["coverage"] = build.camp_coverage(published)
+    os.makedirs(os.path.join(root, "camps"))
+    common.write_json(os.path.join(root, "camps", "index.json"), camps, compact=True)
     if damage:
         bad = os.path.join(progs, f"{BAD}.json")
         os.remove(bad)
@@ -75,12 +87,13 @@ def scratch(tmp: str, damage: bool) -> str:
 
 @contextlib.contextmanager
 def programs_at(path: str):
-    old = common.PROGRAMS_OUT_DIR
-    common.PROGRAMS_OUT_DIR = path
+    """The scratch profiles at `path`, and the scratch camps index beside them (#79)."""
+    old = common.PROGRAMS_OUT_DIR, common.CAMPS_OUT_DIR
+    common.PROGRAMS_OUT_DIR, common.CAMPS_OUT_DIR = path, os.path.join(os.path.dirname(path), "camps")
     try:
         yield
     finally:
-        common.PROGRAMS_OUT_DIR = old
+        common.PROGRAMS_OUT_DIR, common.CAMPS_OUT_DIR = old
 
 
 def run(fn, *a) -> tuple[bool | None, str, str | None]:
