@@ -302,8 +302,10 @@ def scratch(tmp: str, coverage) -> dict:
     for s, p in zip(slugs, FIXTURE):
         # no dated row lies inside the window below, so the index publishes no rows and only coverage is judged
         common.write_json(os.path.join(progs, f"{s}.json"), {"slug": s, **p})
+    # #507: campPages is the sorted slugs of profiles with a camp url, as the build writes it
+    pages = build.camp_page_slugs(zip(slugs, [p.get("camps") for p in FIXTURE]))
     doc = {"updated": UPDATED, "window": {"from": UPDATED[:10], "to": None}, "counts": build.camp_counts([]),
-           "camps": []}
+           "campPages": pages, "camps": []}
     if coverage is not None:
         doc["coverage"] = coverage
     common.write_json(os.path.join(camps, "index.json"), doc)

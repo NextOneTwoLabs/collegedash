@@ -75,6 +75,8 @@ def scratch(tmp: str, damage: bool) -> str:
     published = [common.read_json(os.path.join(progs, f"{p['slug']}.json")) or {}
                  for p in build.published_programs(common.load_registry())]
     camps["coverage"] = build.camp_coverage(published)
+    # #507: and the camp-page slugs of those profiles (the committed index predates the field until the next refresh)
+    camps["campPages"] = build.camp_page_slugs((p.get("slug"), p.get("camps")) for p in published)
     os.makedirs(os.path.join(root, "camps"))
     common.write_json(os.path.join(root, "camps", "index.json"), camps, compact=True)
     if damage:
