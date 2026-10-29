@@ -3634,6 +3634,66 @@ async function recsPilotStart() {
 }
 const recsPilotReady = recsPilotStart();
 
+/* ---------- Home search (#507 v1) ----------
+   One box on Home answers in two sections, Programs and ID Camps (docs/plans/507-search/v1-plan.md, section 3).
+   homeSearch is the whole engine and draws nothing; it reuses the page's two matchers unchanged:
+   - Programs: searchMatches (the header box's matcher) over S.index - names, short names, cited aliases, initials,
+     nickname, then a whole-query state or city. Rows are the first HOME_ROWS hits that are not place hits, as the
+     header box draws them; every other hit (places, overflow) is counted in one closing "All N matching programs"
+     link, #/programs?q=…, which lists exactly those N because the Programs page runs the same matcher with every other
+     filter at its default. (The header box shows that option only for place hits; Home also shows it for overflow.)
+   - ID Camps: `campRows` are campsData(...).all, the upcoming ID camps the ID Camps page lists, in its date order. A
+     camp is in when the camps page's own campsQueryMatch takes the query, or when its program is a Programs hit by
+     name, alias, initials or mascot (never by place): 78 of the 213 names and mascots of programs with camps find none
+     of their own camps through the camps matcher alone ("MSU", "GVSU", "Bruins").
+   - Camp words (camp, camps, clinic, clinics, id) say "show camps": they are dropped from both queries, unless nothing
+     else was typed (a lone "camp" still finds Campbell, a lone "id" Idaho), and they put ID Camps first. Exactly "ID"
+     in capitals is Idaho's code (the site asks for codes in capitals), not a camp word.
+   `campRows` is null until the camps index has loaded: Programs work, and the message says camps are loading.
+   Returns null for an empty box. */
+const HOME_CAMP_WORDS = new Set(['camp', 'camps', 'clinic', 'clinics', 'id']);
+const HOME_ROWS = 6, HOME_CAMP_ROWS = 4;  // 6 program rows, as the header box draws (SUGGEST_MAX)
+function homeSearch(campRows, raw) {
+  const typed = listQ(raw);  // the Programs address's own cap, so the "All N" link carries exactly this text
+  const toks = wordsOf(normText(typed));
+  if (!toks.length) return null;
+  const idaho = typed === 'ID';
+  const rest = idaho ? toks : toks.filter(t => !HOME_CAMP_WORDS.has(t));
+  const camp = rest.length < toks.length;
+  // The program query. With camp words dropped it is the remaining words; the capitals rule (placeQuery) reads the
+  // typed text only for a lone two-letter code, so "TX camps" keeps "TX" and "tx camps" stays lowercase.
+  let pq = typed;
+  if (camp && rest.length) {
+    pq = rest.join(' ');
+    const up = pq.toUpperCase();
+    if (rest.length === 1 && pq.length === 2 && new RegExp(`(^|[^A-Za-z0-9])${up}($|[^A-Za-z0-9])`).test(typed)) pq = up;
+  }
+  const hits = searchMatches(normText(pq), Infinity, pq);
+  const names = hits.filter(h => !h.m.place);
+  const rows = names.slice(0, HOME_ROWS);
+  const programs = { hits, rows, n: hits.length, place: names.length < hits.length,
+                     href: hits.length > rows.length ? listHashOf({ q: pq }) : null };
+  let camps = null;
+  if (Array.isArray(campRows)) {
+    const found = new Set(names.map(h => h.p.slug));
+    const cq = wordsOf(campsNorm(typed)).filter(t => !HOME_CAMP_WORDS.has(t)).join(' ');
+    const all = idaho ? campRows.filter(x => x.info.state === 'ID')
+      : campRows.filter(x => !cq || campsQueryMatch(x.c, x.info, cq) || (rest.length > 0 && found.has(x.c.slug)));
+    camps = { all, shown: all.slice(0, HOME_CAMP_ROWS), n: all.length };
+  }
+  const order = camp || !hits.length ? ['camps', 'programs'] : ['programs', 'camps'];
+  const prog = rows[0] ? { kind: 'program', slug: rows[0].p.slug, href: `#/p/${rows[0].p.slug}` } : null;
+  const first = camps?.all[0];
+  const campRow = first ? { kind: 'camp', slug: first.c.slug, href: `#/p/${first.c.slug}/camps` } : null;
+  const list = programs.href ? { kind: 'list', href: programs.href } : null;
+  // Enter: today's header-box rule when Programs leads (a place hit shows the list), else the first row in section order.
+  const enter = order[0] === 'programs' && programs.place ? list
+    : (order[0] === 'camps' ? campRow || prog : prog || campRow) || list;
+  const message = !camps ? (order[0] === 'camps' ? 'loading' : null)
+    : !hits.length && !camps.n ? 'nomatch' : camp && !camps.n ? 'nocamp' : null;
+  return { typed, pq, camp, idaho, order, programs, camps, enter, message };
+}
+
 /* ---------- router ---------- */
 /* ---------- the list's state in the address (issue #14) ----------
    #/programs?div=D2&region=West&conf=D2:Independent&class=2027&cond=admissionRate:lt:0.3&q=Ohio+State&sort=admit&dir=asc&view=table
@@ -4517,9 +4577,9 @@ function campRowHtml(c, info) {
    (campsUpdate): the controls stay where they are, so focus stays on the one just used, and the count is read out by
    the bar's own status line. A commit pushes one history entry with the new address. */
 let CAMPS = null;  // { doc, byProgram, all: [{ c, info }], known, tally, orphans, st }
-function campsData(idx, doc) {
+// `today` is the visitor's own date unless one is given (#507: the Home search's tests pass a fixed clock).
+function campsData(idx, doc, today = todayLocal()) {
   const byProgram = new Map((idx?.programs || []).map(p => [p.slug, p]));
-  const today = todayLocal();
   const all = [];
   let orphans = 0;
   for (const c of doc.camps) {
