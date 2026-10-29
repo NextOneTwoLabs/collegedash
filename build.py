@@ -1744,6 +1744,15 @@ def camp_coverage_bucket(camps) -> str:
     return "readNothingDated"
 
 
+def camp_page_slugs(blocks) -> list[str]:
+    """Issue #507: the slugs, sorted and once each, of the programs whose camps block names a camp page (a non-empty
+    `url`). `blocks` is (slug, camps block) pairs. Robots-blocked, unreadable and failed pages are kept: the program's
+    Camps tab still links out to the page, and Home search offers that link for a program with no dated camp.
+    Slugs only, never the url or any page text."""
+    return sorted({slug for slug, c in blocks
+                   if isinstance(slug, str) and slug and isinstance(c, dict) and isinstance(c.get("url"), str) and c["url"]})
+
+
 def camp_coverage(profiles) -> dict:
     """What the camp pages of the published programs yielded, counts only (issue #79): every program in exactly one
     bucket (camp_coverage_bucket), so the buckets add up to `programs` by construction. The build writes it into the
@@ -2353,6 +2362,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     rows, all_commits, all_camps = [], [], []
     camps_undated = 0  # issue #70: camp items with no date, left out of the index; counted, never silent
     camp_blocks: list[dict] = []  # issue #79: each program's camps block, for the index's `coverage`
+    camp_pairs: list[tuple] = []  # issue #507: (slug, camps block), for the index's `campPages`
     fit_entries: dict[str, dict] = {}  # issue #400
     window = camps_window()  # one window for the whole run, so a build spanning midnight is coherent
     for program in published:
@@ -2370,6 +2380,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
                                 "sourceCount": len(c["sources"]),
                                 "collegeName": program.get("shortName") or program["name"]})
         camp_blocks.append({"camps": profile.get("camps")})
+        camp_pairs.append((program["slug"], profile.get("camps")))
         for it in ((profile.get("camps") or {}).get("items") or []):
             if camp_in_window(it, window):
                 all_camps.append(camp_row(program["slug"], it, rows[-1]))  # rows[-1]: this program's index row (#465)
@@ -2394,7 +2405,7 @@ def build(registry: dict, *, allow_unexplained_prune: frozenset[str] = frozenset
     # Written compact (#465), like the slim list (#395): Home loads it for its camp preview (owner decision D2).
     common.write_json(os.path.join(common.CAMPS_OUT_DIR, "index.json"),
                       {"updated": updated, "window": window, "counts": camp_tally, "coverage": coverage,
-                       "camps": all_camps},
+                       "campPages": camp_page_slugs(camp_pairs), "camps": all_camps},
                       compact=True)
     common.log(f"build: camps index {len(all_camps)} rows from {len({c['slug'] for c in all_camps})} programs, "
                f"window from {window['from']}; "
@@ -2678,7 +2689,7 @@ def check_camps_index(registry: dict) -> bool:
         print(f"CAMPS: {path} is {'missing' if doc is None else 'a ' + type(doc).__name__ + ', not an object'}")
         return False
     ok = True
-    for key in ("updated", "window", "counts", "coverage", "camps"):
+    for key in ("updated", "window", "counts", "coverage", "campPages", "camps"):
         if key not in doc:
             print(f"CAMPS: the index declares no {key!r}")
             ok = False
@@ -2787,6 +2798,7 @@ def check_camps_index(registry: dict) -> bool:
     item_fields: set = set()
     unreadable: set = set()
     camp_blocks: list[dict] = []  # issue #79: `coverage` is recomputed from these
+    camp_pairs: list[tuple] = []  # issue #507: `campPages` is recomputed from these
     for program in published_programs(registry):
         slug = program.get("slug")
         path = os.path.join(common.PROGRAMS_OUT_DIR, f"{slug}.json")
@@ -2798,6 +2810,7 @@ def check_camps_index(registry: dict) -> bool:
         p = p or {}
         camps = p.get("camps") if isinstance(p, dict) else None
         camp_blocks.append({"camps": camps})
+        camp_pairs.append((slug, camps))
         cause = camps.get("unreadable") if isinstance(camps, dict) else None
         if cause is not None and not (isinstance(cause, dict) and cause.get("cause") in CAMP_UNREADABLE_CAUSES):
             print(f"CAMPS: {slug}'s camps block declares unreadable {cause!r}; it must be null or a cause from "
@@ -2817,6 +2830,13 @@ def check_camps_index(registry: dict) -> bool:
         if declared != actual:
             print(f"CAMPS: the index declares coverage {declared!r}, but the profiles tally "
                   f"{actual!r}; the ID Camps page reports the programs whose camps may be missing from it")
+            ok = False
+    # Issue #507: `campPages` is a list of the profiles, recomputed with the build's function; sorted and unique by it.
+    if "campPages" in doc and not unreadable:
+        declared, actual = doc.get("campPages"), camp_page_slugs(camp_pairs)
+        if declared != actual:
+            print(f"CAMPS: the index declares campPages {declared!r:.200}, but the profiles name camp pages for "
+                  f"{actual!r:.200}; Home search offers a camp-page link for exactly those programs")
             ok = False
     # Issue #69: CAMP_INDEX_FIELDS is an allow-list, so a per-item field added to build_camps is
     # dropped on the way out and nothing said so - which is how `campType` would have reached no

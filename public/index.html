@@ -741,6 +741,7 @@ body.no-rail .sidebar, body.no-rail .sidebar-overlay, body.no-rail .hamburger { 
 .home-group { padding: 4px; }
 .home-group + .home-group { border-top: 1px solid var(--border); }
 .home-group-label { padding: 8px 10px 2px; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; color: var(--text-secondary); }  /* no text-transform: it names the group (aria-labelledby), and all-caps can be spelled out */
+.home-group-note { padding: 2px 10px 6px; font-size: 14px; color: var(--text-secondary); }  /* AA like .home-msg; aria-hidden: the fact is in the group's accessible name and #homeStatus */
 .home-opt { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-height: 44px; padding: 6px 10px; border-radius: var(--radius-sm); cursor: pointer; }
 .home-opt.active, .home-opt:hover { background: var(--bg-surface-alt); }
 .home-opt.active { box-shadow: inset 3px 0 0 var(--accent); }
@@ -1820,6 +1821,7 @@ async function loadCamps() {
   if (!S.camps) {
     const doc = await getJSON('/api/v1/camps');
     S.camps = { updated: doc?.updated || null, window: doc?.window || null, counts: doc?.counts || null,
+                campPages: Array.isArray(doc?.campPages) ? doc.campPages : [],  // #507: slugs of programs with a camp page (absent from an older index)
                 coverage: doc?.coverage || null,  // #79: counts only; absent from an older index (the view hides its line)
                 camps: Array.isArray(doc?.camps) ? doc.camps : [] };
   }
@@ -3679,7 +3681,12 @@ const recsPilotReady = recsPilotStart();
    Returns null for an empty box. */
 const HOME_CAMP_WORDS = new Set(['camp', 'camps', 'clinic', 'clinics', 'id']);
 const HOME_ROWS = 6, HOME_CAMP_ROWS = 4;  // 6 program rows, as the header box draws (SUGGEST_MAX)
-function homeSearch(campRows, raw) {
+/* ID Camps always shows once camps have loaded (#507). Under the dated camps it also lists, for each program in the
+   Programs rows that has a camp page but no dated camp in the result, one "<name> camp page" row to that program's Camps
+   tab (which links out). They are not upcoming camps and are never counted as such. `campPages` is the camps index's list
+   of slugs; the dated camps take the group's HOME_CAMP_ROWS first and the camp-page rows fill what is left, and "Show all"
+   shows every row. Robots-blocked pages are included: the Camps tab still links to them and says why it shows no dates. */
+function homeSearch(campRows, raw, campPages = []) {
   const typed = listQ(raw);  // the Programs address's own cap, so the "All N" link carries exactly this text
   const toks = wordsOf(normText(typed));
   if (!toks.length) return null;
@@ -3707,7 +3714,10 @@ function homeSearch(campRows, raw) {
     const cq = wordsOf(campsNorm(typed)).filter(t => !HOME_CAMP_WORDS.has(t)).join(' ');
     const all = idaho ? campRows.filter(x => x.info.state === 'ID')
       : campRows.filter(x => !cq || campsQueryMatch(x.c, x.info, cq) || (rest.length > 0 && found.has(x.c.slug)));
-    camps = { all, shown: all.slice(0, HOME_CAMP_ROWS), n: all.length };
+    const dated = new Set(all.map(x => x.c.slug)), linked = new Set(campPages);
+    const pages = rows.filter(h => linked.has(h.p.slug) && !dated.has(h.p.slug)).map(h => h.p);
+    camps = { all, shown: all.slice(0, HOME_CAMP_ROWS), n: all.length, pages,
+              shownPages: pages.slice(0, Math.max(0, HOME_CAMP_ROWS - Math.min(all.length, HOME_CAMP_ROWS))) };
   }
   const order = camp || !hits.length ? ['camps', 'programs'] : ['programs', 'camps'];
   const prog = rows[0] ? { kind: 'program', slug: rows[0].p.slug, href: `#/p/${rows[0].p.slug}` } : null;
@@ -3923,7 +3933,7 @@ function renderHome(failed = '') {
    nothing. Keys: Down/Up move across both sections and wrap (Down opens a closed list); Enter opens the active option,
    or with none the engine's target; Escape closes, then clears; Tab closes. Nothing is saved (#447 decision 4).
    Listeners are on the document, so the box that renderHome draws afresh on every visit needs no wiring of its own. */
-const HOME = { raw: '', res: null, items: [], active: -1, open: false, more: false, timer: null, camps: 'idle', rows: null };
+const HOME = { pages: [], raw: '', res: null, items: [], active: -1, open: false, more: false, timer: null, camps: 'idle', rows: null };
 function homeReset() {
   clearTimeout(HOME.timer);
   Object.assign(HOME, { raw: '', res: null, items: [], active: -1, open: false, more: false, timer: null });
@@ -3951,12 +3961,15 @@ function homeSections(res) {
       sections.push({ key, label: `Programs · ${fmtNum(p.n)}`, opts });
     } else {
       const c = res.camps;
-      if (!c || (!c.n && !(res.camp && res.order[0] === 'camps'))) continue;  // an empty Camps section only when it leads
-      const rows = HOME.more ? c.all : c.shown;
+      if (!c) continue;  // camps not loaded (or failed): the message says so; once loaded the group always shows
+      const rows = HOME.more ? c.all : c.shown, pages = HOME.more ? c.pages : c.shownPages;
       const opts = rows.map(x => ({ kind: 'camp', key: `camp:${x.c.slug}|${x.c.startDate}|${x.c.name}`, x, href: `#/p/${x.c.slug}/camps` }));
-      if (c.n > rows.length) opts.push({ kind: 'more', key: 'more', n: c.n });
+      pages.forEach(p => opts.push({ kind: 'camppage', key: `camppage:${p.slug}`, p, href: `#/p/${p.slug}/camps` }));
+      const hidden = c.n - rows.length, hiddenPages = c.pages.length - pages.length;
+      if (hidden > 0) opts.push({ kind: 'more', key: 'more', n: c.n });
+      else if (hiddenPages > 0) opts.push({ kind: 'more', key: 'more', n: hiddenPages, pages: true });
       opts.push({ kind: 'browse', key: 'browse', href: '#/camps' });
-      sections.push({ key, label: `ID Camps · ${fmtNum(c.n)} upcoming`, opts });
+      sections.push({ key, label: `ID Camps · ${fmtNum(c.n)} upcoming`, note: c.n ? '' : 'No upcoming ID camps found', opts });
     }
   }
   let i = 0;
@@ -3973,12 +3986,18 @@ function homeOptHtml(o) {
     return `<div ${attrs} data-slug="${esc(c.slug)}">${two(esc(c.name || 'Camp'), `${divisionTag(info.division)} · ${esc(info.name)} · ${esc(campDate(c))}`)}</div>`;
   }
   if (o.kind === 'all') return `<div ${attrs}>${two(`All ${fmtNum(o.n)} matching programs →`, o.place ? 'Including programs by place · opens the Programs list' : 'Opens the Programs list')}</div>`;
-  if (o.kind === 'more') return `<div ${attrs}>${two(`Show all ${fmtNum(o.n)} camps`, '')}</div>`;
+  if (o.kind === 'camppage') return `<div ${attrs} data-slug="${esc(o.p.slug)}">${two(`${esc(displayName(o.p))} camp page`, `${divisionTag(o.p.division)} · dates not listed here`)}</div>`;
+  if (o.kind === 'more') return `<div ${attrs}>${two(o.pages ? `Show ${fmtNum(o.n)} more camp page${o.n === 1 ? '' : 's'}` : `Show all ${fmtNum(o.n)} camps`, '')}</div>`;
   return `<div ${attrs}>${two('Browse all ID camps →', '')}</div>`;
 }
 function homeResultsHtml(sections, msg) {
   const show = sections.length > 0;
-  const groups = sections.map(sec => `<div role="group" class="home-group" aria-labelledby="homeGrp-${sec.key}"><div class="home-group-label" id="homeGrp-${sec.key}" aria-hidden="true">${esc(sec.label)}</div>${sec.opts.map(homeOptHtml).join('')}</div>`).join('');
+  // A group's heading is one aria-hidden element the group is named by (aria-labelledby). An empty ID Camps group says so
+  // in a visible line inside that same heading, so the listbox still holds only groups and options and the name carries it.
+  const head = sec => sec.note
+    ? `<div class="home-group-head" id="homeGrp-${sec.key}" aria-hidden="true"><div class="home-group-label">${esc(sec.label)}</div><div class="home-group-note">${esc(sec.note)}</div></div>`
+    : `<div class="home-group-label" id="homeGrp-${sec.key}" aria-hidden="true">${esc(sec.label)}</div>`;
+  const groups = sections.map(sec => `<div role="group" class="home-group" aria-labelledby="homeGrp-${sec.key}">${head(sec)}${sec.opts.map(homeOptHtml).join('')}</div>`).join('');
   const list = `<div class="home-list" id="homeList" role="listbox" aria-label="Programs and ID camps"${show ? '' : ' hidden'}>${groups}</div>`;
   const note = `<div class="home-msg" id="homeMsg"${msg ? '' : ' hidden'}>${esc(msg)}</div>`;
   return HOME.res?.order[0] === 'camps' ? note + list : list + note;
@@ -3989,7 +4008,7 @@ function homeMessage(res) {
   if (HOME.camps === 'failed') return res.programs.n ? 'ID camps couldn’t load.' : `No program matches ${q}. ID camps couldn’t load.`;
   if (res.message === 'loading') return 'Loading camps…';
   if (res.message === 'nomatch') return `No program or upcoming ID camp matches ${q}. Try a school’s short name, a mascot, a state or a city.`;
-  if (res.message === 'nocamp') return `No upcoming ID camps match ${q}.`;
+  // 'nocamp' is said inside the ID Camps group ("No upcoming ID camps found"), not here; the status keeps the full sentence
   return '';
 }
 function homeEnterLabel(res) {
@@ -4003,8 +4022,9 @@ function homeStatusText(res, msg) {
   if (!res) return '';
   const plural = (n, one) => `${fmtNum(n)} ${one}${n === 1 ? '' : 's'}`;
   const counts = res.message === 'nomatch' ? '' : `${plural(res.programs.n, 'program')}${res.camps ? ` and ${plural(res.camps.n, 'upcoming ID camp')}` : ''}.`;
+  const nocamp = res.message === 'nocamp' ? `No upcoming ID camps match “${res.typed}”.` : res.camps && !res.camps.n ? 'No upcoming ID camps found.' : '';
   const enter = res.enter ? `Enter opens ${homeEnterLabel(res)}.` : '';
-  return [counts, msg, enter].filter(Boolean).join(' ');
+  return [counts, msg || nocamp, enter].filter(Boolean).join(' ');
 }
 function homeRender() {
   const box = $('#homeQ'), wrap = $('#homeResults');
@@ -4023,7 +4043,7 @@ function homeRender() {
 }
 function homeApply() {
   clearTimeout(HOME.timer); HOME.timer = null;
-  HOME.res = homeSearch(HOME.camps === 'ready' ? HOME.rows : null, HOME.raw);
+  HOME.res = homeSearch(HOME.camps === 'ready' ? HOME.rows : null, HOME.raw, HOME.pages);
   HOME.open = !!HOME.res; HOME.active = -1; HOME.more = false;
   homeRender();
 }
@@ -4036,7 +4056,7 @@ function homeTyped(v) {
 function homeLoadCamps() {
   if (HOME.camps !== 'idle') return;
   HOME.camps = 'loading';
-  loadCamps().then(doc => { HOME.rows = campsData(S.index, doc).all; HOME.camps = 'ready'; }, () => { HOME.camps = 'failed'; })
+  loadCamps().then(doc => { HOME.rows = campsData(S.index, doc).all; HOME.pages = doc.campPages || []; HOME.camps = 'ready'; }, () => { HOME.camps = 'failed'; })
     .then(() => {
       if (currentView() !== 'home' || !HOME.open || !HOME.res) return;
       // The camps arrive while the visitor may be arrowing: the same option stays active if it is still there (a

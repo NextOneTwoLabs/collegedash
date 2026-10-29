@@ -28,7 +28,7 @@ const RULES = parseCss(CSS_TEXT);
 const CANNOT = 'the Home search CSS test cannot read';
 
 // Every class the box draws; a selector naming any of them is watched.
-const CLASSES = ['home-search', 'home-q-label', 'home-q', 'home-results', 'home-list', 'home-group', 'home-group-label', 'home-opt', 'home-opt-name', 'home-opt-sub', 'home-msg'];
+const CLASSES = ['home-search', 'home-q-label', 'home-q', 'home-results', 'home-list', 'home-group', 'home-group-label', 'home-group-head', 'home-group-note', 'home-opt', 'home-opt-name', 'home-opt-sub', 'home-msg'];
 const watched = sel => CLASSES.some(c => new RegExp(`\\.${c}(?![\\w-])`).test(sel));
 const EXPECTED = {
   '|.home-search': { width: '100%', 'max-width': '720px', margin: '4px 0 24px' },
@@ -37,6 +37,7 @@ const EXPECTED = {
   '|.home-results': { 'margin-top': '8px' },
   '|.home-group': { padding: '4px' },
   '|.home-group-label': { padding: '8px 10px 2px', 'font-size': '12px', 'letter-spacing': '0.02em' },
+  '|.home-group-note': { padding: '2px 10px 6px', 'font-size': '14px' },
   '|.home-opt': { display: 'flex', 'flex-direction': 'column', 'justify-content': 'center', gap: '2px', 'min-height': '44px', padding: '6px 10px' },
   '|.home-opt-name': { 'min-width': '0', 'font-size': '15px' },
   '|.home-opt-sub': { 'min-width': '0', 'font-size': '13px' },
@@ -91,6 +92,7 @@ test('AA contrast (4.5:1) in both themes: the box, its placeholder, label, headi
       ['placeholder', colourOf('.home-q::placeholder'), surface],
       ['label', colourOf('.home-q-label'), body],
       ['section heading', colourOf('.home-group-label'), surface],
+      ['no-camps line (#507)', colourOf('.home-group-note'), surface],
       ['option name', colourOf('.home-opt-name'), surface],
       ['option line', colourOf('.home-opt-sub'), surface],
       ['active option name', colourOf('.home-opt-name'), active],
