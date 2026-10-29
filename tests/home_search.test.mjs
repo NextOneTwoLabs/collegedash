@@ -55,7 +55,9 @@ const BODY = HTML.slice(HTML.indexOf('<body'), HTML.indexOf('<script>'));
 const NAV = [...BODY.matchAll(/<a [^>]*data-nav="(\w+)"[^>]*>/g)].map((m, i) => makeEl(`nav${i}`, { dataset: { nav: m[1] } }));
 
 // camps: 'ok' (the fixture), 'fail' (a 404), 'hang' (never answers); programs: 'ok' or 'fail'
-function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } = {}) {
+// campPages: the slugs the served camps index lists as having a camp page (#507); left out, the index is an older one without the list
+function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok', campPages = null } = {}) {
+  const CAMPS_BODY = campPages ? JSON.stringify({ ...CAMPS, campPages }) : CAMPS_TEXT;
   const els = new Map(), docListeners = {}, requests = [], writes = [], release = {};
   const $ = sel => { if (!els.has(sel)) els.set(sel, makeEl(sel)); return els.get(sel); };
   const noon = new Date(`${CLOCK}T12:00:00`).getTime();
@@ -87,8 +89,8 @@ function loadPage({ hash = '#/', width = 1280, camps = 'ok', programs = 'ok' } =
       if (u === '/api/v1/list') return Promise.resolve(answer(programs === 'ok', PROGRAMS_TEXT));
       if (u === '/api/v1/camps') {
         if (camps === 'hang') return new Promise(() => { });
-        if (camps === 'manual') return new Promise(r => { release.camps = () => r(answer(true, CAMPS_TEXT)); });
-        return Promise.resolve(answer(camps === 'ok', CAMPS_TEXT));
+        if (camps === 'manual') return new Promise(r => { release.camps = () => r(answer(true, CAMPS_BODY)); });
+        return Promise.resolve(answer(camps === 'ok', CAMPS_BODY));
       }
       return Promise.resolve(answer(false));
     },
@@ -221,12 +223,15 @@ test('no match: the message is in #homeMsg and #homeStatus, never in the listbox
   const pg = await home();
   await pg.focus(); await pg.type('zzzz');
   const list = listOf(pg), msg = msgOf(pg);
-  assert.ok('hidden' in list.attrs && list.kids.length === 0, 'the listbox shows or holds something');
+  // #507: the ID Camps group never hides once camps have loaded, so even here it says "0 upcoming" and offers Browse
+  assert.deepEqual(list.kids.map(g => g.kids[0].text), ['ID Camps · 0 upcomingNo upcoming ID camps found']);
+  assert.deepEqual(options(pg).map(o => o.attrs['data-kind']), ['browse']);
   assert.ok(!('hidden' in msg.attrs));
   const text = 'No program or upcoming ID camp matches “zzzz”. Try a school’s short name, a mascot, a state or a city.';
   assert.equal(unesc(msg.text), text);
-  assert.equal(statusOf(pg), text);
-  assert.equal(pg.box.getAttribute('aria-expanded'), 'false');
+  assert.ok(!all(list, n => n.attrs.id === 'homeMsg').length, 'the message is inside the listbox');
+  assert.equal(statusOf(pg), `${text} Enter opens the list of 0 programs.`.replace(/ Enter opens.*$/, ''));
+  assert.equal(pg.box.getAttribute('aria-expanded'), 'true');
 });
 
 test('"stanford camps": the no-camp message sits before the listbox, next to the ID Camps section it describes; Enter opens Stanford', async () => {
@@ -234,9 +239,10 @@ test('"stanford camps": the no-camp message sits before the listbox, next to the
   await pg.focus(); await pg.type('stanford camps');
   const top = results(pg).kids.map(n => n.attrs.id);
   assert.deepEqual(top, ['homeMsg', 'homeList'], 'the message is not first when ID Camps leads');
-  assert.equal(unesc(msgOf(pg).text), 'No upcoming ID camps match “stanford camps”.');
+  // #507: the fact is said once, in the group's own heading, not again in the message line
+  assert.ok('hidden' in msgOf(pg).attrs && msgOf(pg).text === '', 'the no-camp fact is repeated in #homeMsg');
   const groups = listOf(pg).kids;
-  assert.deepEqual(groups.map(g => g.kids[0].text), ['ID Camps · 0 upcoming', 'Programs · 1']);
+  assert.deepEqual(groups.map(g => g.kids[0].text), ['ID Camps · 0 upcomingNo upcoming ID camps found', 'Programs · 1']);
   assert.deepEqual(groups[0].kids.slice(1).map(o => o.attrs['data-kind']), ['browse']);
   assert.match(statusOf(pg), /No upcoming ID camps match “stanford camps”\..*Enter opens Stanford\./);
   const e = pg.key('Enter');
@@ -246,6 +252,86 @@ test('"stanford camps": the no-camp message sits before the listbox, next to the
   const pg2 = await home({ camps: 'fail' });
   await pg2.focus(); await pg2.type('unc');
   assert.deepEqual(results(pg2).kids.map(n => n.attrs.id), ['homeList', 'homeMsg']);
+});
+
+// ---- #507: the ID Camps group always shows, with a camp-page row for a program that has a page but no dated camp ----
+const ALL_PAGES = PROGRAMS.programs.map(p => p.slug);
+const groupsOf = pg => listOf(pg).kids.map(g => ({ g, head: g.kids[0], opts: g.kids.slice(1) }));
+const kindsOf = g => g.opts.map(o => o.attrs['data-kind']);
+
+test('"duke" shows both groups: Programs, then ID Camps with its "No upcoming ID camps found" line and Browse (an older index without campPages too)', async () => {
+  const pg = await home();
+  await pg.focus(); await pg.type('duke');
+  const gs = groupsOf(pg);
+  assert.equal(gs.length, 2, 'both groups');
+  assert.match(gs[0].head.text, /^Programs · \d+$/);
+  assert.equal(gs[1].head.text, 'ID Camps · 0 upcomingNo upcoming ID camps found');
+  assert.deepEqual(kindsOf(gs[1]), ['browse']);
+  assert.equal(all(gs[1].head, n => /\bhome-group-note\b/.test(n.attrs.class || '')).length, 1);
+  assert.equal(gs[1].head.attrs['aria-hidden'], 'true');
+  assert.equal(gs[1].g.attrs['aria-labelledby'], gs[1].head.attrs.id, 'the fact is part of the group\'s accessible name');
+  assert.ok(gs.every(x => x.opts.every(o => o.attrs.role === 'option')), 'a non-option inside a group');
+  assert.match(statusOf(pg), /No upcoming ID camps found\./);
+  assert.match(statusOf(pg), /and 0 upcoming ID camps\./);
+  assert.ok('hidden' in msgOf(pg).attrs, 'no message line when the group says it');
+});
+
+test('a program with a camp page but no dated camp gets a "camp page" row to its Camps tab; one without a page gets none; none is counted as upcoming', async () => {
+  const pg = await home({ campPages: ['duke', 'james-madison', 'ucla'] });
+  await pg.focus(); await pg.type('duke');
+  const camps = groupsOf(pg)[1];
+  assert.equal(camps.head.text, 'ID Camps · 0 upcomingNo upcoming ID camps found', 'a camp-page row is not an upcoming camp');
+  assert.deepEqual(kindsOf(camps), ['camppage', 'camppage', 'browse']);
+  const rows = camps.opts.filter(o => o.attrs['data-kind'] === 'camppage');
+  const progRows = groupsOf(pg)[0].opts.filter(o => o.attrs['data-kind'] === 'program').map(o => o.attrs['data-slug']);
+  assert.deepEqual(rows.map(o => o.attrs['data-slug']), progRows.filter(sl => ['duke', 'james-madison'].includes(sl)), 'in program order');
+  assert.ok(!progRows.includes('duquesne') || !rows.some(o => o.attrs['data-slug'] === 'duquesne'), 'a program with no camp page got a row');
+  for (const o of rows) {
+    const p = BY_SLUG.get(o.attrs['data-slug']);
+    assert.ok(unesc(o.text).startsWith(`${display(p)} camp page`), o.text);
+    const tags = all(o, n => /\bdiv-tag\b/.test(n.attrs.class || ''));
+    assert.equal(tags.length, 1); assert.equal(tags[0].text, p.division);
+    assert.match(unesc(o.text), /dates not listed here/);
+  }
+  assert.match(statusOf(pg), /and 0 upcoming ID camps\./);
+  // choosing one opens that program's Camps tab; Enter with none active still opens the first program
+  const first = options(pg).findIndex(o => o.attrs['data-kind'] === 'camppage');
+  for (let i = 0; i <= first; i++) pg.key('ArrowDown');  // none is active after typing: the first press lands on option 0
+  pg.key('Enter');
+  assert.equal(pg.sb.location.hash, `#/p/${rows[0].attrs['data-slug']}/camps`);
+});
+
+test('a program that has a dated camp is not also given a camp-page row; Enter still opens the first program', async () => {
+  const pg = await home({ campPages: ['ucla', 'tcu'] });
+  await pg.focus(); await pg.type('ucla');
+  const camps = groupsOf(pg).find(g => /^ID Camps/.test(g.head.text));
+  assert.ok(camps && kindsOf(camps).includes('camp'));
+  assert.ok(!kindsOf(camps).includes('camppage'), 'UCLA has a dated camp and a page: one row, the camp');
+  assert.ok(!/No upcoming ID camps found/.test(camps.head.text), 'the empty line shows over real camps');
+  const pg2 = await home({ campPages: ['duke'] });
+  await pg2.focus(); await pg2.type('duke');
+  assert.ok(pg2.key('Enter').prevented);
+  assert.equal(pg2.sb.location.hash, '#/p/duke');
+});
+
+test('camp-page rows share the group\'s 4 rows with the dated camps, the rest wait behind "Show N more camp pages"', async () => {
+  const pg = await home({ campPages: ALL_PAGES });
+  await pg.focus(); await pg.type('state');
+  const camps = groupsOf(pg).find(g => /^ID Camps/.test(g.head.text));
+  const shown = kindsOf(camps).filter(k => k === 'camp' || k === 'camppage').length;
+  assert.ok(shown <= 4, `${shown} rows before Show all`);
+  const more = camps.opts.find(o => o.attrs['data-kind'] === 'more');
+  assert.ok(more, 'no Show all');
+  const before = options(pg).length;
+  for (let i = 0; i <= options(pg).findIndex(o => o.attrs['data-kind'] === 'more'); i++) pg.key('ArrowDown');
+  pg.key('Enter');
+  const camps2 = groupsOf(pg).find(g => /^ID Camps/.test(g.head.text));
+  assert.ok(options(pg).length > before, 'Show all added nothing');
+  assert.ok(!camps2.opts.some(o => o.attrs['data-kind'] === 'more'), 'Show all is still offered');
+  const pageRows = camps2.opts.filter(o => o.attrs['data-kind'] === 'camppage').map(o => o.attrs['data-slug']);
+  const dated = new Set(CAMPS.camps.map(c => c.slug));
+  const programRows = groupsOf(pg)[0].opts.filter(o => o.attrs['data-kind'] === 'program').map(o => o.attrs['data-slug']);
+  assert.deepEqual(pageRows, programRows.filter(sl => !dated.has(sl)), 'every shown program without a dated camp, in order');
 });
 
 test('keys: arrows move and wrap across sections, Enter opens the active option, Escape closes then clears', async () => {
