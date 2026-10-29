@@ -44,7 +44,7 @@ function loadPage(extra = {}) {
   const els = new Map();
   const bySelector = sel => { if (!els.has(sel)) els.set(sel, makeElement(sel)); return els.get(sel); };
   const index = JSON.parse(JSON.stringify(INDEX));
-  const serve = { '/api/v1/programs': index, '/api/v1/programs/ucla': UCLA, '/api/v1/programs/stanford': STANFORD };
+  const serve = { '/api/v1/programs': index, '/api/v1/list': index, '/api/v1/programs/ucla': UCLA, '/api/v1/programs/stanford': STANFORD };
   const uclaRow = index.programs.find(p => p.slug === 'ucla');
   for (const [slug, school] of Object.entries(extra)) {
     index.programs.push({ ...uclaRow, slug, name: slug, shortName: slug });

@@ -79,6 +79,7 @@ function loadPage({ html = HTML, status = { local: false }, probe = 'redirect', 
       if (u.startsWith('api/v1/')) {
         const sub = u.slice('api/v1/'.length);
         if (sub === 'programs') u = 'data/programs/index.json';
+        else if (sub === 'list') u = 'data/list/index.json';
         else if (sub.startsWith('programs/')) u = `data/programs/${sub.slice('programs/'.length)}.json`;
         else if (sub === 'camps') u = 'data/camps/index.json';
         else if (sub === 'trends') u = 'data/trends/index.json';
