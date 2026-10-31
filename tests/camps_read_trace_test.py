@@ -146,6 +146,24 @@ def test_counts() -> None:
                "ryzer": 1, "totalcamps": 1, "ussportscamps": 1, "abc": 0, "other": 1}})
 
 
+    # Page chrome is not counted: a Sidearm scoreboard's and the nav's dates change daily and would rewrite every
+    # camps.json. Only the content's one date counts; the nav's camps link is still seen.
+    chrome = ("<html><head><title>Camps</title></head><body>"
+              "<nav><a href='/camps/id'>ID Camps</a> Oct 30, 2026 Oct 31, 2026</nav>"
+              "<div class='scoreboard'>Nov 1, 2026 W 2-0 | Nov 3, 2026 vs Example</div>"
+              "<div class='content'><p>Elite ID Camp - June 14, 2027</p></div>"
+              "<footer>Updated Oct 31, 2026</footer></body></html>")
+    t: dict = {}
+    try:
+        camps.extract_camps(chrome, "https://example.test/camps", title="Camps", trace=t)
+    except TypeError as e:
+        ok("chrome page: takes trace=", False, str(e))
+    else:
+        ok("chrome page: nav, scoreboard and footer dates are not counted", t.get("dayDates") == 1
+           and t.get("years") == {"2027": 1}, str(t))
+        ok("chrome page: the nav's camps link is counted", t.get("sameHostCampLinks") == 1, str(t))
+
+
 def test_per_call() -> None:
     print("per call: the caller's dict, filled by that call only")
     a, b = {}, {}

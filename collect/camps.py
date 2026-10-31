@@ -64,6 +64,7 @@ reads less than the page offers.
 from __future__ import annotations
 
 import collections
+import copy
 import datetime as _dt
 import json
 import os
@@ -1858,9 +1859,11 @@ def _chars_bucket(n: int) -> str:
 
 
 def _trace_page(soup, page_url: str, trace: dict) -> None:
-    """The page-level counts, read from the whole page (navigation included: a coach site's camps subpage is
-    usually only in its menu) after scripts and styles are removed and before anything else is."""
-    text = soup.get_text("\n")
+    """The page-level counts. Dates and text are read from the page's content, stripped of navigation, header,
+    footer, scoreboard and ticker exactly as _content strips it (on a copy, so the reader's own tree is untouched):
+    a Sidearm scoreboard's dates change daily and would rewrite every camps.json. Links are read from the whole page
+    (navigation included: a coach site's camps subpage is usually only in its menu)."""
+    text = _content(copy.copy(soup)).get_text("\n")
     trace["textChars"] = _chars_bucket(len(common.clean(text)))
     days = [d for d in parse_camp_dates(text) if d["precision"] == "day"]
     trace["dayDates"] = len(days)
