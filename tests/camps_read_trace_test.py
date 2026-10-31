@@ -108,23 +108,31 @@ def test_counts() -> None:
     expect("extract/synth-trace-yearless.html", "https://example.test/camps", n_rows=0,
            title="Women's Soccer Camps", want={"dayDates": 0, "yearlessDayDates": 2, "years": {},
                                               "textChars": "<500", "scripts": "0"})
-    # 'When: TBD' under the camp name: the lookahead stops on it.
+    # 'When: TBD' and 'When: TBA' under the two camp names: the lookahead stops on each.
     expect("extract/tbd.html", "https://www.dukesocceracademy.com/idcamps", n_rows=0, title="ID Camps",
-           want={"gated.tbd": 1, "dayDates": 0})
-    # The all-sport hub: one soccer row kept, the other sports' rows gated (section and name rules).
+           want={"gated.tbd": 2, "dayDates": 0})
+    # The all-sport hub: 20 dated rows (20 day dates), 1 soccer row kept, the other 19 gated: 16 by the sport rules
+    # (name, evidence, section) and 3 by the men's rules.
     expect("extract/hub-wofford.html", "https://athletics.wofford.edu/sports/2008/5/5/summer camp.aspx", n_rows=1,
-           title="Summer Camps @ Wofford", want={"gated.otherSport": 17, "gated.mens": 0, "gated.allSport": 0,
-                                                 "gated.cap": 0})
+           title="Summer Camps @ Wofford", want={"dayDates": 20, "gated.otherSport": 16, "gated.mens": 3,
+                                                 "gated.allSport": 0, "gated.cap": 0, "vendorLinks.totalcamps": 1})
     # Same hub read as an all-sport page (pageSoccer false): the extra all-sport rule removes nothing more.
     expect("extract/hub-wofford.html", "https://athletics.wofford.edu/sports/2008/5/5/summer camp.aspx", n_rows=1,
-           title="Summer Camps @ Wofford", page_soccer=False, want={"gated.otherSport": 17, "gated.allSport": 0})
-    # The deadline table: the Deadline column's date is skipped as a registration date.
+           title="Summer Camps @ Wofford", page_soccer=False, want={"gated.otherSport": 16, "gated.mens": 3,
+                                                                    "gated.allSport": 0})
+    # 'Registration opens March 1, 2026 for the Summer ID Camp' is a camp line whose date is a registration date.
+    # (The 'until April 15' sentence has no camp word, so it is never a candidate row and is not counted.)
+    expect("extract/registration.html", "https://example.edu/camps", n_rows=1, title="Summer ID Camp",
+           want={"gated.registration": 1, "dayDates": 3, "vendorLinks.totalcamps": 1})
+    # The deadline table is read whole by the table path (#356); its Deadline column is never a candidate row.
     expect("extract/synth-table-deadline.html", "https://www.example-camps.test/index.cfm", n_rows=1,
-           title="Example Women's Soccer Camps and Clinics", page_soccer=True, want={"gated.registration": 1})
-    # The Ryzer table: 4 rows, slash dates with years, 4 links to register.ryzer.com.
+           title="Example Women's Soccer Camps and Clinics", page_soccer=True,
+           want={"gated.registration": 0, "years": {"2027": 2}})
+    # The Ryzer table: 4 rows, one slash date with a year each (2 in 2026, 2 in 2027); the year-less spans in the
+    # names ('November 21st - 22nd') are counted as year-less; 4 links to register.ryzer.com.
     expect("extract/ryzer-table.html", "https://www.hailstatecamps.com/soccer/", n_rows=4, title="Hailstate Soccer Camps",
-           want={"years": {"2026": 2, "2027": 3}, "vendorLinks.ryzer": 4, "vendorLinks.totalcamps": 0,
-                 "sameHostCampLinks": 0, "gated.cap": 0})
+           want={"dayDates": 4, "yearlessDayDates": 3, "years": {"2026": 2, "2027": 2}, "vendorLinks.ryzer": 4,
+                 "vendorLinks.totalcamps": 0, "sameHostCampLinks": 0, "gated.cap": 0})
     # 25 dated rows: 20 returned (MAX_CAMPS), the 5 cut are counted.
     expect("extract/synth-trace-cap.html", "https://example.test/camps", n_rows=camps.MAX_CAMPS,
            title="Women's Soccer ID Camps", want={"gated.cap": 5, "dayDates": 25, "years": {"2027": 25}})

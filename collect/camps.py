@@ -1011,7 +1011,7 @@ def _sport_section(line: str) -> dict | None:
 
 
 def _row_allowed(name: str, section: dict | None, *, is_hub: bool, named: str = "row",
-                 evidence: str | None = None, page_is_soccer: bool = False) -> bool:
+                 evidence: str | None = None, page_is_soccer: bool = False, why: list | None = None) -> bool:
     """False when a row is another sport's or another gender's. The name is checked on its own
     (safe anywhere: 'Rod Ray Tennis Camp', "ORU Winter College Men's ID Camp I"); the enclosing
     section applies only on a page that is actually an all-sport hub (see HUB_SPORT_COUNT).
@@ -1059,23 +1059,31 @@ def _row_allowed(name: str, section: dict | None, *, is_hub: bool, named: str = 
     back to 2 rows and fails synth-chrome-sports. The unconditional NAME rule above still rejects
     every row that has a boys' name of its own, which is the case that was ever worth catching.
     A row with a name of its own is judged on the name exactly as before, evidence or no
-    evidence."""
+    evidence.
+
+    `why` (#79 read trace): when given, the rule that rejected the row is appended to it, "otherSport" or "mens".
+    It never changes the answer."""
+    def no(reason: str) -> bool:
+        if why is not None:
+            why.append(reason)
+        return False
+
     t = common.clean(name or "")
     soccer_name = bool(SOCCER_RE.search(t))
     if name_other_sport(t) and not soccer_name:  # #76: was OTHER_SPORT_RE, which read 'dive' and 'track' anywhere
-        return False
+        return no("otherSport")
     if MALE_RE.search(t) and not FEMALE_RE.search(t):  # MALE_RE does not fire inside "Women's"
-        return False
+        return no("mens")
     if named == "page":
         ev = common.clean(evidence or "")
         if not page_is_soccer and OTHER_SPORT_RE.search(ev) and not SOCCER_RE.search(ev):
-            return False
+            return no("otherSport")
     if section is None or not is_hub:
         return True
     if section["sport"] == "other" and not soccer_name:
-        return False
+        return no("otherSport")
     if section["male"] and not FEMALE_RE.search(t):
-        return False
+        return no("mens")
     return True
 
 
@@ -1339,7 +1347,7 @@ def _is_chrome_name(name: str) -> bool:
 
 
 def _table_entries(soup, page_url: str, published: str | None, sports: set | None = None,
-                   parsed: list | None = None) -> list[dict]:
+                   parsed: list | None = None, gated: dict | None = None) -> list[dict]:
     """Rows from camp tables: a header row naming a date column and a camp column.
 
     #356: a table read COMPLETELY here - every data row became a row, or was a TBD / registration
@@ -1382,6 +1390,8 @@ def _table_entries(soup, page_url: str, published: str | None, sports: set | Non
             if len(texts) <= max(c_date, c_name):
                 continue
             if TBD_RE.search(texts[c_date]) or REGISTRATION_RE.search(texts[c_date]):
+                if gated is not None:  # #79 read trace
+                    gated["tbd" if TBD_RE.search(texts[c_date]) else "registration"] += 1
                 read += 1
                 continue
             dates = parse_camp_dates(texts[c_date], published, default_year=default_year)
@@ -1450,7 +1460,7 @@ def _dated_line_name(lines, i: int, published: str | None, section) -> str | Non
 
 
 def _prose_entries(lines, page_url: str, published: str | None, page_name: str | None,
-                   title: str | None, sports: set | None = None) -> list[dict]:
+                   title: str | None, sports: set | None = None, gated: dict | None = None) -> list[dict]:
     """`page_name` is the name a row falls back to when it has none of its own; `title` still
     decides whether the page is a camp page at all (the bare-date branch below)."""
     camp_page = bool(title and CAMP_RE.search(NOT_CAMP_RE.sub(" ", title)))
@@ -1497,6 +1507,8 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
         picked = []
         for d in parse_camp_dates(text, published):
             if REGISTRATION_RE.search(text[max(0, d["pos"] - 60):d["pos"]]):
+                if gated is not None:  # #79 read trace
+                    gated["registration"] += 1
                 continue  # 'Registration opens March 1' is not a camp date
             picked.append(d)
         j = i + 1
@@ -1505,6 +1517,8 @@ def _prose_entries(lines, page_url: str, published: str | None, page_name: str |
             if CAMP_RE.search(NOT_CAMP_RE.sub(" ", t2)) and len(t2) < 90:
                 break  # the next camp starts here
             if TBD_RE.search(t2):
+                if gated is not None:  # #79 read trace
+                    gated["tbd"] += 1
                 break
             raw = parse_camp_dates(t2, published)
             if raw and _starts_new_row(t2, raw[0]["pos"]):
@@ -1713,7 +1727,7 @@ def _session_entries(blocks, page_url: str) -> list[dict]:
 
 
 def extract_camps(html: str, page_url: str, *, published: str | None = None, title: str | None = None,
-                  body_only: bool = False, page_soccer: bool | None = None) -> list[dict]:
+                  body_only: bool = False, page_soccer: bool | None = None, trace: dict | None = None) -> list[dict]:
     """Heuristic camp entries from a server-rendered page: table rows (header names a date and a
     camp/clinic/event column) and text lines naming a camp with a date. Camp pages need a year in
     the text (or a table caption year); news releases pass `published` so a year-less date is
@@ -1727,10 +1741,22 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     naming no other sport (a coach's 'Lions Elite Camps' site) and None (news articles, and every
     caller that passes nothing) keep today's behaviour exactly.
 
-    #326: "names another sport" means at least ALLSPORT_MIN_SPORTS (1) distinct sports, by allsport_sports."""
+    #326: "names another sport" means at least ALLSPORT_MIN_SPORTS (1) distinct sports, by allsport_sports.
+
+    `trace` (#79, slice S1): when the caller passes a dict, it is cleared and filled with counts of what this call
+    saw and why rows were not kept (see new_read_trace); the rows returned are exactly the same either way. It is
+    the caller's own dict, never module state, so threaded collectors cannot mix counts."""
     soup = BeautifulSoup(_prepare(html), "html.parser")
+    gated = None
+    if trace is not None:
+        trace.clear()
+        trace.update(new_read_trace())
+        gated = trace["gated"]
+        trace["scripts"] = _scripts_bucket(len(soup.find_all("script")))  # before they are removed below
     for t in soup(["script", "style", "noscript", "svg", "template"]):
         t.decompose()
+    if trace is not None:
+        _trace_page(soup, page_url, trace)
     # #292: a dated-entry block is read as one row, and then removed so the prose path cannot read it
     # again - a `span.label` camp line would otherwise look ahead into the NEXT block's date. Read
     # before _content, which strips the block's `session--header` (it looks like page chrome). With
@@ -1758,11 +1784,11 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     # women's "Elite ID Camp" on the date of the softball camp below it. The table rows themselves are
     # the page's answer for those dates.
     tables: list = []
-    table_rows = _table_entries(root, page_url, published, sports, parsed=tables)
+    table_rows = _table_entries(root, page_url, published, sports, parsed=tables, gated=gated)
     if tables:
         ids = {id(t) for t in tables}
         lines = [ln for ln in lines if not any(id(p) in ids for p in (ln[1], *getattr(ln[1], "parents", ())))]
-    entries = session_rows + table_rows + _prose_entries(lines, page_url, published, page_name, title, sports)
+    entries = session_rows + table_rows + _prose_entries(lines, page_url, published, page_name, title, sports, gated=gated)
     day_months = {e["startDate"][:7] for e in entries if e["precision"] == "day"}
     entries = [e for e in entries if not (e["precision"] == "month" and e["startDate"] in day_months)]
     # Gating is inserted upstream of the cap, which already ran last. MAX_CAMPS is a defence against
@@ -1777,10 +1803,20 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
     # Gate BEFORE the repair, and on `_named`/`_evidence` rather than on the displayed name: the
     # repair below hands a row a clean name, and a gate reading that name would be reading the
     # repair's own output. That ordering is what issue #80 turns on.
-    entries = [e for e in entries
-               if _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
-                               evidence=e.get("_evidence"), page_is_soccer=page_is_soccer)
-               and (page_soccer is not False or _row_names_soccer(e))]
+    kept = []
+    for e in entries:
+        why: list = []
+        if not _row_allowed(e["name"], e.get("_section"), is_hub=is_hub, named=e.get("_named", "row"),
+                            evidence=e.get("_evidence"), page_is_soccer=page_is_soccer, why=why):
+            if gated is not None:
+                gated[why[0] if why else "otherSport"] += 1
+            continue
+        if page_soccer is False and not _row_names_soccer(e):
+            if gated is not None:
+                gated["allSport"] += 1
+            continue
+        kept.append(e)
+    entries = kept
     for e in entries:  # #76 shadow: a kept row the old name rule (OTHER_SPORT_RE anywhere in the name) dropped
         t = common.clean(e["name"] or "")
         if OTHER_SPORT_RE.search(t) and not SOCCER_RE.search(t):
@@ -1789,7 +1825,72 @@ def extract_camps(html: str, page_url: str, *, published: str | None = None, tit
         for e in entries:
             if _is_chrome_name(e["name"]):
                 e["name"] = page_name
-    return _dedupe(entries)[:MAX_CAMPS]
+    out = _dedupe(entries)
+    if gated is not None:
+        gated["cap"] = max(0, len(out) - MAX_CAMPS)
+    return out[:MAX_CAMPS]
+
+
+# ---------- read trace (issue #79, slice S1) ----------
+#
+# Counts only - no page text, hosts or URLs - of what one camp page held and why rows were not kept, so a page
+# that yields nothing can be told apart: no dates at all, dates without a year, rows removed by a gate, a
+# JavaScript shell, or camps on a subpage or at a vendor. collect() stores it in the program's camps.json as
+# `readTrace`; build.py never copies it into a profile or the camps index. textChars and scripts are coarse
+# buckets so a daily refresh does not rewrite the file for a few characters' difference.
+TRACE_GATES = ("otherSport", "mens", "allSport", "registration", "tbd", "cap")
+TRACE_VENDORS = (("ryzer.com", "ryzer"), ("ryzerregister.com", "ryzer"), ("totalcamps.com", "totalcamps"),
+                 ("ussportscamps.com", "ussportscamps"), ("abcsportscamps.com", "abc"))
+
+
+def new_read_trace() -> dict:
+    return {"dayDates": 0, "yearlessDayDates": 0, "years": {}, "gated": {g: 0 for g in TRACE_GATES},
+            "sameHostCampLinks": 0, "vendorLinks": {v: 0 for v in ("ryzer", "totalcamps", "ussportscamps", "abc", "other")},
+            "textChars": "0", "scripts": "0"}
+
+
+def _scripts_bucket(n: int) -> str:
+    return "0" if n <= 0 else "1-5" if n <= 5 else "6+"
+
+
+def _chars_bucket(n: int) -> str:
+    return "0" if n <= 0 else "<500" if n < 500 else "<5k" if n < 5000 else "5k+"
+
+
+def _trace_page(soup, page_url: str, trace: dict) -> None:
+    """The page-level counts, read from the whole page (navigation included: a coach site's camps subpage is
+    usually only in its menu) after scripts and styles are removed and before anything else is."""
+    text = soup.get_text("\n")
+    trace["textChars"] = _chars_bucket(len(common.clean(text)))
+    days = [d for d in parse_camp_dates(text) if d["precision"] == "day"]
+    trace["dayDates"] = len(days)
+    years: dict = {}
+    for d in days:
+        years[d["startDate"][:4]] = years.get(d["startDate"][:4], 0) + 1
+    trace["years"] = dict(sorted(years.items()))
+    trace["yearlessDayDates"] = sum(1 for m in DATE_RE.finditer(text)
+                                    if not m.group(5) and _month(m.group(1)) and 1 <= int(m.group(2)) <= 31)
+    page_host = _host(page_url)
+    own = page_url.split("#")[0]
+    same, vendor = set(), {}
+    for a in soup.find_all("a", href=True):
+        url = _http_url(a.get("href"), page_url)
+        if not url:
+            continue
+        url = url.split("#")[0]
+        host = _host(url)
+        fam = next((v for suffix, v in TRACE_VENDORS if host == suffix or host.endswith("." + suffix)), None)
+        text_a = " ".join(filter(None, [a.get_text(" ", strip=True), a.get("title"), a.get("aria-label")]))
+        if fam:
+            vendor.setdefault(fam, set()).add(url)
+        elif host == page_host:
+            if url != own and _link_score(text_a, url):
+                same.add(url)
+        elif _link_score(text_a, url):
+            vendor.setdefault("other", set()).add(url)
+    trace["sameHostCampLinks"] = len(same)
+    for fam, urls in vendor.items():
+        trace["vendorLinks"][fam] = len(urls)
 
 
 ARTICLE_CLASS_RE = re.compile(r"article-content|article__body|article-body|articleBody|story-body|story__body|c-article__content|"
@@ -2027,7 +2128,8 @@ def collect(program: dict, registry: dict) -> dict:
     base_host = _host(base)
     data = {"campsUrl": None, "discoveredVia": None, "hubUrl": None, "finalUrl": None, "host": None, "vendor": None,
             "pageTitle": None, "robotsBlocked": False, "hostRefused": False, "fetchError": None, "parsed": False,
-            "linkReused": False, "camps": [], "newsCamps": [], "newsScanned": 0}
+            "linkReused": False, "camps": [], "newsCamps": [], "newsScanned": 0,
+            "readTrace": None}  # #79: counts from reading the camp page; null when no HTML was read
     roster_url = f"{base}{a.get('sportPath', '')}/roster"
     link = None
     registry_url = _http_url(a.get("campsUrl"))
@@ -2097,8 +2199,11 @@ def collect(program: dict, registry: dict) -> dict:
             soup = BeautifulSoup(r["html"][:20000], "html.parser")
             data["pageTitle"] = common.clean(soup.title.get_text())[:120] if soup.title else None
             short_title = re.split(r"\s+[-|–]\s+", data["pageTitle"] or "")[0] or None
+            trace: dict = {}
             data["camps"] = extract_camps(r["html"], data["finalUrl"], title=short_title,
-                                          page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]))
+                                          page_soccer=page_soccer_flag(short_title, data["finalUrl"], data["campsUrl"]),
+                                          trace=trace)
+            data["readTrace"] = trace
         elif r.get("robotsDisallowed"):
             # the camp page is disallowed (the hook in enforce mode, issue #101, or an explicit check, issue #87
             # decision 8), so nothing was read. The camps stored for the same campsUrl (the stable key) are kept,
