@@ -39,10 +39,13 @@ US Sports Camps 1; the other 7 reach the index through news rows only. Of the 10
 | ↳ **titled pages labelled `totalcamps` by markup only** (counted `app-shell` today, §1b) | 9 | 5/4/0 | they have a `<title>`, so they are server-rendered; `detect_vendor` labelled them because the text "totalcamps" appears somewhere in the HTML (`VENDOR_MARKERS`, camps.py:204, applied at :509-511). Some are not TotalCamps at all: fresno-pacific is a Sidearm story page, ut-martin a Ryzer `?path=general` site, texas-tyler `uttyler.edu/camps/`. | iowa (D1), siena-college (D1), findlay (D2) |
 | **Wrong link** (inside the rows above) | 8 | 1/4/3 | title or URL names another sport or the men's team: auburn-montgomery `?path=msoc`, lewis-clark-college "Men's Soccer Camps", dartmouth "Men's Soccer", simon-fraser `mens-soccer-camps`, mary "Women's Basketball", lycoming-college `MBB_Camps`, colorado-mesa "Women's Lacrosse", averett "canceled … COVID-19" (2020 page). bates-college (D3, "Bates Soccer Camps") is unclear and not counted. **Certain gap; the fix is a link, not a parser.** | as listed |
 
+The rows above (Ryzer 173, athletics 165, external 120 including its 10 suspected shells, Weebly 6, and the 8 in the
+Wix/… row) sum to today's 472; the 9-row line is added by row 8, giving 481. The wrong-link row is inside the others.
+
 ### 1b. App shell: 119 evidenced (+10 suspected); the live count of 128 includes 9 that are not shells
 
 **Evidenced: the 119 on `*.totalcamps.com`**, every one with no `<title>`. D1 57 / D2 46 / D3 16 — **the most
-D1/D2-heavy bucket**. Final paths: `/About%20Us` 62, `/shop/…` 35, `/` 22. **Suspected:** the 10 untitled
+D1/D2-heavy bucket**. Final paths: `/About%20Us` 62, `/shop/…` 35, other paths 22 (20 site roots + 2 `/Content/…` pages: cornell, idaho). **Suspected:** the 10 untitled
 custom-domain pages in §1a. **Not shells:** the 9 titled custom-domain records `build.py:1516` counts as `app-shell`
 only because their stored `vendor` is `totalcamps` (charleston-wv, iowa, washington-state, eastern-washington,
 fresno-pacific, ut-martin, findlay, siena-college, texas-tyler); `schema/camps.schema.json:51`'s "a JavaScript app with
@@ -81,7 +84,7 @@ No row in any revision since 09-15. Examples: abilene-christian `acusoccer.total
 ## 2. Fixes ranked by programs gained per unit of work and risk
 
 **Gain = programs that newly show an upcoming `campType: id` camp-page row** (youth/unknown rows are not counted),
-as ranges, judged against today's rates: of the 237 Ryzer records, 55 (23%) have upcoming rows, and 63 of the 69
+as ranges, judged against today's rates: of the 237 readable Ryzer records (240 have `vendor: ryzer`; 3 were blocked, refused or failed), 55 (23%) have upcoming rows, and 63 of the 69
 programs with camp-page rows in the index (91%) have an `id` row. "Pool" is the programs the fix can touch.
 
 | # | Fix | Pool | ID gain (est.) | Work | Risk | Needs a fetch first? |
