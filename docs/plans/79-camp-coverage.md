@@ -106,7 +106,8 @@ Tests (new `tests/camps_read_trace_test.py` + fixture entries read by `tools/cam
 `ryzer-table.html`, `tbd.html` (`gated.tbd` = 1, no rows), `hub-wofford.html` (`gated.allSport` > 0),
 `synth-table-deadline.html` (`gated.registration`), a new hand-built year-less page ("June 14–16" under a
 "2027" heading: `yearlessDayDates` = 1, rows = 0, which pins today's behaviour), and a hand-built no-title
-`/About%20Us` shell → `totalcamps`. Each asserts exact counts. All fail on main (no `readTrace`, vendor `external`).
+`/About%20Us` shell → `totalcamps`. Each asserts exact counts, measured on the fixture in the PR (the gate counts
+named here are expectations, not yet run). All fail on main (no `readTrace`, vendor `external`).
 `extract-snapshot.json` must not change (rows identical). Gain: 0. After one refresh, a counts-only summary of
 `readTrace` by bucket goes on #79 and re-ranks S3–S6.
 
