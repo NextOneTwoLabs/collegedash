@@ -116,7 +116,7 @@ many schools will post 2027 dates and when.
   tools/camps_check.py:315 and :562, and 5 test files). New keyword `trace: dict | None = None`, filled in place per
   call, never through the shared `STATS` (collectors run in threads). Only the camp-page call at :2100 passes one.
 - Counts (no text, hosts or URLs): `{"dayDates", "yearlessDayDates", "years": {"2026": n, …}, "gated":
-  {"otherSport", "mens", "allSport", "registration", "tbd", "chrome", "cap"}, "sameHostCampLinks", "vendorLinks":
+  {"otherSport", "mens", "allSport", "registration", "tbd", "cap"}, "sameHostCampLinks", "vendorLinks":
   {"ryzer", "totalcamps", "ussportscamps", "abc", "other"}, "textChars", "scripts"}`; `vendorLinks` keys from a fixed
   list; `gated.cap` counts rows cut by `MAX_CAMPS`. `scripts` is counted before the decompose at :1732.
   `textChars` and `scripts` are stored as coarse buckets (`0`, `<500`, `<5k`, `5k+`; `0`, `1-5`, `6+`) so the daily
@@ -215,3 +215,11 @@ Not fixable by fetching: 23 refused hosts, 22 robots-blocked, 69 skipped (#73).
 - R5: URL-pattern recognition removed from S1; it is row 8b, after the ubsoccercamps sample, with the guards asked for.
 - R6: S1 plumbing pinned (signature, per-call trace, :2100 only, scripts counted before :1732, null without HTML,
   coarse buckets, `gated.cap`). Risks (a)–(d) added. Fetch list: Ryzer dropped, Weebly deferred, CDN host allowed.
+
+## As built (S1, branch feat/79-s1-read-trace)
+
+- `gated.chrome` is dropped: no code path removes a row for a chrome name (it is renamed, never rejected), so the
+  count would always be 0.
+- Dates and `textChars` are counted on the page content with navigation, header, footer, scoreboard and ticker
+  stripped as `_content` strips them (on a copy); links on the whole page. A scoreboard's daily dates would
+  otherwise rewrite every Sidearm camps.json each day.
