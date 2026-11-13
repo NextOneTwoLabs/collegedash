@@ -115,7 +115,8 @@ function loadPage(overrides = {}) {
 const nonEmpty = v => Array.isArray(v) ? v.length > 0 : v != null && typeof v === 'object' ? Object.keys(v).length > 0 : v != null;
 const HONORS = ['nationalTitles', 'nationalRunnerUp', 'collegeCups', 'ncaaAppearances', 'confRegularSeasonTitles', 'confTournamentTitles'];
 // #492: the card keeps two rows that are ALWAYS there - Undergrads and Tuition, each a bracket when the school reports
-// the figure and "Not reported" when it does not (so no card has a hole); RPI, US rank, commits and the roster are in
+// the figure and "Not reported" when it does not (so no card has a hole; the four service academies say "No tuition"
+// over "(service academy)" instead, #493, which is no bracket either way); RPI, US rank, commits and the roster are in
 // Stats and on the profile, never on the card.
 const expectRow = r => ({
   'RPI on the card': false,
