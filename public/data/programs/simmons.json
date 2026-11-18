@@ -3025,7 +3025,7 @@
   "curated": {},
   "commitmentsByYear": {},
   "_build": {
-    "builtAt": "2026-11-17T20:13:30Z",
+    "builtAt": "2026-11-18T19:47:40Z",
     "completeness": 0.78,
     "sections": {
       "school": true,
@@ -3039,12 +3039,28 @@
       "news": true
     },
     "stale": [],
-    "failed": [],
+    "failed": [
+      {
+        "collector": "athletics",
+        "error": "HTTP 403 for https://athletics.simmons.edu/sports/womens-soccer/roster",
+        "at": "2026-11-18T19:43:05Z"
+      },
+      {
+        "collector": "camps",
+        "error": "HTTP 403 for https://athletics.simmons.edu/sports/womens-soccer/roster",
+        "at": "2026-11-18T19:43:10Z"
+      },
+      {
+        "collector": "news",
+        "error": "HTTP 403 for https://athletics.simmons.edu/sports/womens-soccer/archives",
+        "at": "2026-11-18T19:43:09Z"
+      }
+    ],
     "skipped": [
       {
         "collector": "tds",
         "reason": "tds: no TopDrawerSoccer team id in the registry (set ids.tdsClgId + ids.tdsSlug)",
-        "at": "2026-11-17T20:04:58Z"
+        "at": "2026-11-18T19:43:05Z"
       },
       {
         "collector": "wikipedia",
