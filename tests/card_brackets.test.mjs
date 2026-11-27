@@ -114,7 +114,11 @@ test('2. every card shows its undergrads as a bracket (size word + range, exact 
   assert.ok(missing > 0 && counts.every(n => n > 0), 'fixture: every bracket and the missing case should occur in the index');
 });
 
-test('3. tuition: one label; two bracket lines for publics (in-state, out-of-state), one for the rest; 30,000 is $30K-45K; gaps are "Not reported"', () => {
+// #493 restated this test: it said a gap is "Not reported" for every program. The four service academies (Air Force, Army,
+// Navy, Coast Guard) charge no tuition, so while Scorecard has no figure for one the card reads "No tuition" over
+// "(service academy)" instead; every other gap is still "Not reported". tests/service_academy_tuition.test.mjs has the rest.
+const SERVICE_ACADEMIES = ['air-force', 'army', 'navy', 'coast-guard'];
+test('3. tuition: one label; two bracket lines for publics (in-state, out-of-state), one for the rest; 30,000 is $30K-45K; gaps are "Not reported" (the four service academies: "No tuition" over "(service academy)")', () => {
   let publics = 0, others = 0;
   for (const p of P) {
     const row = rowOf(card(p), 'card-tuition');
@@ -123,6 +127,10 @@ test('3. tuition: one label; two bracket lines for publics (in-state, out-of-sta
     assert.ok(text(row).startsWith('Tuition'), p.slug);
     const lines = spansOf(row, 'tl');
     const inS = p.tuitionInState, out = p.tuitionOutOfState;
+    if (SERVICE_ACADEMIES.includes(p.slug) && inS == null && out == null) {
+      assert.deepEqual(lines.map(text), ['No tuition', '(service academy)'], `${p.slug}: a service academy with no figure`);
+      continue;
+    }
     if (p.ownership === 'Public') {
       publics++;
       if (inS == null && out == null) { assert.deepEqual(lines.map(text), ['Not reported'], `${p.slug}: both missing`); continue; }
